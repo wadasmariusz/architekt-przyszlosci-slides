@@ -63,7 +63,7 @@ Wizualizacja: moduły jako klocki z zamkniętymi wnętrzami
 └──────────┘   └──────────┘   └──────────┘
 ```
 
-> Zmień jedną decyzję — reszta systemu nie drży
+> Zmieniasz jedną decyzję bez obaw o resztę systemu
 
 ---
 

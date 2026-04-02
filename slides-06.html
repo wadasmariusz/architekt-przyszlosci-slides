@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 — ERA Klient–Serwer</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .content {
+            bottom: 80px;
+            max-width: 1100px;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            width: 100%;
+            padding: 0 80px;
+        }
+
+        .era-chip {
+            display: inline-block;
+            font-size: 12px;
+            padding: 0.35em 1em;
+            border-radius: 100px;
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.2);
+            color: var(--cyan-400);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title { font-size: 64px; margin-bottom: 16px; }
+
+        /* --- balance scale --- */
+        .scale-scene {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.9s forwards;
+        }
+
+        .scale-emoji {
+            font-size: 28px;
+            margin-bottom: 2px;
+            animation: scaleRock 3s ease-in-out infinite;
+        }
+
+        @keyframes scaleRock {
+            0%, 100% { transform: rotate(0deg); }
+            25%      { transform: rotate(4deg); }
+            75%      { transform: rotate(-4deg); }
+        }
+
+        .scale-beam {
+            position: relative;
+            width: 500px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--cyan-700), var(--cyan-400), var(--cyan-700));
+            border-radius: 2px;
+            animation: beamTilt 3s ease-in-out infinite;
+            transform-origin: center center;
+        }
+
+        @keyframes beamTilt {
+            0%, 100% { transform: rotate(0deg); }
+            25%      { transform: rotate(3deg); }
+            75%      { transform: rotate(-3deg); }
+        }
+
+        .scale-pillar {
+            width: 3px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--cyan-500), var(--cyan-900));
+            margin-top: -2px;
+        }
+
+        .scale-base {
+            width: 80px;
+            height: 4px;
+            background: var(--cyan-700);
+            border-radius: 2px;
+        }
+
+        .scale-pans {
+            display: flex;
+            justify-content: space-between;
+            width: 500px;
+            margin-top: -4px;
+        }
+
+        .scale-pan {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 160px;
+        }
+
+        .pan-rope {
+            width: 2px;
+            height: 16px;
+            background: linear-gradient(to bottom, var(--cyan-500), transparent);
+        }
+
+        .pan-plate {
+            width: 160px;
+            padding: 14px 12px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .pan-plate:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.15);
+        }
+
+        .pan-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+        .pan-label { font-size: 14px; font-weight: 700; color: #e2e8f0; display: block; margin-bottom: 2px; }
+        .pan-desc { font-size: 11px; font-weight: 400; color: #94a3b8; }
+        .pan-desc strong { color: var(--cyan-400); font-weight: 600; }
+
+        /* --- bouncing arrow --- */
+        .bounce-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.5s forwards;
+        }
+
+        .arrow-left, .arrow-right {
+            font-size: 18px;
+            color: var(--cyan-400);
+        }
+
+        .arrow-left { animation: arrowBounceLeft 2s ease-in-out infinite; }
+        .arrow-right { animation: arrowBounceRight 2s ease-in-out infinite; }
+
+        @keyframes arrowBounceLeft {
+            0%, 100% { transform: translateX(0); opacity: 0.4; }
+            50%      { transform: translateX(-12px); opacity: 1; }
+        }
+        @keyframes arrowBounceRight {
+            0%, 100% { transform: translateX(0); opacity: 0.4; }
+            50%      { transform: translateX(12px); opacity: 1; }
+        }
+
+        .arrow-question {
+            font-size: 24px;
+            font-weight: 600;
+            color: #e2e8f0;
+            padding: 8px 18px;
+            border-radius: 12px;
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(6,182,212,0.15);
+        }
+
+        .arrow-question strong { color: var(--cyan-400); }
+
+        /* --- validation options --- */
+        .validation-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.8s forwards;
+        }
+
+        .val-option {
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.12);
+            backdrop-filter: blur(8px);
+            font-size: 18px;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .val-option:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 24px rgba(6,182,212,0.12);
+        }
+
+        .val-option .val-icon { font-size: 15px; }
+        .val-option strong { color: var(--cyan-400); font-weight: 600; }
+
+        .val-option--active {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.06);
+            box-shadow: 0 0 24px rgba(6,182,212,0.12);
+            animation: activeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes activeGlow {
+            0%, 100% { box-shadow: 0 0 16px rgba(6,182,212,0.08); }
+            50%      { box-shadow: 0 0 32px rgba(6,182,212,0.2); }
+        }
+
+        /* --- lesson --- */
+        .lesson {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 11px;
+            padding: 18px 36px;
+            border-radius: 12px;
+            background: rgba(6,182,212,0.04);
+            border: 1px solid rgba(6,182,212,0.12);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.2s forwards;
+        }
+
+        .lesson-icon { font-size: 19px; }
+        .lesson-text { font-size: 24px; font-weight: 300; color: #94a3b8; }
+        .lesson-text strong { color: var(--cyan-400); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="background">
+            <div class="bg-grid"></div>
+            <div class="bg-glow"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="corner corner--tl"></div>
+            <div class="corner corner--br"></div>
+        </div>
+
+        <div class="content">
+            <span class="era-chip">ERA · Klient–Serwer</span>
+
+            <h2 class="section-title">
+                <span class="highlight">Gdzie</span> postawić granicę?
+            </h2>
+
+            <div class="scale-scene">
+                <span class="scale-emoji">⚖️</span>
+                <div class="scale-beam"></div>
+                <div class="scale-pans">
+                    <div class="scale-pan">
+                        <div class="pan-rope"></div>
+                        <div class="pan-plate">
+                            <span class="pan-icon">🖥️</span>
+                            <span class="pan-label">Klient</span>
+                            <span class="pan-desc">Szybko <strong>blisko użytkownika</strong></span>
+                        </div>
+                    </div>
+                    <div class="scale-pan">
+                        <div class="pan-rope"></div>
+                        <div class="pan-plate">
+                            <span class="pan-icon">🗄️</span>
+                            <span class="pan-label">Serwer</span>
+                            <span class="pan-desc">Bezpiecznie <strong>pełna kontrola</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bounce-arrow">
+                <span class="arrow-left">←</span>
+                <div class="arrow-question"><strong>Walidacja</strong> tu czy tam?</div>
+                <span class="arrow-right">→</span>
+            </div>
+
+            <div class="validation-row">
+                <div class="val-option">
+                    <span class="val-icon">⚡</span>
+                    <span>Po stronie <strong>klienta</strong> - szybko</span>
+                </div>
+                <div class="val-option">
+                    <span class="val-icon">🔒</span>
+                    <span>Po stronie <strong>serwera</strong> - bezpiecznie</span>
+                </div>
+                <div class="val-option val-option--active">
+                    <span class="val-icon">✅</span>
+                    <span>A może <strong>w obu</strong>?</span>
+                </div>
+            </div>
+
+            <div class="lesson">
+                <span class="lesson-icon">💡</span>
+            </div>
+        </div>
+
+        <div class="camera-box">
+            <div class="camera-box__placeholder">kamera 480 &times; 270</div>
+        </div>
+
+        <div class="overlay"></div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                stage.style.transform = 'scale(' + Math.min(innerWidth / 1920, innerHeight / 1080) + ')';
+            }
+            addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

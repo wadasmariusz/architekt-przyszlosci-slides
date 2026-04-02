@@ -8,186 +8,98 @@ Utwórz kolejny slajd prezentacji HTML na podstawie podanego opisu: $ARGUMENTS
 
 3. **Przeczytaj poprzedni slajd**: Otwórz ostatni istniejący plik `slides-XX.html` aby upewnić się o spójności stylu.
 
-4. **Utwórz plik HTML** z zachowaniem poniższego systemu projektowego:
+4. **Przeczytaj `styles.css`**: Zapoznaj się ze współdzielonymi stylami — NIE duplikuj ich w `<style>` slajdu. W `<style>` slajdu umieszczaj **tylko style specyficzne** dla tego slajdu.
 
-### Paleta kolorów (CSS custom properties)
-```css
-:root {
-    --cyan-400: #22d3ee;
-    --cyan-500: #06b6d4;
-    --cyan-600: #0891b2;
-    --cyan-700: #0e7490;
-    --cyan-900: #164e63;
-    --dark-bg: #0a0e17;
-    --dark-surface: #111827;
-}
-```
+5. **Przeczytaj `template.html`**: Użyj go jako bazowej struktury HTML.
 
-### Typografia
-- Font: `'Inter', sans-serif` (import z Google Fonts: wght 300, 400, 600, 800)
-- Kolor tekstu: `#f0f4f8`
-- Kolor drugorzędny: `#94a3b8`
-- Kolor przyciemniony: `#64748b`
+6. **Utwórz plik HTML** z zachowaniem poniższego systemu projektowego:
 
-### Tło slajdu (obowiązkowe warstwy)
-Każdy slajd MUSI zawierać te elementy tła:
+### Struktura HTML (obowiązkowa)
+Każdy slajd MUSI używać tej struktury (zgodnej z `template.html`):
 ```html
-<div class="slide">
-    <!-- background layers -->
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide XX — Tytuł slajdu</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* TYLKO style specyficzne dla tego slajdu */
+        /* NIE powtarzaj stylów z styles.css */
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="background">
+            <div class="bg-grid"></div>
+            <div class="bg-glow"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="corner corner--tl"></div>
+            <div class="corner corner--br"></div>
+        </div>
 
-    <!-- corner accents -->
-    <div class="corner corner--tl"></div>
-    <div class="corner corner--br"></div>
+        <!-- CONTENT — treść slajdu -->
+        <div class="content">
+            <!-- treść specyficzna dla slajdu -->
+        </div>
 
-    <!-- slide content -->
-    <div class="content">
-        <!-- treść slajdu -->
+        <!-- CAMERA BOX — obowiązkowy w każdym slajdzie -->
+        <div class="camera-box">
+            <div class="camera-box__placeholder">kamera 480 &times; 270</div>
+        </div>
+
+        <div class="overlay"></div>
     </div>
-</div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                stage.style.transform = 'scale(' + Math.min(innerWidth / 1920, innerHeight / 1080) + ')';
+            }
+            addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
 ```
 
-### Styl tła (obowiązkowy CSS)
-```css
-.slide {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-}
+### Współdzielone klasy CSS (zdefiniowane w `styles.css` — NIE duplikuj)
+Te klasy są już dostępne i gotowe do użycia:
+- **Layout**: `.stage`, `.background`, `.bg-grid`, `.bg-glow`, `.particle`, `.corner`, `.corner--tl`, `.corner--br`, `.content`, `.camera-box`, `.camera-box__placeholder`, `.overlay`
+- **Typografia**: `.title`, `.title .highlight`, `.section-title`, `.section-title .highlight`, `.subtitle`, `.module-label`, `.divider`
+- **Chipy**: `.era-chips`, `.chip`
+- **Animacje**: `fadeUp`, `gridMove`, `pulse`, `float`
 
-.bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    animation: gridMove 20s linear infinite;
-}
+### Ważne szczegóły layoutu
+- `.stage` ma stały rozmiar 1920×1080px i jest skalowany JS-em do viewportu
+- `.content` jest pozycjonowany absolutnie z `bottom: 310px` — to zostawia miejsce na `.camera-box` (480×270px) w prawym dolnym rogu
+- `.camera-box` jest pozycjonowany absolutnie: `right: 40px; bottom: 40px`
+- Treść slajdu musi się zmieścić w obszarze `.content` bez nachodzenia na camera-box
 
-@keyframes gridMove {
-    0%   { background-position: 0 0; }
-    100% { background-position: 60px 60px; }
-}
-
-.bg-glow {
-    position: absolute;
-    width: 700px;
-    height: 700px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: pulse 6s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-    50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
-}
-
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--cyan-400);
-    opacity: 0;
-    animation: float 8s ease-in-out infinite;
-}
-
-/* rozmieść particles w różnych miejscach z różnymi animation-delay */
-
-@keyframes float {
-    0%   { opacity: 0; transform: translateY(0) scale(1); }
-    20%  { opacity: 0.8; }
-    80%  { opacity: 0.8; }
-    100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
-}
-```
-
-### Corner accents (obowiązkowy CSS)
-```css
-.corner {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    z-index: 1;
-}
-
-.corner::before,
-.corner::after {
-    content: '';
-    position: absolute;
-    background: var(--cyan-700);
-}
-
-.corner--tl { top: 30px; left: 30px; }
-.corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
-.corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
-
-.corner--br { bottom: 30px; right: 30px; }
-.corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
-.corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
-```
-
-### Styl treści
-```css
-.content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    width: 100%;
-    max-width: 1100px;
-    padding: 0 3rem;
-}
-```
+### Paleta kolorów (dostępna jako CSS custom properties)
+- `--cyan-400` do `--cyan-900` — kolory akcentowe
+- `--dark-bg`, `--dark-surface` — tła
+- Tekst: `#f0f4f8` (główny), `#94a3b8` (drugorzędny), `#64748b` (przyciemniony)
 
 ### Wzorce animacji wejścia
-- Używaj `fadeUp` jako główną animację wejścia:
-```css
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-```
+- Używaj `fadeUp` jako główną animację wejścia (zdefiniowaną w `styles.css`)
 - Elementy zaczynają z `opacity: 0` i mają `animation: fadeUp 0.8s ease-out Xs forwards` z rosnącym delay (0.3s, 0.6s, 0.9s, ...)
 - Dla kart/elementów listy używaj kaskadowego opóźnienia (0.3s odstępu)
 
-### Wzorce komponentów
-
-**Tytuł sekcji:**
-```css
-.section-title {
-    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
-    font-weight: 800;
-    margin-bottom: 3.5rem;
-}
-
-.section-title .highlight {
-    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-```
+### Wzorce komponentów (definiuj w `<style>` slajdu tylko gdy potrzebne)
 
 **Karty/boxy:**
 ```css
-/* Użyj tych wzorców dla kart */
 border-radius: 16px;
 background: rgba(17,24,39,0.7);
 border: 1px solid rgba(6,182,212,0.15);
@@ -205,36 +117,17 @@ box-shadow: 0 8px 32px rgba(6,182,212,0.15);
 border-color: var(--cyan-500);
 background: rgba(6,182,212,0.06);
 box-shadow: 0 0 24px rgba(6,182,212,0.15);
-/* + animacja pulsującego glow */
-```
-
-**Chipy/tagi:**
-```css
-font-size: 0.75rem;
-padding: 0.35em 1em;
-border-radius: 100px;
-background: rgba(6,182,212,0.08);
-border: 1px solid rgba(6,182,212,0.2);
-color: var(--cyan-400);
-```
-
-**Podpis/caption:**
-```css
-font-size: 0.95rem;
-font-weight: 300;
-color: #64748b;
-/* Ważne słowa: */
-color: var(--cyan-400);
-font-weight: 600;
 ```
 
 ### Zasady ogólne
-- Każdy slajd to osobny plik HTML (self-contained ze stylami w `<style>`)
+- Każdy slajd importuje `styles.css` via `<link>` — NIE kopiuj tych stylów do `<style>`
+- W `<style>` slajdu definiuj **tylko** klasy specyficzne dla tego slajdu
 - Język: polski
-- Slajd musi mieścić się w 100vw x 100vh bez scrollowania
+- Slajd musi mieścić się w 1920×1080 bez scrollowania
 - Używaj kreatywnych wizualizacji (diagramy CSS, animacje, ikony emoji) zamiast prostego tekstu
-- Tekst powinien być zwięzły - slajd to nie ściana tekstu
+- Tekst powinien być zwięzły — slajd to nie ściana tekstu
 - Animacje wejścia powinny się odtwarzać automatycznie po załadowaniu strony
-- Każdy slajd musi być samodzielny (nie wymaga JS ani zewnętrznych zasobów poza Google Fonts)
+- Każdy slajd musi zawierać camera-box z placeholderem
+- Skrypt skalujący `rescale()` jest obowiązkowy w każdym slajdzie
 
-5. **Zapisz plik** jako `slides-XX.html` w katalogu projektu.
+7. **Zapisz plik** jako `slides-XX.html` w katalogu projektu.
