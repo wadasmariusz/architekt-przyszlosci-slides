@@ -1,0 +1,53 @@
+Branża programistyczna stoi dziś u progu jednej z największych zmian od czasu, gdy na dobre weszła chmura.
+Coraz większą rolę zaczyna odgrywać generatywna sztuczna inteligencja (GenAI), która wchodzi praktycznie w każdy etap tworzenia oprogramowania. Rola architekta oprogramowania nie powstała w wyniku jednej decyzji ani jednego przełomu technologicznego. Wyłoniła się stopniowo  jako odpowiedź na rosnącą złożoność systemów, potrzebę koordynacji zespołów i konieczność podejmowania decyzji technicznych o długoterminowych konsekwencjach.
+Przez siedem dekad historii informatyki architekt przeobrażał się z operatora maszyny w ososbe odpwiedzialan za projektowanie  zlozozycnh systemow. Każda era przynosiła nowe wyzwania, nowe narzędzia i nowe oczekiwania wobec osoby pełniącej tę funkcję
+ ERA  Mainframe'y W tamtych czasach nikt nie mówił "architekt oprogramowania". To pojęcie po prostu nie istniało. Był główny programista — zwykle najstarszy, najbardziej doświadczony człowiek w zespole — i to on decydował, jak system będzie zbudowany. Dlatego, że jako jedyny rozumiał maszynę na tyle dobrze, żeby wiedzieć, co jest w ogóle możliwe. Każda decyzja projektowa była podyktowana przez sprzęt. Masz cztery kilobajty pamięci? To tyle po prostu musisz zmieścić program w czterech kilobajtach i już. To było myślenie inżynierskie w najczystszej postaci: zasoby są skończone, a twoim zadaniem jest użyć ich optymalnie. Wtedy zasoby były cenne i nie wolno ich marnować, to jest jedna z tych rzeczy , co dobry architekt ma w głowie do dziś. Nawet kiedy pracuje w chmurze, gdzie teoretycznie możesz dokupić dowolną ilość mocy obliczeniowej jednym kliknięciem.
+
+ERA 2
+Komputery zaczęły zmniejszać swój rozmiar i mieściły się już w jednym pokoju, a nie w całym budynku i kilka lat później Apple pokazał Macintosha, komputer trafił na biurko zwykłego pracownika.I tu zaczął się prawdziwy problem, który do dziś nie zniknął: oprogramowanie musiało działać na wielu różnych maszynach, dla wielu różnych użytkowników, i musiało być na tyle zrozumiałe, żeby ktoś inny mógł je utrzymywać i rozwijać.
+David Parnas w 1972 roku napisał artykuł, który brzmi dość sucho w tytule — "On the Criteria To Be Used in Decomposing Systems into Modules"  zaliczamy go ammw materiałach. W środku zawierał rewolucyjną myśl: dobry podział systemu na moduły to taki, w którym każdy moduł ukrywa jedną decyzję projektową. Żebyś mógł zmienić tę decyzję bez ruszania reszty systemu.  ERA · Klient–serwer
+Sieci lokalne zmieniły wszystko po raz kolejny. Nagle komputery mogły rozmawiać ze sobą. I zaczęły się pojawiać się pytanie o odpowiedzialności
+Gdzie wstawić walidację? Po stronie klienta, żeby było szybko? Czy po stronie serwera, żeby było bezpiecznie? A może w obu miejscach
+
+ERA Internetu i architektury rozproszonej
+No i wtedy wchodzi internet… i wywraca stolik.
+Wcześniej budowałeś system dla stu, może tysiąca osób. W sumie ogarniałeś, kto z tego korzysta, kiedy, jak często. Dało się nawet zaplanować przerwę techniczną na weekend i nikt specjalnie nie narzekał.
+A potem nagle pojawiają się takie firmy jak Amazon, Yahoo czy eBay — i masz miliony użytkowników. Z całego świata. O każdej godzinie. Zawsze ktoś coś klika. Nie ma już czegoś takiego jak „spokojny moment”.
+I tu architektura musiała się totalnie zmienić.
+
+ERA  Chmury, mikrousługi i DevOps
+Początek tej epoki wcale nie zapowiadał rewolucji. Gdy Amazon Web Services startował w 2006 roku, wielu traktowało to jak ciekawostkę — eksperyment dla startupów, nie dla „poważnych” firm. Oddać dane komuś obcemu? Brzmiało jak ryzyko
+Momentem przełomowym była historia Netflix. Po awarii własnej infrastruktury w 2008 roku zrozumieli coś fundamentalnego, że cały ich model działania jest kruchy. Zamiast naprawiać monolit, postanowili go porzucić. Przenieśli się do chmury i rozbili system na dziesiątki, potem setki niezależnych usług. Mikrousługi to była odpowiedź na problemy SOA. Zamiast wspólnej szyny danych — bezpośrednia komunikacja między usługami. Zamiast jednej bazy danych dla wszystkich — każda usługa ma swoją. Zamiast dużych wdrożeń raz na kwartał — małe zmiany, dziesiątki razy dziennie. I tu architekt znów musiał się zmienić Nagle architekt musiał rozumieć Kubernetes, Terraform, pipeline CI/CD. Nie musiał być ekspertem od każdego narzędzia. Ale musiał rozumieć zasady, bo jego decyzje projektowe miały bezpośredni wpływ na to, jak łatwo albo jak koszmarnie trudno jest system wdrażać i utrzymywać.
+
+
+ERA AI
+I dochodzimy do dziś. Do ery, w której architekci stają przed czymś, czego wcześniej nie było: niedeterminizmem jako cechą systemu.
+Przez sześćdziesiąt lat systemy informatyczne były deterministyczne. Te same dane wejściowe, ten sam wynik. Zawsze. Możesz przetestować, możesz przewidzieć, możesz zagwarantować.
+Model językowy — taki jak te, które napędzają narzędzia AI, z których korzystacie na co dzień — tak nie działa.
+
+Ta historia pokazuje jedną rzecz: rola architekta nigdy nie była stała, ale zawsze zmieniała się wraz z technologią. AI to po prostu kolejny, ale wyjątkowo duży krok tej ewolucji.
+Fundamentem zmiany jest postrzeganie AI  jako współpracownika obecnego na każdym etapie, od podejmowania decyzji po rozwój produktu. Tradycyjne zespoły projektowe zmieniają się w mniejsze, bardziej zwinne grupy z różnymi kompetencjami, które są bezpośrednio związane z konkretnymi produktami i ich realną wartością. Ewolucja ta wymusza zmianę tożsamości zawodowej. Programiści, którzy definiowali siebie poprzez pisanie kodu, mogą odczuwać kryzys tożsamości, ponieważ ich dotychczasowa praca czyli tłumaczenie zadań na kod pomału zanika. Coraz mniej chodzi o pisanie wszystkiego samemu, a bardziej o  szersza perspektywę na system, zaprojektowanie architektury i  składanie tego w całość. Architekt coraz bardziej pełni rolę osoby zarządzającej ryzykiem, a nacisk na jakość i porządną inżynierię przesuwa się wyżej  na etap analizy wymagań i projektowania testów, które stają się kluczowymi elementami pracy.
+W świecie AI rola architekta trochę się zmienia pojawiają się nowe sposoby projektowania systemów, które nie do końca pasują do klasycznego, przewidywalnego podejścia.
+Największa zmiana polega na tym, że przestajemy myśleć o modelach językowych tylko jako o generatorach tekstu. Coraz częściej traktujemy je jak agentów, którzy potrafią planować działania, podejmować decyzje i korzystać z różnych narzędzi. To oznacza przejście od z klepania tasków do projektowania całego zachowania systemu.
+Jednym z ważniejszych podejść jest tzw. ReAct (Reason + Act), które rozdziela myślenie modelu od jego działania.  Dzięki temu system najpierw „zastanawia się”, a dopiero potem wykonuje konkretne kroki, co w praktyce daje bardziej przewidywalne i stabilne efekty.
+Do tego dochodzi projektowanie systemów złożonych z wielu agentów.
+Zmienia się też samo podejście do przewidywalności systemów. Klasyczne rozwiązania działają w sposób deterministyczny — te same dane wejściowe dają ten sam wynik. Przez dekady programowanie opierało się na bardzo prostym, ale potężnym założeniu: ten sam kod i ten sam input dają ten sam wynik. Zawsze. Na tym budowaliśmy testy, debugowanie, monitoring i w ogóle całe podejście do odpowiedzialności za system.
+LLM-y ten fundament naruszają.
+Możesz mieć ten sam prompt, te same parametry i ten sam model, a mimo to dostać różne, czasem sprzeczne odpowiedzi. I to nie jest bug. To jest cecha systemu.
+Martin Fowler porównuje tę zmianę do momentu, kiedy przeszliśmy z assembly na pierwsze języki wysokiego poziomu. Nie dlatego, że nagle zrobiło się trudniej technicznie, tylko dlatego, że zmienił się sposób myślenia o tym, czym w ogóle jest program i jak się go buduje.
+Dobrze pokazuje to anegdota, którą przytacza. Jego żona, inżynier konstrukcyjny, zapytała go kiedyś: jakie są tolerancje? W budowie mostów to podstawowe pytanie. Nie projektujesz pod idealne warunki, tylko zakładasz, że świat jest nieprzewidywalny. Będzie wiatr, zużycie materiału, różne odchylenia.
+I dokładnie to samo pytanie musi dziś zadawać architekt systemów.
+Gdzie mogę pozwolić sobie na niedeterminizm, a gdzie absolutnie nie?
+Chatbot, który czasem odpowie trochę inaczej niż oczekujesz, to zazwyczaj nie problem. System, który podejmuje decyzję o kredycie albo dawce leku, to zupełnie inna historia.
+To są walnie decyzje architektoniczne które muśmy podejmować,. Trzeba świadomie zdecydować, gdzie i jak używasz LLM-a, jakie stawiasz ograniczenia, kiedy robisz fallback, a kiedy weryfikujesz odpowiedź innym mechanizmem.
+Ktoś może powiedzieć, że przecież niedeterminizm nie jest niczym nowym. Systemy rozproszone od lat są nieprzewidywalne. Mamy race conditions, problemy z siecią, eventual consistency.
+I to prawda. Tyle że tamten niedeterminizm jest techniczny i w dużej mierze przewidywalny. Wiemy, co może pójść nie tak i mamy na to wzorce. Jeśli sieć padnie, robimy retry. Jeśli są konflikty zapisu, używamy idempotencji.
+W LLM-ach problem jest inny.
+System działa poprawnie i zwraca odpowiedź, ale ta odpowiedź może być logicznie błędna albo sprzeczna z poprzednią. To nie jest problem infrastruktury, tylko znaczenia.
+To jest niedeterminizm semantyczny, a nie techniczny.
+Oznacza to ze musimy zaca korzystac z technik, które pomagają modelować i kontrolować tę niepewność, tak żeby system jako całość był stabilny i bezpieczny, nawet jeśli pojedyncze odpowiedzi nie są w 100% przewidywalne.
+
+Świat It zaczyna się mocno zmieniać, Rola programisty do tej pory była ona mocno związana z pisaniem kodu, z przekładaniem wymagań na implementację. Ale AI robi to coraz lepiej. Coraz częściej jesteśmy w sytuacji, w której nie chodzi o to, żeby wszystko napisać samemu, tylko żeby wiedzieć, co powinno powstać, jak to powinno działać i jak to połączyć w sensowną całość.  
+W praktyce oznacza to, że coraz więcej osób zaczyna myśleć jak architekt. Musza zacząć podejmować decyzje, rozumieć kompromisy, projektować granice systemu, składać rozwiązania z różnych elementów — nie tylko kodu, ale też usług, narzędzi i modeli AI.
+I w efekcie ta granica między programistą a architektem zaczyna się powoli zacierać, dlatego, że sposób pracy przesuwa się wyżej — z poziomu implementacji na poziom projektowania i podejmowania decyzji.
+Ewolucja roli architekta nie polega na tym, że przestajemy być potrzebni. Chodzi raczej o to, że przestajemy być tylko projektantami systemów deterministycznych. Przez lata budowaliśmy rozwiązania, w których wszystko było przewidywalne — ten sam input, ten sam output. Dzisiaj to się zmienia. Coraz częściej projektujemy systemy, które współpracują z komponentami, które z natury nie są w pełni przewidywalne, jak modele AI. I naszym zadaniem jest sprawić, żeby mimo tego cały system jako całość działał stabilnie i przewidywalnie
