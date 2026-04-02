@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 — ERA Mainframe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: #f0f4f8;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- animated background --- */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        /* floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 85%; top: 15%; animation-delay: 1.5s; }
+        .particle:nth-child(3) { left: 70%; top: 75%; animation-delay: 3s; }
+        .particle:nth-child(4) { left: 20%; top: 80%; animation-delay: 4.5s; }
+        .particle:nth-child(5) { left: 50%; top: 10%; animation-delay: 2s; }
+        .particle:nth-child(6) { left: 90%; top: 50%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* corner accents */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* --- content --- */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+        }
+
+        /* era chip */
+        .era-chip {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.35em 1em;
+            border-radius: 100px;
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.2);
+            color: var(--cyan-400);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- mainframe visualization --- */
+        .mainframe-scene {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.9s forwards;
+        }
+
+        /* big computer */
+        .mainframe {
+            width: 180px;
+            height: 240px;
+            background: rgba(17,24,39,0.8);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 1.5rem;
+            box-shadow: 0 0 40px rgba(6,182,212,0.08);
+        }
+
+        .mainframe-screen {
+            width: 120px;
+            height: 80px;
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mainframe-screen::after {
+            content: '>';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--cyan-400);
+            font-size: 1.5rem;
+            font-family: monospace;
+            animation: blink 1.2s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50%      { opacity: 0; }
+        }
+
+        /* blinking lights on mainframe */
+        .mainframe-lights {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 0.8rem;
+        }
+
+        .light {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--cyan-700);
+        }
+
+        .light:nth-child(1) { animation: lightBlink 2s ease-in-out infinite 0s; }
+        .light:nth-child(2) { animation: lightBlink 2s ease-in-out infinite 0.4s; }
+        .light:nth-child(3) { animation: lightBlink 2s ease-in-out infinite 0.8s; }
+        .light:nth-child(4) { animation: lightBlink 2s ease-in-out infinite 1.2s; }
+        .light:nth-child(5) { animation: lightBlink 2s ease-in-out infinite 1.6s; }
+
+        @keyframes lightBlink {
+            0%, 100% { background: var(--cyan-700); box-shadow: none; }
+            50%      { background: var(--cyan-400); box-shadow: 0 0 8px rgba(34,211,238,0.6); }
+        }
+
+        /* tape reels */
+        .mainframe-reels {
+            display: flex;
+            gap: 12px;
+        }
+
+        .reel {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid rgba(6,182,212,0.2);
+            position: relative;
+            animation: spin 4s linear infinite;
+        }
+
+        .reel::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.15);
+            transform: translate(-50%, -50%);
+        }
+
+        .reel:nth-child(2) { animation-direction: reverse; }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        /* person figure */
+        .person {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .person-head {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.15);
+            border: 1px solid rgba(6,182,212,0.3);
+        }
+
+        .person-body {
+            width: 20px;
+            height: 40px;
+            border-radius: 8px 8px 4px 4px;
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.2);
+        }
+
+        .person-label {
+            font-size: 0.7rem;
+            color: var(--cyan-400);
+            font-weight: 600;
+            margin-top: 0.3rem;
+            white-space: nowrap;
+        }
+
+        /* connection line */
+        .connection {
+            position: relative;
+            align-self: center;
+            margin-bottom: 3rem;
+        }
+
+        .connection-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan-700), var(--cyan-400));
+            animation: pulseLine 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseLine {
+            0%, 100% { opacity: 0.4; }
+            50%      { opacity: 1; }
+        }
+
+        /* --- bullet points --- */
+        .bullets {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .bullet {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.8rem 1.4rem;
+            border-radius: 12px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.12);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .bullet:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 24px rgba(6,182,212,0.12);
+        }
+
+        .bullet:nth-child(1) { animation: fadeUp 0.6s ease-out 1.2s forwards; }
+        .bullet:nth-child(2) { animation: fadeUp 0.6s ease-out 1.5s forwards; }
+        .bullet:nth-child(3) { animation: fadeUp 0.6s ease-out 1.8s forwards; }
+
+        .bullet-icon {
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .bullet-text {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #e2e8f0;
+            text-align: left;
+        }
+
+        .bullet-text strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        /* --- memory bar visualization --- */
+        .memory-bar-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.1s forwards;
+        }
+
+        .memory-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--cyan-400);
+            letter-spacing: 0.08em;
+        }
+
+        .memory-bar {
+            width: 300px;
+            height: 20px;
+            border-radius: 10px;
+            background: rgba(17,24,39,0.8);
+            border: 1px solid rgba(6,182,212,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .memory-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--cyan-700), var(--cyan-400));
+            border-radius: 10px;
+            animation: fillBar 1.5s ease-out 2.5s forwards;
+            position: relative;
+        }
+
+        .memory-fill::after {
+            content: '4 KB';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+        }
+
+        @keyframes fillBar {
+            to { width: 100%; }
+        }
+
+        .memory-total {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: 300;
+        }
+
+        /* --- bottom lesson --- */
+        .lesson {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            background: rgba(6,182,212,0.04);
+            border: 1px solid rgba(6,182,212,0.12);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.8s forwards;
+        }
+
+        .lesson-icon {
+            font-size: 1.2rem;
+        }
+
+        .lesson-text {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: #94a3b8;
+        }
+
+        .lesson-text strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <span class="era-chip">lata 50.</span>
+
+            <h2 class="section-title">
+                <span class="highlight">Jeden człowiek</span>, jedna maszyna
+            </h2>
+
+            <!-- mainframe visualization -->
+            <div class="mainframe-scene">
+                <div class="mainframe">
+                    <div class="mainframe-screen"></div>
+                    <div class="mainframe-lights">
+                        <div class="light"></div>
+                        <div class="light"></div>
+                        <div class="light"></div>
+                        <div class="light"></div>
+                        <div class="light"></div>
+                    </div>
+                    <div class="mainframe-reels">
+                        <div class="reel"></div>
+                        <div class="reel"></div>
+                    </div>
+                </div>
+
+                <div class="connection">
+                    <div class="connection-line"></div>
+                </div>
+
+                <div class="person">
+                    <div class="person-head"></div>
+                    <div class="person-body"></div>
+                    <span class="person-label">Główny programista</span>
+                </div>
+            </div>
+
+            <!-- bullet points -->
+            <div class="bullets">
+                <div class="bullet">
+                    <span class="bullet-icon">👤</span>
+                    <span class="bullet-text">Brak pojęcia „architekt" — był <strong>główny programista</strong></span>
+                </div>
+                <div class="bullet">
+                    <span class="bullet-icon">⚙️</span>
+                    <span class="bullet-text">Decyzje podyktowane <strong>przez sprzęt</strong></span>
+                </div>
+                <div class="bullet">
+                    <span class="bullet-icon">📏</span>
+                    <span class="bullet-text"><strong>4 KB pamięci</strong> = zmieść program w 4 KB</span>
+                </div>
+            </div>
+
+            <!-- memory bar -->
+            <div class="memory-bar-wrap">
+                <span class="memory-label">RAM</span>
+                <div class="memory-bar">
+                    <div class="memory-fill"></div>
+                </div>
+                <span class="memory-total">4 KB / 4 KB</span>
+            </div>
+
+            <!-- lesson -->
+            <div class="lesson">
+                <span class="lesson-icon">💡</span>
+                <span class="lesson-text">Lekcja na dziś: <strong>zasoby zawsze mają swoją cenę</strong> — nawet w chmurze</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

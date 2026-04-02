@@ -153,54 +153,32 @@
         .timeline {
             position: relative;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            justify-content: center;
+            gap: 1rem;
             padding: 0 1rem;
         }
 
-        /* horizontal line */
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 5%;
-            right: 5%;
-            height: 2px;
-            background: linear-gradient(90deg,
-                transparent,
-                var(--cyan-700) 10%,
-                var(--cyan-500) 50%,
-                var(--cyan-700) 90%,
-                transparent
-            );
-        }
-
-        /* animated progress line */
-        .timeline::after {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 5%;
-            right: 5%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--cyan-400), var(--cyan-500));
-            transform-origin: left;
-            transform: scaleX(0);
-            animation: lineGrow 2s ease-out 0.5s forwards;
-        }
-
-        @keyframes lineGrow {
-            to { transform: scaleX(1); }
-        }
-
-        /* era item */
+        /* era card */
         .era {
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex: 1;
+            width: 150px;
+            padding: 1.5rem 0.8rem 1.2rem;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
             position: relative;
             opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .era:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.08);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.15);
         }
 
         .era:nth-child(1) { animation: eraAppear 0.6s ease-out 0.8s forwards; }
@@ -211,47 +189,31 @@
         .era:nth-child(6) { animation: eraAppear 0.6s ease-out 2.3s forwards; }
 
         @keyframes eraAppear {
-            from { opacity: 0; transform: translateY(20px) scale(0.8); }
+            from { opacity: 0; transform: translateY(20px) scale(0.9); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .era-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: var(--dark-surface);
-            border: 2px solid var(--cyan-700);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 2;
-            transition: all 0.4s ease;
-        }
-
-        .era:hover .era-icon {
-            border-color: var(--cyan-400);
-            background: rgba(6,182,212,0.12);
-            transform: scale(1.15);
-            box-shadow: 0 0 24px rgba(6,182,212,0.3);
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+            line-height: 1;
         }
 
         /* active era (AI) gets special glow */
-        .era--active .era-icon {
-            border-color: var(--cyan-400);
-            box-shadow: 0 0 20px rgba(6,182,212,0.25);
-            animation: activeGlow 2s ease-in-out infinite;
+        .era--active {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.06);
+            box-shadow: 0 0 24px rgba(6,182,212,0.15);
+            animation: eraAppear 0.6s ease-out 2.3s forwards, activeGlow 3s ease-in-out 2.9s infinite;
         }
 
         @keyframes activeGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.25); }
-            50%      { box-shadow: 0 0 35px rgba(6,182,212,0.5); }
+            0%, 100% { box-shadow: 0 0 24px rgba(6,182,212,0.15); }
+            50%      { box-shadow: 0 0 40px rgba(6,182,212,0.35); }
         }
 
         .era-year {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 600;
             letter-spacing: 0.15em;
             color: var(--cyan-400);
@@ -260,28 +222,157 @@
         }
 
         .era-name {
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 700;
             color: #e2e8f0;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.35rem;
         }
 
         .era-desc {
             font-size: 0.7rem;
             font-weight: 300;
-            color: #64748b;
-            max-width: 120px;
-            line-height: 1.4;
+            color: #94a3b8;
+            max-width: 130px;
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        /* --- timeline bar below cards --- */
+        .timeline-bar {
+            position: relative;
+            width: 100%;
+            max-width: 960px;
+            height: 48px;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.6s forwards;
+        }
+
+        /* base track */
+        .timeline-bar .track {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 2px;
+            background: rgba(6,182,212,0.12);
+            transform: translateY(-50%);
+            border-radius: 2px;
+        }
+
+        /* animated fill */
+        .timeline-bar .track-fill {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--cyan-700), var(--cyan-400));
+            transform: translateY(-50%) scaleX(0);
+            transform-origin: left;
+            border-radius: 2px;
+            animation: trackGrow 1.8s ease-out 3s forwards;
+        }
+
+        @keyframes trackGrow {
+            to { transform: translateY(-50%) scaleX(1); }
+        }
+
+        /* dots on the track */
+        .timeline-bar .dot-group {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 4%;
+        }
+
+        .timeline-bar .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--dark-bg);
+            border: 2px solid var(--cyan-700);
+            position: relative;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-bar .dot:nth-child(1) { animation: dotPop 0.4s ease-out 3.2s forwards; }
+        .timeline-bar .dot:nth-child(2) { animation: dotPop 0.4s ease-out 3.5s forwards; }
+        .timeline-bar .dot:nth-child(3) { animation: dotPop 0.4s ease-out 3.8s forwards; }
+        .timeline-bar .dot:nth-child(4) { animation: dotPop 0.4s ease-out 4.1s forwards; }
+        .timeline-bar .dot:nth-child(5) { animation: dotPop 0.4s ease-out 4.4s forwards; }
+        .timeline-bar .dot:nth-child(6) { animation: dotPop 0.4s ease-out 4.7s forwards; }
+
+        .timeline-bar .dot--active {
+            border-color: var(--cyan-400);
+            background: var(--cyan-400);
+            box-shadow: 0 0 10px rgba(34,211,238,0.6);
+        }
+
+        .timeline-bar .dot--active::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 1px solid rgba(34,211,238,0.3);
+            animation: ring 2s ease-in-out infinite;
+        }
+
+        @keyframes ring {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50%      { transform: scale(1.6); opacity: 0; }
+        }
+
+        @keyframes dotPop {
+            from { opacity: 0; transform: scale(0); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* connector arrows between dots (subtle chevrons) */
+        .timeline-bar .arrows {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 10%;
+        }
+
+        .timeline-bar .arrow {
+            color: var(--cyan-700);
+            font-size: 0.6rem;
+            opacity: 0;
+            animation: arrowFade 0.4s ease-out forwards;
+        }
+
+        .timeline-bar .arrow:nth-child(1) { animation-delay: 3.4s; }
+        .timeline-bar .arrow:nth-child(2) { animation-delay: 3.7s; }
+        .timeline-bar .arrow:nth-child(3) { animation-delay: 4.0s; }
+        .timeline-bar .arrow:nth-child(4) { animation-delay: 4.3s; }
+        .timeline-bar .arrow:nth-child(5) { animation-delay: 4.6s; }
+
+        @keyframes arrowFade {
+            from { opacity: 0; transform: translateX(-4px); }
+            to   { opacity: 0.6; transform: translateX(0); }
         }
 
         /* bottom caption */
         .caption {
-            margin-top: 3.5rem;
+            margin-top: 1.5rem;
             font-size: 0.95rem;
             font-weight: 300;
             color: #64748b;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 2.8s forwards;
+            animation: fadeUp 0.8s ease-out 5s forwards;
         }
 
         .caption strong {
@@ -358,6 +449,27 @@
                     <span class="era-year">dziś</span>
                     <span class="era-name">AI</span>
                     <span class="era-desc">Niedeterminizm jako cecha</span>
+                </div>
+            </div>
+
+            <!-- timeline bar -->
+            <div class="timeline-bar">
+                <div class="track"></div>
+                <div class="track-fill"></div>
+                <div class="arrows">
+                    <span class="arrow">&#9654;</span>
+                    <span class="arrow">&#9654;</span>
+                    <span class="arrow">&#9654;</span>
+                    <span class="arrow">&#9654;</span>
+                    <span class="arrow">&#9654;</span>
+                </div>
+                <div class="dot-group">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot dot--active"></div>
                 </div>
             </div>
 
