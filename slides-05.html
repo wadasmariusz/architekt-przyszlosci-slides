@@ -4,138 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slide 05 — David Parnas (1972)</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* --- slide-specific: darker variant --- */
         :root {
-            --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
-            --cyan-600: #0891b2;
-            --cyan-700: #0e7490;
-            --cyan-900: #164e63;
             --dark-bg: #131a2b;
             --dark-surface: #1e2a3f;
         }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
-            color: #f0f4f8;
-        }
-
-        .slide {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* --- animated background --- */
-        .bg-grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0%   { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
-        }
-
-        .bg-glow {
-            position: absolute;
-            width: 700px;
-            height: 700px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 6s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--cyan-400);
-            opacity: 0;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
-        .particle:nth-child(2) { left: 85%; top: 15%; animation-delay: 1.5s; }
-        .particle:nth-child(3) { left: 70%; top: 75%; animation-delay: 3s; }
-        .particle:nth-child(4) { left: 20%; top: 80%; animation-delay: 4.5s; }
-        .particle:nth-child(5) { left: 50%; top: 10%; animation-delay: 2s; }
-        .particle:nth-child(6) { left: 90%; top: 50%; animation-delay: 5s; }
-
-        @keyframes float {
-            0%   { opacity: 0; transform: translateY(0) scale(1); }
-            20%  { opacity: 0.8; }
-            80%  { opacity: 0.8; }
-            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
-        }
-
-        /* corner accents */
-        .corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            z-index: 1;
-        }
-
-        .corner::before,
-        .corner::after {
-            content: '';
-            position: absolute;
-            background: var(--cyan-700);
-        }
-
-        .corner--tl { top: 30px; left: 30px; }
-        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
-        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
-
-        .corner--br { bottom: 30px; right: 30px; }
-        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
-        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
-
-        /* --- content --- */
         .content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            width: 100%;
+            bottom: 80px;
             max-width: 1100px;
-            padding: 0 3rem;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            width: 100%;
+            padding: 0 80px;
         }
 
         .era-chip {
             display: inline-block;
-            font-size: 0.75rem;
+            font-size: 12px;
             padding: 0.35em 1em;
             border-radius: 100px;
             background: rgba(6,182,212,0.08);
@@ -144,286 +33,108 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 1.2rem;
+            margin-bottom: 19px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.3s forwards;
         }
 
-        .section-title {
-            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.6s forwards;
-        }
-
-        .section-title .highlight {
-            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        .section-title { margin-bottom: 16px; }
 
         .subtitle {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: #64748b;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.9s forwards;
+            font-size: 15px; font-weight: 300; color: #64748b; margin-bottom: 48px;
+            max-width: none;
         }
-
-        .subtitle em {
-            color: #94a3b8;
-            font-style: italic;
-        }
+        .subtitle em { color: #94a3b8; font-style: italic; }
 
         /* --- modules diagram --- */
         .modules-scene {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            opacity: 0;
+            display: flex; justify-content: center; gap: 32px;
+            margin-bottom: 48px; opacity: 0;
             animation: fadeUp 0.8s ease-out 1.2s forwards;
         }
-
         .module {
-            width: 200px;
-            padding: 1.5rem;
-            border-radius: 16px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.15);
-            backdrop-filter: blur(8px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.8rem;
-            transition: all 0.4s ease;
-            position: relative;
+            width: 200px; padding: 24px; border-radius: 16px;
+            background: rgba(17,24,39,0.7); border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px); display: flex; flex-direction: column;
+            align-items: center; gap: 13px; transition: all 0.4s ease; position: relative;
         }
-
-        .module:hover {
-            border-color: var(--cyan-500);
-            background: rgba(6,182,212,0.08);
-            transform: translateY(-6px);
-            box-shadow: 0 8px 32px rgba(6,182,212,0.15);
-        }
-
-        .module-name {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #e2e8f0;
-            letter-spacing: 0.05em;
-        }
-
-        /* hidden interior box */
+        .module:hover { border-color: var(--cyan-500); background: rgba(6,182,212,0.08); transform: translateY(-6px); box-shadow: 0 8px 32px rgba(6,182,212,0.15); }
+        .module-name { font-size: 14px; font-weight: 700; color: #e2e8f0; letter-spacing: 0.05em; }
         .module-interior {
-            width: 100%;
-            padding: 1rem;
-            border-radius: 10px;
-            background: rgba(6,182,212,0.04);
-            border: 1px dashed rgba(6,182,212,0.2);
-            position: relative;
-            overflow: hidden;
+            width: 100%; padding: 16px; border-radius: 10px;
+            background: rgba(6,182,212,0.04); border: 1px dashed rgba(6,182,212,0.2);
+            position: relative; overflow: hidden;
         }
-
-        .module-secret {
-            font-family: monospace;
-            font-size: 1.1rem;
-            letter-spacing: 0.15em;
-            color: var(--cyan-700);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { opacity: 0.5; }
-            50%      { opacity: 0.9; }
-        }
-
-        /* lock icon */
+        .module-secret { font-family: monospace; font-size: 18px; letter-spacing: 0.15em; color: var(--cyan-700); animation: shimmer 3s ease-in-out infinite; }
+        @keyframes shimmer { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
         .module-lock {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--dark-bg);
-            border: 1px solid rgba(6,182,212,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
+            position: absolute; top: -10px; right: -10px; width: 28px; height: 28px;
+            border-radius: 50%; background: var(--dark-bg); border: 1px solid rgba(6,182,212,0.3);
+            display: flex; align-items: center; justify-content: center; font-size: 12px;
         }
-
-        /* public interface */
-        .module-api {
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
+        .module-api { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
         .api-tag {
-            font-size: 0.6rem;
-            padding: 0.25em 0.7em;
-            border-radius: 100px;
-            background: rgba(6,182,212,0.08);
-            border: 1px solid rgba(6,182,212,0.2);
-            color: var(--cyan-400);
-            font-weight: 600;
-            letter-spacing: 0.05em;
+            font-size: 10px; padding: 0.25em 0.7em; border-radius: 100px;
+            background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.2);
+            color: var(--cyan-400); font-weight: 600; letter-spacing: 0.05em;
         }
 
-        /* connections between modules */
+        /* connections */
         .connections {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.5s forwards;
+            display: flex; align-items: center; justify-content: center; gap: 32px;
+            margin-bottom: 48px; opacity: 0; animation: fadeUp 0.8s ease-out 1.5s forwards;
         }
-
-        .conn-line {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .conn-dash {
-            width: 40px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--cyan-700), transparent);
-            animation: connPulse 2s ease-in-out infinite;
-        }
-
+        .conn-line { display: flex; align-items: center; gap: 8px; }
+        .conn-dash { width: 40px; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan-700), transparent); animation: connPulse 2s ease-in-out infinite; }
         .conn-dash:nth-child(2) { animation-delay: 0.3s; }
+        @keyframes connPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        .conn-icon { font-size: 13px; color: var(--cyan-400); }
 
-        @keyframes connPulse {
-            0%, 100% { opacity: 0.3; }
-            50%      { opacity: 0.8; }
-        }
-
-        .conn-icon {
-            font-size: 0.8rem;
-            color: var(--cyan-400);
-        }
-
-        /* --- change visualization --- */
+        /* change demo */
         .change-demo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.8s forwards;
+            display: flex; align-items: center; justify-content: center; gap: 24px;
+            margin-bottom: 40px; opacity: 0; animation: fadeUp 0.8s ease-out 1.8s forwards;
         }
-
-        .change-box {
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .change-box--before {
-            background: rgba(239,68,68,0.08);
-            border: 1px solid rgba(239,68,68,0.25);
-            color: #fca5a5;
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
-
-        .change-box--arrow {
-            color: var(--cyan-400);
-            font-size: 1.4rem;
-            animation: arrowBounce 1.5s ease-in-out infinite;
-        }
-
-        @keyframes arrowBounce {
-            0%, 100% { transform: translateX(0); }
-            50%      { transform: translateX(6px); }
-        }
-
-        .change-box--after {
-            background: rgba(34,197,94,0.08);
-            border: 1px solid rgba(34,197,94,0.25);
-            color: #86efac;
-        }
-
+        .change-box { padding: 13px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; }
+        .change-box--before { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; text-decoration: line-through; opacity: 0.6; }
+        .change-box--arrow { color: var(--cyan-400); font-size: 22px; animation: arrowBounce 1.5s ease-in-out infinite; }
+        @keyframes arrowBounce { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+        .change-box--after { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); color: #86efac; }
         .change-box--rest {
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.15);
-            color: #94a3b8;
-            font-size: 0.85rem;
-            font-weight: 400;
+            padding: 13px 24px; border-radius: 12px;
+            background: rgba(17,24,39,0.7); border: 1px solid rgba(6,182,212,0.15);
+            color: #94a3b8; font-size: 14px; font-weight: 400;
             animation: stableGlow 3s ease-in-out infinite;
         }
+        @keyframes stableGlow { 0%, 100% { box-shadow: none; } 50% { box-shadow: 0 0 12px rgba(34,197,94,0.1); } }
 
-        @keyframes stableGlow {
-            0%, 100% { box-shadow: none; }
-            50%      { box-shadow: 0 0 12px rgba(34,197,94,0.1); }
-        }
-
-        /* --- bottom quote --- */
+        /* quote */
         .quote {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            padding: 1.2rem 2rem;
-            border-radius: 12px;
-            background: rgba(6,182,212,0.04);
-            border: 1px solid rgba(6,182,212,0.12);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 2.1s forwards;
+            display: flex; align-items: center; justify-content: center; gap: 13px;
+            padding: 19px 32px; border-radius: 12px;
+            background: rgba(6,182,212,0.04); border: 1px solid rgba(6,182,212,0.12);
+            opacity: 0; animation: fadeUp 0.8s ease-out 2.1s forwards;
         }
-
-        .quote-icon {
-            font-size: 1.4rem;
-            opacity: 0.7;
-        }
-
-        .quote-text {
-            font-size: 0.95rem;
-            font-weight: 300;
-            color: #94a3b8;
-        }
-
-        .quote-text strong {
-            color: var(--cyan-400);
-            font-weight: 600;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+        .quote-icon { font-size: 22px; opacity: 0.7; }
+        .quote-text { font-size: 15px; font-weight: 300; color: #94a3b8; }
+        .quote-text strong { color: var(--cyan-400); font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="slide">
-        <!-- background layers -->
-        <div class="bg-grid"></div>
-        <div class="bg-glow"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+    <div class="stage" id="stage">
+        <div class="background">
+            <div class="bg-grid"></div>
+            <div class="bg-glow"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="corner corner--tl"></div>
+            <div class="corner corner--br"></div>
+        </div>
 
-        <!-- corner accents -->
-        <div class="corner corner--tl"></div>
-        <div class="corner corner--br"></div>
-
-        <!-- slide content -->
         <div class="content">
             <span class="era-chip">David Parnas &middot; 1972</span>
 
@@ -435,7 +146,6 @@
                 <em>&ldquo;On the Criteria To Be Used in Decomposing Systems into Modules&rdquo;</em>
             </p>
 
-            <!-- modules diagram -->
             <div class="modules-scene">
                 <div class="module">
                     <span class="module-lock">🔒</span>
@@ -448,7 +158,6 @@
                         <span class="api-tag">init()</span>
                     </div>
                 </div>
-
                 <div class="module">
                     <span class="module-lock">🔒</span>
                     <span class="module-name">Moduł B</span>
@@ -460,7 +169,6 @@
                         <span class="api-tag">validate()</span>
                     </div>
                 </div>
-
                 <div class="module">
                     <span class="module-lock">🔒</span>
                     <span class="module-name">Moduł C</span>
@@ -474,22 +182,35 @@
                 </div>
             </div>
 
-            <!-- change demonstration -->
             <div class="change-demo">
                 <div class="change-box change-box--before">Decyzja X v1</div>
                 <span class="change-box--arrow">→</span>
                 <div class="change-box change-box--after">Decyzja X v2</div>
-                <span style="color: #64748b; font-size: 0.85rem; margin: 0 0.5rem;">a reszta?</span>
+                <span style="color: #64748b; font-size: 14px; margin: 0 8px;">a reszta?</span>
                 <div class="change-box--rest">Moduł B — stabilny ✓</div>
                 <div class="change-box--rest">Moduł C — stabilny ✓</div>
             </div>
 
-            <!-- bottom quote -->
             <div class="quote">
                 <span class="quote-icon">💡</span>
                 <span class="quote-text">Zmień jedną decyzję — <strong>reszta systemu nie drży</strong></span>
             </div>
         </div>
+
+        <div class="camera-box">
+            <div class="camera-box__placeholder">kamera 480 &times; 270</div>
+        </div>
     </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                stage.style.transform = 'scale(' + Math.min(innerWidth / 1920, innerHeight / 1080) + ')';
+            }
+            addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
 </body>
 </html>
