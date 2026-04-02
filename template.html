@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 01 — Architekt oprogramowania w erze AI</title>
+    <title>Slide — Szablon prezentacji</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
@@ -21,6 +21,14 @@
             --cyan-900: #164e63;
             --dark-bg: #0a0e17;
             --dark-surface: #111827;
+
+            --stage-w: 1920;
+            --stage-h: 1080;
+            --camera-w: 480;
+            --camera-h: 270;
+            --camera-margin: 40px;
+            --safe-pad: 80px;
+            --safe-right: 560px; /* camera-w + safe-pad */
         }
 
         html, body {
@@ -43,6 +51,7 @@
             overflow: hidden;
             background: var(--dark-bg);
             transform-origin: center center;
+            /* scale is set by JS */
         }
 
         /* ===== BACKGROUND LAYER ===== */
@@ -186,7 +195,15 @@
             text-transform: uppercase;
         }
 
-        /* ===== CONTENT STYLES ===== */
+        /* ===== OVERLAY LAYER (slide number, etc.) ===== */
+        .overlay {
+            position: absolute;
+            z-index: 3;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        /* ===== REUSABLE CONTENT STYLES ===== */
         .module-label {
             display: inline-block;
             font-size: 14px;
@@ -292,33 +309,25 @@
             <div class="corner corner--br"></div>
         </div>
 
-        <!-- CONTENT -->
+        <!-- CONTENT — replace this per slide -->
         <div class="content">
+            <span class="module-label">Szablon</span>
             <h1 class="title">
-                Architekt oprogramowania<br>
-                w erze <span class="highlight">AI</span>
+                Tytuł <span class="highlight">slajdu</span>
             </h1>
-
             <p class="subtitle">
-                Jak zmieniała się rola architekta i dokąd zmierza
+                Opis lub podtytuł slajdu — zamień tę sekcję na właściwą treść.
             </p>
-
             <hr class="divider">
-
-            <div class="era-chips">
-                <span class="chip">Mainframe</span>
-                <span class="chip">Minikomputery</span>
-                <span class="chip">Internet</span>
-                <span class="chip">Chmura</span>
-                <span class="chip">Mikrousługi</span>
-                <span class="chip">AI</span>
-            </div>
         </div>
 
         <!-- CAMERA BOX -->
         <div class="camera-box">
             <div class="camera-box__placeholder">kamera 480 × 270</div>
         </div>
+
+        <!-- OVERLAY (slide number, watermark, etc.) -->
+        <div class="overlay"></div>
     </div>
 
     <script>
