@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 04 Light — ERA Minikomputerów</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cyan-400: #06b6d4;
+            --cyan-500: #0891b2;
+            --cyan-600: #0e7490;
+            --cyan-700: #155e75;
+            --cyan-900: #164e63;
+            --light-bg: #f8fafc;
+            --light-surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: var(--light-bg);
+            color: var(--text-primary);
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- animated background --- */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(14,116,144,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14,116,144,0.06) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-500);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 85%; top: 15%; animation-delay: 1.5s; }
+        .particle:nth-child(3) { left: 70%; top: 75%; animation-delay: 3s; }
+        .particle:nth-child(4) { left: 20%; top: 80%; animation-delay: 4.5s; }
+        .particle:nth-child(5) { left: 50%; top: 10%; animation-delay: 2s; }
+        .particle:nth-child(6) { left: 90%; top: 50%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.5; }
+            80%  { opacity: 0.5; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* corner accents */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: rgba(14,116,144,0.25);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* --- content --- */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+        }
+
+        .era-chip {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.35em 1em;
+            border-radius: 100px;
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.25);
+            color: var(--cyan-600);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- shrinking animation --- */
+        .shrink-scene {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.9s forwards;
+        }
+
+        .shrink-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .shrink-box {
+            border-radius: 12px;
+            background: var(--light-surface);
+            border: 1px solid rgba(14,116,144,0.15);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+        }
+
+        .shrink-box:hover {
+            border-color: var(--cyan-500);
+            box-shadow: 0 4px 20px rgba(6,182,212,0.12);
+        }
+
+        .shrink-box--building {
+            width: 180px;
+            height: 160px;
+            font-size: 3.5rem;
+            animation: shrinkPulse 3s ease-in-out infinite;
+        }
+
+        .shrink-box--room {
+            width: 130px;
+            height: 120px;
+            font-size: 2.5rem;
+            animation: shrinkPulse 3s ease-in-out infinite 1s;
+        }
+
+        .shrink-box--desk {
+            width: 90px;
+            height: 90px;
+            font-size: 1.8rem;
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.04);
+            box-shadow: 0 0 20px rgba(6,182,212,0.1);
+            animation: activeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes shrinkPulse {
+            0%, 100% { opacity: 0.5; }
+            50%      { opacity: 0.8; }
+        }
+
+        @keyframes activeGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.1); }
+            50%      { box-shadow: 0 0 32px rgba(6,182,212,0.2); }
+        }
+
+        .shrink-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .shrink-label--active {
+            color: var(--cyan-600);
+        }
+
+        .shrink-arrow {
+            font-size: 1.8rem;
+            color: rgba(14,116,144,0.35);
+            animation: arrowPulse 2s ease-in-out infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        .shrink-arrow:nth-of-type(2) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.3; transform: translateX(0); }
+            50%      { opacity: 0.8; transform: translateX(4px); }
+        }
+
+        /* --- new problems section --- */
+        .problems-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
+        }
+
+        .problems {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .problem-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            background: var(--light-surface);
+            border: 1px solid rgba(14,116,144,0.12);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            min-width: 200px;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .problem-card:hover {
+            border-color: var(--cyan-500);
+            background: var(--light-surface);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.12);
+        }
+
+        .problem-card:nth-child(1) { animation: fadeUp 0.6s ease-out 1.5s forwards; }
+        .problem-card:nth-child(2) { animation: fadeUp 0.6s ease-out 1.8s forwards; }
+        .problem-card:nth-child(3) { animation: fadeUp 0.6s ease-out 2.1s forwards; }
+
+        .problem-icon {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .problem-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .problem-desc {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            max-width: 160px;
+            line-height: 1.4;
+        }
+
+        .problem-desc strong {
+            color: var(--cyan-600);
+            font-weight: 600;
+        }
+
+        /* --- users visualization --- */
+        .users-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+            margin-top: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.4s forwards;
+        }
+
+        .user-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(14,116,144,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.55rem;
+        }
+
+        .user-dot:nth-child(odd) {
+            animation: userPop 3s ease-in-out infinite;
+        }
+
+        .user-dot:nth-child(even) {
+            animation: userPop 3s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes userPop {
+            0%, 100% { border-color: rgba(14,116,144,0.15); }
+            50%      { border-color: var(--cyan-500); box-shadow: 0 0 6px rgba(6,182,212,0.15); }
+        }
+
+        .users-label {
+            display: block;
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.7s forwards;
+        }
+
+        .users-label strong {
+            color: var(--cyan-600);
+            font-weight: 600;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <span class="era-chip">lata 70.</span>
+
+            <h2 class="section-title">
+                Z budynku — <span class="highlight">na biurko</span>
+            </h2>
+
+            <!-- shrinking computer visualization -->
+            <div class="shrink-scene">
+                <div class="shrink-stage">
+                    <div class="shrink-box shrink-box--building">🏢</div>
+                    <span class="shrink-label">Cały budynek</span>
+                </div>
+
+                <span class="shrink-arrow">→</span>
+
+                <div class="shrink-stage">
+                    <div class="shrink-box shrink-box--room">🖥️</div>
+                    <span class="shrink-label">Pokój</span>
+                </div>
+
+                <span class="shrink-arrow">→</span>
+
+                <div class="shrink-stage">
+                    <div class="shrink-box shrink-box--desk">💻</div>
+                    <span class="shrink-label shrink-label--active">Biurko</span>
+                </div>
+            </div>
+
+            <!-- new problems -->
+            <p class="problems-title">Nowy problem:</p>
+
+            <div class="problems">
+                <div class="problem-card">
+                    <span class="problem-icon">👥</span>
+                    <span class="problem-text">Wielu użytkowników</span>
+                    <span class="problem-desc">System musi obsługiwać <strong>wiele osób</strong> jednocześnie</span>
+                </div>
+
+                <div class="problem-card">
+                    <span class="problem-icon">🖧</span>
+                    <span class="problem-text">Wiele maszyn</span>
+                    <span class="problem-desc">Komputery zaczęły <strong>ze sobą rozmawiać</strong></span>
+                </div>
+
+                <div class="problem-card">
+                    <span class="problem-icon">🔧</span>
+                    <span class="problem-text">Utrzymanie</span>
+                    <span class="problem-desc"><strong>Ktoś inny</strong> musi to utrzymywać i rozwijać</span>
+                </div>
+            </div>
+
+            <!-- users visualization -->
+            <div class="users-row">
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+                <div class="user-dot">👤</div>
+            </div>
+            <span class="users-label">Oprogramowanie musiało być zrozumiałe dla <strong>wielu osób</strong></span>
+        </div>
+    </div>
+</body>
+</html>
