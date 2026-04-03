@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +37,7 @@
             position: absolute;
             inset: 0;
             background-image: linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+                linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
             background-size: 60px 60px;
         }
 
@@ -111,7 +112,10 @@
             transition: all 0.5s ease;
         }
 
-        .card--left { animation: fadeUp 0.8s ease-out 0.5s forwards; }
+        .card--left {
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
         .card--right {
             animation: fadeUp 0.8s ease-out 1s forwards;
             border-color: rgba(6, 182, 212, 0.4);
@@ -204,18 +208,40 @@
             animation: fadeIn 1s ease-out 1.8s forwards;
         }
 
-        .lesson-icon { font-size: 32px; }
-        .lesson-text { font-size: 24px; font-weight: 500; }
-        .lesson-text strong { color: var(--cyan-400); text-transform: uppercase; }
+        .lesson-icon {
+            font-size: 32px;
+        }
+
+        .lesson-text {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .lesson-text strong {
+            color: var(--cyan-400);
+            text-transform: uppercase;
+        }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .camera-box {
@@ -224,13 +250,13 @@
             right: 40px;
             width: 480px;
             height: 270px;
-            background: rgba(0,0,0,0.4);
-            border: 2px dashed rgba(255,255,255,0.2);
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255, 255, 255, 0.3);
             font-size: 14px;
             z-index: 100;
         }
@@ -247,74 +273,81 @@
         }
     </style>
 </head>
+
 <body>
-<div class="stage" id="stage">
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
 
-    <div class="content">
-        <span class="era-chip">Era Internetu</span>
-        <h2 class="section-title">
-            Architektura: w erze <span class="highlight"></span> <span class="highlight">globalnej cyfryzacji</span>
-        </h2>
+        <div class="content">
+            <span class="era-chip">Era Internetu</span>
+            <h2 class="section-title">
+                Architektura: w erze <span class="highlight"></span> <span class="highlight">globalnej cyfryzacji</span>
+            </h2>
 
-        <div class="comparison">
-            <!-- Left Card: Aquarium -->
-            <div class="card card--left">
-                <div class="card-header">
-                    <div class="card-icon"><i class="ti ti-server"></i></div>
-                    <div class="card-title">Architektura Skoncentrowana</div>
+            <div class="comparison">
+                <!-- Left Card: Aquarium -->
+                <div class="card card--left">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="ti ti-server"></i></div>
+                        <div class="card-title">Architektura Skoncentrowana</div>
+                    </div>
+                    <div class="visual-box">
+                        <img src="images/aquarium_monolith.png" alt="Scentralizowane Akwarium" class="visual-img">
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item"><i>●</i> <span>Przewidywalne <strong>środowisko pracy</strong></span>
+                        </div>
+                        <div class="feature-item"><i>●</i> <span>Skalowanie <strong>pionowe</strong></span></div>
+                        <div class="feature-item"><i>●</i> <span>Zarządzanie stanem <strong>lokalnie</strong></span>
+                        </div>
+                        <div class="feature-item"><i>●</i> <span>Planowane <strong>okna serwisowe</strong></span></div>
+                    </div>
                 </div>
-                <div class="visual-box">
-                    <img src="images/aquarium_monolith.png" alt="Scentralizowane Akwarium" class="visual-img">
-                </div>
-                <div class="feature-list">
-                    <div class="feature-item"><i>●</i> <span>Przewidywalne <strong>środowisko pracy</strong></span></div>
-                    <div class="feature-item"><i>●</i> <span>Skalowanie <strong>pionowe</strong></span></div>
-                    <div class="feature-item"><i>●</i> <span>Zarządzanie stanem <strong>lokalnie</strong></span></div>
-                    <div class="feature-item"><i>●</i> <span>Planowane <strong>okna serwisowe</strong></span></div>
-                </div>
-            </div>
 
-            <!-- Right Card: Ocean -->
-            <div class="card card--right">
-                <div class="card-header">
-                    <div class="card-icon"><i class="ti ti-network"></i></div>
-                    <div class="card-title">Architektura Zdecentralizowana</div>
-                </div>
-                <div class="visual-box">
-                    <img src="https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&q=80&w=800" alt="Ocean Storm" class="visual-img">
-                </div>
-                <div class="feature-list">
-                    <div class="feature-item"><i>●</i> <span>Dynamiczne <strong>skoki obciążenia</strong></span></div>
-                    <div class="feature-item"><i>●</i> <span>Skalowanie <strong>poziome</strong></span></div>
-                    <div class="feature-item"><i>●</i> <span>Bezstanowość i <strong>replikacja</strong></span></div>
-                    <div class="feature-item"><i>●</i> <span>Dostępność <strong>24/7</strong></span></div>
+                <!-- Right Card: Ocean -->
+                <div class="card card--right">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="ti ti-network"></i></div>
+                        <div class="card-title">Architektura Zdecentralizowana</div>
+                    </div>
+                    <div class="visual-box">
+                        <img src="https://images.unsplash.com/photo-1551244072-5d12893278ab?auto=format&fit=crop&q=80&w=800"
+                            alt="Ocean Storm" class="visual-img">
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item"><i>●</i> <span>Dynamiczne <strong>skoki obciążenia</strong></span>
+                        </div>
+                        <div class="feature-item"><i>●</i> <span>Skalowanie <strong>poziome</strong></span></div>
+                        <div class="feature-item"><i>●</i> <span>Bezstanowość i <strong>replikacja</strong></span></div>
+                        <div class="feature-item"><i>●</i> <span>Dostępność <strong>24/7</strong></span></div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <img src="logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości"
+            class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
     </div>
 
-    <img src="logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
-
-    <div class="camera-box">
-        kamera 480 &times; 270
-    </div>
-</div>
-
-<script>
-    (function () {
-        const stage = document.getElementById('stage');
-        function rescale() {
-            const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
-            stage.style.transformOrigin = 'top left';
-            stage.style.transform = 'scale(' + scale + ')';
-            stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
-            stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
-        }
-        window.addEventListener('resize', rescale);
-        rescale();
-    })();
-</script>
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
 </body>
+
 </html>
