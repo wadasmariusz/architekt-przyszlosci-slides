@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 08 — Sygnały Ostrzegawcze (Conway)</title>
+    <title>Slide 03 — Era Mainframów</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -30,9 +30,8 @@
             background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
             overflow: hidden;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
 
         .bg-grid {
@@ -47,10 +46,10 @@
         .bg-glow {
             position: absolute;
             top: 50%;
-            left: 50%;
+            left: 70%;
             transform: translate(-50%, -50%);
-            width: 900px;
-            height: 900px;
+            width: 700px;
+            height: 700px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -59,78 +58,125 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1400px;
+            width: 1500px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            gap: 80px;
         }
 
-        .section-label {
+        .text-side {
+            flex: 1;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.3s forwards;
+        }
+
+        .era-label {
             font-size: 18px;
             text-transform: uppercase;
             letter-spacing: 6px;
-            color: rgba(239, 68, 68, 0.8);
-            margin-bottom: 24px;
+            color: var(--cyan-400);
+            margin-bottom: 20px;
             font-weight: 600;
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
         }
 
-        h2.title {
-            font-size: 60px;
+        .text-side h2 {
+            font-size: 64px;
             font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 72px;
-            text-align: center;
             color: #ffffff;
-            opacity: 0;
-            animation: fadeUp 1s ease-out 0.2s forwards;
+            line-height: 1.1;
+            margin-bottom: 12px;
             letter-spacing: -1px;
         }
 
-        h2.title .highlight {
-            color: rgba(239, 68, 68, 0.8);
+        .text-side h2 .highlight {
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .warning-list {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            width: 100%;
+        .role-tag {
+            display: inline-block;
+            font-size: 20px;
+            color: var(--cyan-400);
+            font-weight: 600;
+            padding: 8px 24px;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 100px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            margin-bottom: 28px;
         }
 
-        .warning-item {
+        .text-side p {
+            font-size: 24px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 36px;
+        }
+
+        .info-box {
+            padding: 24px 32px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 16px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.2s forwards;
+        }
+
+        .info-box .info-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--cyan-400);
+            margin-bottom: 8px;
+        }
+
+        .info-box .info-text {
+            font-size: 20px;
+            color: var(--text-muted);
+        }
+
+        /* Right visual - mainframe icon */
+        .visual-side {
+            flex-shrink: 0;
+            width: 400px;
+            height: 450px;
             display: flex;
             align-items: center;
-            gap: 24px;
-            padding: 28px 36px;
-            background: rgba(239, 68, 68, 0.05);
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            border-radius: 20px;
-            font-size: 26px;
-            font-weight: 500;
-            color: #fca5a5;
+            justify-content: center;
             opacity: 0;
+            animation: fadeIn 1s ease-out 0.6s forwards;
         }
 
-        .warning-item:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
-        .warning-item:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
-        .warning-item:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
-        .warning-item:nth-child(4) { animation: fadeUp 0.7s ease-out 1.1s forwards; }
+        .mainframe-icon {
+            width: 300px;
+            height: 400px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            backdrop-filter: blur(12px);
+        }
 
-        .warning-item i {
-            font-size: 32px;
-            color: rgba(239, 68, 68, 0.7);
-            flex-shrink: 0;
+        .mainframe-icon i {
+            font-size: 120px;
+            color: var(--cyan-400);
+            opacity: 0.6;
+        }
+
+        .mainframe-icon span {
+            font-size: 20px;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.12;
+            filter: blur(60px);
+            opacity: 0.1;
             z-index: 0;
         }
 
@@ -177,28 +223,24 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 400px; height: 400px; top: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; top: 10%; right: 5%;"></div>
 
         <div class="content">
-            <span class="section-label">Red Flags</span>
-            <h2 class="title">Sygnały <span class="highlight">ostrzegawcze</span> Conwaya</h2>
+            <div class="text-side">
+                <span class="era-label">Era Mainframów</span>
+                <h2>Era <span class="highlight">Mainframów</span></h2>
+                <span class="role-tag">Rola: Główny Programista</span>
+                <p>Decyzje podejmowane przez najbardziej doświadczonego inżyniera, który rozumiał fizyczne ograniczenia maszyny.</p>
+                <div class="info-box">
+                    <div class="info-title">Zasada 4KB</div>
+                    <div class="info-text">Optymalizacja zasobów jako fundament myślenia inżynierskiego</div>
+                </div>
+            </div>
 
-            <div class="warning-list">
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Niekończące się spotkania o "kontraktach" między zespołami
-                </div>
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Powielona logika w różnych zespołach
-                </div>
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Distributed Monolith - wspólne deploymenty
-                </div>
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Zespół platformowy jako wąskie gardło
+            <div class="visual-side">
+                <div class="mainframe-icon">
+                    <i class="ti ti-cpu"></i>
+                    <span>Mainframe</span>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 08 — Sygnały Ostrzegawcze (Conway)</title>
+    <title>Slide 09 — Agenci i Strategie ReAct</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -59,18 +59,18 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1400px;
+            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: -40px;
         }
 
-        .section-label {
+        .era-label {
             font-size: 18px;
             text-transform: uppercase;
             letter-spacing: 6px;
-            color: rgba(239, 68, 68, 0.8);
+            color: var(--cyan-400);
             margin-bottom: 24px;
             font-weight: 600;
             opacity: 0;
@@ -78,10 +78,10 @@
         }
 
         h2.title {
-            font-size: 60px;
+            font-size: 56px;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 72px;
+            margin-bottom: 60px;
             text-align: center;
             color: #ffffff;
             opacity: 0;
@@ -90,39 +90,88 @@
         }
 
         h2.title .highlight {
-            color: rgba(239, 68, 68, 0.8);
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .warning-list {
+        /* Two boxes */
+        .boxes {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .box {
+            width: 600px;
+            padding: 40px 36px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
-            gap: 24px;
-            width: 100%;
+            gap: 16px;
+            opacity: 0;
+            transition: all 0.3s ease;
         }
 
-        .warning-item {
+        .box:nth-child(1) { animation: fadeUp 0.8s ease-out 0.5s forwards; }
+        .box:nth-child(2) { animation: fadeUp 0.8s ease-out 0.7s forwards; }
+
+        .box:hover {
+            border-color: var(--cyan-500);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
+        }
+
+        .box-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
             display: flex;
             align-items: center;
-            gap: 24px;
-            padding: 28px 36px;
-            background: rgba(239, 68, 68, 0.05);
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            border-radius: 20px;
-            font-size: 26px;
-            font-weight: 500;
-            color: #fca5a5;
-            opacity: 0;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--cyan-400);
         }
 
-        .warning-item:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
-        .warning-item:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
-        .warning-item:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
-        .warning-item:nth-child(4) { animation: fadeUp 0.7s ease-out 1.1s forwards; }
+        .box-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+        }
 
-        .warning-item i {
-            font-size: 32px;
-            color: rgba(239, 68, 68, 0.7);
-            flex-shrink: 0;
+        .box-desc {
+            font-size: 20px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Flow diagram */
+        .flow {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.0s forwards;
+        }
+
+        .flow-step {
+            padding: 16px 28px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--cyan-400);
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: var(--text-muted);
         }
 
         .accent {
@@ -178,28 +227,34 @@
         <div class="bg-glow"></div>
 
         <div class="accent" style="width: 400px; height: 400px; top: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; left: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">Red Flags</span>
-            <h2 class="title">Sygnały <span class="highlight">ostrzegawcze</span> Conwaya</h2>
+            <span class="era-label">AI Agents</span>
+            <h2 class="title">Agenci i strategie <span class="highlight">ReAct</span></h2>
 
-            <div class="warning-list">
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Niekończące się spotkania o "kontraktach" między zespołami
+            <div class="boxes">
+                <div class="box">
+                    <div class="box-icon"><i class="ti ti-brain"></i></div>
+                    <span class="box-title">ReAct</span>
+                    <span class="box-desc"><strong style="color: var(--cyan-400);">Reason + Act</strong> - rozdzielenie myślenia od działania. Agent najpierw analizuje, potem wykonuje akcję.</span>
                 </div>
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Powielona logika w różnych zespołach
+
+                <div class="box">
+                    <div class="box-icon"><i class="ti ti-users-group"></i></div>
+                    <span class="box-title">Multi-Agent</span>
+                    <span class="box-desc">Współpraca wielu specjalistów AI. Każdy agent ma swoją domenę i narzędzia.</span>
                 </div>
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Distributed Monolith - wspólne deploymenty
-                </div>
-                <div class="warning-item">
-                    <i class="ti ti-alert-triangle"></i>
-                    Zespół platformowy jako wąskie gardło
-                </div>
+            </div>
+
+            <div class="flow">
+                <div class="flow-step">Prompt</div>
+                <span class="flow-arrow"><i class="ti ti-arrow-right"></i></span>
+                <div class="flow-step">Myślenie</div>
+                <span class="flow-arrow"><i class="ti ti-arrow-right"></i></span>
+                <div class="flow-step">Narzędzie</div>
+                <span class="flow-arrow"><i class="ti ti-arrow-right"></i></span>
+                <div class="flow-step">Wynik</div>
             </div>
         </div>
 
