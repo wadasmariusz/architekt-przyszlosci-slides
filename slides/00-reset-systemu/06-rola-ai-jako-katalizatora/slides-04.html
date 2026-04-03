@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 02 - Kryzys tożsamości</title>
+    <title>Slide 04 - Luka walidacyjna</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
         :root {
             --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
             --dark-900: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -51,7 +50,7 @@
             transform: translate(-50%, -50%);
             width: 900px;
             height: 900px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -59,11 +58,11 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            text-align: center;
+            max-width: 1500px;
         }
 
         .section-label {
@@ -81,8 +80,7 @@
             font-size: 64px;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 80px;
-            text-align: center;
+            margin-bottom: 60px;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
@@ -94,79 +92,38 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .roles {
-            display: flex;
-            gap: 48px;
-            justify-content: center;
-        }
-
-        .role-card {
-            width: 340px;
-            padding: 48px 32px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
+        /* Chart */
+        .chart {
+            width: 900px;
+            height: 400px;
+            position: relative;
             opacity: 0;
-            backdrop-filter: blur(12px);
-            transition: border-color 0.3s ease;
+            animation: fadeIn 1s ease-out 0.6s forwards;
         }
 
-        .role-card:hover {
-            border-color: rgba(34, 211, 238, 0.3);
+        .chart-svg {
+            width: 100%;
+            height: 100%;
         }
 
-        .role-card:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
-        .role-card:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
-        .role-card:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
-
-        .role-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(6, 182, 212, 0.1);
-            border: 2px solid rgba(6, 182, 212, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            color: var(--cyan-400);
-        }
-
-        .role-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .role-desc {
-            font-size: 18px;
-            color: var(--text-muted);
-            text-align: center;
-            line-height: 1.5;
-        }
-
-        .bottom-text {
-            margin-top: 60px;
-            font-size: 24px;
+        .gap-label {
+            margin-top: 40px;
+            font-size: 28px;
             color: var(--text-muted);
             opacity: 0;
-            animation: fadeIn 1s ease-out 1.4s forwards;
+            animation: fadeIn 1s ease-out 1.2s forwards;
         }
 
-        .bottom-text strong {
-            color: rgba(239, 68, 68, 0.8);
+        .gap-label strong {
+            color: rgba(239, 68, 68, 0.9);
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.12;
+            filter: blur(60px);
+            opacity: 0.1;
             z-index: 0;
         }
 
@@ -213,32 +170,46 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
-        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 600px; height: 600px; top: 10%; right: 5%;"></div>
 
         <div class="content">
-            <span class="section-label">Tożsamość</span>
-            <h2 class="title">Jeden tytuł - <span class="highlight">wiele definicji</span></h2>
+            <span class="section-label">Problem</span>
+            <h2 class="title"><span class="highlight">Luka</span> walidacyjna</h2>
 
-            <div class="roles">
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-presentation"></i></div>
-                    <span class="role-title">Teoretyk systemów</span>
-                    <span class="role-desc">Spotkania z biznesem, PowerPointy, brak kontaktu z kodem</span>
-                </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-code-circle-2"></i></div>
-                    <span class="role-title">Super-Senior</span>
-                    <span class="role-desc">Code Review 24/7, decyzje techniczne, brak wizji strategicznej</span>
-                </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-ghost"></i></div>
-                    <span class="role-title">Widmo</span>
-                    <span class="role-desc">Brak jasnych zadań, niejasna odpowiedzialność, niewidoczny wpływ</span>
-                </div>
+            <div class="chart">
+                <svg class="chart-svg" viewBox="0 0 900 400">
+                    <!-- Axes -->
+                    <line x1="80" y1="350" x2="850" y2="350" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+                    <line x1="80" y1="350" x2="80" y2="30" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+
+                    <!-- Generation line (steep) -->
+                    <path d="M 80 340 Q 300 300 450 180 T 830 40" fill="none" stroke="#22d3ee" stroke-width="4" stroke-dasharray="1000" stroke-dashoffset="1000">
+                        <animate attributeName="stroke-dashoffset" from="1000" to="0" dur="2s" begin="0.8s" fill="freeze"/>
+                    </path>
+                    <text x="835" y="35" fill="#22d3ee" font-size="20" font-weight="600">Generowanie</text>
+
+                    <!-- Validation line (flat) -->
+                    <path d="M 80 340 Q 300 320 450 280 T 830 220" fill="none" stroke="rgba(239, 68, 68, 0.8)" stroke-width="4" stroke-dasharray="1000" stroke-dashoffset="1000">
+                        <animate attributeName="stroke-dashoffset" from="1000" to="0" dur="2s" begin="1.2s" fill="freeze"/>
+                    </path>
+                    <text x="835" y="215" fill="rgba(239, 68, 68, 0.8)" font-size="20" font-weight="600">Walidacja</text>
+
+                    <!-- Gap annotation -->
+                    <line x1="700" y1="100" x2="700" y2="240" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="8,4">
+                        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.5s" fill="freeze"/>
+                    </line>
+                    <text x="715" y="175" fill="rgba(255,255,255,0.5)" font-size="18" opacity="0">
+                        GAP
+                        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.5s" fill="freeze"/>
+                    </text>
+
+                    <!-- Axis labels -->
+                    <text x="460" y="390" fill="rgba(255,255,255,0.4)" font-size="16" text-anchor="middle">Czas</text>
+                    <text x="30" y="190" fill="rgba(255,255,255,0.4)" font-size="16" text-anchor="middle" transform="rotate(-90, 30, 190)">Zdolność</text>
+                </svg>
             </div>
 
-            <p class="bottom-text">Chaos w nazewnictwie = <strong>chaos w oczekiwaniach</strong></p>
+            <p class="gap-label">Generowanie &gt; walidacja = <strong>rosnące ryzyko</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

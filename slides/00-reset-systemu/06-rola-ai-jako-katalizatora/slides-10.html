@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 02 - Kryzys tożsamości</title>
+    <title>Slide 10 - Hipoteza vs fakt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
         :root {
             --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
             --dark-900: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -94,65 +93,80 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .roles {
-            display: flex;
-            gap: 48px;
-            justify-content: center;
+        .title .warning {
+            color: rgba(239, 68, 68, 0.9);
         }
 
-        .role-card {
-            width: 340px;
-            padding: 48px 32px;
+        /* Two columns */
+        .columns {
+            display: flex;
+            gap: 80px;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .column {
+            width: 500px;
+            padding: 48px 40px;
             background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
+            backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
             gap: 24px;
             opacity: 0;
-            backdrop-filter: blur(12px);
-            transition: border-color 0.3s ease;
         }
 
-        .role-card:hover {
-            border-color: rgba(34, 211, 238, 0.3);
+        .column:nth-child(1) {
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
         }
 
-        .role-card:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
-        .role-card:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
-        .role-card:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
+        .column:nth-child(2) {
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            animation: fadeUp 0.8s ease-out 0.8s forwards;
+        }
 
-        .role-icon {
+        .column-icon {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: rgba(6, 182, 212, 0.1);
-            border: 2px solid rgba(6, 182, 212, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            color: var(--cyan-400);
         }
 
-        .role-title {
-            font-size: 24px;
+        .column:nth-child(1) .column-icon {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: rgba(239, 68, 68, 0.8);
+        }
+
+        .column:nth-child(2) .column-icon {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: rgba(34, 197, 94, 0.8);
+        }
+
+        .column-title {
+            font-size: 28px;
             font-weight: 700;
             color: #ffffff;
         }
 
-        .role-desc {
-            font-size: 18px;
+        .column-desc {
+            font-size: 20px;
             color: var(--text-muted);
-            text-align: center;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .bottom-text {
-            margin-top: 60px;
-            font-size: 24px;
+            font-size: 28px;
             color: var(--text-muted);
+            text-align: center;
             opacity: 0;
             animation: fadeIn 1s ease-out 1.4s forwards;
         }
@@ -214,31 +228,27 @@
         <div class="bg-glow"></div>
 
         <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
-        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; right: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">Tożsamość</span>
-            <h2 class="title">Jeden tytuł - <span class="highlight">wiele definicji</span></h2>
+            <span class="section-label">Ryzyko</span>
+            <h2 class="title">Hipoteza vs <span class="highlight">fakt</span></h2>
 
-            <div class="roles">
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-presentation"></i></div>
-                    <span class="role-title">Teoretyk systemów</span>
-                    <span class="role-desc">Spotkania z biznesem, PowerPointy, brak kontaktu z kodem</span>
+            <div class="columns">
+                <div class="column">
+                    <div class="column-icon"><i class="ti ti-sparkles"></i></div>
+                    <span class="column-title">AI output</span>
+                    <p class="column-desc">Hipotezy, sugestie,<br>prawdopodobne odpowiedzi,<br>potencjalne halucynacje</p>
                 </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-code-circle-2"></i></div>
-                    <span class="role-title">Super-Senior</span>
-                    <span class="role-desc">Code Review 24/7, decyzje techniczne, brak wizji strategicznej</span>
-                </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-ghost"></i></div>
-                    <span class="role-title">Widmo</span>
-                    <span class="role-desc">Brak jasnych zadań, niejasna odpowiedzialność, niewidoczny wpływ</span>
+
+                <div class="column">
+                    <div class="column-icon"><i class="ti ti-shield-check"></i></div>
+                    <span class="column-title">Zweryfikowana wiedza</span>
+                    <p class="column-desc">Potwierdzone fakty,<br>przetestowane rozwiązania,<br>udokumentowane decyzje</p>
                 </div>
             </div>
 
-            <p class="bottom-text">Chaos w nazewnictwie = <strong>chaos w oczekiwaniach</strong></p>
+            <p class="bottom-text">Największe ryzyko: traktowanie hipotez jako <strong>faktów</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

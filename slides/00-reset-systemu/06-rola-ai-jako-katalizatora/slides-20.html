@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 02 - Kryzys tożsamości</title>
+    <title>Slide 20 - Enterprise i kontekst</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
         :root {
             --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
             --dark-900: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -94,65 +93,89 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .roles {
+        /* Enterprise visual */
+        .enterprise-row {
             display: flex;
             gap: 48px;
             justify-content: center;
+            align-items: center;
+            margin-bottom: 60px;
         }
 
-        .role-card {
-            width: 340px;
-            padding: 48px 32px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .sys-box {
+            width: 320px;
+            padding: 40px 32px;
             border-radius: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 24px;
+            text-align: center;
+            gap: 20px;
             opacity: 0;
-            backdrop-filter: blur(12px);
-            transition: border-color 0.3s ease;
         }
 
-        .role-card:hover {
-            border-color: rgba(34, 211, 238, 0.3);
+        .sys-box.legacy {
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            animation: fadeUp 0.7s ease-out 0.5s forwards;
         }
 
-        .role-card:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
-        .role-card:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
-        .role-card:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
+        .sys-box.new {
+            background: rgba(34, 197, 94, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            animation: fadeUp 0.7s ease-out 0.7s forwards;
+        }
 
-        .role-icon {
+        .sys-box.warning {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: fadeUp 0.7s ease-out 0.9s forwards;
+        }
+
+        .sys-icon {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: rgba(6, 182, 212, 0.1);
-            border: 2px solid rgba(6, 182, 212, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            color: var(--cyan-400);
         }
 
-        .role-title {
-            font-size: 24px;
+        .legacy .sys-icon {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: rgba(251, 191, 36, 0.8);
+        }
+
+        .new .sys-icon {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: rgba(34, 197, 94, 0.8);
+        }
+
+        .warning .sys-icon {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: rgba(239, 68, 68, 0.8);
+        }
+
+        .sys-name {
+            font-size: 26px;
             font-weight: 700;
             color: #ffffff;
         }
 
-        .role-desc {
+        .sys-desc {
             font-size: 18px;
             color: var(--text-muted);
-            text-align: center;
             line-height: 1.5;
         }
 
         .bottom-text {
-            margin-top: 60px;
-            font-size: 24px;
+            font-size: 28px;
             color: var(--text-muted);
+            text-align: center;
             opacity: 0;
             animation: fadeIn 1s ease-out 1.4s forwards;
         }
@@ -214,31 +237,33 @@
         <div class="bg-glow"></div>
 
         <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
-        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; right: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">Tożsamość</span>
-            <h2 class="title">Jeden tytuł - <span class="highlight">wiele definicji</span></h2>
+            <span class="section-label">Enterprise</span>
+            <h2 class="title">Enterprise i <span class="highlight">kontekst</span></h2>
 
-            <div class="roles">
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-presentation"></i></div>
-                    <span class="role-title">Teoretyk systemów</span>
-                    <span class="role-desc">Spotkania z biznesem, PowerPointy, brak kontaktu z kodem</span>
+            <div class="enterprise-row">
+                <div class="sys-box legacy">
+                    <div class="sys-icon"><i class="ti ti-building"></i></div>
+                    <span class="sys-name">Legacy system</span>
+                    <p class="sys-desc">Lata historii,<br>ukryte zależności,<br>brak dokumentacji</p>
                 </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-code-circle-2"></i></div>
-                    <span class="role-title">Super-Senior</span>
-                    <span class="role-desc">Code Review 24/7, decyzje techniczne, brak wizji strategicznej</span>
+
+                <div class="sys-box new">
+                    <div class="sys-icon"><i class="ti ti-sparkles"></i></div>
+                    <span class="sys-name">Nowy system</span>
+                    <p class="sys-desc">AI-generated,<br>nowoczesny stack,<br>brak kontekstu</p>
                 </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-ghost"></i></div>
-                    <span class="role-title">Widmo</span>
-                    <span class="role-desc">Brak jasnych zadań, niejasna odpowiedzialność, niewidoczny wpływ</span>
+
+                <div class="sys-box warning">
+                    <div class="sys-icon"><i class="ti ti-alert-triangle"></i></div>
+                    <span class="sys-name">Ryzyko</span>
+                    <p class="sys-desc">Brak wiedzy domenowej,<br>utracony kontekst,<br>nieznane zależności</p>
                 </div>
             </div>
 
-            <p class="bottom-text">Chaos w nazewnictwie = <strong>chaos w oczekiwaniach</strong></p>
+            <p class="bottom-text">Legacy + brak wiedzy = <strong>ryzyko katastrofy</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

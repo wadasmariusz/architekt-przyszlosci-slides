@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 02 - Kryzys tożsamości</title>
+    <title>Slide 13 - Prompt jako specyfikacja</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
         :root {
             --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
             --dark-900: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -59,11 +58,11 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            text-align: center;
+            max-width: 1500px;
         }
 
         .section-label {
@@ -82,7 +81,6 @@
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 80px;
-            text-align: center;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
@@ -94,79 +92,113 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .roles {
+        /* Prompt flow */
+        .prompt-flow {
             display: flex;
-            gap: 48px;
-            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
         }
 
-        .role-card {
-            width: 340px;
-            padding: 48px 32px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
+        .prompt-block {
+            width: 360px;
+            padding: 40px 32px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            text-align: left;
+        }
+
+        .prompt-block .label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .prompt-line {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(6, 182, 212, 0.15);
+            margin-bottom: 12px;
+        }
+
+        .prompt-line:nth-child(2) { width: 90%; }
+        .prompt-line:nth-child(3) { width: 70%; }
+        .prompt-line:nth-child(4) { width: 85%; }
+        .prompt-line:nth-child(5) { width: 60%; }
+        .prompt-line:nth-child(6) { width: 75%; }
+
+        .flow-middle {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 24px;
-            opacity: 0;
-            backdrop-filter: blur(12px);
-            transition: border-color 0.3s ease;
+            gap: 12px;
         }
 
-        .role-card:hover {
-            border-color: rgba(34, 211, 238, 0.3);
-        }
-
-        .role-card:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
-        .role-card:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
-        .role-card:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
-
-        .role-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(6, 182, 212, 0.1);
-            border: 2px solid rgba(6, 182, 212, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
+        .flow-middle i {
+            font-size: 40px;
             color: var(--cyan-400);
         }
 
-        .role-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
+        .flow-middle span {
+            font-size: 16px;
+            color: var(--text-muted);
         }
 
-        .role-desc {
+        .response-block {
+            width: 360px;
+            padding: 40px 32px;
+            background: rgba(6, 182, 212, 0.06);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 20px;
+            text-align: left;
+        }
+
+        .response-block .label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .response-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: var(--text-main);
             font-size: 18px;
-            color: var(--text-muted);
-            text-align: center;
-            line-height: 1.5;
+        }
+
+        .response-item i {
+            color: var(--cyan-400);
+            font-size: 20px;
         }
 
         .bottom-text {
             margin-top: 60px;
-            font-size: 24px;
+            font-size: 28px;
             color: var(--text-muted);
             opacity: 0;
-            animation: fadeIn 1s ease-out 1.4s forwards;
+            animation: fadeIn 1s ease-out 1.2s forwards;
         }
 
         .bottom-text strong {
-            color: rgba(239, 68, 68, 0.8);
+            color: var(--cyan-400);
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.12;
+            filter: blur(60px);
+            opacity: 0.1;
             z-index: 0;
         }
 
@@ -213,32 +245,38 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
-        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; left: 5%;"></div>
 
         <div class="content">
-            <span class="section-label">Tożsamość</span>
-            <h2 class="title">Jeden tytuł - <span class="highlight">wiele definicji</span></h2>
+            <span class="section-label">Prompt Engineering</span>
+            <h2 class="title">Prompt jako <span class="highlight">specyfikacja</span></h2>
 
-            <div class="roles">
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-presentation"></i></div>
-                    <span class="role-title">Teoretyk systemów</span>
-                    <span class="role-desc">Spotkania z biznesem, PowerPointy, brak kontaktu z kodem</span>
+            <div class="prompt-flow">
+                <div class="prompt-block">
+                    <div class="label">Prompt / dokument techniczny</div>
+                    <div class="prompt-line"></div>
+                    <div class="prompt-line"></div>
+                    <div class="prompt-line"></div>
+                    <div class="prompt-line"></div>
+                    <div class="prompt-line"></div>
                 </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-code-circle-2"></i></div>
-                    <span class="role-title">Super-Senior</span>
-                    <span class="role-desc">Code Review 24/7, decyzje techniczne, brak wizji strategicznej</span>
+
+                <div class="flow-middle">
+                    <i class="ti ti-arrow-right"></i>
+                    <span>AI</span>
+                    <i class="ti ti-arrow-right"></i>
                 </div>
-                <div class="role-card">
-                    <div class="role-icon"><i class="ti ti-ghost"></i></div>
-                    <span class="role-title">Widmo</span>
-                    <span class="role-desc">Brak jasnych zadań, niejasna odpowiedzialność, niewidoczny wpływ</span>
+
+                <div class="response-block">
+                    <div class="label">Strukturalna odpowiedź</div>
+                    <div class="response-item"><i class="ti ti-check"></i> Architektura</div>
+                    <div class="response-item"><i class="ti ti-check"></i> Trade-offy</div>
+                    <div class="response-item"><i class="ti ti-check"></i> Rekomendacja</div>
+                    <div class="response-item"><i class="ti ti-check"></i> Ryzyka</div>
                 </div>
             </div>
 
-            <p class="bottom-text">Chaos w nazewnictwie = <strong>chaos w oczekiwaniach</strong></p>
+            <p class="bottom-text">Prompt = <strong>dokument techniczny</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
