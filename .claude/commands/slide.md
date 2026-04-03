@@ -2,20 +2,16 @@ Utwórz kolejny slajd prezentacji HTML na podstawie podanego opisu: $ARGUMENTS
 
 ## Instrukcje
 
-1. **Ustal numer slajdu**: Sprawdź istniejące pliki `slides-*.html` w katalogu projektu i nadaj kolejny numer (np. jeśli istnieje `slides-05.html`, utwórz `slides-06.html`).
+1. **Ustal numer slajdu**: Sprawdź istniejące pliki `slides-*.html` w katalogu projektu i nadaj kolejny numer (np. jeśli istnieje `slides-07.html`, utwórz `slides-08.html`).
 
 2. **Przeczytaj skrypt**: Otwórz `slides.md` i `skrypt.md`, znajdź treść odpowiadającą podanemu opisowi slajdu.
 
-3. **Przeczytaj poprzedni slajd**: Otwórz ostatni istniejący plik `slides-XX.html` aby upewnić się o spójności stylu.
+3. **Przeczytaj poprzedni slajd**: Otwórz ostatni istniejący plik `slides-XX.html` aby upewnić się o spójności stylu i podejścia wizualnego.
 
-4. **Przeczytaj `styles.css`**: Zapoznaj się ze współdzielonymi stylami — NIE duplikuj ich w `<style>` slajdu. W `<style>` slajdu umieszczaj **tylko style specyficzne** dla tego slajdu.
-
-5. **Przeczytaj `template.html`**: Użyj go jako bazowej struktury HTML.
-
-6. **Utwórz plik HTML** z zachowaniem poniższego systemu projektowego:
+4. **Utwórz samodzielny plik HTML** — każdy slajd jest w pełni autonomiczny (wszystkie style inline, zewnętrzne CDN-y). Nie używaj zewnętrznego `styles.css`.
 
 ### Struktura HTML (obowiązkowa)
-Każdy slajd MUSI używać tej struktury (zgodnej z `template.html`):
+
 ```html
 <!DOCTYPE html>
 <html lang="pl">
@@ -23,49 +19,148 @@ Każdy slajd MUSI używać tej struktury (zgodnej z `template.html`):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slide XX — Tytuł slajdu</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
-        /* TYLKO style specyficzne dla tego slajdu */
-        /* NIE powtarzaj stylów z styles.css */
+        /* ===== CSS Custom Properties ===== */
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-700: #0e7490;
+            --dark-900: #030712;
+        }
+
+        /* ===== Base ===== */
+        body {
+            background-color: var(--dark-900);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
+        }
+
+        /* ===== Tło ===== */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(to right, rgba(6,182,212,0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(6,182,212,0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* ===== Content layout ===== */
+        .content {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== Typografia ===== */
+        .highlight {
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6,182,212,0.5);
+        }
+
+        /* ===== Camera Box ===== */
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        /* ===== Logo ===== */
+        .slide-logo {
+            position: absolute;
+            z-index: 4;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        /* ===== Animacje ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* ===== Style specyficzne dla tego slajdu ===== */
+        /* ... tutaj dodaj style unikalne dla slajdu ... */
     </style>
 </head>
 <body>
     <div class="stage" id="stage">
-        <div class="background">
-            <div class="bg-grid"></div>
-            <div class="bg-glow"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="corner corner--tl"></div>
-            <div class="corner corner--br"></div>
-        </div>
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
 
-        <!-- CONTENT — treść slajdu -->
         <div class="content">
-            <!-- treść specyficzna dla slajdu -->
+            <!-- Treść slajdu -->
         </div>
 
-        <!-- CAMERA BOX — obowiązkowy w każdym slajdzie -->
+        <!-- Logo — obowiązkowe -->
+        <img src="logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- Camera box — obowiązkowy -->
         <div class="camera-box">
-            <div class="camera-box__placeholder">kamera 480 &times; 270</div>
+            kamera 480 &times; 270
         </div>
-
-        <div class="overlay"></div>
     </div>
 
     <script>
         (function () {
             const stage = document.getElementById('stage');
             function rescale() {
-                stage.style.transform = 'scale(' + Math.min(innerWidth / 1920, innerHeight / 1080) + ')';
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
             }
-            addEventListener('resize', rescale);
+            window.addEventListener('resize', rescale);
             rescale();
         })();
     </script>
@@ -73,72 +168,118 @@ Każdy slajd MUSI używać tej struktury (zgodnej z `template.html`):
 </html>
 ```
 
-### Współdzielone klasy CSS (zdefiniowane w `styles.css` — NIE duplikuj)
-Te klasy są już dostępne i gotowe do użycia:
-- **Layout**: `.stage`, `.background`, `.bg-grid`, `.bg-glow`, `.particle`, `.corner`, `.corner--tl`, `.corner--br`, `.content`, `.camera-box`, `.camera-box__placeholder`, `.overlay`
-- **Typografia**: `.title` (72px), `.title .highlight`, `.section-title` (56px), `.section-title .highlight`, `.subtitle` (26px), `.module-label` (16px), `.divider`
-- **Chipy**: `.era-chips`, `.chip` (16px), `.era-chip` (16px, uppercase, z animacją fadeUp)
-- **Lesson box**: `.lesson`, `.lesson-icon` (24px), `.lesson-text` (22px), `.lesson-text strong`
-- **Animacje**: `fadeUp`, `gridMove`, `pulse`, `float`
+### System projektowy
 
-### Rozmiary czcionek (wytyczne)
-Czcionki muszą być duże i wyraźne — prezentacja jest wyświetlana na ekranie 1920×1080:
-- Tytuły główne: **72px**
-- Tytuły sekcji: **56px**
-- Podtytuły: **26px**
-- Tekst w kartach/bulletach: **18-22px** (nie mniej niż 16px)
-- Opisy drugorzędne: **16px** minimum
-- Chipy/tagi: **16px**
-- Ikony emoji: **24-36px**
+#### Paleta kolorów
+- **Akcent**: `--cyan-400` (#22d3ee), `--cyan-500` (#06b6d4), `--cyan-700` (#0e7490)
+- **Tło**: `--dark-900` (#030712), gradient `#0f172a → #030712`
+- **Powierzchnie**: `rgba(30,41,59,0.5)` z `backdrop-filter: blur(12px)`
+- **Tekst główny**: `white`
+- **Tekst drugorzędny**: `#94a3b8`
+- **Obramowania**: `rgba(255,255,255,0.1)`, akcentowane `rgba(6,182,212,0.3-0.4)`
 
-### Ważne szczegóły layoutu
-- `.stage` ma stały rozmiar 1920×1080px i jest skalowany JS-em do viewportu
-- `.content` jest pozycjonowany absolutnie z `bottom: 310px` — to zostawia miejsce na `.camera-box` (480×270px) w prawym dolnym rogu
-- `.camera-box` jest pozycjonowany absolutnie: `right: 40px; bottom: 40px`
-- Treść slajdu musi się zmieścić w obszarze `.content` bez nachodzenia na camera-box
+#### Rozmiary czcionek (1920×1080 — muszą być duże i czytelne)
+| Element | Rozmiar | Waga |
+|---------|---------|------|
+| Tytuł główny | **64px** | 800 |
+| Tytuł sekcji | **48-56px** | 700 |
+| Podtytuł | **24-26px** | 500 |
+| Tekst w kartach/bulletach | **20-22px** | 400 |
+| Chip/tag | **14px** | 600, uppercase, letter-spacing 2px |
+| Ikony w kartach | **48px** | — |
 
-### Paleta kolorów (dostępna jako CSS custom properties)
-- `--cyan-400` do `--cyan-900` — kolory akcentowe
-- `--dark-bg`, `--dark-surface` — tła
-- Tekst: `#f0f4f8` (główny), `#94a3b8` (drugorzędny), `#64748b` (przyciemniony)
+#### Komponenty (wzorce do stosowania)
 
-### Wzorce animacji wejścia
-- Używaj `fadeUp` jako główną animację wejścia (zdefiniowaną w `styles.css`)
-- Elementy zaczynają z `opacity: 0` i mają `animation: fadeUp 0.8s ease-out Xs forwards` z rosnącym delay (0.3s, 0.6s, 0.9s, ...)
-- Dla kart/elementów listy używaj kaskadowego opóźnienia (0.3s odstępu)
-
-### Wzorce komponentów (definiuj w `<style>` slajdu tylko gdy potrzebne)
-
-**Karty/boxy:**
+**Era Chip** (nad tytułem):
 ```css
-border-radius: 16px;
-background: rgba(17,24,39,0.7);
-border: 1px solid rgba(6,182,212,0.15);
-backdrop-filter: blur(8px);
-
-/* hover: */
-border-color: var(--cyan-500);
-background: rgba(6,182,212,0.08);
-transform: translateY(-6px);
-box-shadow: 0 8px 32px rgba(6,182,212,0.15);
+background: rgba(6,182,212,0.1);
+border: 1px solid rgba(6,182,212,0.3);
+color: var(--cyan-400);
+padding: 8px 20px;
+border-radius: 9999px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 2px;
+font-size: 14px;
 ```
 
-**Aktywny/wyróżniony element:**
+**Karta (card)**:
 ```css
-border-color: var(--cyan-500);
-background: rgba(6,182,212,0.06);
-box-shadow: 0 0 24px rgba(6,182,212,0.15);
+background: rgba(30,41,59,0.5);
+border: 1px solid rgba(255,255,255,0.1);
+border-radius: 32px;
+padding: 40px;
+backdrop-filter: blur(12px);
 ```
+
+**Karta wyróżniona (accent)**:
+```css
+border-color: rgba(6,182,212,0.4);
+background: linear-gradient(145deg, rgba(30,41,59,0.5) 0%, rgba(6,182,212,0.05) 100%);
+```
+
+**Ikona w karcie**:
+```css
+font-size: 48px;
+background: rgba(15,23,42,0.8);
+width: 80px; height: 80px;
+display: flex; align-items: center; justify-content: center;
+border-radius: 20px;
+border: 1px solid rgba(255,255,255,0.1);
+```
+
+**Lesson bar (dolny pasek z wnioskiem)**:
+```css
+padding: 24px 48px;
+background: rgba(6,182,212,0.1);
+border: 1px solid rgba(6,182,212,0.3);
+border-radius: 20px;
+```
+
+**Feature list (lista cech z bullet)**:
+```css
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    color: #94a3b8;
+}
+.feature-item strong { color: white; }
+.feature-item i { color: var(--cyan-400); font-size: 14px; }
+```
+
+#### Ikony
+- Używaj **Tabler Icons** (klasy `ti ti-*`) zamiast emoji
+- Popularne ikony: `ti-server`, `ti-network`, `ti-code`, `ti-database`, `ti-cloud`, `ti-shield`, `ti-rocket`, `ti-bulb`, `ti-chart-bar`, `ti-users`, `ti-lock`, `ti-arrow-right`, `ti-check`
+- Pełna lista: https://tabler.io/icons
+
+#### Animacje wejścia
+- Elementy zaczynają z `opacity: 0` i `transform: translateY(30px)`
+- Animacja: `fadeUp 0.8s ease-out [delay] forwards`
+- Kaskadowe opóźnienia: 0.5s, 1.0s, 1.5s, ... (co 0.5s)
+- Lesson bar / podsumowanie: `fadeIn 1s ease-out 1.8s forwards`
+- Hover na kartach: `transition: all 0.5s ease` z delikatnym `transform: scale(1.05)`
+
+#### Layout i rozmieszczenie
+- `.stage` = 1920×1080px, skalowany JS-em do viewportu (centrowany)
+- `.content` = szerokość 1500px, wycentrowany, `top: 80-100px`
+- Camera box: `480×270px`, prawy dolny róg (`right: 40px; bottom: 40px`)
+- Logo: lewy dolny róg (`left: 40px; bottom: 40px; height: 100px`)
+- Treść musi się zmieścić bez nachodzenia na camera-box i logo
+- Karty porównawcze: `flex` z `gap: 40px`, `max-width: 600px` każda
 
 ### Zasady ogólne
-- Każdy slajd importuje `styles.css` via `<link>` — NIE kopiuj tych stylów do `<style>`
-- W `<style>` slajdu definiuj **tylko** klasy specyficzne dla tego slajdu
-- Język: polski
-- Slajd musi mieścić się w 1920×1080 bez scrollowania
-- Używaj kreatywnych wizualizacji (diagramy CSS, animacje, ikony emoji) zamiast prostego tekstu
-- Tekst powinien być zwięzły — slajd to nie ściana tekstu
-- Animacje wejścia powinny się odtwarzać automatycznie po załadowaniu strony
-- Każdy slajd musi zawierać camera-box z placeholderem
-- Skrypt skalujący `rescale()` jest obowiązkowy w każdym slajdzie
 
-7. **Zapisz plik** jako `slides-XX.html` w katalogu projektu.
+1. **Samodzielny plik** — każdy slajd jest kompletny, nie zależy od `styles.css`
+2. **Tailwind CSS** via CDN — używaj do utility classes tam gdzie wygodne
+3. **Tabler Icons** via CDN — używaj ikon zamiast emoji
+4. **Język**: polski
+5. **Bez scrollowania** — treść musi się zmieścić w 1920×1080
+6. **Zwięzły tekst** — slajd to nie ściana tekstu, używaj kart, ikon, wizualizacji
+7. **Kreatywne wizualizacje** — diagramy CSS, karty porównawcze, animowane elementy, progress bary, ikony
+8. **Logo obowiązkowe** — `logo/Architekt_Przyszłości_horizontal_gradient_light.png` w lewym dolnym rogu
+9. **Camera box obowiązkowy** — w prawym dolnym rogu
+10. **Skrypt skalujący obowiązkowy** — centrujący stage na stronie
+
+5. **Zapisz plik** jako `slides-XX.html` w katalogu projektu.

@@ -4,295 +4,444 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slide 06 — ERA Klient–Serwer</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Tailwind CSS included -> ensures global resets are present -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
-        .content {
-            bottom: 80px;
-            max-width: 1100px;
-            left: 50%;
-            right: auto;
-            transform: translateX(-50%);
-            width: 100%;
-            padding: 0 80px;
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-900: #164e63;
+            --dark-900: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
-        .section-title { margin-bottom: 16px; }
-
-        /* --- balance scale --- */
-        .scale-scene {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 16px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.9s forwards;
+        body {
+            background-color: var(--dark-900);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
         }
 
-        .scale-emoji {
-            font-size: 28px;
-            margin-bottom: 2px;
-            animation: scaleRock 3s ease-in-out infinite;
-        }
-
-        @keyframes scaleRock {
-            0%, 100% { transform: rotate(0deg); }
-            25%      { transform: rotate(4deg); }
-            75%      { transform: rotate(-4deg); }
-        }
-
-        .scale-beam {
+        .stage {
+            width: 1920px;
+            height: 1080px;
             position: relative;
-            width: 500px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--cyan-700), var(--cyan-400), var(--cyan-700));
-            border-radius: 2px;
-            animation: beamTilt 3s ease-in-out infinite;
-            transform-origin: center center;
-        }
-
-        @keyframes beamTilt {
-            0%, 100% { transform: rotate(0deg); }
-            25%      { transform: rotate(3deg); }
-            75%      { transform: rotate(-3deg); }
-        }
-
-        .scale-pillar {
-            width: 3px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--cyan-500), var(--cyan-900));
-            margin-top: -2px;
-        }
-
-        .scale-base {
-            width: 80px;
-            height: 4px;
-            background: var(--cyan-700);
-            border-radius: 2px;
-        }
-
-        .scale-pans {
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
             display: flex;
-            justify-content: space-between;
-            width: 500px;
-            margin-top: -4px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .scale-pan {
+        /* Ambient Background */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Content Container */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            width: 200px;
+            margin-top: -60px; /* Slight optical adjustment */
         }
 
-        .pan-rope {
-            width: 2px;
-            height: 16px;
-            background: linear-gradient(to bottom, var(--cyan-500), transparent);
+        /* Typography */
+        .era-label {
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--cyan-400);
+            margin-bottom: 24px;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
         }
 
-        .pan-plate {
-            width: 200px;
-            padding: 14px 12px;
-            border-radius: 16px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.15);
-            backdrop-filter: blur(8px);
+        h2.title {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 100px;
             text-align: center;
-            transition: all 0.4s ease;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.2s forwards;
+            letter-spacing: -1px;
         }
 
-        .pan-plate:hover {
-            border-color: var(--cyan-500);
-            background: rgba(6,182,212,0.08);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 32px rgba(6,182,212,0.15);
+        h2.title .highlight {
+            color: var(--cyan-400);
+            position: relative;
+        }
+        
+        h2.title .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--cyan-400);
+            border-radius: 2px;
+            opacity: 0.5;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
         }
 
-        .pan-icon { font-size: 32px; display: block; margin-bottom: 4px; }
-        .pan-label { font-size: 20px; font-weight: 700; color: #e2e8f0; display: block; margin-bottom: 2px; }
-        .pan-desc { font-size: 16px; font-weight: 400; color: #94a3b8; }
-        .pan-desc strong { color: var(--cyan-400); font-weight: 600; }
-
-        /* --- bouncing arrow --- */
-        .bounce-arrow {
+        /* Architecture Nodes Diagram */
+        .arch-diagram {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 14px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.5s forwards;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 100px; /* Bring nodes inward slightly */
+            margin-bottom: 100px;
+            position: relative;
         }
 
-        .arrow-left, .arrow-right {
-            font-size: 24px;
+        .node {
+            width: 360px;
+            padding: 40px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .node.client {
+            transform: translateX(-40px);
+            animation: slideInLeft 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+        }
+
+        .node.server {
+            transform: translateX(40px);
+            animation: slideInRight 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+        }
+
+        .node i {
+            font-size: 72px;
+            color: var(--text-main);
+            margin-bottom: 24px;
+            background: rgba(34, 211, 238, 0.1);
+            padding: 20px;
+            border-radius: 24px;
+            border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        .node-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .node-desc {
+            font-size: 20px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .node-desc strong {
             color: var(--cyan-400);
         }
 
-        .arrow-left { animation: arrowBounceLeft 2s ease-in-out infinite; }
-        .arrow-right { animation: arrowBounceRight 2s ease-in-out infinite; }
-
-        @keyframes arrowBounceLeft {
-            0%, 100% { transform: translateX(0); opacity: 0.4; }
-            50%      { transform: translateX(-12px); opacity: 1; }
+        /* Connection line traveling between */
+        .connection-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 450px;
+            right: 450px;
+            height: 4px;
+            transform: translateY(-50%);
+            z-index: 1;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.2s forwards;
         }
-        @keyframes arrowBounceRight {
-            0%, 100% { transform: translateX(0); opacity: 0.4; }
-            50%      { transform: translateX(12px); opacity: 1; }
+
+        .connection-track {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 2px;
         }
 
-        .arrow-question {
+        .connection-flow {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(90deg, var(--cyan-400) 0, var(--cyan-400) 15px, transparent 15px, transparent 30px);
+            background-size: 30px 4px;
+            border-radius: 2px;
+            opacity: 0.4;
+            animation: moveDashes 1s linear infinite;
+        }
+
+        /* Centered Question Badge */
+        .question-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: var(--dark-900);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 24px 40px;
+            border-radius: 50px;
             font-size: 28px;
             font-weight: 600;
-            color: #e2e8f0;
-            padding: 8px 18px;
-            border-radius: 12px;
-            background: rgba(6,182,212,0.06);
-            border: 1px solid rgba(6,182,212,0.15);
+            color: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.8s forwards;
+            z-index: 3;
+            white-space: nowrap;
         }
 
-        .arrow-question strong { color: var(--cyan-400); }
+        .question-badge span {
+            color: var(--cyan-400);
+            font-weight: 800;
+        }
 
-        /* --- validation options --- */
-        .validation-row {
+        /* Options Blocks */
+        .options-container {
             display: flex;
+            gap: 24px;
+            width: 100%;
+            padding: 0 40px; /* Slight padding to bring inwards */
             justify-content: center;
-            gap: 14px;
-            margin-bottom: 16px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.8s forwards;
         }
 
-        .val-option {
-            padding: 14px 22px;
-            border-radius: 10px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.12);
-            backdrop-filter: blur(8px);
-            font-size: 22px;
-            color: #94a3b8;
-            transition: all 0.3s ease;
+        .option-card {
+            flex: 1;
+            max-width: 420px;
+            padding: 36px 32px;
+            border-radius: 24px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            position: relative;
+        }
+
+        .option-card.opt-1 { animation: fadeUp 0.8s ease-out 2.8s forwards; }
+        .option-card.opt-2 { animation: fadeUp 0.8s ease-out 3.2s forwards; }
+        .option-card.opt-best {
+            animation: fadeUpHighlight 1s cubic-bezier(0.16, 1, 0.3, 1) 4.2s forwards;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(6, 182, 212, 0.1) 100%);
+            border-color: rgba(34, 211, 238, 0.3);
+        }
+
+        .opt-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            display: inline-block;
+        }
+        .opt-best .opt-icon {
+            color: var(--cyan-400);
+            filter: drop-shadow(0 0 15px rgba(34,211,238,0.4));
+        }
+
+        .opt-title {
+            font-size: 24px;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .opt-best .opt-title {
+            color: var(--cyan-400);
+        }
+
+        .opt-text {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .opt-best .opt-text {
+            color: #e2e8f0;
+            font-size: 19px;
+        }
+        
+        /* Floating particles or accents */
+        .accent {
+            position: absolute;
+            background: var(--cyan-400);
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeUpHighlight {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { 
+                opacity: 1; 
+                transform: translateY(-10px) scale(1.05); /* pops out slightly */
+                box-shadow: 0 30px 60px -15px rgba(34,211,238,0.2); 
+            }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-80px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(80px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            70% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        @keyframes moveDashes {
+            to { background-position: 30px 0; }
+        }
+
+        /* Utilities */
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
         }
 
-        .val-option:hover {
-            border-color: var(--cyan-500);
-            background: rgba(6,182,212,0.08);
-            transform: translateY(-4px);
-            box-shadow: 0 6px 24px rgba(6,182,212,0.12);
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
         }
-
-        .val-option .val-icon { font-size: 20px; }
-        .val-option strong { color: var(--cyan-400); font-weight: 600; }
-
-        .val-option--active {
-            border-color: var(--cyan-500);
-            background: rgba(6,182,212,0.06);
-            box-shadow: 0 0 24px rgba(6,182,212,0.12);
-            animation: activeGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes activeGlow {
-            0%, 100% { box-shadow: 0 0 16px rgba(6,182,212,0.08); }
-            50%      { box-shadow: 0 0 32px rgba(6,182,212,0.2); }
-        }
-
-        /* lesson uses global styles from styles.css */
     </style>
 </head>
 <body>
     <div class="stage" id="stage">
-        <div class="background">
-            <div class="bg-grid"></div>
-            <div class="bg-glow"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="corner corner--tl"></div>
-            <div class="corner corner--br"></div>
-        </div>
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        
+        <!-- Accents for lighting -->
+        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
 
         <div class="content">
-            <span class="era-chip">ERA · Klient–Serwer</span>
+            <span class="era-label">Era · Klient–Serwer</span>
+            <h2 class="title">Gdzie postawić <span class="highlight">granicę?</span></h2>
 
-            <h2 class="section-title">
-                <span class="highlight">Gdzie</span> postawić granicę?
-            </h2>
+            <div class="arch-diagram">
+                <!-- Client Node -->
+                <div class="node client">
+                    <i class="ti ti-device-laptop"></i>
+                    <h3 class="node-title">Klient</h3>
+                    <p class="node-desc">Szybka reakcja, blisko <strong>użytkownika</strong></p>
+                </div>
 
-            <div class="scale-scene">
-                <span class="scale-emoji">⚖️</span>
-                <div class="scale-beam"></div>
-                <div class="scale-pans">
-                    <div class="scale-pan">
-                        <div class="pan-rope"></div>
-                        <div class="pan-plate">
-                            <span class="pan-icon">🖥️</span>
-                            <span class="pan-label">Klient</span>
-                            <span class="pan-desc">Szybko <strong>blisko użytkownika</strong></span>
-                        </div>
-                    </div>
-                    <div class="scale-pan">
-                        <div class="pan-rope"></div>
-                        <div class="pan-plate">
-                            <span class="pan-icon">🗄️</span>
-                            <span class="pan-label">Serwer</span>
-                            <span class="pan-desc">Bezpiecznie <strong>pełna kontrola</strong></span>
-                        </div>
-                    </div>
+                <!-- Server Node -->
+                <div class="node server">
+                    <i class="ti ti-server-2"></i>
+                    <h3 class="node-title">Serwer</h3>
+                    <p class="node-desc">Centralne źródło prawdy, <strong>bezpieczeństwo</strong></p>
+                </div>
+
+                <!-- Connection elements -->
+                <div class="connection-wrapper">
+                    <div class="connection-track"></div>
+                    <div class="connection-flow"></div>
+                </div>
+
+                <!-- Central Question -->
+                <div class="question-badge">
+                     <span>Gdzie walidacja?</span>
                 </div>
             </div>
 
-            <div class="bounce-arrow">
-                <span class="arrow-left">←</span>
-                <div class="arrow-question"><strong>Walidacja</strong> tu czy tam?</div>
-                <span class="arrow-right">→</span>
-            </div>
+            <div class="options-container">
+                <!-- Option 1: Client -->
+                <div class="option-card opt-1">
+                    <i class="ti ti-bolt opt-icon"></i>
+                    <h4 class="opt-title">Tylko u Klienta</h4>
+                    <p class="opt-text">Błyskawiczny feedback dla użytkownika i płynny UX, ale narażenie systemu na obejście zabezpieczeń i manipulację.</p>
+                </div>
 
-            <div class="validation-row">
-                <div class="val-option">
-                    <span class="val-icon">⚡</span>
-                    <span>Po stronie <strong>klienta</strong> - szybko</span>
+                <!-- Option 2: Server -->
+                <div class="option-card opt-2">
+                    <i class="ti ti-shield-lock opt-icon"></i>
+                    <h4 class="opt-title">Tylko na Serwerze</h4>
+                    <p class="opt-text">Twarda kontrola i domyślne uwierzytelnienie, jednak z irytującym długim oczekiwaniem i obciążającą siecią pętlą.</p>
                 </div>
-                <div class="val-option">
-                    <span class="val-icon">🔒</span>
-                    <span>Po stronie <strong>serwera</strong> - bezpiecznie</span>
-                </div>
-                <div class="val-option val-option--active">
-                    <span class="val-icon">✅</span>
-                    <span>A może <strong>w obu</strong>?</span>
-                </div>
-            </div>
 
-            <div class="lesson">
-                <span class="lesson-icon">💡</span>
-                <span class="lesson-text">Lekcja na dziś: waliduj <strong>po obu stronach</strong> — UX + bezpieczeństwo</span>
             </div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
 
         <div class="camera-box">
-            <div class="camera-box__placeholder">kamera 480 &times; 270</div>
+            kamera 480 &times; 270
         </div>
-
-        <div class="overlay"></div>
     </div>
 
     <script>
         (function () {
             const stage = document.getElementById('stage');
             function rescale() {
-                stage.style.transform = 'scale(' + Math.min(innerWidth / 1920, innerHeight / 1080) + ')';
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
             }
-            addEventListener('resize', rescale);
+            window.addEventListener('resize', rescale);
             rescale();
         })();
     </script>
