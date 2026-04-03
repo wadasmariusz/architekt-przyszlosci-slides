@@ -8,7 +8,7 @@ Utwórz kolejny slajd prezentacji HTML na podstawie podanego opisu: $ARGUMENTS
 
 3. **Przeczytaj poprzedni slajd**: Otwórz ostatni istniejący plik `slides-XX.html` aby upewnić się o spójności stylu i podejścia wizualnego.
 
-4. **Utwórz samodzielny plik HTML** — każdy slajd jest w pełni autonomiczny (wszystkie style inline, zewnętrzne CDN-y). Nie używaj zewnętrznego `styles.css`.
+4. **Utwórz samodzielny plik HTML** - każdy slajd jest w pełni autonomiczny (wszystkie style inline, zewnętrzne CDN-y). Nie używaj zewnętrznego `styles.css`.
 
 ### Struktura HTML (obowiązkowa)
 
@@ -18,7 +18,7 @@ Utwórz kolejny slajd prezentacji HTML na podstawie podanego opisu: $ARGUMENTS
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide XX — Tytuł slajdu</title>
+    <title>Slide XX - Tytuł slajdu</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tabler Icons -->
@@ -140,11 +140,11 @@ Utwórz kolejny slajd prezentacji HTML na podstawie podanego opisu: $ARGUMENTS
             <!-- Treść slajdu -->
         </div>
 
-        <!-- Logo — obowiązkowe -->
+        <!-- Logo - obowiązkowe -->
         <img src="logo/Architekt_Przyszłości_horizontal_gradient_light.png"
              alt="Architekt Przyszłości" class="slide-logo">
 
-        <!-- Camera box — obowiązkowy -->
+        <!-- Camera box - obowiązkowy -->
         <div class="camera-box">
             kamera 480 &times; 270
         </div>
@@ -178,7 +178,7 @@ Utwórz kolejny slajd prezentacji HTML na podstawie podanego opisu: $ARGUMENTS
 - **Tekst drugorzędny**: `#94a3b8`
 - **Obramowania**: `rgba(255,255,255,0.1)`, akcentowane `rgba(6,182,212,0.3-0.4)`
 
-#### Rozmiary czcionek (1920×1080 — muszą być duże i czytelne)
+#### Rozmiary czcionek (1920×1080 - muszą być duże i czytelne)
 | Element | Rozmiar | Waga |
 |---------|---------|------|
 | Tytuł główny | **64px** | 800 |
@@ -186,7 +186,7 @@ Utwórz kolejny slajd prezentacji HTML na podstawie podanego opisu: $ARGUMENTS
 | Podtytuł | **24-26px** | 500 |
 | Tekst w kartach/bulletach | **20-22px** | 400 |
 | Chip/tag | **14px** | 600, uppercase, letter-spacing 2px |
-| Ikony w kartach | **48px** | — |
+| Ikony w kartach | **48px** | - |
 
 #### Komponenty (wzorce do stosowania)
 
@@ -271,15 +271,15 @@ border-radius: 20px;
 
 ### Zasady ogólne
 
-1. **Samodzielny plik** — każdy slajd jest kompletny, nie zależy od `styles.css`
-2. **Tailwind CSS** via CDN — używaj do utility classes tam gdzie wygodne
-3. **Tabler Icons** via CDN — używaj ikon zamiast emoji
+1. **Samodzielny plik** - każdy slajd jest kompletny, nie zależy od `styles.css`
+2. **Tailwind CSS** via CDN - używaj do utility classes tam gdzie wygodne
+3. **Tabler Icons** via CDN - używaj ikon zamiast emoji
 4. **Język**: polski
-5. **Bez scrollowania** — treść musi się zmieścić w 1920×1080
-6. **Zwięzły tekst** — slajd to nie ściana tekstu, używaj kart, ikon, wizualizacji
-7. **Kreatywne wizualizacje** — diagramy CSS, karty porównawcze, animowane elementy, progress bary, ikony
-8. **Logo obowiązkowe** — `logo/Architekt_Przyszłości_horizontal_gradient_light.png` w lewym dolnym rogu
-9. **Camera box obowiązkowy** — w prawym dolnym rogu
-10. **Skrypt skalujący obowiązkowy** — centrujący stage na stronie
+5. **Bez scrollowania** - treść musi się zmieścić w 1920×1080
+6. **Zwięzły tekst** - slajd to nie ściana tekstu, używaj kart, ikon, wizualizacji
+7. **Kreatywne wizualizacje** - diagramy CSS, karty porównawcze, animowane elementy, progress bary, ikony
+8. **Logo obowiązkowe** - `logo/Architekt_Przyszłości_horizontal_gradient_light.png` w lewym dolnym rogu
+9. **Camera box obowiązkowy** - w prawym dolnym rogu
+10. **Skrypt skalujący obowiązkowy** - centrujący stage na stronie
 
 5. **Zapisz plik** jako `slides-XX.html` w katalogu projektu.

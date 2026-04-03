@@ -15,7 +15,7 @@
     3. Widmo (Brak jasnych zadań)
 * **Cel:** Podkreślenie chaosu w nazewnictwie ról.
 
-## **\[TYPY ARCHITEKTÓW — 1:30–4:30\]**
+## **\[TYPY ARCHITEKTÓW - 1:30–4:30\]**
 
 ### **Slajd 3: Fundament – Oś Roli**
 
@@ -34,7 +34,7 @@
     * **Enterprise Architect:** Wysoko na Biznesie (Y), Dalej od Technologii (X).
     * **Data/App Architect:** Konkretne punkty blisko osi X.
 
-## **\[MOST I WINDA — 4:30–7:00\]**
+## **\[MOST I WINDA - 4:30–7:00\]**
 
 ### **Slajd 5: Architekt jako Łącznik**
 
@@ -59,7 +59,7 @@
 * **Wizualizacja:** Winda wypełniona kilkoma postaciami (Architekt \+ Seniorzy).
 * **Tekst:** Zrozumienie biznesu \= lepsze decyzje techniczne.
 
-## **\[DWIE PUŁAPKI — 7:00–8:30\]**
+## **\[DWIE PUŁAPKI - 7:00–8:30\]**
 
 ### **Slajd 8: Balans na krawędzi**
 
@@ -69,7 +69,7 @@
     2. **Zaszycie w kodzie:** Utrata perspektywy strategicznej.
 * **Dopisek:** "Gdzie teraz jesteś?"
 
-## **\[EWOLUCJA ROLI — 8:30–10:00\]**
+## **\[EWOLUCJA ROLI - 8:30–10:00\]**
 
 ### **Slajd 9: Nowoczesne Przywództwo**
 
@@ -84,7 +84,7 @@
 * **Wizualizacja:** Ikona boiska sportowego – wyraźne linie boczne (Standardy), ale pełna swoboda ruchu zawodników wewnątrz (Autonomia).
 * **Lista:** Dokumentacja decyzyjna (ADR), Standardy projektowe, Mentoring.
 
-## **\[ZAMKNIĘCIE — 10:00–10:30\]**
+## **\[ZAMKNIĘCIE - 10:00–10:30\]**
 
 ### **Slajd 11: Call to Action**
 

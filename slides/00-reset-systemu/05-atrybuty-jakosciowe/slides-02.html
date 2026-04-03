@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - System działa… aż do produkcji</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --dark-900: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--dark-900);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 1400px;
+            margin-top: -60px;
+        }
+
+        .section-label {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--cyan-400);
+            margin-bottom: 24px;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        h2.title {
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 72px;
+            text-align: center;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.2s forwards;
+            letter-spacing: -1px;
+        }
+
+        .steps {
+            display: flex;
+            gap: 48px;
+            margin-bottom: 72px;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+        }
+
+        .step:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
+        .step:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
+        .step:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
+
+        .step-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 24px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            color: var(--text-muted);
+        }
+
+        .step:nth-child(3) .step-icon {
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+        }
+
+        .step-label {
+            font-size: 24px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .step:nth-child(3) .step-label {
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        .arrow {
+            display: flex;
+            align-items: center;
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.6s forwards;
+        }
+
+        .bottom-question {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--cyan-400);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.3s forwards;
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .accent {
+            position: absolute;
+            background: var(--cyan-400);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <div class="accent" style="width: 500px; height: 500px; top: 10%; right: 5%;"></div>
+
+        <div class="content">
+            <span class="section-label">Problem</span>
+            <h2 class="title">System działa… aż do produkcji</h2>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon"><i class="ti ti-checkbox"></i></div>
+                    <span class="step-label">Feature'y gotowe</span>
+                </div>
+                <div class="arrow"><i class="ti ti-chevron-right"></i></div>
+                <div class="step">
+                    <div class="step-icon"><i class="ti ti-test-pipe"></i></div>
+                    <span class="step-label">Testy przechodzą</span>
+                </div>
+                <div class="arrow"><i class="ti ti-chevron-right"></i></div>
+                <div class="step">
+                    <div class="step-icon"><i class="ti ti-flame"></i></div>
+                    <span class="step-label">Produkcja → awaria</span>
+                </div>
+            </div>
+
+            <p class="bottom-question">Kto za to odpowiada?</p>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

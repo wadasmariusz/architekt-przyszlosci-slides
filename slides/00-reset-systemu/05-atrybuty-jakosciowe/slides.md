@@ -2,7 +2,7 @@
 
 ---
 
-## Slajd 1 — Tytuł
+## Slajd 1 - Tytuł
 **Nagłówek:**
 Atrybuty jakościowe
 
@@ -16,7 +16,7 @@ Fundament decyzji architektonicznych
 
 ---
 
-## Slajd 2 — Problem
+## Slajd 2 - Problem
 **Nagłówek:**
 System działa… aż do produkcji
 
@@ -33,7 +33,7 @@ Kto za to odpowiada?
 
 ---
 
-## Slajd 3 — Odpowiedzialność
+## Slajd 3 - Odpowiedzialność
 **Nagłówek:**
 Odpowiedzialność architekta
 
@@ -47,7 +47,7 @@ Architekt odpowiada za atrybuty jakościowe
 
 ---
 
-## Slajd 4 — Góra lodowa
+## Slajd 4 - Góra lodowa
 **Nagłówek:**
 Wymagania systemu
 
@@ -59,7 +59,7 @@ Wymagania systemu
 
 ---
 
-## Slajd 5 — Dwa typy wymagań
+## Slajd 5 - Dwa typy wymagań
 **Nagłówek:**
 Dwa światy
 
@@ -77,7 +77,7 @@ Dwa światy
 
 ---
 
-## Slajd 6 — Problem nazewnictwa
+## Slajd 6 - Problem nazewnictwa
 **Nagłówek:**
 "Wymagania niefunkcjonalne"?
 
@@ -90,7 +90,7 @@ Mów: jakość systemu
 
 ---
 
-## Slajd 7 — Kontekst ma znaczenie
+## Slajd 7 - Kontekst ma znaczenie
 **Nagłówek:**
 To zależy od systemu
 
@@ -103,7 +103,7 @@ Priorytety zależą od biznesu
 
 ---
 
-## Slajd 8 — Trade-offy
+## Slajd 8 - Trade-offy
 **Nagłówek:**
 Nie da się mieć wszystkiego
 
@@ -116,7 +116,7 @@ Zawsze wybierasz kompromisy
 
 ---
 
-## Slajd 9 — Etykiety vs znaczenie
+## Slajd 9 - Etykiety vs znaczenie
 **Nagłówek:**
 "System ma być szybki"
 
@@ -128,7 +128,7 @@ To tylko etykieta
 
 ---
 
-## Slajd 10 — Wydajność vs skalowalność
+## Slajd 10 - Wydajność vs skalowalność
 **Nagłówek:**
 Dwa różne pojęcia
 
@@ -142,7 +142,7 @@ Dwa różne pojęcia
 
 ---
 
-## Slajd 11 — arc42
+## Slajd 11 - arc42
 **Nagłówek:**
 arc42
 
@@ -153,7 +153,7 @@ arc42
 
 ---
 
-## Slajd 12 — Model atrybutu
+## Slajd 12 - Model atrybutu
 **Nagłówek:**
 Atrybut jakościowy = 3 elementy
 
@@ -164,7 +164,7 @@ Atrybut jakościowy = 3 elementy
 
 ---
 
-## Slajd 13 — Najważniejszy element
+## Slajd 13 - Najważniejszy element
 **Nagłówek:**
 Scenariusz
 
@@ -172,11 +172,11 @@ Scenariusz
 Najczęściej pomijany
 
 **Wyróżnienie:**
-Bez scenariusza — brak kontekstu
+Bez scenariusza - brak kontekstu
 
 ---
 
-## Slajd 14 — Przykład
+## Slajd 14 - Przykład
 **Nagłówek:**
 Wydajność
 
@@ -187,7 +187,7 @@ Wydajność
 
 ---
 
-## Slajd 15 — Kluczowa zasada
+## Slajd 15 - Kluczowa zasada
 **Nagłówek:**
 To nie jest wymaganie
 
@@ -196,7 +196,7 @@ Atrybut bez scenariusza i metryki = życzenie
 
 ---
 
-## Slajd 16 — Wpływ na architekturę
+## Slajd 16 - Wpływ na architekturę
 **Nagłówek:**
 Atrybuty kształtują architekturę
 
@@ -207,7 +207,7 @@ Atrybuty kształtują architekturę
 
 ---
 
-## Slajd 17 — Podsumowanie
+## Slajd 17 - Podsumowanie
 **Nagłówek:**
 Najważniejsza myśl
 
@@ -216,7 +216,7 @@ Atrybuty jakościowe kształtują architekturę
 
 ---
 
-## Slajd 18 — Call to action
+## Slajd 18 - Call to action
 **Nagłówek:**
 Zanim wybierzesz architekturę
 
