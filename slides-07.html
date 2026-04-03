@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07 — ERA Internetu</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .content {
+            bottom: 80px;
+            max-width: 1100px;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            width: 100%;
+            padding: 0 80px;
+        }
+
+        .section-title { margin-bottom: 12px; }
+
+        /* --- scale explosion --- */
+        .scale-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .scale-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+        }
+
+        .scale-row--before { animation: fadeUp 0.8s ease-out 0.9s forwards; }
+        .scale-row--after  { animation: fadeUp 0.8s ease-out 1.3s forwards; }
+
+        .scale-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #64748b;
+            width: 80px;
+            text-align: right;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .scale-bar {
+            position: relative;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+
+        .scale-bar--small {
+            width: 180px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+        }
+
+        .scale-bar--large {
+            width: 700px;
+            background: linear-gradient(90deg, rgba(6,182,212,0.08), rgba(6,182,212,0.2));
+            border: 1px solid rgba(6,182,212,0.3);
+            animation: barGrow 1.2s ease-out 1.3s both;
+        }
+
+        @keyframes barGrow {
+            from { width: 180px; }
+            to   { width: 700px; }
+        }
+
+        .scale-bar__users {
+            font-size: 20px;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        .scale-bar--small .scale-bar__users { color: #94a3b8; }
+        .scale-bar--large .scale-bar__users { color: var(--cyan-400); }
+
+        .scale-bar__count {
+            margin-left: auto;
+            font-size: 16px;
+            font-weight: 700;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+        .scale-bar--large .scale-bar__count {
+            color: var(--cyan-400);
+            font-size: 20px;
+        }
+
+        /* --- multiplier pulse --- */
+        .multiplier {
+            position: absolute;
+            right: 16px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--cyan-400);
+            animation: pulseBeat 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBeat {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50%      { transform: scale(1.15); opacity: 1; }
+        }
+
+        /* --- company chips --- */
+        .companies {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.7s forwards;
+        }
+
+        .company-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            font-size: 22px;
+            font-weight: 600;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .company-chip:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.15);
+        }
+
+        .company-chip .icon { font-size: 24px; }
+
+        /* --- requirements row --- */
+        .requirements {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.0s forwards;
+        }
+
+        .req-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .req-item .req-icon {
+            font-size: 22px;
+        }
+
+        .req-item strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        /* --- separator dots --- */
+        .req-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-700);
+            align-self: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="background">
+            <div class="bg-grid"></div>
+            <div class="bg-glow"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="corner corner--tl"></div>
+            <div class="corner corner--br"></div>
+        </div>
+
+        <div class="content">
+            <span class="era-chip">ERA Internetu</span>
+
+            <h2 class="section-title">
+                Z tysięcy użytkowników na <span class="highlight">miliony</span>
+            </h2>
+
+            <div class="scale-visual">
+                <div class="scale-row scale-row--before">
+                    <span class="scale-label">Przed</span>
+                    <div class="scale-bar scale-bar--small">
+                        <span class="scale-bar__users">👤 👤 👤</span>
+                        <span class="scale-bar__count">setki</span>
+                    </div>
+                </div>
+                <div class="scale-row scale-row--after">
+                    <span class="scale-label">Po</span>
+                    <div class="scale-bar scale-bar--large">
+                        <span class="scale-bar__users">👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤👤</span>
+                        <span class="multiplier">× 1 000 000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="companies">
+                <div class="company-chip">
+                    <span class="icon">📦</span> Amazon
+                </div>
+                <div class="company-chip">
+                    <span class="icon">🔍</span> Yahoo
+                </div>
+                <div class="company-chip">
+                    <span class="icon">🛒</span> eBay
+                </div>
+            </div>
+
+            <div class="requirements">
+                <div class="req-item">
+                    <span class="req-icon">🕐</span>
+                    <strong>24/7</strong>
+                </div>
+                <div class="req-dot"></div>
+                <div class="req-item">
+                    <span class="req-icon">🌍</span>
+                    <span>cały <strong>świat</strong></span>
+                </div>
+                <div class="req-dot"></div>
+                <div class="req-item">
+                    <span class="req-icon">⚡</span>
+                    <span>zero <strong>przerw</strong></span>
+                </div>
+            </div>
+
+            <div class="lesson">
+                <span class="lesson-icon">💡</span>
+                <span class="lesson-text">Nie ma już <strong>dobrego momentu</strong> na przerwę</span>
+            </div>
+        </div>
+
+        <div class="camera-box">
+            <div class="camera-box__placeholder">kamera 480 &times; 270</div>
+        </div>
+
+        <div class="overlay"></div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                stage.style.transform = 'scale(' + Math.min(innerWidth / 1920, innerHeight / 1080) + ')';
+            }
+            addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
