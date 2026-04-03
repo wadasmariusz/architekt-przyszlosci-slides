@@ -16,22 +16,6 @@
             padding: 0 80px;
         }
 
-        .era-chip {
-            display: inline-block;
-            font-size: 12px;
-            padding: 0.35em 1em;
-            border-radius: 100px;
-            background: rgba(6,182,212,0.08);
-            border: 1px solid rgba(6,182,212,0.2);
-            color: var(--cyan-400);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 19px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.3s forwards;
-        }
-
         .section-title { margin-bottom: 48px; }
 
         /* --- mainframe visualization --- */
@@ -119,8 +103,8 @@
         .bullet:nth-child(1) { animation: fadeUp 0.6s ease-out 1.2s forwards; }
         .bullet:nth-child(2) { animation: fadeUp 0.6s ease-out 1.5s forwards; }
         .bullet:nth-child(3) { animation: fadeUp 0.6s ease-out 1.8s forwards; }
-        .bullet-icon { font-size: 21px; line-height: 1; }
-        .bullet-text { font-size: 14px; font-weight: 400; color: #e2e8f0; text-align: left; }
+        .bullet-icon { font-size: 26px; line-height: 1; }
+        .bullet-text { font-size: 18px; font-weight: 400; color: #e2e8f0; text-align: left; }
         .bullet-text strong { color: var(--cyan-400); font-weight: 600; }
 
         /* memory bar */
@@ -128,23 +112,15 @@
             display: flex; align-items: center; justify-content: center; gap: 16px;
             margin-bottom: 40px; opacity: 0; animation: fadeUp 0.8s ease-out 2.1s forwards;
         }
-        .memory-label { font-size: 12px; font-weight: 600; color: var(--cyan-400); letter-spacing: 0.08em; }
+        .memory-label { font-size: 15px; font-weight: 600; color: var(--cyan-400); letter-spacing: 0.08em; }
         .memory-bar { width: 300px; height: 20px; border-radius: 10px; background: rgba(17,24,39,0.8); border: 1px solid rgba(6,182,212,0.15); overflow: hidden; position: relative; }
         .memory-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cyan-700), var(--cyan-400)); border-radius: 10px; animation: fillBar 1.5s ease-out 2.5s forwards; position: relative; }
-        .memory-fill::after { content: '4 KB'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 700; color: var(--dark-bg); }
+        .memory-fill::after { content: '4 KB'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 700; color: var(--dark-bg); }
         @keyframes fillBar { to { width: 100%; } }
-        .memory-total { font-size: 11px; color: #64748b; font-weight: 300; }
+        .memory-total { font-size: 14px; color: #64748b; font-weight: 300; }
 
-        /* lesson */
-        .lesson {
-            display: flex; align-items: center; justify-content: center; gap: 11px;
-            padding: 16px 32px; border-radius: 12px;
-            background: rgba(6,182,212,0.04); border: 1px solid rgba(6,182,212,0.12);
-            opacity: 0; animation: fadeUp 0.8s ease-out 2.8s forwards;
-        }
-        .lesson-icon { font-size: 19px; }
-        .lesson-text { font-size: 15px; font-weight: 300; color: #94a3b8; }
-        .lesson-text strong { color: var(--cyan-400); font-weight: 600; }
+        /* lesson delay override */
+        .lesson { animation-delay: 2.8s; }
     </style>
 </head>
 <body>
@@ -199,7 +175,7 @@
             <div class="bullets">
                 <div class="bullet">
                     <span class="bullet-icon">👤</span>
-                    <span class="bullet-text">Brak pojęcia „architekt" — był <strong>główny programista</strong></span>
+                    <span class="bullet-text"><strong>Główny programista</strong></span>
                 </div>
                 <div class="bullet">
                     <span class="bullet-icon">⚙️</span>
@@ -221,7 +197,7 @@
 
             <div class="lesson">
                 <span class="lesson-icon">💡</span>
-                <span class="lesson-text">Lekcja na dziś: <strong>zasoby zawsze mają swoją cenę</strong> — nawet w chmurze</span>
+                <span class="lesson-text"><strong>Zasoby zawsze mają swoją cenę</strong> </br>  nawet w chmurze</span>
             </div>
         </div>
 

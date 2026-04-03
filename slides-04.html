@@ -16,22 +16,6 @@
             padding: 0 80px;
         }
 
-        .era-chip {
-            display: inline-block;
-            font-size: 12px;
-            padding: 0.35em 1em;
-            border-radius: 100px;
-            background: rgba(6,182,212,0.08);
-            border: 1px solid rgba(6,182,212,0.2);
-            color: var(--cyan-400);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 19px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.3s forwards;
-        }
-
         .section-title { margin-bottom: 48px; }
 
         /* --- shrinking animation --- */
@@ -59,14 +43,14 @@
         @keyframes shrinkPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 0.9; } }
         @keyframes activeGlow { 0%, 100% { box-shadow: 0 0 24px rgba(6,182,212,0.15); } 50% { box-shadow: 0 0 40px rgba(6,182,212,0.35); } }
 
-        .shrink-label { font-size: 12px; font-weight: 600; color: #94a3b8; letter-spacing: 0.05em; }
+        .shrink-label { font-size: 16px; font-weight: 600; color: #94a3b8; letter-spacing: 0.05em; }
         .shrink-label--active { color: var(--cyan-400); }
         .shrink-arrow { font-size: 29px; color: var(--cyan-700); animation: arrowPulse 2s ease-in-out infinite; margin-bottom: 24px; }
         .shrink-arrow:nth-of-type(2) { animation-delay: 0.5s; }
         @keyframes arrowPulse { 0%, 100% { opacity: 0.4; transform: translateX(0); } 50% { opacity: 1; transform: translateX(4px); } }
 
         /* problems */
-        .problems-title { font-size: 16px; font-weight: 600; color: #94a3b8; margin-bottom: 24px; letter-spacing: 0.05em; opacity: 0; animation: fadeUp 0.8s ease-out 1.2s forwards; }
+        .problems-title { font-size: 20px; font-weight: 600; color: #94a3b8; margin-bottom: 24px; letter-spacing: 0.05em; opacity: 0; animation: fadeUp 0.8s ease-out 1.2s forwards; }
         .problems { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
         .problem-card {
             display: flex; flex-direction: column; align-items: center; gap: 10px;
@@ -79,9 +63,9 @@
         .problem-card:nth-child(1) { animation: fadeUp 0.6s ease-out 1.5s forwards; }
         .problem-card:nth-child(2) { animation: fadeUp 0.6s ease-out 1.8s forwards; }
         .problem-card:nth-child(3) { animation: fadeUp 0.6s ease-out 2.1s forwards; }
-        .problem-icon { font-size: 32px; line-height: 1; }
-        .problem-text { font-size: 15px; font-weight: 600; color: #e2e8f0; }
-        .problem-desc { font-size: 12px; font-weight: 300; color: #64748b; max-width: 160px; line-height: 1.4; }
+        .problem-icon { font-size: 36px; line-height: 1; }
+        .problem-text { font-size: 20px; font-weight: 600; color: #e2e8f0; }
+        .problem-desc { font-size: 16px; font-weight: 300; color: #64748b; max-width: 180px; line-height: 1.4; }
         .problem-desc strong { color: var(--cyan-400); font-weight: 600; }
 
         /* users */
@@ -94,7 +78,7 @@
         .user-dot:nth-child(odd) { animation: userPop 3s ease-in-out infinite; }
         .user-dot:nth-child(even) { animation: userPop 3s ease-in-out infinite 1.5s; }
         @keyframes userPop { 0%, 100% { border-color: rgba(6,182,212,0.2); } 50% { border-color: var(--cyan-500); box-shadow: 0 0 8px rgba(6,182,212,0.2); } }
-        .users-label { display: block; margin-top: 13px; font-size: 13px; font-weight: 300; color: #64748b; opacity: 0; animation: fadeUp 0.8s ease-out 2.7s forwards; }
+        .users-label { display: block; margin-top: 13px; font-size: 18px; font-weight: 300; color: #64748b; opacity: 0; animation: fadeUp 0.8s ease-out 2.7s forwards; }
         .users-label strong { color: var(--cyan-400); font-weight: 600; }
     </style>
 </head>
@@ -117,13 +101,13 @@
             <span class="era-chip">lata 70.</span>
 
             <h2 class="section-title">
-                Z budynku — <span class="highlight">na biurko</span>
+               <span class="highlight">Miniaturyzacja</span> sprzętu
             </h2>
 
             <div class="shrink-scene">
                 <div class="shrink-stage">
                     <div class="shrink-box shrink-box--building">🏢</div>
-                    <span class="shrink-label">Cały budynek</span>
+                    <span class="shrink-label">Budynek</span>
                 </div>
                 <span class="shrink-arrow">→</span>
                 <div class="shrink-stage">
@@ -171,7 +155,7 @@
                 <div class="user-dot">👤</div>
                 <div class="user-dot">👤</div>
             </div>
-            <span class="users-label">Oprogramowanie musiało być zrozumiałe dla <strong>wielu osób</strong></span>
+            <span class="users-label">Oprogramowanie musiało być zrozumiałe dla <strong></br>wielu osób</strong></span>
         </div>
 
         <div class="camera-box">

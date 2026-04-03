@@ -76,9 +76,20 @@ Każdy slajd MUSI używać tej struktury (zgodnej z `template.html`):
 ### Współdzielone klasy CSS (zdefiniowane w `styles.css` — NIE duplikuj)
 Te klasy są już dostępne i gotowe do użycia:
 - **Layout**: `.stage`, `.background`, `.bg-grid`, `.bg-glow`, `.particle`, `.corner`, `.corner--tl`, `.corner--br`, `.content`, `.camera-box`, `.camera-box__placeholder`, `.overlay`
-- **Typografia**: `.title`, `.title .highlight`, `.section-title`, `.section-title .highlight`, `.subtitle`, `.module-label`, `.divider`
-- **Chipy**: `.era-chips`, `.chip`
+- **Typografia**: `.title` (72px), `.title .highlight`, `.section-title` (56px), `.section-title .highlight`, `.subtitle` (26px), `.module-label` (16px), `.divider`
+- **Chipy**: `.era-chips`, `.chip` (16px), `.era-chip` (16px, uppercase, z animacją fadeUp)
+- **Lesson box**: `.lesson`, `.lesson-icon` (24px), `.lesson-text` (22px), `.lesson-text strong`
 - **Animacje**: `fadeUp`, `gridMove`, `pulse`, `float`
+
+### Rozmiary czcionek (wytyczne)
+Czcionki muszą być duże i wyraźne — prezentacja jest wyświetlana na ekranie 1920×1080:
+- Tytuły główne: **72px**
+- Tytuły sekcji: **56px**
+- Podtytuły: **26px**
+- Tekst w kartach/bulletach: **18-22px** (nie mniej niż 16px)
+- Opisy drugorzędne: **16px** minimum
+- Chipy/tagi: **16px**
+- Ikony emoji: **24-36px**
 
 ### Ważne szczegóły layoutu
 - `.stage` ma stały rozmiar 1920×1080px i jest skalowany JS-em do viewportu
