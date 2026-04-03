@@ -1,6 +1,5 @@
 # **Scenariusz Slajdów: Czym jest Architektura Oprogramowania?**
 
-**Stylistyka:** Dark mode (ciemne tło \#121212), typografia sans-serif (np. Inter lub Montserrat), akcenty w kolorze "Electric Blue" lub "Amber". Dużo światła (whitespace).
 
 ## **Slajd 1: Tytułowy**
 
