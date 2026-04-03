@@ -197,21 +197,21 @@
                     <text x="570" y="420" fill="#94a3b8" font-size="18" text-anchor="middle">Rozmiar zmiany</text>
 
                     <!-- Good architecture - linear -->
-                    <path d="M 80 360 Q 400 300, 1040 180" fill="none" stroke="#22d3ee" stroke-width="4" stroke-linecap="round">
+                    <path d="M 80 360 Q 400 330, 1040 240" fill="none" stroke="#22d3ee" stroke-width="4" stroke-linecap="round">
                         <animate attributeName="stroke-dashoffset" from="1200" to="0" dur="2s" fill="freeze"/>
                     </path>
 
                     <!-- Bad architecture - exponential -->
-                    <path d="M 80 360 Q 300 340, 600 260 T 1040 30" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" stroke-dasharray="12 8">
+                    <path d="M 80 360 C 250 350, 400 340, 530 310 C 700 260, 850 140, 1040 30" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" stroke-dasharray="12 8">
                         <animate attributeName="stroke-dashoffset" from="1200" to="0" dur="2s" fill="freeze"/>
                     </path>
 
                     <!-- Legend below chart -->
                     <line x1="280" y1="470" x2="320" y2="470" stroke="#22d3ee" stroke-width="4"/>
-                    <text x="330" y="476" fill="#22d3ee" font-size="18">Dobra architektura (proporcjonalny)</text>
+                    <text x="330" y="476" fill="#22d3ee" font-size="18">Dobra architektura</text>
 
                     <line x1="680" y1="470" x2="720" y2="470" stroke="#ef4444" stroke-width="4" stroke-dasharray="12 8"/>
-                    <text x="730" y="476" fill="#ef4444" font-size="18">Zła architektura (wykładniczy)</text>
+                    <text x="730" y="476" fill="#ef4444" font-size="18">Zła architektura </text>
                 </svg>
             </div>
 

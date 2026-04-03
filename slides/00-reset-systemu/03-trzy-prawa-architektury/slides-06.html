@@ -130,8 +130,9 @@
         .conway-side {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
             gap: 12px;
+            width: 300px;
         }
 
         .conway-side-label {
@@ -145,37 +146,51 @@
 
         .team-group {
             display: flex;
-            gap: 8px;
-            padding: 20px 28px;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
             background: rgba(34, 197, 94, 0.08);
             border: 1px solid rgba(34, 197, 94, 0.25);
-            border-radius: 16px;
+            border-radius: 12px;
+            min-width: 240px;
         }
 
-        .team-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #86efac;
+        .team-group .team-icon {
+            font-size: 22px;
+            color: #86efac;
+        }
+
+        .team-group .team-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #86efac;
         }
 
         .module-box {
-            width: 120px;
-            height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
             background: rgba(168, 85, 247, 0.1);
             border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 12px;
+            min-width: 240px;
         }
 
-        .conway-arrow {
-            font-size: 48px;
-            color: var(--text-muted);
+        .module-box .module-icon {
+            font-size: 22px;
+            color: #c084fc;
+        }
+
+        .module-box .module-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #c084fc;
         }
 
         .conway-equals {
-            font-size: 64px;
+            font-size: 56px;
             color: var(--cyan-400);
-            font-weight: 300;
         }
 
         .accent {
@@ -238,23 +253,25 @@
         <div class="content">
             <span class="section-label">II Prawo Architektury</span>
             <h2 class="title">Prawo <span class="highlight">Conwaya</span></h2>
-            <p class="sub-text">Architektura systemu odzwierciedla strukturę komunikacyjną organizacji.</p>
+            <p class="sub-text">Architektura systemu odzwierciedla strukturę organizacji.</p>
 
             <div class="conway-diagram">
                 <div class="conway-side">
                     <span class="conway-side-label">Zespoły</span>
-                    <div class="team-group"><div class="team-dot"></div><div class="team-dot"></div><div class="team-dot"></div></div>
-                    <div class="team-group"><div class="team-dot"></div><div class="team-dot"></div><div class="team-dot"></div></div>
-                    <div class="team-group"><div class="team-dot"></div><div class="team-dot"></div><div class="team-dot"></div></div>
+                    <div class="team-group"><i class="ti ti-brush team-icon"></i><span class="team-name">Frontend Team</span></div>
+                    <div class="team-group"><i class="ti ti-server team-icon"></i><span class="team-name">Backend Team</span></div>
+                    <div class="team-group"><i class="ti ti-database team-icon"></i><span class="team-name">Data Team</span></div>
+                    <div class="team-group"><i class="ti ti-package team-icon"></i><span class="team-name">Product Team</span></div>
                 </div>
 
-                <span class="conway-equals">=</span>
+                <span class="conway-equals"><i class="ti ti-arrow-right"></i></span>
 
                 <div class="conway-side">
-                    <span class="conway-side-label">Moduły</span>
-                    <div class="module-box"></div>
-                    <div class="module-box"></div>
-                    <div class="module-box"></div>
+                    <span class="conway-side-label">System</span>
+                    <div class="module-box"><i class="ti ti-browser module-icon"></i><span class="module-name">Frontend</span></div>
+                    <div class="module-box"><i class="ti ti-code module-icon"></i><span class="module-name">Backend</span></div>
+                    <div class="module-box"><i class="ti ti-database module-icon"></i><span class="module-name">Warstwa danych</span></div>
+                    <div class="module-box"><i class="ti ti-bulb module-icon"></i><span class="module-name">Logika biznesowa</span></div>
                 </div>
             </div>
         </div>
