@@ -5,7 +5,7 @@
 
 * **Wizualizacja:** Minimalistyczna abstrakcja geometryczna (np. siatka punktów połączonych cienkimi liniami).
 * **Tekst główny:** Architektura Oprogramowania
-* **Podtytuł:** Lekcja 1: Definicja i cel
+* **Podtytuł:** Jak ją zdefiniować?
 * **Cel:** Profesjonalne otwarcie.
 
 ## **Slajd 2: Perspektywa (5 architektów)**
