@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 — Koszt Zmiany</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --dark-900: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--dark-900);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 1500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -40px;
+        }
+
+        .section-label {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--cyan-400);
+            margin-bottom: 24px;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        h2.title {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 64px;
+            text-align: center;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.2s forwards;
+            letter-spacing: -1px;
+        }
+
+        h2.title .highlight {
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+        }
+
+        /* Chart area */
+        .chart-wrapper {
+            width: 1100px;
+            height: 440px;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.5s forwards;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .takeaway {
+            margin-top: 48px;
+            padding: 20px 40px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 16px;
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeUp 1s ease-out 1.2s forwards;
+        }
+
+        .takeaway strong {
+            color: var(--cyan-400);
+        }
+
+        .accent {
+            position: absolute;
+            background: var(--cyan-400);
+            border-radius: 50%;
+            filter: blur(50px);
+            opacity: 0.12;
+            z-index: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+
+        <div class="content">
+            <span class="section-label">Wykres</span>
+            <h2 class="title">Koszt zmiany a <span class="highlight">architektura</span></h2>
+
+            <div class="chart-wrapper">
+                <svg class="chart-svg" viewBox="0 0 1100 500">
+                    <!-- Axes -->
+                    <line x1="80" y1="20" x2="80" y2="380" stroke="rgba(148,163,184,0.3)" stroke-width="2"/>
+                    <line x1="80" y1="380" x2="1060" y2="380" stroke="rgba(148,163,184,0.3)" stroke-width="2"/>
+
+                    <!-- Y axis label -->
+                    <text x="30" y="200" fill="#94a3b8" font-size="18" text-anchor="middle" transform="rotate(-90, 30, 200)">Koszt</text>
+
+                    <!-- X axis label -->
+                    <text x="570" y="420" fill="#94a3b8" font-size="18" text-anchor="middle">Rozmiar zmiany</text>
+
+                    <!-- Good architecture - linear -->
+                    <path d="M 80 360 Q 400 300, 1040 180" fill="none" stroke="#22d3ee" stroke-width="4" stroke-linecap="round">
+                        <animate attributeName="stroke-dashoffset" from="1200" to="0" dur="2s" fill="freeze"/>
+                    </path>
+
+                    <!-- Bad architecture - exponential -->
+                    <path d="M 80 360 Q 300 340, 600 260 T 1040 30" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round" stroke-dasharray="12 8">
+                        <animate attributeName="stroke-dashoffset" from="1200" to="0" dur="2s" fill="freeze"/>
+                    </path>
+
+                    <!-- Legend below chart -->
+                    <line x1="280" y1="470" x2="320" y2="470" stroke="#22d3ee" stroke-width="4"/>
+                    <text x="330" y="476" fill="#22d3ee" font-size="18">Dobra architektura (proporcjonalny)</text>
+
+                    <line x1="680" y1="470" x2="720" y2="470" stroke="#ef4444" stroke-width="4" stroke-dasharray="12 8"/>
+                    <text x="730" y="476" fill="#ef4444" font-size="18">Zła architektura (wykładniczy)</text>
+                </svg>
+            </div>
+
+            <div class="takeaway">
+                Dobra architektura <strong>potrafi płynnie</strong> reagować na zmiany
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
