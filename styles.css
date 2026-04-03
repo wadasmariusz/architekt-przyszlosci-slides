@@ -16,6 +16,11 @@
     --cyan-900: #164e63;
     --dark-bg: #0a0e17;
     --dark-surface: #111827;
+
+    /* Brand palette */
+    --brand-violet: #6C5CE7;
+    --brand-violet-light: #9B51E0;
+
 }
 
 /* ===== BASE ===== */
@@ -328,6 +333,18 @@ html, body {
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== SLIDE LOGO ===== */
+.slide-logo {
+    position: absolute;
+    z-index: 4;
+    bottom: 40px;
+    left: 40px;
+    height: 100px;
+    width: auto;
+    opacity: 0.85;
+    pointer-events: none;
 }
 
 /* ===== SCALING SCRIPT (inline in each HTML via shared pattern) ===== */

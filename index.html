@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduł 0 — Spis slajdów</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B1F3A;
+            color: #fff;
+            min-height: 100vh;
+            padding: 3rem 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #56CCF2, #6C5CE7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #B0B8C1;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #112744;
+            border: 1px solid rgba(45, 156, 219, 0.2);
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: #2D9CDB;
+            box-shadow: 0 8px 30px rgba(45, 156, 219, 0.15);
+            background: #1a3358;
+        }
+
+        .card.disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .card-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #2D9CDB;
+            line-height: 1;
+            min-width: 2.2rem;
+        }
+
+        .card-body {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .card-desc {
+            font-size: 0.82rem;
+            color: #B0B8C1;
+            line-height: 1.4;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.4rem;
+            background: rgba(108, 92, 231, 0.3);
+            color: #9B51E0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .card:not(.disabled) .badge { display: none; }
+
+        .index-logo {
+            display: block;
+            margin: 0 auto 1.5rem;
+            height: 56px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+
+<img src="logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="index-logo">
+<h1>Moduł 0 — Ewolucja roli architekta</h1>
+<p class="subtitle">Kliknij slajd, aby go otworzyć</p>
+
+<div class="grid">
+
+    <a class="card" href="slides-01.html">
+        <span class="card-number">01</span>
+        <div class="card-body">
+            <div class="card-title">Tytuł</div>
+            <div class="card-desc">Architekt oprogramowania w erze AI</div>
+        </div>
+    </a>
+
+    <a class="card" href="slides-02.html">
+        <span class="card-number">02</span>
+        <div class="card-body">
+            <div class="card-title">Oś czasu</div>
+            <div class="card-desc">Ewolucja roli architekta</div>
+        </div>
+    </a>
+
+    <a class="card" href="slides-03.html">
+        <span class="card-number">03</span>
+        <div class="card-body">
+            <div class="card-title">ERA Mainframe</div>
+            <div class="card-desc">Jeden człowiek, jedna maszyna</div>
+        </div>
+    </a>
+
+    <a class="card" href="slides-04.html">
+        <span class="card-number">04</span>
+        <div class="card-body">
+            <div class="card-title">ERA Minikomputerów</div>
+            <div class="card-desc">Z budynku — na biurko</div>
+        </div>
+    </a>
+
+    <a class="card" href="slides-05.html">
+        <span class="card-number">05</span>
+        <div class="card-body">
+            <div class="card-title">David Parnas (1972)</div>
+            <div class="card-desc">Ukryj decyzję projektową</div>
+        </div>
+    </a>
+
+    <a class="card" href="slides-06.html">
+        <span class="card-number">06</span>
+        <div class="card-body">
+            <div class="card-title">ERA Klient–Serwer</div>
+            <div class="card-desc">Gdzie postawić granicę?</div>
+        </div>
+    </a>
+
+    <a class="card" href="slides-07.html">
+        <span class="card-number">07</span>
+        <div class="card-body">
+            <div class="card-title">ERA Internetu</div>
+            <div class="card-desc">Z tysięcy użytkowników — na miliony</div>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-08.html">
+        <span class="card-number">08</span>
+        <div class="card-body">
+            <div class="card-title">ERA Chmury i Mikrousług</div>
+            <div class="card-desc">Netflix — od awarii do rewolucji</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-09.html">
+        <span class="card-number">09</span>
+        <div class="card-body">
+            <div class="card-title">Nowe wymagania</div>
+            <div class="card-desc">Architekt musi rozumieć infrastrukturę</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-10.html">
+        <span class="card-number">10</span>
+        <div class="card-body">
+            <div class="card-title">ERA AI</div>
+            <div class="card-desc">Niedeterminizm jako cecha systemu</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-11.html">
+        <span class="card-number">11</span>
+        <div class="card-body">
+            <div class="card-title">Cytat Fowlera</div>
+            <div class="card-desc">Jak przejście z assembly na języki wysokiego poziomu</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-12.html">
+        <span class="card-number">12</span>
+        <div class="card-body">
+            <div class="card-title">Anegdota — Tolerancje</div>
+            <div class="card-desc">Jakie są tolerancje?</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-13.html">
+        <span class="card-number">13</span>
+        <div class="card-body">
+            <div class="card-title">Gdzie niedeterminizm jest OK?</div>
+            <div class="card-desc">Świadoma decyzja architektoniczna</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-14.html">
+        <span class="card-number">14</span>
+        <div class="card-body">
+            <div class="card-title">Dwa rodzaje niedeterminizmu</div>
+            <div class="card-desc">Techniczny vs Semantyczny</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-15.html">
+        <span class="card-number">15</span>
+        <div class="card-body">
+            <div class="card-title">ReAct: Reason + Act</div>
+            <div class="card-desc">Nowe podejścia architektoniczne</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-16.html">
+        <span class="card-number">16</span>
+        <div class="card-body">
+            <div class="card-title">AI jako współpracownik</div>
+            <div class="card-desc">Na każdym etapie</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-17.html">
+        <span class="card-number">17</span>
+        <div class="card-body">
+            <div class="card-title">Zmiana tożsamości programisty</div>
+            <div class="card-desc">Od pisania kodu do projektowania systemu</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+    <a class="card disabled" href="slides-18.html">
+        <span class="card-number">18</span>
+        <div class="card-body">
+            <div class="card-title">Podsumowanie</div>
+            <div class="card-desc">Architekt przyszłości — 4 kluczowe filary</div>
+            <span class="badge">wkrótce</span>
+        </div>
+    </a>
+
+</div>
+
+</body>
+</html>
