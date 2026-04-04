@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 05 - Sieci i Internet</title>
+    <title>Slide 06 - Sieci Lokalne</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -30,9 +30,8 @@
             background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
             overflow: hidden;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
 
         .bg-grid {
@@ -47,10 +46,10 @@
         .bg-glow {
             position: absolute;
             top: 50%;
-            left: 50%;
+            left: 70%;
             transform: translate(-50%, -50%);
-            width: 900px;
-            height: 900px;
+            width: 700px;
+            height: 700px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -61,9 +60,14 @@
             z-index: 10;
             width: 1500px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            gap: 80px;
+        }
+
+        .text-side {
+            flex: 1;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.3s forwards;
         }
 
         .era-label {
@@ -71,93 +75,108 @@
             text-transform: uppercase;
             letter-spacing: 6px;
             color: var(--cyan-400);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             font-weight: 600;
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
         }
 
-        h2.title {
+        .text-side h2 {
             font-size: 60px;
             font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 80px;
-            text-align: center;
             color: #ffffff;
-            opacity: 0;
-            animation: fadeUp 1s ease-out 0.2s forwards;
+            line-height: 1.1;
+            margin-bottom: 16px;
             letter-spacing: -1px;
         }
 
-        h2.title .highlight {
+        .text-side h2 .highlight {
             color: var(--cyan-400);
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Three tiles */
-        .tiles {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
+        .text-side p {
+            font-size: 24px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 36px;
         }
 
-        .tile {
-            width: 420px;
-            padding: 48px 36px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            backdrop-filter: blur(12px);
+        .question-list {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 20px;
+            gap: 16px;
             opacity: 0;
-            transition: all 0.3s ease;
+            animation: fadeIn 1s ease-out 1.2s forwards;
         }
 
-        .tile:nth-child(1) { animation: fadeUp 0.8s ease-out 0.5s forwards; }
-        .tile:nth-child(2) { animation: fadeUp 0.8s ease-out 0.7s forwards; }
-        .tile:nth-child(3) { animation: fadeUp 0.8s ease-out 0.9s forwards; }
-
-        .tile:hover {
-            border-color: var(--cyan-500);
-            transform: translateY(-8px);
-            box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
-        }
-
-        .tile-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(6, 182, 212, 0.1);
-            border: 1px solid rgba(6, 182, 212, 0.2);
+        .question-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 36px;
+            gap: 16px;
+            padding: 16px 24px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+        }
+
+        .question-item i {
+            font-size: 28px;
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .question-item span {
+            font-size: 20px;
+            color: #e2e8f0;
+        }
+
+        .question-item strong {
             color: var(--cyan-400);
         }
 
-        .tile-title {
-            font-size: 26px;
-            font-weight: 700;
-            color: #ffffff;
+        /* Right visual - network icon */
+        .visual-side {
+            flex-shrink: 0;
+            width: 400px;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.6s forwards;
         }
 
-        .tile-desc {
+        .network-icon {
+            width: 340px;
+            height: 400px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            backdrop-filter: blur(12px);
+        }
+
+        .network-icon i {
+            font-size: 120px;
+            color: var(--cyan-400);
+            opacity: 0.6;
+        }
+
+        .network-icon span {
             font-size: 20px;
             color: var(--text-muted);
-            line-height: 1.5;
+            font-weight: 500;
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.12;
+            filter: blur(60px);
+            opacity: 0.1;
             z-index: 0;
         }
 
@@ -204,30 +223,34 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
-        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; top: 10%; right: 5%;"></div>
 
         <div class="content">
-            <span class="era-label">Era Sieci</span>
-            <h2 class="title">Sieci i <span class="highlight">Internet</span></h2>
+            <div class="text-side">
+                <span class="era-label">Sieci lokalne</span>
+                <h2>Komputery zaczęły<br><span class="highlight">rozmawiać</span> ze sobą</h2>
+                <p>Wydawało się, że sytuacja jest pod kontrolą. Ale sieci lokalne zmieniły wszystko po raz kolejny — i pojawiły się nowe pytania o odpowiedzialności.</p>
 
-            <div class="tiles">
-                <div class="tile">
-                    <div class="tile-icon"><i class="ti ti-network"></i></div>
-                    <span class="tile-title">Klient-Serwer</span>
-                    <span class="tile-desc">Podział odpowiedzialności, gdzie powinna być walidacja?</span>
+                <div class="question-list">
+                    <div class="question-item">
+                        <i class="ti ti-device-laptop"></i>
+                        <span>Walidacja po stronie <strong>klienta</strong> — żeby było szybko?</span>
+                    </div>
+                    <div class="question-item">
+                        <i class="ti ti-server"></i>
+                        <span>Walidacja po stronie <strong>serwera</strong> — żeby było bezpiecznie?</span>
+                    </div>
+                    <div class="question-item">
+                        <i class="ti ti-arrows-split-2"></i>
+                        <span>A może w <strong>obu miejscach</strong>?</span>
+                    </div>
                 </div>
+            </div>
 
-                <div class="tile">
-                    <div class="tile-icon"><i class="ti ti-world"></i></div>
-                    <span class="tile-title">Internet</span>
-                    <span class="tile-desc">Miliony użytkowników jednocześnie. Koniec przerw technicznych.</span>
-                </div>
-
-                <div class="tile">
-                    <div class="tile-icon"><i class="ti ti-bolt"></i></div>
-                    <span class="tile-title">Dostępność 24/7</span>
-                    <span class="tile-desc">Wymóg ciągłego działania zmienia sposób projektowania.</span>
+            <div class="visual-side">
+                <div class="network-icon">
+                    <i class="ti ti-network"></i>
+                    <span>Sieci lokalne (LAN)</span>
                 </div>
             </div>
         </div>

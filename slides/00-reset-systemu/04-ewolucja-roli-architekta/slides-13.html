@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 12 - Architekt Przyszłości</title>
+    <title>Slide 11 - Metafora Mostu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -51,7 +51,7 @@
             transform: translate(-50%, -50%);
             width: 1000px;
             height: 1000px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -59,11 +59,32 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1500px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            gap: 80px;
+            width: 1400px;
+        }
+
+        /* Bridge visual */
+        .bridge-visual {
+            flex-shrink: 0;
+            width: 400px;
+            height: 350px;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.3s forwards;
+        }
+
+        .bridge-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Quote side */
+        .quote-side {
+            flex: 1;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
         }
 
         .section-label {
@@ -71,122 +92,44 @@
             text-transform: uppercase;
             letter-spacing: 6px;
             color: var(--cyan-400);
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             font-weight: 600;
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
         }
 
-        h2.title {
-            font-size: 64px;
+        .big-quote {
+            font-size: 56px;
             font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 64px;
-            text-align: center;
             color: #ffffff;
-            opacity: 0;
-            animation: fadeUp 1s ease-out 0.2s forwards;
+            line-height: 1.2;
+            margin-bottom: 40px;
             letter-spacing: -1px;
         }
 
-        h2.title .highlight {
+        .big-quote .highlight {
             color: var(--cyan-400);
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Two panels */
-        .panels {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
-            margin-bottom: 48px;
+        .quote-desc {
+            font-size: 24px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 36px;
         }
 
-        .panel {
-            width: 560px;
-            padding: 44px 40px;
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            opacity: 0;
-        }
-
-        .panel.yesterday {
-            background: rgba(148, 163, 184, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            animation: fadeUp 0.8s ease-out 0.5s forwards;
-        }
-
-        .panel.tomorrow {
+        .quote-author {
+            padding: 20px 32px;
             background: rgba(6, 182, 212, 0.08);
             border: 1px solid rgba(6, 182, 212, 0.2);
-            animation: fadeUp 0.8s ease-out 0.7s forwards;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .panel-header i {
-            font-size: 32px;
-        }
-
-        .panel.yesterday .panel-header i { color: var(--text-muted); }
-        .panel.tomorrow .panel-header i { color: var(--cyan-400); }
-
-        .panel-title {
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .panel.yesterday .panel-title { color: var(--text-muted); }
-        .panel.tomorrow .panel-title { color: var(--cyan-400); }
-
-        .panel-text {
-            font-size: 22px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .panel.tomorrow .panel-text strong {
-            color: var(--cyan-400);
-        }
-
-        /* Infinity connector */
-        .connector {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: -24px;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 1.0s forwards;
-        }
-
-        .connector i {
-            font-size: 48px;
-            color: var(--cyan-400);
-            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
-        }
-
-        /* Bottom punchline */
-        .punchline {
-            margin-top: 24px;
-            padding: 24px 48px;
-            background: rgba(6, 182, 212, 0.1);
-            border: 1px solid rgba(6, 182, 212, 0.3);
             border-radius: 16px;
-            font-size: 26px;
-            font-weight: 600;
+            font-size: 20px;
             color: var(--text-muted);
-            text-align: center;
+            display: inline-block;
             opacity: 0;
-            animation: fadeUp 1s ease-out 1.3s forwards;
+            animation: fadeIn 1s ease-out 1.2s forwards;
         }
 
-        .punchline strong {
+        .quote-author strong {
             color: var(--cyan-400);
         }
 
@@ -195,7 +138,7 @@
             background: var(--cyan-400);
             border-radius: 50%;
             filter: blur(60px);
-            opacity: 0.12;
+            opacity: 0.1;
             z-index: 0;
         }
 
@@ -242,37 +185,40 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 500px; height: 500px; top: 5%; left: 5%;"></div>
-        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 15%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; bottom: 15%; left: 5%;"></div>
 
         <div class="content">
-            <span class="section-label">Podsumowanie</span>
-            <h2 class="title">Architekt <span class="highlight">przyszłości</span></h2>
-
-            <div class="panels">
-                <div class="panel yesterday">
-                    <div class="panel-header">
-                        <i class="ti ti-history"></i>
-                        <span class="panel-title">Wczoraj</span>
-                    </div>
-                    <p class="panel-text">Budowanie systemów przewidywalnych. Determinizm jako fundament. Architektura = plan, który się nie zmienia.</p>
-                </div>
-
-                <div class="panel tomorrow">
-                    <div class="panel-header">
-                        <i class="ti ti-sparkles"></i>
-                        <span class="panel-title">Jutro</span>
-                    </div>
-                    <p class="panel-text">Zarządzanie <strong>ryzykiem i stabilnością</strong> w świecie nieprzewidywalnych komponentów. Architektura = żywa strategia adaptacji.</p>
-                </div>
+            <div class="bridge-visual">
+                <svg class="bridge-svg" viewBox="0 0 400 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bridge deck -->
+                    <rect x="20" y="220" width="360" height="12" rx="2" fill="rgba(34, 211, 238, 0.3)" stroke="rgba(34, 211, 238, 0.5)" stroke-width="1"/>
+                    <!-- Left tower -->
+                    <rect x="80" y="100" width="16" height="120" rx="2" fill="rgba(34, 211, 238, 0.25)" stroke="rgba(34, 211, 238, 0.4)" stroke-width="1"/>
+                    <!-- Right tower -->
+                    <rect x="300" y="100" width="16" height="120" rx="2" fill="rgba(34, 211, 238, 0.25)" stroke="rgba(34, 211, 238, 0.4)" stroke-width="1"/>
+                    <!-- Cables left -->
+                    <line x1="88" y1="105" x2="30" y2="220" stroke="rgba(34, 211, 238, 0.3)" stroke-width="2"/>
+                    <line x1="88" y1="105" x2="60" y2="220" stroke="rgba(34, 211, 238, 0.2)" stroke-width="1.5"/>
+                    <line x1="88" y1="105" x2="120" y2="220" stroke="rgba(34, 211, 238, 0.2)" stroke-width="1.5"/>
+                    <line x1="88" y1="105" x2="150" y2="220" stroke="rgba(34, 211, 238, 0.15)" stroke-width="1"/>
+                    <!-- Cables right -->
+                    <line x1="308" y1="105" x2="370" y2="220" stroke="rgba(34, 211, 238, 0.3)" stroke-width="2"/>
+                    <line x1="308" y1="105" x2="340" y2="220" stroke="rgba(34, 211, 238, 0.2)" stroke-width="1.5"/>
+                    <line x1="308" y1="105" x2="280" y2="220" stroke="rgba(34, 211, 238, 0.2)" stroke-width="1.5"/>
+                    <line x1="308" y1="105" x2="250" y2="220" stroke="rgba(34, 211, 238, 0.15)" stroke-width="1"/>
+                    <!-- Main cable -->
+                    <path d="M 30 140 Q 200 50 370 140" stroke="rgba(34, 211, 238, 0.5)" stroke-width="3" fill="none"/>
+                    <!-- Water -->
+                    <path d="M 0 300 Q 50 285 100 300 Q 150 315 200 300 Q 250 285 300 300 Q 350 315 400 300" stroke="rgba(34, 211, 238, 0.15)" stroke-width="2" fill="none"/>
+                    <path d="M 0 320 Q 50 305 100 320 Q 150 335 200 320 Q 250 305 300 320 Q 350 335 400 320" stroke="rgba(34, 211, 238, 0.1)" stroke-width="1.5" fill="none"/>
+                </svg>
             </div>
 
-            <div class="connector">
-                <i class="ti ti-infinity"></i>
-            </div>
-
-            <div class="punchline">
-                Granica między programistą a architektem <strong>zaciera się</strong>
+            <div class="quote-side">
+                <span class="section-label">Inżynieria tolerancji</span>
+                <div class="big-quote">Jakie są <span class="highlight">tolerancje</span>?</div>
+                <p class="quote-desc">Projektowanie pod nieidealne warunki. Most wytrzymuje więcej niż nominalne obciążenie - system musi tolerować nieprzewidywalne zachowania komponentów.</p>
+                <div class="quote-author">Inspiracja: <strong>Martin Fowler</strong></div>
             </div>
         </div>
 
