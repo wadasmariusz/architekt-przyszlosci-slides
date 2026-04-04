@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 17 - Zmiana roli programisty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --dark-900: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--dark-900);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 1400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -20px;
+        }
+
+        .section-label {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--cyan-400);
+            margin-bottom: 24px;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        h2.title {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.2s forwards;
+            letter-spacing: -1px;
+        }
+
+        h2.title .highlight {
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.6;
+            max-width: 900px;
+            margin-bottom: 56px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.4s forwards;
+        }
+
+        /* Two columns */
+        .columns {
+            display: flex;
+            gap: 48px;
+            width: 100%;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .col {
+            flex: 1;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .col-before {
+            background: rgba(234, 179, 8, 0.04);
+            border-color: rgba(234, 179, 8, 0.15);
+        }
+
+        .col-after {
+            background: rgba(6, 182, 212, 0.04);
+            border-color: rgba(6, 182, 212, 0.15);
+        }
+
+        .col-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .col-before .col-header {
+            border-bottom-color: rgba(234, 179, 8, 0.12);
+        }
+
+        .col-after .col-header {
+            border-bottom-color: rgba(6, 182, 212, 0.12);
+        }
+
+        .col-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .col-before .col-icon {
+            background: rgba(234, 179, 8, 0.12);
+            color: #fbbf24;
+        }
+
+        .col-after .col-icon {
+            background: rgba(6, 182, 212, 0.12);
+            color: var(--cyan-400);
+        }
+
+        .col-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .col-before .col-title { color: #fbbf24; }
+        .col-after .col-title { color: var(--cyan-400); }
+
+        .col-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .col-items li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 21px;
+            line-height: 1.45;
+            color: #cbd5e1;
+        }
+
+        .col-items li i {
+            flex-shrink: 0;
+            margin-top: 3px;
+            font-size: 20px;
+        }
+
+        .col-before .col-items li i { color: rgba(234, 179, 8, 0.5); }
+        .col-after .col-items li i { color: rgba(6, 182, 212, 0.6); }
+
+        /* Arrow between columns */
+        .arrow-separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1s forwards;
+        }
+
+        .arrow-separator i {
+            font-size: 40px;
+            color: var(--cyan-400);
+            text-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .accent {
+            position: absolute;
+            background: var(--cyan-400);
+            border-radius: 50%;
+            filter: blur(50px);
+            opacity: 0.12;
+            z-index: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 5%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+
+        <div class="content">
+            <span class="section-label">Nowa rzeczywistość</span>
+            <h2 class="title">Nie tylko pisanie kodu,</br> ale też <span class="highlight">projektowanie rozwiązania</span></h2>
+            <div class="columns">
+                <div class="col col-before">
+                    <div class="col-header">
+                        <div class="col-icon"><i class="ti ti-code"></i></div>
+                        <span class="col-title">Wczoraj</span>
+                    </div>
+                    <ul class="col-items">
+                        <li><i class="ti ti-point-filled"></i>Rola = pisanie kodu</li>
+                        <li><i class="ti ti-point-filled"></i>Przekładanie wymagań na implementację</li>
+                        <li><i class="ti ti-point-filled"></i>Wartość w linijkach kodu</li>
+                        <li><i class="ti ti-point-filled"></i>Samodzielne budowanie od zera</li>
+                    </ul>
+                </div>
+
+                <div class="arrow-separator">
+                    <i class="ti ti-arrow-right"></i>
+                </div>
+
+                <div class="col col-after">
+                    <div class="col-header">
+                        <div class="col-icon"><i class="ti ti-brain"></i></div>
+                        <span class="col-title">Dziś i jutro</span>
+                    </div>
+                    <ul class="col-items">
+                        <li><i class="ti ti-point-filled"></i>Rola = podejmowanie decyzji architektonicznych</li>
+                        <li><i class="ti ti-point-filled"></i>Rozumienie kompromisów i trade-offów</li>
+                        <li><i class="ti ti-point-filled"></i>Projektowanie granic systemu</li>
+                        <li><i class="ti ti-point-filled"></i>Składanie z usług, narzędzi i modeli AI</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
