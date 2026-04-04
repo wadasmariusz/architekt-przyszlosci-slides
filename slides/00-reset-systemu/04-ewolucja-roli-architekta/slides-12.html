@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 09 - Agenci i Strategie ReAct</title>
+    <title>Slide 12 - Zmiana Tożsamości Zawodowej</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -13,6 +13,8 @@
             --dark-900: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
         }
 
         body {
@@ -49,9 +51,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 900px;
-            height: 900px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -59,29 +61,29 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1500px;
+            width: 1560px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            margin-top: -30px;
         }
 
         .era-label {
-            font-size: 18px;
+            font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 6px;
-            color: var(--cyan-400);
-            margin-bottom: 24px;
+            color: var(--amber-400);
+            margin-bottom: 16px;
             font-weight: 600;
             opacity: 0;
             animation: fadeIn 1s ease-out forwards;
         }
 
         h2.title {
-            font-size: 56px;
+            font-size: 52px;
             font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 60px;
+            line-height: 1.15;
+            margin-bottom: 50px;
             text-align: center;
             color: #ffffff;
             opacity: 0;
@@ -94,92 +96,179 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Two boxes */
-        .boxes {
+        /* Main layout: left column + right column */
+        .columns {
             display: flex;
             gap: 40px;
-            justify-content: center;
-            margin-bottom: 60px;
+            width: 100%;
         }
 
-        .box {
-            width: 600px;
-            padding: 40px 36px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* Left - identity crisis card */
+        .crisis-card {
+            flex: 0 0 480px;
+            background: rgba(251, 191, 36, 0.04);
+            border: 1px solid rgba(251, 191, 36, 0.15);
             border-radius: 24px;
-            backdrop-filter: blur(12px);
+            padding: 44px 36px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 24px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .crisis-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--amber-400);
+        }
+
+        .crisis-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--amber-400);
+        }
+
+        .crisis-desc {
+            font-size: 19px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .crisis-desc strong {
+            color: var(--amber-400);
+        }
+
+        .crisis-quote {
+            font-size: 17px;
+            color: rgba(148, 163, 184, 0.6);
+            font-style: italic;
+            border-left: 3px solid rgba(251, 191, 36, 0.3);
+            padding-left: 16px;
+            line-height: 1.5;
+        }
+
+        /* Right - shift cards */
+        .shift-cards {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .shift-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 28px 32px;
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
             opacity: 0;
             transition: all 0.3s ease;
         }
 
-        .box:nth-child(1) { animation: fadeUp 0.8s ease-out 0.5s forwards; }
-        .box:nth-child(2) { animation: fadeUp 0.8s ease-out 0.7s forwards; }
+        .shift-card:nth-child(1) { animation: fadeUp 0.8s ease-out 0.6s forwards; }
+        .shift-card:nth-child(2) { animation: fadeUp 0.8s ease-out 0.8s forwards; }
+        .shift-card:nth-child(3) { animation: fadeUp 0.8s ease-out 1.0s forwards; }
 
-        .box:hover {
+        .shift-card:hover {
             border-color: var(--cyan-500);
-            transform: translateY(-8px);
-            box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
+            transform: translateX(8px);
+            box-shadow: 0 4px 24px rgba(6, 182, 212, 0.1);
         }
 
-        .box-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            background: rgba(6, 182, 212, 0.1);
+        .shift-icon {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 14px;
+            background: rgba(6, 182, 212, 0.08);
             border: 1px solid rgba(6, 182, 212, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 24px;
             color: var(--cyan-400);
         }
 
-        .box-title {
-            font-size: 28px;
+        .shift-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .shift-title {
+            font-size: 22px;
             font-weight: 700;
             color: #ffffff;
         }
 
-        .box-desc {
-            font-size: 20px;
+        .shift-desc {
+            font-size: 18px;
             color: var(--text-muted);
             line-height: 1.5;
         }
 
-        /* Flow diagram */
-        .flow {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.0s forwards;
+        .shift-desc .cyan {
+            color: var(--cyan-400);
+            font-weight: 600;
         }
 
-        .flow-step {
-            padding: 16px 28px;
-            background: rgba(6, 182, 212, 0.08);
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            border-radius: 12px;
-            font-size: 20px;
+        /* Arrow between from/to */
+        .from-to {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .from-tag, .to-tag {
+            font-size: 14px;
             font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 8px;
+        }
+
+        .from-tag {
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: var(--text-muted);
+        }
+
+        .to-tag {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.25);
             color: var(--cyan-400);
         }
 
-        .flow-arrow {
-            font-size: 24px;
+        .from-to-arrow {
             color: var(--text-muted);
+            font-size: 16px;
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.12;
+            filter: blur(60px);
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .accent-amber {
+            position: absolute;
+            background: var(--amber-400);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.06;
             z-index: 0;
         }
 
@@ -226,35 +315,67 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 400px; height: 400px; top: 10%; right: 10%;"></div>
-        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; left: 10%;"></div>
+        <div class="accent-amber" style="width: 500px; height: 500px; top: 5%; left: 5%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 20%;"></div>
 
         <div class="content">
-            <span class="era-label">AI Agents</span>
-            <h2 class="title">Agenci i strategie <span class="highlight">ReAct</span></h2>
+            <span class="era-label">Nowa rzeczywistość</span>
+            <h2 class="title">Zmiana <span class="highlight">tożsamości zawodowej</span></h2>
 
-            <div class="boxes">
-                <div class="box">
-                    <div class="box-icon"><i class="ti ti-brain"></i></div>
-                    <span class="box-title">ReAct</span>
-                    <span class="box-desc"><strong style="color: var(--cyan-400);">Reason + Act</strong> - rozdzielenie myślenia od działania. Agent najpierw analizuje, potem wykonuje akcję.</span>
+            <div class="columns">
+                <!-- Left: Identity crisis -->
+                <div class="crisis-card">
+                    <div class="crisis-icon"><i class="ti ti-user-question"></i></div>
+                    <span class="crisis-title">Kryzys tożsamości</span>
+                    <p class="crisis-desc">
+                        Programiści definiowali siebie poprzez <strong>pisanie kodu</strong>. Tłumaczenie zadań na kod powoli zanika i zostaje zastąpione przez AI.
+                    </p>
+                    <p class="crisis-quote">
+                        &bdquo;Jeśli nie piszę kodu, to kim jestem?&rdquo;
+                    </p>
                 </div>
 
-                <div class="box">
-                    <div class="box-icon"><i class="ti ti-users-group"></i></div>
-                    <span class="box-title">Multi-Agent</span>
-                    <span class="box-desc">Współpraca wielu specjalistów AI. Każdy agent ma swoją domenę i narzędzia.</span>
-                </div>
-            </div>
+                <!-- Right: Shift cards -->
+                <div class="shift-cards">
+                    <div class="shift-card">
+                        <div class="shift-icon"><i class="ti ti-eye"></i></div>
+                        <div class="shift-content">
+                            <span class="shift-title">Szersza perspektywa na system</span>
+<!--                            <span class="shift-desc">Mniej pisania samemu, więcej <span class="cyan">projektowania architektury</span> i składania całości z gotowych elementów.</span>-->
+                            <div class="from-to">
+                                <span class="from-tag">Pisanie kodu</span>
+                                <span class="from-to-arrow"><i class="ti ti-arrow-right"></i></span>
+                                <span class="to-tag">Orkiestracja systemu</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="flow">
-                <div class="flow-step">Prompt</div>
-                <span class="flow-arrow"><i class="ti ti-arrow-right"></i></span>
-                <div class="flow-step">Myślenie</div>
-                <span class="flow-arrow"><i class="ti ti-arrow-right"></i></span>
-                <div class="flow-step">Narzędzie</div>
-                <span class="flow-arrow"><i class="ti ti-arrow-right"></i></span>
-                <div class="flow-step">Wynik</div>
+                    <div class="shift-card">
+                        <div class="shift-icon"><i class="ti ti-shield-check"></i></div>
+                        <div class="shift-content">
+                            <span class="shift-title">Architekt = zarządzanie ryzykiem</span>
+<!--                            <span class="shift-desc">Nacisk na jakość przesuwa się wyżej &mdash; na <span class="cyan">analizę wymagań</span> i <span class="cyan">projektowanie testów</span>, które stają się kluczowe.</span>-->
+                            <div class="from-to">
+                                <span class="from-tag">Jakość w kodzie</span>
+                                <span class="from-to-arrow"><i class="ti ti-arrow-right"></i></span>
+                                <span class="to-tag">Jakość w wymaganiach i testach</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shift-card">
+                        <div class="shift-icon"><i class="ti ti-route-2"></i></div>
+                        <div class="shift-content">
+                            <span class="shift-title">Nowe wzorce projektowania</span>
+<!--                            <span class="shift-desc">Pojawiają się sposoby projektowania systemów, które <span class="cyan">nie pasują</span></br> do klasycznego, przewidywalnego podejścia.</span>-->
+                            <div class="from-to">
+                                <span class="from-tag">Deterministyczne</span>
+                                <span class="from-to-arrow"><i class="ti ti-arrow-right"></i></span>
+                                <span class="to-tag">Probabilistyczne</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
