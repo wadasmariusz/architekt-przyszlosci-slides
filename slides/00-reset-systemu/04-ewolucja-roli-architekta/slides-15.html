@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 10 - Tabela Porównawcza</title>
+    <title>Slide 15 - Tolerancje: Lekcja z Inżynierii</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -13,6 +13,7 @@
             --dark-900: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --amber-400: #fbbf24;
         }
 
         body {
@@ -49,9 +50,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 900px;
-            height: 900px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -59,29 +60,29 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1400px;
+            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            margin-top: -80px;
         }
 
-        .section-label {
-            font-size: 18px;
+        .source-tag {
+            font-size: 15px;
             text-transform: uppercase;
-            letter-spacing: 6px;
-            color: var(--cyan-400);
-            margin-bottom: 24px;
+            letter-spacing: 5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
             font-weight: 600;
             opacity: 0;
             animation: fadeIn 1s ease-out forwards;
         }
 
         h2.title {
-            font-size: 56px;
+            font-size: 50px;
             font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 60px;
+            line-height: 1.15;
+            margin-bottom: 48px;
             text-align: center;
             color: #ffffff;
             opacity: 0;
@@ -94,84 +95,210 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Table */
-        .compare-table {
+        /* Main layout */
+        .columns {
+            display: flex;
+            gap: 40px;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+            align-items: stretch;
+        }
+
+        /* Left: quote / anecdote */
+        .quote-panel {
+            flex: 0 0 560px;
+            background: rgba(251, 191, 36, 0.04);
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            border-radius: 24px;
+            padding: 44px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.5s forwards;
-            border-radius: 16px;
-            overflow: hidden;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
         }
 
-        .compare-table thead th {
-            padding: 24px 32px;
-            font-size: 22px;
-            font-weight: 700;
-            text-align: left;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .quote-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .compare-table thead th:first-child {
-            background: rgba(15, 23, 42, 0.8);
-            color: var(--text-muted);
-            width: 220px;
+        .quote-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: var(--amber-400);
         }
 
-        .compare-table thead th:nth-child(2) {
-            background: rgba(234, 179, 8, 0.1);
-            color: #fbbf24;
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .compare-table thead th:nth-child(3) {
-            background: rgba(6, 182, 212, 0.1);
-            color: var(--cyan-400);
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .compare-table tbody td {
-            padding: 22px 32px;
+        .quote-author {
             font-size: 20px;
-            line-height: 1.4;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 700;
+            color: var(--amber-400);
         }
 
-        .compare-table tbody td:first-child {
-            background: rgba(15, 23, 42, 0.4);
+        .quote-role {
+            font-size: 15px;
             color: var(--text-muted);
+        }
+
+        .anecdote {
+            font-size: 19px;
+            color: var(--text-muted);
+            line-height: 1.65;
+            border-left: 3px solid rgba(251, 191, 36, 0.3);
+            padding-left: 20px;
+        }
+
+        .anecdote strong {
+            color: var(--amber-400);
+        }
+
+        .bridge-quote {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--amber-400);
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        .bridge-quote::before {
+            content: "\201E";
+            font-size: 40px;
+            color: rgba(251, 191, 36, 0.4);
+            margin-right: 4px;
+        }
+
+        .bridge-quote::after {
+            content: "\201D";
+            font-size: 40px;
+            color: rgba(251, 191, 36, 0.4);
+            margin-left: 4px;
+        }
+
+        /* Right: parallel + key question */
+        .right-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .parallel-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 32px 32px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .parallel-card:nth-child(1) { animation: fadeUp 0.8s ease-out 0.6s forwards; }
+        .parallel-card:nth-child(2) { animation: fadeUp 0.8s ease-out 0.8s forwards; }
+
+        .parallel-card:hover {
+            border-color: var(--cyan-500);
+            transform: translateX(6px);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1);
+        }
+
+        .par-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 12px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--cyan-400);
+        }
+
+        .par-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .par-title {
+            font-size: 21px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .par-desc {
+            font-size: 17px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .par-desc .cyan {
+            color: var(--cyan-400);
             font-weight: 600;
         }
 
-        .compare-table tbody td:nth-child(2) {
-            background: rgba(15, 23, 42, 0.2);
-            color: #e2e8f0;
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .compare-table tbody td:nth-child(3) {
-            background: rgba(6, 182, 212, 0.03);
-            color: #e2e8f0;
-            border-left: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .compare-table tbody tr {
+        /* Key question box */
+        .key-question {
+            background: rgba(6, 182, 212, 0.06);
+            border: 2px solid rgba(6, 182, 212, 0.25);
+            border-radius: 20px;
+            padding: 36px 36px;
+            text-align: center;
             opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.0s forwards;
         }
 
-        .compare-table tbody tr:nth-child(1) { animation: fadeUp 0.6s ease-out 0.7s forwards; }
-        .compare-table tbody tr:nth-child(2) { animation: fadeUp 0.6s ease-out 0.9s forwards; }
-        .compare-table tbody tr:nth-child(3) { animation: fadeUp 0.6s ease-out 1.1s forwards; }
-        .compare-table tbody tr:nth-child(4) { animation: fadeUp 0.6s ease-out 1.3s forwards; }
+        .kq-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+
+        .kq-text {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .kq-text .cyan {
+            color: var(--cyan-400);
+            text-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .kq-text .amber {
+            color: var(--amber-400);
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.12;
+            filter: blur(60px);
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .accent-amber {
+            position: absolute;
+            background: var(--amber-400);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.06;
             z-index: 0;
         }
 
@@ -218,44 +345,38 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 5%;"></div>
-        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
+        <div class="accent-amber" style="width: 450px; height: 450px; top: 5%; left: 5%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; right: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">Porównanie</span>
-            <h2 class="title">Dwa rodzaje <span class="highlight">niedeterminizmu</span></h2>
+            <span class="source-tag">Martin Fowler</span>
+            <h2 class="title">Jakie są <span class="highlight">tolerancje</span>?</h2>
 
-            <table class="compare-table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Techniczny</th>
-                        <th>Semantyczny (LLM)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Źródło</td>
-                        <td>Sieć, race conditions, timeouty</td>
-                        <td>Logika modelu językowego</td>
-                    </tr>
-                    <tr>
-                        <td>Objaw</td>
-                        <td>Błędy, awarie, opóźnienia</td>
-                        <td>Różne odpowiedzi na ten sam prompt</td>
-                    </tr>
-                    <tr>
-                        <td>Rozwiązanie</td>
-                        <td>Retry, circuit breaker, fallback</td>
-                        <td>Guardrails, walidacja, ewaluacja</td>
-                    </tr>
-                    <tr>
-                        <td>Przewidywalność</td>
-                        <td>Wysoka (znane wzorce)</td>
-                        <td>Niska (emergentne zachowania)</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="columns">
+                <!-- Left: Anecdote -->
+                <div class="quote-panel">
+                    <div class="quote-header">
+                        <div class="quote-icon"><i class="ti ti-building-bridge-2"></i></div>
+                        <div>
+                            <div class="quote-author">Anegdota  Martina Fowlera</div>
+                        </div>
+                    </div>
+
+                    <span class="bridge-quote">Świat jest nieprzewidywalny i projekt musi to uwzględniać</span>
+                </div>
+
+                <!-- Right: Parallels + Question -->
+                <div class="right-col">
+
+                    <div class="key-question">
+                        <div class="kq-label">Kluczowe pytanie architekta</div>
+                        <div class="kq-text">
+                            Gdzie mogę pozwolić sobie na <span class="cyan">niedeterminizm</span>,<br>
+                            a gdzie <span class="amber">absolutnie nie</span>?
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
