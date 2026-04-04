@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 11 - AI jako system</title>
+    <title>Slide 10 - Hipoteza vs fakt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -58,11 +58,11 @@
         .content {
             position: relative;
             z-index: 10;
+            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            max-width: 1500px;
+            margin-top: -40px;
         }
 
         .section-label {
@@ -81,6 +81,7 @@
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 80px;
+            text-align: center;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
@@ -92,71 +93,94 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* System diagram */
-        .system-diagram {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            opacity: 0;
-            animation: fadeUp 1s ease-out 0.6s forwards;
+        .title .warning {
+            color: rgba(239, 68, 68, 0.9);
         }
 
-        .sys-node {
-            width: 200px;
-            height: 140px;
-            border-radius: 20px;
+        /* Two columns */
+        .columns {
+            display: flex;
+            gap: 80px;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .column {
+            width: 500px;
+            padding: 48px 40px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+            gap: 24px;
+            opacity: 0;
+        }
+
+        .column:nth-child(1) {
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .column:nth-child(2) {
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            animation: fadeUp 0.8s ease-out 0.8s forwards;
+        }
+
+        .column-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 600;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-main);
-        }
-
-        .sys-node.ai {
-            background: rgba(6, 182, 212, 0.12);
-            border: 2px solid var(--cyan-400);
-            color: var(--cyan-400);
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
-        }
-
-        .sys-node i {
             font-size: 36px;
         }
 
-        .sys-connector {
-            width: 40px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.15);
+        .column:nth-child(1) .column-icon {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: rgba(239, 68, 68, 0.8);
         }
 
-        .sys-connector.active {
-            background: var(--cyan-400);
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        .column:nth-child(2) .column-icon {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: rgba(34, 197, 94, 0.8);
+        }
+
+        .column-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .column-desc {
+            font-size: 20px;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
         .bottom-text {
-            margin-top: 70px;
             font-size: 28px;
             color: var(--text-muted);
+            text-align: center;
             opacity: 0;
-            animation: fadeIn 1s ease-out 1.2s forwards;
+            animation: fadeIn 1s ease-out 1.4s forwards;
         }
 
         .bottom-text strong {
-            color: var(--cyan-400);
+            color: rgba(239, 68, 68, 0.8);
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.1;
+            filter: blur(50px);
+            opacity: 0.12;
             z-index: 0;
         }
 
@@ -203,41 +227,28 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 500px; height: 500px; top: 10%; left: 5%;"></div>
-        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; right: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">System</span>
-            <h2 class="title">AI jako <span class="highlight">element procesu</span></h2>
+            <span class="section-label">Ryzyko</span>
+            <h2 class="title">Hipoteza vs <span class="highlight">fakt</span></h2>
 
-            <div class="system-diagram">
-                <div class="sys-node">
-                    <i class="ti ti-file-description"></i>
-                    Wymagania
+            <div class="columns">
+                <div class="column">
+                    <div class="column-icon"><i class="ti ti-sparkles"></i></div>
+                    <span class="column-title">AI output</span>
+                    <p class="column-desc">Hipotezy, sugestie,<br>prawdopodobne odpowiedzi,<br>potencjalne halucynacje</p>
                 </div>
-                <div class="sys-connector"></div>
-                <div class="sys-node">
-                    <i class="ti ti-users"></i>
-                    Zespół
-                </div>
-                <div class="sys-connector active"></div>
-                <div class="sys-node ai">
-                    <i class="ti ti-sparkles"></i>
-                    AI
-                </div>
-                <div class="sys-connector active"></div>
-                <div class="sys-node">
-                    <i class="ti ti-test-pipe"></i>
-                    Walidacja
-                </div>
-                <div class="sys-connector"></div>
-                <div class="sys-node">
-                    <i class="ti ti-rocket"></i>
-                    Produkt
+
+                <div class="column">
+                    <div class="column-icon"><i class="ti ti-shield-check"></i></div>
+                    <span class="column-title">Zweryfikowana wiedza</span>
+                    <p class="column-desc">Potwierdzone fakty,<br>przetestowane rozwiązania,<br>udokumentowane decyzje</p>
                 </div>
             </div>
 
-            <p class="bottom-text">Element procesu, <strong>nie autonomiczne narzędzie</strong></p>
+            <p class="bottom-text">Największe ryzyko: traktowanie hipotez jako <strong>faktów</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

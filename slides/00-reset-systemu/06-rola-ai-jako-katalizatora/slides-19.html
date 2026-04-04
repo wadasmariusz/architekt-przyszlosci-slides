@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 19 - Dług techniczny AI</title>
+    <title>Slide 18 - Błędy AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -50,7 +50,7 @@
             transform: translate(-50%, -50%);
             width: 900px;
             height: 900px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -58,11 +58,11 @@
         .content {
             position: relative;
             z-index: 10;
+            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            max-width: 1500px;
+            margin-top: -40px;
         }
 
         .section-label {
@@ -80,7 +80,8 @@
             font-size: 64px;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
+            text-align: center;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
@@ -91,37 +92,93 @@
             color: rgba(239, 68, 68, 0.9);
         }
 
-        /* Debt chart */
-        .debt-chart {
-            width: 900px;
-            height: 400px;
+        /* Three columns */
+        .error-cols {
+            display: flex;
+            gap: 48px;
+            justify-content: center;
+        }
+
+        .error-col {
+            width: 360px;
+            padding: 48px 36px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
             opacity: 0;
-            animation: fadeIn 1s ease-out 0.6s forwards;
+            transition: all 0.3s ease;
         }
 
-        .debt-svg {
-            width: 100%;
-            height: 100%;
+        .error-col:nth-child(1) {
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            animation: fadeUp 0.7s ease-out 0.5s forwards;
         }
 
-        .bottom-text {
-            margin-top: 40px;
-            font-size: 28px;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: fadeIn 1s ease-out 1.2s forwards;
+        .error-col:nth-child(2) {
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: fadeUp 0.7s ease-out 0.7s forwards;
         }
 
-        .bottom-text strong {
+        .error-col:nth-child(3) {
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            animation: fadeUp 0.7s ease-out 0.9s forwards;
+        }
+
+        .error-col:hover {
+            transform: translateY(-8px);
+        }
+
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .error-col:nth-child(1) .error-icon {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: rgba(251, 191, 36, 0.8);
+        }
+
+        .error-col:nth-child(2) .error-icon {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
             color: rgba(239, 68, 68, 0.8);
+        }
+
+        .error-col:nth-child(3) .error-icon {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: rgba(168, 85, 247, 0.8);
+        }
+
+        .error-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .error-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.1;
+            filter: blur(50px);
+            opacity: 0.12;
             z-index: 0;
         }
 
@@ -168,40 +225,32 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 600px; height: 600px; top: 10%; right: 5%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; right: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">Ryzyko</span>
-            <h2 class="title">Dług techniczny <span class="highlight">przyspieszony przez AI</span></h2>
+            <span class="section-label">Uwaga</span>
+            <h2 class="title">3 typy <span class="highlight">błędów AI</span></h2>
 
-            <div class="debt-chart">
-                <svg class="debt-svg" viewBox="0 0 900 400">
-                    <!-- Axes -->
-                    <line x1="80" y1="350" x2="850" y2="350" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-                    <line x1="80" y1="350" x2="80" y2="30" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+            <div class="error-cols">
+                <div class="error-col">
+                    <div class="error-icon"><i class="ti ti-database"></i></div>
+                    <span class="error-title">Błędne fakty</span>
+                    <p class="error-desc">Nieprawdziwe informacje podane z pewnością siebie</p>
+                </div>
 
-                    <!-- Normal debt (gentle curve) -->
-                    <path d="M 80 340 Q 300 320 450 280 T 830 200" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-dasharray="8,4"/>
-                    <text x="835" y="195" fill="rgba(255,255,255,0.4)" font-size="16">Tradycyjny dług</text>
+                <div class="error-col">
+                    <div class="error-icon"><i class="ti ti-math-function"></i></div>
+                    <span class="error-title">Błędna logika</span>
+                    <p class="error-desc">Poprawne dane, ale błędne wnioskowanie</p>
+                </div>
 
-                    <!-- AI-accelerated debt (steep exponential) -->
-                    <path d="M 80 340 Q 250 320 400 260 T 600 120 Q 700 60 830 30" fill="none" stroke="rgba(239, 68, 68, 0.8)" stroke-width="4" stroke-dasharray="1000" stroke-dashoffset="1000">
-                        <animate attributeName="stroke-dashoffset" from="1000" to="0" dur="2s" begin="0.8s" fill="freeze"/>
-                    </path>
-                    <text x="835" y="25" fill="rgba(239, 68, 68, 0.8)" font-size="16" font-weight="600">Dług z AI</text>
-
-                    <!-- Shaded area between curves -->
-                    <path d="M 400 260 Q 500 210 600 120 Q 700 60 830 30 L 830 200 Q 650 230 450 280 Z" fill="rgba(239, 68, 68, 0.06)" opacity="0">
-                        <animate attributeName="opacity" from="0" to="1" dur="1s" begin="2s" fill="freeze"/>
-                    </path>
-
-                    <!-- Labels -->
-                    <text x="460" y="390" fill="rgba(255,255,255,0.4)" font-size="16" text-anchor="middle">Czas</text>
-                    <text x="30" y="190" fill="rgba(255,255,255,0.4)" font-size="16" text-anchor="middle" transform="rotate(-90, 30, 190)">Dług</text>
-                </svg>
+                <div class="error-col">
+                    <div class="error-icon"><i class="ti ti-ghost"></i></div>
+                    <span class="error-title">Halucynacje</span>
+                    <p class="error-desc">Kompletnie zmyślone odpowiedzi, API, biblioteki</p>
+                </div>
             </div>
-
-            <p class="bottom-text">Więcej kodu = <strong>szybszy przyrost długu</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 18 - Błędy AI</title>
+    <title>Slide 17 - Adwokat Diabła</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -58,11 +58,11 @@
         .content {
             position: relative;
             z-index: 10;
-            width: 1500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -40px;
+            text-align: center;
+            max-width: 1500px;
         }
 
         .section-label {
@@ -81,7 +81,6 @@
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 80px;
-            text-align: center;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
@@ -89,96 +88,112 @@
         }
 
         h2.title .highlight {
-            color: rgba(239, 68, 68, 0.9);
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Three columns */
-        .error-cols {
+        /* Attack flow */
+        .attack-flow {
             display: flex;
-            gap: 48px;
-            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
         }
 
-        .error-col {
-            width: 360px;
-            padding: 48px 36px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 24px;
-            backdrop-filter: blur(12px);
+        .idea-box {
+            width: 280px;
+            padding: 40px 32px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            gap: 24px;
-            opacity: 0;
-            transition: all 0.3s ease;
+            gap: 16px;
         }
 
-        .error-col:nth-child(1) {
-            border: 1px solid rgba(251, 191, 36, 0.2);
-            animation: fadeUp 0.7s ease-out 0.5s forwards;
+        .idea-box i {
+            font-size: 48px;
+            color: var(--text-muted);
         }
 
-        .error-col:nth-child(2) {
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            animation: fadeUp 0.7s ease-out 0.7s forwards;
-        }
-
-        .error-col:nth-child(3) {
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            animation: fadeUp 0.7s ease-out 0.9s forwards;
-        }
-
-        .error-col:hover {
-            transform: translateY(-8px);
-        }
-
-        .error-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-        }
-
-        .error-col:nth-child(1) .error-icon {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            color: rgba(251, 191, 36, 0.8);
-        }
-
-        .error-col:nth-child(2) .error-icon {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: rgba(239, 68, 68, 0.8);
-        }
-
-        .error-col:nth-child(3) .error-icon {
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            color: rgba(168, 85, 247, 0.8);
-        }
-
-        .error-title {
-            font-size: 26px;
+        .idea-box span {
+            font-size: 24px;
             font-weight: 700;
             color: #ffffff;
         }
 
-        .error-desc {
-            font-size: 18px;
+        .attack-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .attack-arrow i {
+            font-size: 36px;
+            color: rgba(239, 68, 68, 0.7);
+        }
+
+        .attack-arrow span {
+            font-size: 16px;
+            color: rgba(239, 68, 68, 0.6);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .risk-list {
+            width: 400px;
+            padding: 32px;
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .risk-list-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: rgba(239, 68, 68, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .risk-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
             color: var(--text-muted);
-            line-height: 1.6;
+        }
+
+        .risk-item i {
+            color: rgba(239, 68, 68, 0.6);
+            font-size: 20px;
+        }
+
+        .bottom-text {
+            margin-top: 60px;
+            font-size: 28px;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.2s forwards;
+        }
+
+        .bottom-text strong {
+            color: var(--cyan-400);
         }
 
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(50px);
-            opacity: 0.12;
+            filter: blur(60px);
+            opacity: 0.1;
             z-index: 0;
         }
 
@@ -226,31 +241,34 @@
         <div class="bg-glow"></div>
 
         <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 10%;"></div>
-        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; right: 10%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; bottom: 10%; right: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">Uwaga</span>
-            <h2 class="title">3 typy <span class="highlight">błędów AI</span></h2>
+            <span class="section-label">Technika</span>
+            <h2 class="title"><span class="highlight">Adwokat Diabła</span></h2>
 
-            <div class="error-cols">
-                <div class="error-col">
-                    <div class="error-icon"><i class="ti ti-database"></i></div>
-                    <span class="error-title">Błędne fakty</span>
-                    <p class="error-desc">Nieprawdziwe informacje podane z pewnością siebie</p>
+            <div class="attack-flow">
+                <div class="idea-box">
+                    <i class="ti ti-bulb"></i>
+                    <span>Twój pomysł</span>
                 </div>
 
-                <div class="error-col">
-                    <div class="error-icon"><i class="ti ti-math-function"></i></div>
-                    <span class="error-title">Błędna logika</span>
-                    <p class="error-desc">Poprawne dane, ale błędne wnioskowanie</p>
+                <div class="attack-arrow">
+                    <i class="ti ti-arrow-right"></i>
+                    <span>Atak</span>
+                    <i class="ti ti-arrow-right"></i>
                 </div>
 
-                <div class="error-col">
-                    <div class="error-icon"><i class="ti ti-ghost"></i></div>
-                    <span class="error-title">Halucynacje</span>
-                    <p class="error-desc">Kompletnie zmyślone odpowiedzi, API, biblioteki</p>
+                <div class="risk-list">
+                    <div class="risk-list-title"><i class="ti ti-alert-triangle"></i> Lista ryzyk</div>
+                    <div class="risk-item"><i class="ti ti-x"></i> Single point of failure</div>
+                    <div class="risk-item"><i class="ti ti-x"></i> Brak skalowalności</div>
+                    <div class="risk-item"><i class="ti ti-x"></i> Vendor lock-in</div>
+                    <div class="risk-item"><i class="ti ti-x"></i> Koszt migracji</div>
                 </div>
             </div>
+
+            <p class="bottom-text">AI atakuje pomysł &rarr; <strong>lepsze decyzje</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

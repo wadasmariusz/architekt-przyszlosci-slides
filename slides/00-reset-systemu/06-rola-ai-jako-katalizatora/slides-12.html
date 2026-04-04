@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 12 - Kontekst</title>
+    <title>Slide 11 - AI jako system</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -48,9 +48,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -62,18 +62,29 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            max-width: 1200px;
+            max-width: 1500px;
+        }
+
+        .section-label {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--cyan-400);
+            margin-bottom: 24px;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
         }
 
         h2.title {
-            font-size: 72px;
+            font-size: 64px;
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 80px;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
-            letter-spacing: -2px;
+            letter-spacing: -1px;
         }
 
         h2.title .highlight {
@@ -81,54 +92,51 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* AI + no data = ? */
-        .equation {
+        /* System diagram */
+        .system-diagram {
             display: flex;
             align-items: center;
-            gap: 40px;
+            gap: 32px;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.6s forwards;
         }
 
-        .eq-box {
-            width: 260px;
-            height: 200px;
-            border-radius: 24px;
+        .sys-node {
+            width: 200px;
+            height: 140px;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 16px;
-            font-size: 24px;
-            font-weight: 700;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
         }
 
-        .eq-box.ai {
-            background: rgba(6, 182, 212, 0.1);
+        .sys-node.ai {
+            background: rgba(6, 182, 212, 0.12);
             border: 2px solid var(--cyan-400);
             color: var(--cyan-400);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
         }
 
-        .eq-box.nodata {
-            background: rgba(239, 68, 68, 0.08);
-            border: 2px solid rgba(239, 68, 68, 0.3);
-            color: rgba(239, 68, 68, 0.8);
+        .sys-node i {
+            font-size: 36px;
         }
 
-        .eq-box.result {
-            background: rgba(251, 191, 36, 0.08);
-            border: 2px solid rgba(251, 191, 36, 0.3);
-            color: rgba(251, 191, 36, 0.9);
+        .sys-connector {
+            width: 40px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .eq-box i {
-            font-size: 56px;
-        }
-
-        .eq-sign {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--text-muted);
+        .sys-connector.active {
+            background: var(--cyan-400);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
         }
 
         .bottom-text {
@@ -140,7 +148,7 @@
         }
 
         .bottom-text strong {
-            color: rgba(239, 68, 68, 0.8);
+            color: var(--cyan-400);
         }
 
         .accent {
@@ -195,29 +203,41 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 500px; height: 500px; top: 5%; left: 5%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; top: 10%; left: 5%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 10%;"></div>
 
         <div class="content">
-            <h2 class="title">AI bez <span class="highlight">kontekstu</span></h2>
+            <span class="section-label">System</span>
+            <h2 class="title">AI jako <span class="highlight">element procesu</span></h2>
 
-            <div class="equation">
-                <div class="eq-box ai">
+            <div class="system-diagram">
+                <div class="sys-node">
+                    <i class="ti ti-file-description"></i>
+                    Wymagania
+                </div>
+                <div class="sys-connector"></div>
+                <div class="sys-node">
+                    <i class="ti ti-users"></i>
+                    Zespół
+                </div>
+                <div class="sys-connector active"></div>
+                <div class="sys-node ai">
                     <i class="ti ti-sparkles"></i>
                     AI
                 </div>
-                <span class="eq-sign">+</span>
-                <div class="eq-box nodata">
-                    <i class="ti ti-database-off"></i>
-                    Brak danych
+                <div class="sys-connector active"></div>
+                <div class="sys-node">
+                    <i class="ti ti-test-pipe"></i>
+                    Walidacja
                 </div>
-                <span class="eq-sign">=</span>
-                <div class="eq-box result">
-                    <i class="ti ti-help-octagon"></i>
-                    ???
+                <div class="sys-connector"></div>
+                <div class="sys-node">
+                    <i class="ti ti-rocket"></i>
+                    Produkt
                 </div>
             </div>
 
-            <p class="bottom-text">AI bez kontekstu = <strong>błędne decyzje</strong></p>
+            <p class="bottom-text">Element procesu, <strong>nie autonomiczne narzędzie</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

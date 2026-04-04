@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 15 - Proces decyzyjny</title>
+    <title>Slide 14 - 4 filary promptu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -48,8 +48,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 1000px;
-            height: 1000px;
+            width: 900px;
+            height: 900px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -92,63 +92,58 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Pipeline */
-        .pipeline {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        /* 4-block grid */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.6s forwards;
         }
 
-        .pipe-step {
+        .pillar {
+            width: 380px;
+            padding: 40px 36px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 16px;
-            padding: 32px 28px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            backdrop-filter: blur(12px);
             transition: all 0.3s ease;
-            min-width: 180px;
         }
 
-        .pipe-step:hover {
+        .pillar:hover {
             border-color: var(--cyan-400);
             transform: translateY(-6px);
             box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
         }
 
-        .pipe-num {
-            width: 48px;
-            height: 48px;
+        .pillar-icon {
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             background: rgba(6, 182, 212, 0.1);
-            border: 2px solid var(--cyan-400);
+            border: 1px solid rgba(6, 182, 212, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 28px;
             color: var(--cyan-400);
         }
 
-        .pipe-icon {
-            font-size: 36px;
+        .pillar-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .pillar-desc {
+            font-size: 18px;
             color: var(--text-muted);
-        }
-
-        .pipe-label {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .pipe-arrow {
-            font-size: 24px;
-            color: var(--cyan-400);
+            text-align: center;
         }
 
         .accent {
@@ -203,42 +198,33 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 500px; height: 500px; top: 5%; left: 5%;"></div>
-        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 15%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; top: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; left: 10%;"></div>
 
         <div class="content">
-            <span class="section-label">Decyzje</span>
-            <h2 class="title"><span class="highlight">Proces</span> decyzyjny</h2>
+            <span class="section-label">Framework</span>
+            <h2 class="title"><span class="highlight">4 filary</span> promptu</h2>
 
-            <div class="pipeline">
-                <div class="pipe-step">
-                    <div class="pipe-num">1</div>
-                    <i class="pipe-icon ti ti-target"></i>
-                    <span class="pipe-label">Kryteria</span>
+            <div class="pillars">
+                <div class="pillar">
+                    <div class="pillar-icon"><i class="ti ti-user-star"></i></div>
+                    <span class="pillar-name">Rola</span>
+                    <span class="pillar-desc">Kim jest AI w tym zadaniu</span>
                 </div>
-                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
-                <div class="pipe-step">
-                    <div class="pipe-num">2</div>
-                    <i class="pipe-icon ti ti-list-search"></i>
-                    <span class="pipe-label">Opcje</span>
+                <div class="pillar">
+                    <div class="pillar-icon"><i class="ti ti-world"></i></div>
+                    <span class="pillar-name">Kontekst</span>
+                    <span class="pillar-desc">Tło i ograniczenia systemu</span>
                 </div>
-                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
-                <div class="pipe-step">
-                    <div class="pipe-num">3</div>
-                    <i class="pipe-icon ti ti-analyze"></i>
-                    <span class="pipe-label">Analiza</span>
+                <div class="pillar">
+                    <div class="pillar-icon"><i class="ti ti-target-arrow"></i></div>
+                    <span class="pillar-name">Jakość</span>
+                    <span class="pillar-desc">Kryteria akceptacji</span>
                 </div>
-                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
-                <div class="pipe-step">
-                    <div class="pipe-num">4</div>
-                    <i class="pipe-icon ti ti-scale"></i>
-                    <span class="pipe-label">Porównanie</span>
-                </div>
-                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
-                <div class="pipe-step">
-                    <div class="pipe-num">5</div>
-                    <i class="pipe-icon ti ti-circle-check"></i>
-                    <span class="pipe-label">Wybór</span>
+                <div class="pillar">
+                    <div class="pillar-icon"><i class="ti ti-lock"></i></div>
+                    <span class="pillar-name">Ograniczenia</span>
+                    <span class="pillar-desc">Czego AI nie powinno robić</span>
                 </div>
             </div>
         </div>

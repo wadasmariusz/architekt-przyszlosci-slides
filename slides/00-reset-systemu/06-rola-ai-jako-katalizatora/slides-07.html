@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 07 - Specyfikacja</title>
+    <title>Slide 06 - Przesunięcie jakości</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -48,9 +48,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 1000px;
-            height: 1000px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -92,84 +92,65 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Spec to code visual */
-        .spec-flow {
+        /* Timeline */
+        .timeline {
             display: flex;
             align-items: center;
-            gap: 48px;
+            gap: 0;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.6s forwards;
         }
 
-        .spec-doc {
-            width: 280px;
-            height: 360px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 2px solid var(--cyan-400);
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 32px 40px;
+            position: relative;
+        }
+
+        .timeline-step.emphasized {
+            background: rgba(6, 182, 212, 0.08);
+            border: 2px solid rgba(6, 182, 212, 0.3);
             border-radius: 20px;
-            padding: 32px;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.1);
+        }
+
+        .timeline-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
-            flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 0 40px rgba(6, 182, 212, 0.15);
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--text-muted);
         }
 
-        .spec-line {
-            height: 8px;
-            border-radius: 4px;
-            background: rgba(6, 182, 212, 0.2);
+        .timeline-step.emphasized .timeline-icon {
+            border-color: var(--cyan-400);
+            color: var(--cyan-400);
+            background: rgba(6, 182, 212, 0.1);
         }
 
-        .spec-line:nth-child(1) { width: 80%; }
-        .spec-line:nth-child(2) { width: 60%; }
-        .spec-line:nth-child(3) { width: 90%; }
-        .spec-line:nth-child(4) { width: 45%; }
-        .spec-line:nth-child(5) { width: 75%; }
-        .spec-line:nth-child(6) { width: 55%; }
-        .spec-line:nth-child(7) { width: 85%; }
+        .timeline-label {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
 
-        .spec-label {
-            margin-top: auto;
-            font-size: 20px;
-            font-weight: 700;
+        .timeline-step.emphasized .timeline-label {
             color: var(--cyan-400);
         }
 
-        .multiply-arrows {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            color: var(--cyan-400);
+        .timeline-arrow {
             font-size: 28px;
+            color: rgba(255, 255, 255, 0.2);
+            margin: 0 8px;
         }
-
-        .code-copies {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .code-copy {
-            width: 180px;
-            height: 120px;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .code-copy-line {
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .code-copy-line:nth-child(1) { width: 70%; }
-        .code-copy-line:nth-child(2) { width: 50%; }
-        .code-copy-line:nth-child(3) { width: 80%; }
 
         .bottom-text {
             margin-top: 60px;
@@ -235,56 +216,35 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 500px; height: 500px; top: 5%; right: 10%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; top: 10%; left: 5%;"></div>
 
         <div class="content">
-            <span class="section-label">Jakość</span>
-            <h2 class="title"><span class="highlight">Specyfikacja</span> = źródło jakości</h2>
+            <span class="section-label">Shift Left</span>
+            <h2 class="title">Przesunięcie <span class="highlight">jakości</span></h2>
 
-            <div class="spec-flow">
-                <div class="spec-doc">
-                    <div class="spec-line"></div>
-                    <div class="spec-line"></div>
-                    <div class="spec-line"></div>
-                    <div class="spec-line"></div>
-                    <div class="spec-line"></div>
-                    <div class="spec-line"></div>
-                    <div class="spec-line"></div>
-                    <span class="spec-label"><i class="ti ti-file-text"></i> Specyfikacja</span>
+            <div class="timeline">
+                <div class="timeline-step emphasized">
+                    <div class="timeline-icon"><i class="ti ti-file-description"></i></div>
+                    <span class="timeline-label">Wymagania</span>
                 </div>
-
-                <div class="multiply-arrows">
-                    <i class="ti ti-arrow-right"></i>
-                    <i class="ti ti-arrow-right"></i>
-                    <i class="ti ti-arrow-right"></i>
-                    <i class="ti ti-arrow-right"></i>
+                <span class="timeline-arrow"><i class="ti ti-chevron-right"></i></span>
+                <div class="timeline-step emphasized">
+                    <div class="timeline-icon"><i class="ti ti-layout-board"></i></div>
+                    <span class="timeline-label">Projekt</span>
                 </div>
-
-                <div class="code-copies">
-                    <div class="code-copy">
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                    </div>
-                    <div class="code-copy">
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                    </div>
-                    <div class="code-copy">
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                    </div>
-                    <div class="code-copy">
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                        <div class="code-copy-line"></div>
-                    </div>
+                <span class="timeline-arrow"><i class="ti ti-chevron-right"></i></span>
+                <div class="timeline-step emphasized">
+                    <div class="timeline-icon"><i class="ti ti-test-pipe"></i></div>
+                    <span class="timeline-label">Testy</span>
+                </div>
+                <span class="timeline-arrow"><i class="ti ti-chevron-right"></i></span>
+                <div class="timeline-step">
+                    <div class="timeline-icon"><i class="ti ti-code"></i></div>
+                    <span class="timeline-label">Kod</span>
                 </div>
             </div>
 
-            <p class="bottom-text">Dokument &rarr; <strong>masowa produkcja kodu</strong></p>
+            <p class="bottom-text">Projekt i testy <strong>przed kodem</strong></p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

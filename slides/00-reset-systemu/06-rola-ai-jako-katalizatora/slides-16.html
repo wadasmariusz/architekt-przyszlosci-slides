@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 16 - AI jako research</title>
+    <title>Slide 15 - Proces decyzyjny</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -48,8 +48,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 900px;
-            height: 900px;
+            width: 1000px;
+            height: 1000px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -80,7 +80,7 @@
             font-size: 64px;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
@@ -92,58 +92,62 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        /* Comparison table */
-        .comp-table {
-            border-collapse: separate;
-            border-spacing: 0;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            overflow: hidden;
+        /* Pipeline */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 16px;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.6s forwards;
         }
 
-        .comp-table th {
-            padding: 24px 48px;
-            font-size: 20px;
-            font-weight: 700;
+        .pipe-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 32px 28px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .pipe-step:hover {
+            border-color: var(--cyan-400);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
+        }
+
+        .pipe-num {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(6, 182, 212, 0.1);
+            border: 2px solid var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
             color: var(--cyan-400);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: rgba(6, 182, 212, 0.08);
-            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
         }
 
-        .comp-table td {
-            padding: 20px 48px;
+        .pipe-icon {
+            font-size: 36px;
+            color: var(--text-muted);
+        }
+
+        .pipe-label {
             font-size: 20px;
-            color: var(--text-main);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .comp-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .comp-table td:first-child {
             font-weight: 600;
-            color: var(--text-muted);
+            color: var(--text-main);
         }
 
-        .check { color: rgba(34, 197, 94, 0.8); }
-        .cross { color: rgba(239, 68, 68, 0.8); }
-        .mid { color: rgba(251, 191, 36, 0.8); }
-
-        .bottom-text {
-            margin-top: 50px;
-            font-size: 28px;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: fadeIn 1s ease-out 1.2s forwards;
-        }
-
-        .bottom-text strong {
+        .pipe-arrow {
+            font-size: 24px;
             color: var(--cyan-400);
         }
 
@@ -199,50 +203,44 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 500px; height: 500px; top: 10%; right: 5%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; top: 5%; left: 5%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 15%;"></div>
 
         <div class="content">
-            <span class="section-label">Research</span>
-            <h2 class="title">AI jako <span class="highlight">szybkie porównania</span></h2>
+            <span class="section-label">Decyzje</span>
+            <h2 class="title"><span class="highlight">Proces</span> decyzyjny</h2>
 
-            <table class="comp-table">
-                <thead>
-                    <tr>
-                        <th>Kryterium</th>
-                        <th>PostgreSQL</th>
-                        <th>MongoDB</th>
-                        <th>DynamoDB</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Skalowalność</td>
-                        <td class="mid">Średnia</td>
-                        <td class="check">Wysoka</td>
-                        <td class="check">Bardzo wysoka</td>
-                    </tr>
-                    <tr>
-                        <td>Złożone zapytania</td>
-                        <td class="check">Tak</td>
-                        <td class="mid">Ograniczone</td>
-                        <td class="cross">Nie</td>
-                    </tr>
-                    <tr>
-                        <td>Koszt</td>
-                        <td class="check">Niski</td>
-                        <td class="mid">Średni</td>
-                        <td class="mid">Pay-per-use</td>
-                    </tr>
-                    <tr>
-                        <td>Elastyczność schematu</td>
-                        <td class="cross">Sztywny</td>
-                        <td class="check">Elastyczny</td>
-                        <td class="check">Elastyczny</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p class="bottom-text">Szybkie porównania &rarr; <strong>lepsze decyzje</strong></p>
+            <div class="pipeline">
+                <div class="pipe-step">
+                    <div class="pipe-num">1</div>
+                    <i class="pipe-icon ti ti-target"></i>
+                    <span class="pipe-label">Kryteria</span>
+                </div>
+                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
+                <div class="pipe-step">
+                    <div class="pipe-num">2</div>
+                    <i class="pipe-icon ti ti-list-search"></i>
+                    <span class="pipe-label">Opcje</span>
+                </div>
+                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
+                <div class="pipe-step">
+                    <div class="pipe-num">3</div>
+                    <i class="pipe-icon ti ti-analyze"></i>
+                    <span class="pipe-label">Analiza</span>
+                </div>
+                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
+                <div class="pipe-step">
+                    <div class="pipe-num">4</div>
+                    <i class="pipe-icon ti ti-scale"></i>
+                    <span class="pipe-label">Porównanie</span>
+                </div>
+                <span class="pipe-arrow"><i class="ti ti-chevron-right"></i></span>
+                <div class="pipe-step">
+                    <div class="pipe-num">5</div>
+                    <i class="pipe-icon ti ti-circle-check"></i>
+                    <span class="pipe-label">Wybór</span>
+                </div>
+            </div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
