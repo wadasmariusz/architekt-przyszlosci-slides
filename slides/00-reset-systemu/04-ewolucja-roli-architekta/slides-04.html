@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 04 - Era PC i Utrzymywalność</title>
+    <title>Slide 04 - Era Komputerów PC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -77,8 +77,8 @@
         }
 
         .pc-icon {
-            width: 300px;
-            height: 400px;
+            width: 360px;
+            height: 420px;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
@@ -86,14 +86,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 24px;
+            gap: 16px;
             backdrop-filter: blur(12px);
+            padding: 20px;
         }
 
-        .pc-icon i {
-            font-size: 120px;
-            color: var(--cyan-400);
-            opacity: 0.6;
+        .pc-icon img {
+            width: 100%;
+            height: 320px;
+            object-fit: contain;
         }
 
         .pc-icon span {
@@ -156,20 +157,11 @@
             font-size: 22px;
             color: #e2e8f0;
             line-height: 1.5;
-            font-style: italic;
-            margin-bottom: 12px;
         }
 
         .quote-box .quote-text strong {
             color: var(--cyan-400);
             font-weight: 700;
-            font-style: normal;
-        }
-
-        .quote-box .quote-author {
-            font-size: 18px;
-            color: var(--text-muted);
-            font-weight: 600;
         }
 
         .accent {
@@ -229,18 +221,17 @@
         <div class="content">
             <div class="visual-side">
                 <div class="pc-icon">
-                    <i class="ti ti-device-desktop"></i>
-                    <span>Komputer PC</span>
+                    <img src="images/macintosh-transparent.png" alt="Macintosh">
+                    <span>Macintosh, 1984</span>
                 </div>
             </div>
 
             <div class="text-side">
                 <span class="era-label">Era komputerów PC</span>
-                <h2>Era <span class="highlight">Komputerów PC</span></h2>
-                <p class="challenge">Kluczowe wyzwanie: <strong>utrzymywalność kodu</strong> przez inne osoby niż autor.</p>
+                <h2>Komputer zmieścił się<br>na <span class="highlight">biurku</span></h2>
+                <p class="challenge">Miniaturyzacja zmieniła wszystko — komputer przestał być <strong>maszyną w piwnicy</strong> i stał się narzędziem osobistym. Miliony użytkowników, tysiące programów.</p>
                 <div class="quote-box">
-                    <p class="quote-text">"Ukrywanie <strong>decyzji projektowych</strong> w modułach - każdy moduł ukrywa ważną decyzję za dobrze zdefiniowanym interfejsem."</p>
-                    <span class="quote-author">David Parnas, 1972</span>
+                    <p class="quote-text">Nowe wyzwanie: kod musi być <strong>utrzymywalny</strong> przez inne osoby niż autor.</p>
                 </div>
             </div>
         </div>
