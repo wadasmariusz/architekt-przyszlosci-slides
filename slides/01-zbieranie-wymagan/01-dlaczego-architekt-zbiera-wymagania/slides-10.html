@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - Wysoka dostępność nic nie znaczy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --dark-900: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--dark-900);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .accent {
+            position: absolute;
+            background: var(--cyan-400);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 1400px;
+            margin-top: -40px;
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.2s forwards;
+        }
+
+        .slide-title {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 720px;
+            margin-bottom: 48px;
+        }
+
+        .question-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 28px;
+            background: rgba(6, 182, 212, 0.05);
+            border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 12px;
+            text-align: left;
+            opacity: 0;
+        }
+
+        .question-row:nth-child(1) { animation: fadeUp 0.6s ease-out 0.6s forwards; }
+        .question-row:nth-child(2) { animation: fadeUp 0.6s ease-out 0.8s forwards; }
+        .question-row:nth-child(3) { animation: fadeUp 0.6s ease-out 1.0s forwards; }
+        .question-row:nth-child(4) { animation: fadeUp 0.6s ease-out 1.2s forwards; }
+        .question-row:nth-child(5) { animation: fadeUp 0.6s ease-out 1.4s forwards; }
+
+        .question-row i {
+            font-size: 28px;
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .question-row span {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .takeaway {
+            font-size: 26px;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.7s forwards;
+        }
+
+        .takeaway strong {
+            color: var(--cyan-400);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <div class="accent" style="width: 500px; height: 500px; top: 10%; right: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 20%; left: 15%;"></div>
+
+        <div class="content">
+            <div class="section-label">PRZYKŁAD</div>
+            <h1 class="slide-title">"Wysoka dostępność" <span class="highlight">nic nie znaczy</span></h1>
+
+            <div class="questions-list">
+                <div class="question-row">
+                    <i class="ti ti-percentage"></i>
+                    <span>Ile uptime?</span>
+                </div>
+                <div class="question-row">
+                    <i class="ti ti-clock-pause"></i>
+                    <span>Akceptowalny downtime?</span>
+                </div>
+                <div class="question-row">
+                    <i class="ti ti-refresh"></i>
+                    <span>RTO / RPO?</span>
+                </div>
+                <div class="question-row">
+                    <i class="ti ti-arrow-back-up"></i>
+                    <span>Co z transakcjami podczas awarii?</span>
+                </div>
+                <div class="question-row">
+                    <i class="ti ti-list"></i>
+                    <span>Queue czy loss?</span>
+                </div>
+            </div>
+
+            <p class="takeaway">Odpowiedzi determinują <strong>architekturę</strong></p>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

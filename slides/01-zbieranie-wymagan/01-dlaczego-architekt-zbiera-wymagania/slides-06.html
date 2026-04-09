@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Kiedy NIE budować systemu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --dark-900: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--dark-900);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .accent {
+            position: absolute;
+            background: var(--cyan-400);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 1400px;
+            margin-top: -40px;
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.2s forwards;
+        }
+
+        .slide-title {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+        }
+
+        /* Decision tree */
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .tree-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+        }
+        .tree-node:nth-child(1) { animation: fadeUp 0.6s ease-out 0.6s forwards; }
+        .tree-node:nth-child(2) { animation: fadeUp 0.6s ease-out 0.8s forwards; }
+        .tree-node:nth-child(3) { animation: fadeUp 0.6s ease-out 1.0s forwards; }
+        .tree-node:nth-child(4) { animation: fadeUp 0.6s ease-out 1.2s forwards; }
+        .tree-node:nth-child(5) { animation: fadeUp 0.6s ease-out 1.4s forwards; }
+
+        .rect-box {
+            padding: 14px 32px;
+            border: 2px solid var(--cyan-500);
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            background: rgba(6, 182, 212, 0.08);
+            color: var(--text-main);
+        }
+
+        .diamond-row {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .diamond {
+            width: 260px;
+            padding: 14px 16px;
+            border: 2px solid var(--cyan-500);
+            border-radius: 8px;
+            transform: none;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            background: rgba(6, 182, 212, 0.06);
+            color: var(--text-main);
+            position: relative;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+
+        .diamond-wrap {
+            width: 260px;
+            height: 120px;
+            border: 2px solid var(--cyan-500);
+            background: rgba(6, 182, 212, 0.06);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .diamond-wrap span {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+            max-width: 140px;
+            line-height: 1.3;
+        }
+
+        .arrow-down {
+            font-size: 28px;
+            color: var(--cyan-400);
+            line-height: 1;
+            margin: 4px 0;
+        }
+
+        .arrow-label {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .arrow-yes { color: #4ade80; }
+        .arrow-no { color: #f87171; }
+
+        .result-green {
+            padding: 10px 28px;
+            border-radius: 8px;
+            background: rgba(74, 222, 128, 0.15);
+            border: 2px solid #4ade80;
+            color: #4ade80;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .result-red {
+            padding: 10px 28px;
+            border-radius: 8px;
+            background: rgba(248, 113, 113, 0.15);
+            border: 2px solid #f87171;
+            color: #f87171;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .result-cyan {
+            padding: 10px 28px;
+            border-radius: 8px;
+            background: rgba(6, 182, 212, 0.15);
+            border: 2px solid var(--cyan-400);
+            color: var(--cyan-400);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <div class="accent" style="width: 600px; height: 600px; top: 10%; left: 5%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 15%; right: 35%;"></div>
+
+        <div class="content">
+            <div class="section-label">DECISION TREE</div>
+            <h1 class="slide-title">Kiedy <span class="highlight">NIE</span> budować systemu?</h1>
+
+            <div class="tree">
+                <!-- Start -->
+                <div class="tree-node">
+                    <div class="rect-box">Problem biznesowy</div>
+                    <div class="arrow-down">↓</div>
+                </div>
+
+                <!-- Decision 1 -->
+                <div class="tree-node">
+                    <div class="diamond-row">
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div class="diamond-wrap"><span>Czy wystarczy zmiana procesu?</span></div>
+                            <div class="arrow-down">↓ <span class="arrow-label arrow-no">NO</span></div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <span class="arrow-label arrow-yes">YES →</span>
+                            <div class="result-green">Zmień proces</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision 2 -->
+                <div class="tree-node">
+                    <div class="diamond-row">
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div class="diamond-wrap"><span>Czy jest gotowe rozwiązanie?</span></div>
+                            <div class="arrow-down">↓ <span class="arrow-label arrow-no">NO</span></div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <span class="arrow-label arrow-yes">YES →</span>
+                            <div class="result-green">Buy / SaaS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision 3 -->
+                <div class="tree-node">
+                    <div class="diamond-row">
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div class="diamond-wrap"><span>Czy ROI uzasadnia?</span></div>
+                            <div class="arrow-down">↓ <span class="arrow-label arrow-yes">YES</span></div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <span class="arrow-label arrow-no">NO →</span>
+                            <div class="result-red">Nie buduj</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final -->
+                <div class="tree-node">
+                    <div class="result-cyan">Build</div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
