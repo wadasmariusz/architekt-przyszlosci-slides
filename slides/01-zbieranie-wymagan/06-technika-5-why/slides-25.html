@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 25 - Paradoks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --dark-900: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--dark-900);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .accent {
+            position: absolute;
+            background: var(--cyan-400);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.12;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 1400px;
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.2s forwards;
+        }
+
+        .big-text {
+            font-size: 80px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            color: var(--cyan-400);
+            text-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--cyan-400);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.6), 0 0 40px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Arrows visualization */
+        .arrows-row {
+            display: flex;
+            gap: 160px;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 0.9s forwards;
+        }
+
+        .arrow-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .arrow-label {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .arrow-down {
+            width: 80px;
+            height: 180px;
+            position: relative;
+        }
+
+        .arrow-down::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 140px;
+            background: var(--cyan-400);
+            border-radius: 3px;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+        }
+
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid var(--cyan-400);
+            filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.5));
+        }
+
+        .arrow-up {
+            width: 80px;
+            height: 180px;
+            position: relative;
+        }
+
+        .arrow-up::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 140px;
+            background: #34d399;
+            border-radius: 3px;
+            box-shadow: 0 0 12px rgba(52, 211, 153, 0.5);
+        }
+
+        .arrow-up::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid #34d399;
+            filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.5));
+        }
+
+        .label-cyan { color: var(--cyan-400); }
+        .label-green { color: #34d399; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <div class="accent" style="width: 500px; height: 500px; top: 5%; left: 15%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 20%;"></div>
+
+        <div class="content">
+            <div class="section-label">PARADOKS</div>
+
+            <div class="big-text">
+                Im głębiej kopiesz,<br>
+                tym <span class="highlight">prostsze</span> rozwiązanie
+            </div>
+
+            <div class="arrows-row">
+                <div class="arrow-col">
+                    <div class="arrow-label label-cyan">Głębiej &#x2193;</div>
+                    <div class="arrow-down"></div>
+                </div>
+                <div class="arrow-col">
+                    <div class="arrow-up"></div>
+                    <div class="arrow-label label-green">Prościej &#x2191;</div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
