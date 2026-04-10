@@ -93,74 +93,85 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .concepts {
+        .sticky-grid {
             display: flex;
-            gap: 60px;
-            margin-bottom: 64px;
+            gap: 32px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        .concept-card {
-            width: 300px;
-            padding: 48px 36px;
-            border-radius: 20px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(6, 182, 212, 0.15);
+        .sticky-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             opacity: 0;
-            animation: fadeUp 1s ease-out forwards;
         }
 
-        .concept-card:nth-child(1) { animation-delay: 0.4s; }
-        .concept-card:nth-child(2) { animation-delay: 0.6s; }
-        .concept-card:nth-child(3) { animation-delay: 0.8s; }
+        .sticky-item:nth-child(1) { animation: fadeUp 0.8s ease-out 0.4s forwards; }
+        .sticky-item:nth-child(2) { animation: fadeUp 0.8s ease-out 0.55s forwards; }
+        .sticky-item:nth-child(3) { animation: fadeUp 0.8s ease-out 0.7s forwards; }
+        .sticky-item:nth-child(4) { animation: fadeUp 0.8s ease-out 0.85s forwards; }
+        .sticky-item:nth-child(5) { animation: fadeUp 0.8s ease-out 1.0s forwards; }
 
-        .concept-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+        .sticky-note {
+            width: 200px;
+            height: 160px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-        }
-
-        .concept-card:nth-child(1) .concept-icon {
-            background: rgba(255, 152, 0, 0.15);
-            border: 2px solid rgba(255, 152, 0, 0.4);
-            color: #ff9800;
-        }
-
-        .concept-card:nth-child(2) .concept-icon {
-            background: rgba(33, 150, 243, 0.15);
-            border: 2px solid rgba(33, 150, 243, 0.4);
-            color: #2196f3;
-        }
-
-        .concept-card:nth-child(3) .concept-icon {
-            background: rgba(76, 175, 80, 0.15);
-            border: 2px solid rgba(76, 175, 80, 0.4);
-            color: #4caf50;
-        }
-
-        .concept-label {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
+            position: relative;
+            box-shadow: 3px 4px 14px rgba(0, 0, 0, 0.4);
+            padding: 16px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .sticky-note::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .sticky-note.orange {
+            background: rgba(255, 152, 0, 0.85);
+            color: #1a1a1a;
+            transform: rotate(-2deg);
+        }
+        .sticky-note.blue {
+            background: rgba(33, 150, 243, 0.85);
+            color: #ffffff;
+            transform: rotate(1.5deg);
+        }
+        .sticky-note.yellow {
+            background: rgba(255, 235, 59, 0.85);
+            color: #1a1a1a;
+            transform: rotate(-1deg);
+        }
+        .sticky-note.purple {
+            background: rgba(188, 177, 251, 0.85);
+            color: #1a1a1a;
+            transform: rotate(2deg);
+        }
+        .sticky-note.lilac {
+            background: rgba(206, 147, 216, 0.85);
+            color: #1a1a1a;
+            transform: rotate(-1.5deg);
+        }
+
+        .sticky-label {
+            font-size: 18px;
+            font-weight: 600;
             color: var(--text-main);
-        }
-
-        .color-dots {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .color-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
         }
 
         .bottom-text {
@@ -233,41 +244,26 @@
             <span class="section-label">Notacja</span>
             <h2 class="title">Elementy <span class="highlight">notacji</span></h2>
 
-            <div class="concepts">
-                <div class="concept-card">
-                    <div class="concept-icon"><i class="ti ti-note"></i></div>
-                    <span class="concept-label">Karteczki</span>
-                    <div class="color-dots">
-                        <div class="color-dot" style="background: #ff9800;"></div>
-                        <div class="color-dot" style="background: #2196f3;"></div>
-                        <div class="color-dot" style="background: #ffeb3b;"></div>
-                        <div class="color-dot" style="background: #9c27b0;"></div>
-                        <div class="color-dot" style="background: #4caf50;"></div>
-                    </div>
+            <div class="sticky-grid">
+                <div class="sticky-item">
+                    <div class="sticky-note orange">Zamówienie złożone</div>
+                    <span class="sticky-label">Zdarzenie domenowe</span>
                 </div>
-
-                <div class="concept-card">
-                    <div class="concept-icon"><i class="ti ti-palette"></i></div>
-                    <span class="concept-label">Kolory</span>
-                    <div class="color-dots">
-                        <div class="color-dot" style="background: #ff9800;"></div>
-                        <div class="color-dot" style="background: #2196f3;"></div>
-                        <div class="color-dot" style="background: #ffeb3b;"></div>
-                        <div class="color-dot" style="background: #ce93d8;"></div>
-                        <div class="color-dot" style="background: #4caf50;"></div>
-                    </div>
+                <div class="sticky-item">
+                    <div class="sticky-note blue">Złóż zamówienie</div>
+                    <span class="sticky-label">Komenda / Akcja</span>
                 </div>
-
-                <div class="concept-card">
-                    <div class="concept-icon"><i class="ti ti-eye"></i></div>
-                    <span class="concept-label">Czytelność</span>
-                    <div class="color-dots">
-                        <div class="color-dot" style="background: #ff9800;"></div>
-                        <div class="color-dot" style="background: #2196f3;"></div>
-                        <div class="color-dot" style="background: #ffeb3b;"></div>
-                        <div class="color-dot" style="background: #9c27b0;"></div>
-                        <div class="color-dot" style="background: #4caf50;"></div>
-                    </div>
+                <div class="sticky-item">
+                    <div class="sticky-note yellow">Klient</div>
+                    <span class="sticky-label">Aktor</span>
+                </div>
+                <div class="sticky-item">
+                    <div class="sticky-note lilac">Bramka płatności</div>
+                    <span class="sticky-label">System zewnętrzny</span>
+                </div>
+                <div class="sticky-item">
+                    <div class="sticky-note purple">Gdy X &rarr; zrób Y</div>
+                    <span class="sticky-label">Policy</span>
                 </div>
             </div>
 

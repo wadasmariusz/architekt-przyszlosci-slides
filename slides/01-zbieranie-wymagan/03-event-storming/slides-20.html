@@ -64,8 +64,31 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            max-width: 1500px;
+            max-width: 1600px;
             margin-top: -20px;
+        }
+
+        .two-col {
+            display: flex;
+            align-items: center;
+            gap: 64px;
+        }
+
+        .photo-frame {
+            flex-shrink: 0;
+            width: 1000px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.1), 0 16px 40px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.4s forwards;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         .section-label {
@@ -116,9 +139,9 @@
             transition: all 0.3s ease;
         }
 
-        .list-item:nth-child(1) { animation: fadeUp 0.7s ease-out 0.4s forwards; }
-        .list-item:nth-child(2) { animation: fadeUp 0.7s ease-out 0.55s forwards; }
-        .list-item:nth-child(3) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
+        .list-item:nth-child(1) { animation: fadeUp 0.7s ease-out 0.6s forwards; }
+        .list-item:nth-child(2) { animation: fadeUp 0.7s ease-out 0.75s forwards; }
+        .list-item:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
 
         .list-item:hover {
             border-color: var(--cyan-500);
@@ -205,19 +228,8 @@
             <span class="section-label">EFEKT</span>
             <h2 class="title">Efekt <span class="highlight">warsztatu</span></h2>
 
-            <div class="list">
-                <div class="list-item">
-                    <div class="item-icon"><i class="ti ti-border-all"></i></div>
-                    <span class="item-text">Granice systemu</span>
-                </div>
-                <div class="list-item">
-                    <div class="item-icon"><i class="ti ti-user-check"></i></div>
-                    <span class="item-text">Odpowiedzialno&sacute;ci</span>
-                </div>
-                <div class="list-item">
-                    <div class="item-icon"><i class="ti ti-alert-triangle"></i></div>
-                    <span class="item-text">Ryzyka</span>
-                </div>
+            <div class="photo-frame">
+                <img src="images/efekt%20warsztatu.png" alt="Efekt warsztatu Event Storming">
             </div>
         </div>
 
