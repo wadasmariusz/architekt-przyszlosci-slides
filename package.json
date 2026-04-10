@@ -1,0 +1,30 @@
+{
+  "name": "prezentacje-modul-0",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "export": "node scripts/export-screenshots.mjs",
+    "export:screens": "node scripts/export-screenshots.mjs",
+    "export:all": "node scripts/export-screenshots.mjs --all",
+    "export:videos": "node scripts/export-videos.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wadasmariusz/architekt-przyszlosci-slides.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/wadasmariusz/architekt-przyszlosci-slides/issues"
+  },
+  "homepage": "https://github.com/wadasmariusz/architekt-przyszlosci-slides#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  },
+  "dependencies": {
+    "@inquirer/select": "^5.1.3"
+  }
+}
