@@ -79,14 +79,28 @@
             animation: fadeIn 1s ease-out forwards;
         }
 
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            margin-bottom: 72px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.2s forwards;
+        }
+
+        .es-logo {
+            height: 72px;
+            width: auto;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.3));
+        }
+
         h2.title {
             font-size: 56px;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 72px;
+            margin-bottom: 0;
             color: #ffffff;
-            opacity: 0;
-            animation: fadeUp 1s ease-out 0.2s forwards;
             letter-spacing: -1px;
         }
 
@@ -226,7 +240,7 @@
                 <div class="arrow-sep"><i class="ti ti-chevron-right"></i></div>
                 <div class="level-card">
                     <i class="ti ti-git-branch"></i>
-                    <span class="level-title">Process Modelling</span>
+                    <span class="level-title">Process Level</span>
                     <span class="level-sub">Szczegóły procesu</span>
                 </div>
                 <div class="arrow-sep"><i class="ti ti-chevron-right"></i></div>

@@ -64,7 +64,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            max-width: 1400px;
+            max-width: 1600px;
             margin-top: -40px;
         }
 
@@ -97,20 +97,21 @@
 
         .grid-cards {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 28px;
-            margin-bottom: 56px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
         }
 
         .glass-card {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 36px 40px;
-            width: 380px;
+            padding: 20px;
+            width: 300px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 24px;
+            gap: 16px;
             opacity: 0;
         }
 
@@ -119,17 +120,36 @@
         .glass-card:nth-child(3) { animation: fadeUp 0.8s ease-out 0.7s forwards; }
         .glass-card:nth-child(4) { animation: fadeUp 0.8s ease-out 0.85s forwards; }
 
+        .glass-card .card-img {
+            width: 260px;
+            height: 140px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-card .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+
         .glass-card i {
-            font-size: 40px;
+            font-size: 32px;
             color: var(--cyan-400);
             flex-shrink: 0;
         }
 
         .glass-card span {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--text-main);
-            text-align: left;
+            text-align: center;
+            line-height: 1.3;
         }
 
         .takeaway {
@@ -208,19 +228,27 @@
 
             <div class="grid-cards">
                 <div class="glass-card">
-                    <i class="ti ti-chart-bar"></i>
+                    <div class="card-img">
+                        <img src="images/explore-bottleneck.jpg" alt="Explore &amp; Bottleneck">
+                    </div>
                     <span>Analiza istniejącego biznesu</span>
                 </div>
                 <div class="glass-card">
-                    <i class="ti ti-bulb"></i>
+                    <div class="card-img">
+                        <img src="images/bounded-contexts-and-events.jpg" alt="Bounded Contexts">
+                    </div>
                     <span>Walidacja pomysłów</span>
                 </div>
                 <div class="glass-card">
-                    <i class="ti ti-settings"></i>
+                    <div class="card-img">
+                        <img src="images/style-envision.jpg" alt="Envision">
+                    </div>
                     <span>Projektowanie usług</span>
                 </div>
                 <div class="glass-card">
-                    <i class="ti ti-code"></i>
+                    <div class="card-img">
+                        <img src="images/detailed-software.jpg" alt="Detailed Software">
+                    </div>
                     <span>Projektowanie systemów</span>
                 </div>
             </div>
