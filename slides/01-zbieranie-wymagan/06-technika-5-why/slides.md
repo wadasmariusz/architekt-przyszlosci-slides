@@ -1,12 +1,12 @@
 ---
 
-# **Scenariusz Slajdów: 5 WHY — zrozumienie prawdziwego problemu**
+# **Scenariusz Slajdów: 5 WHY - zrozumienie prawdziwego problemu**
 
 ---
 
 ## **Slajd 1: Tytułowy**
 
-* **Wizualizacja:** Minimalistyczna ilustracja — pojedyncze pytanie „WHY?” powielone w głąb (efekt perspektywy).
+* **Wizualizacja:** Minimalistyczna ilustracja - pojedyncze pytanie „WHY?” powielone w głąb (efekt perspektywy).
 * **Tekst główny:** 5 WHY
 * **Podtytuł:** Jak znaleźć prawdziwy problem?
 * **Cel:** Ustawienie tematu i zaciekawienie.
@@ -105,7 +105,7 @@
 ## **Slajd 11: Sygnał ostrzegawczy**
 
 * **Wizualizacja:** Lista technologii (Kafka, Cloud, Microservices) przekreślona
-* **Tekst:** Jeśli słyszysz technologię — nie znasz problemu
+* **Tekst:** Jeśli słyszysz technologię - nie znasz problemu
 * **Cel:** Nauka rozpoznawania anty-patternu.
 
 ---
@@ -201,7 +201,7 @@
 ## **Slajd 22: Alternatywa**
 
 * **Wizualizacja:** Diagram Ishikawy (rybia ość)
-* **Tekst:** Gdy problem jest złożony — myśl szerzej
+* **Tekst:** Gdy problem jest złożony - myśl szerzej
 * **Cel:** Rozszerzenie narzędziownika.
 
 ---

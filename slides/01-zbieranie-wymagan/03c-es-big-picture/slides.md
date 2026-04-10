@@ -51,7 +51,7 @@ Pełny obraz procesu
 * Gdzie są problemy
 
 **Wyróżnienie:**
-Nie zakładamy — odkrywamy
+Nie zakładamy - odkrywamy
 
 ---
 
