@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 06 - Obiekt roboczy</title>
+    <title>Slide 06 - Co widzi architekt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -50,8 +50,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 1000px;
-            height: 1000px;
+            width: 900px;
+            height: 900px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -68,68 +68,127 @@
         }
 
         .section-label {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 18px;
             text-transform: uppercase;
             letter-spacing: 6px;
             color: var(--cyan-400);
             margin-bottom: 24px;
+            font-weight: 600;
             opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.2s forwards;
+            animation: fadeIn 1s ease-out forwards;
         }
 
-        h1.title {
-            font-size: 72px;
+        h2.title {
+            font-size: 60px;
             font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 70px;
+            line-height: 1.15;
+            margin-bottom: 72px;
             color: #ffffff;
             opacity: 0;
-            animation: fadeUp 1s ease-out 0.4s forwards;
+            animation: fadeUp 1s ease-out 0.2s forwards;
             letter-spacing: -1px;
         }
 
-        h1.title .highlight {
+        h2.title .highlight {
             color: var(--cyan-400);
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .objects-row {
+        .columns {
             display: flex;
-            gap: 36px;
-            margin-bottom: 60px;
+            align-items: flex-start;
+            gap: 0;
+            width: 1100px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
         }
 
-        .object-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 40px 48px;
-            backdrop-filter: blur(12px);
+        .col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .col-header {
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+        }
+
+        .col-header.muted {
+            color: var(--text-muted);
+        }
+
+        .col-header.cyan {
+            color: var(--cyan-400);
+        }
+
+        .divider {
+            width: 2px;
+            min-height: 280px;
+            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.3), transparent);
+            margin: 0 48px;
+            flex-shrink: 0;
+        }
+
+        .col-card {
             display: flex;
             align-items: center;
             gap: 20px;
+            padding: 24px 32px;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            width: 380px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out forwards;
         }
 
-        .object-card:nth-child(1) { animation-delay: 0.6s; }
-        .object-card:nth-child(2) { animation-delay: 0.75s; }
-        .object-card:nth-child(3) { animation-delay: 0.9s; }
-        .object-card:nth-child(4) { animation-delay: 1.05s; }
+        .col-card.default {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-        .object-card .icon {
-            font-size: 40px;
+        .col-card.cyan {
+            background: rgba(6, 182, 212, 0.06);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .col-card:nth-child(2) { animation-delay: 0.6s; }
+        .col-card:nth-child(3) { animation-delay: 0.75s; }
+        .col-card:nth-child(4) { animation-delay: 0.9s; }
+
+        .col-card .icon {
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .col-card.default .icon {
+            color: var(--text-muted);
+        }
+
+        .col-card.cyan .icon {
             color: var(--cyan-400);
         }
 
-        .object-card .label {
+        .col-card .label {
             font-size: 22px;
             font-weight: 600;
+        }
+
+        .col-card.default .label {
             color: var(--text-main);
         }
 
+        .col-card.cyan .label {
+            color: var(--cyan-400);
+        }
+
         .takeaway {
+            margin-top: 64px;
             background: rgba(6, 182, 212, 0.06);
             border: 1px solid rgba(6, 182, 212, 0.25);
             border-radius: 16px;
@@ -137,7 +196,7 @@
             font-size: 24px;
             color: var(--text-muted);
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.3s forwards;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
         }
 
         .takeaway strong {
@@ -200,30 +259,34 @@
         <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 15%;"></div>
 
         <div class="content">
-            <div class="section-label">Element</div>
+            <span class="section-label">Perspektywa</span>
+            <h2 class="title">Biznes widzi proces<br>Architekt widzi <span class="highlight">ryzyko</span></h2>
 
-            <h1 class="title">Work <span class="highlight">Object</span></h1>
+            <div class="columns">
+                <div class="col">
+                    <div class="col-header muted">Biznes</div>
+                    <div class="col-card default" style="animation-delay: 0.6s;">
+                        <div class="icon"><i class="ti ti-layout-grid"></i></div>
+                        <div class="label">Wspólny plan sali</div>
+                    </div>
+                </div>
 
-            <div class="objects-row">
-                <div class="object-card">
-                    <div class="icon"><i class="ti ti-shopping-cart"></i></div>
-                    <div class="label">Zamówienie</div>
-                </div>
-                <div class="object-card">
-                    <div class="icon"><i class="ti ti-ticket"></i></div>
-                    <div class="label">Ticket</div>
-                </div>
-                <div class="object-card">
-                    <div class="icon"><i class="ti ti-report"></i></div>
-                    <div class="label">Raport</div>
-                </div>
-                <div class="object-card">
-                    <div class="icon"><i class="ti ti-file"></i></div>
-                    <div class="label">Plik</div>
+                <div class="divider"></div>
+
+                <div class="col">
+                    <div class="col-header cyan">Architekt</div>
+                    <div class="col-card cyan" style="animation-delay: 0.75s;">
+                        <div class="icon"><i class="ti ti-alert-triangle"></i></div>
+                        <div class="label">Konflikt rezerwacji</div>
+                    </div>
+                    <div class="col-card cyan" style="animation-delay: 0.9s;">
+                        <div class="icon"><i class="ti ti-arrows-exchange"></i></div>
+                        <div class="label">Problem współbieżności</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="takeaway">To „rzecz", która przechodzi przez <strong>proces</strong></div>
+            <div class="takeaway">Biznes opowiada swoimi słowami — Ty słyszysz <strong>ryzyka</strong></div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

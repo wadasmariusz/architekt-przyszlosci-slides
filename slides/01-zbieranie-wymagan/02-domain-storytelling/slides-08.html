@@ -42,6 +42,7 @@
                               linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
             background-size: 60px 60px;
             z-index: 0;
+            pointer-events: none;
         }
 
         .bg-glow {
@@ -97,7 +98,7 @@
             display: flex;
             flex-direction: column;
             gap: 24px;
-            width: 800px;
+            width: 900px;
         }
 
         .glass-card {
@@ -116,36 +117,35 @@
         .glass-card:nth-child(2) { animation-delay: 0.6s; }
         .glass-card:nth-child(3) { animation-delay: 0.8s; }
 
-        .card-number {
-            width: 48px;
-            height: 48px;
-            min-width: 48px;
+        .card-dot {
+            width: 14px;
+            height: 14px;
+            min-width: 14px;
             border-radius: 50%;
-            background: rgba(6, 182, 212, 0.12);
-            border: 2px solid var(--cyan-400);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--cyan-400);
+            background: var(--cyan-400);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
         }
 
         .card-text {
             font-size: 26px;
             font-weight: 500;
             color: var(--text-main);
+            text-align: left;
         }
 
-        .bottom-text {
+        .takeaway {
             margin-top: 56px;
-            font-size: 28px;
+            background: rgba(6, 182, 212, 0.06);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            border-radius: 16px;
+            padding: 28px 48px;
+            font-size: 24px;
             color: var(--text-muted);
             opacity: 0;
-            animation: fadeIn 1s ease-out 1.2s forwards;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
         }
 
-        .bottom-text strong {
+        .takeaway strong {
             color: var(--cyan-400);
         }
 
@@ -206,24 +206,24 @@
 
         <div class="content">
             <span class="section-label">Scenariusz</span>
-            <h2 class="title">Najpierw <span class="highlight">normalny przebieg</span></h2>
+            <h2 class="title">Zawsze zaczynaj od <span class="highlight">Happy Path</span></h2>
 
             <div class="cards">
                 <div class="glass-card">
-                    <div class="card-number">1</div>
-                    <span class="card-text">Kto zaczyna?</span>
+                    <div class="card-dot"></div>
+                    <span class="card-text">Żeby zrozumieć wyjątek, musisz wiedzieć co jest normą</span>
                 </div>
                 <div class="glass-card">
-                    <div class="card-number">2</div>
-                    <span class="card-text">Co dzieje si&#281; najpierw?</span>
+                    <div class="card-dot"></div>
+                    <span class="card-text">Architekci naturalnie myślą o tym co może pójść nie tak — to pułapka</span>
                 </div>
                 <div class="glass-card">
-                    <div class="card-number">3</div>
-                    <span class="card-text">Jak wygl&#261;da standardowy scenariusz?</span>
+                    <div class="card-dot"></div>
+                    <span class="card-text">Happy Path daje fundament</span>
                 </div>
             </div>
 
-            <p class="bottom-text">Najpierw norma, potem <strong>wyj&#261;tki</strong></p>
+            <div class="takeaway">Najpierw norma, potem <strong>wyjątki</strong></div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

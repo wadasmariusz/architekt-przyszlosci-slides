@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 14 - Excel jako sygnał ostrzegawczy</title>
+    <title>Slide 14 - Rozmowa ponad diagram</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -42,6 +42,7 @@
                               linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
             background-size: 60px 60px;
             z-index: 0;
+            pointer-events: none;
         }
 
         .bg-glow {
@@ -79,7 +80,7 @@
         }
 
         h2.title {
-            font-size: 60px;
+            font-size: 64px;
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 64px;
@@ -94,64 +95,63 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .cards {
+        .rows {
             display: flex;
-            gap: 48px;
-            justify-content: center;
+            flex-direction: column;
+            gap: 24px;
+            width: 900px;
             margin-bottom: 56px;
         }
 
-        .card {
-            width: 440px;
-            padding: 48px 40px;
+        .row {
+            padding: 32px 40px;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
+            border-radius: 20px;
             backdrop-filter: blur(12px);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            text-align: center;
-            gap: 24px;
+            gap: 28px;
             opacity: 0;
             transition: all 0.3s ease;
         }
 
-        .card:nth-child(1) { animation: fadeUp 0.7s ease-out 0.5s forwards; }
-        .card:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
+        .row:nth-child(1) { animation: fadeUp 0.7s ease-out 0.4s forwards; }
+        .row:nth-child(2) { animation: fadeUp 0.7s ease-out 0.6s forwards; }
+        .row:nth-child(3) { animation: fadeUp 0.7s ease-out 0.8s forwards; }
 
-        .card:hover {
+        .row:hover {
             border-color: var(--cyan-500);
-            transform: translateY(-8px);
+            transform: translateX(8px);
             box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
         }
 
-        .card-icon {
-            width: 72px;
-            height: 72px;
+        .row-icon {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: rgba(250, 204, 21, 0.1);
-            border: 2px solid rgba(250, 204, 21, 0.3);
+            background: rgba(6, 182, 212, 0.1);
+            border: 2px solid rgba(6, 182, 212, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: rgba(250, 204, 21, 0.9);
+            font-size: 28px;
+            color: var(--cyan-400);
+            flex-shrink: 0;
         }
 
-        .card-text {
+        .row-text {
             font-size: 26px;
-            font-weight: 700;
+            font-weight: 600;
             color: #ffffff;
-            line-height: 1.4;
         }
 
         .takeaway {
             padding: 28px 56px;
-            background: rgba(250, 204, 21, 0.06);
-            border: 2px solid rgba(250, 204, 21, 0.25);
+            background: rgba(6, 182, 212, 0.06);
+            border: 1px solid rgba(6, 182, 212, 0.2);
             border-radius: 16px;
-            font-size: 28px;
+            font-size: 30px;
             color: var(--text-main);
             font-weight: 600;
             opacity: 0;
@@ -162,11 +162,16 @@
             color: var(--cyan-400);
         }
 
+        .takeaway .strike {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
         .accent {
             position: absolute;
             background: var(--cyan-400);
             border-radius: 50%;
-            filter: blur(60px);
+            filter: blur(50px);
             opacity: 0.12;
             z-index: 0;
         }
@@ -214,25 +219,29 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 400px; height: 400px; top: 10%; left: 5%;"></div>
-        <div class="accent" style="width: 350px; height: 350px; bottom: 15%; right: 10%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; top: 10%; right: 8%;"></div>
+        <div class="accent" style="width: 350px; height: 350px; bottom: 15%; left: 5%;"></div>
 
         <div class="content">
-            <span class="section-label">Sygnał</span>
-            <h2 class="title">&bdquo;Eksportuj&eogon; do <span class="highlight">Excela</span>...&rdquo;</h2>
+            <span class="section-label">Kluczowe</span>
+            <h2 class="title">Diagram to <span class="highlight">nie wszystko</span></h2>
 
-            <div class="cards">
-                <div class="card">
-                    <div class="card-icon"><i class="ti ti-alert-triangle"></i></div>
-                    <span class="card-text">To może nie być proces</span>
+            <div class="rows">
+                <div class="row">
+                    <div class="row-icon"><i class="ti ti-building"></i></div>
+                    <span class="row-text">Kontekst zostaje w sali</span>
                 </div>
-                <div class="card">
-                    <div class="card-icon"><i class="ti ti-alert-circle"></i></div>
-                    <span class="card-text">To może być obejście problemu</span>
+                <div class="row">
+                    <div class="row-icon"><i class="ti ti-heart"></i></div>
+                    <span class="row-text">Emocje nie trafiają na obrazek</span>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="ti ti-message-circle"></i></div>
+                    <span class="row-text">Rozmowa niesie wiedzę</span>
                 </div>
             </div>
 
-            <div class="takeaway">Workaround &ne; wymaganie <strong>biznesowe</strong></div>
+            <div class="takeaway"><strong>Storytelling</strong>, nie <span class="strike">Story Writing</span></div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

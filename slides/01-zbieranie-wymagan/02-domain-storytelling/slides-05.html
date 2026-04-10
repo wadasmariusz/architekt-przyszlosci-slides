@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 05 - Aktor</title>
+    <title>Slide 05 - Kino Metropolis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -50,8 +50,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 1000px;
-            height: 1000px;
+            width: 900px;
+            height: 900px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -64,95 +64,61 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            max-width: 1500px;
+            max-width: 1600px;
         }
 
         .section-label {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 18px;
             text-transform: uppercase;
             letter-spacing: 6px;
             color: var(--cyan-400);
-            margin-bottom: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
             opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.2s forwards;
+            animation: fadeIn 1s ease-out forwards;
         }
 
-        h1.title {
-            font-size: 72px;
+        h2.title {
+            font-size: 52px;
             font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 70px;
+            line-height: 1.1;
+            margin-bottom: 36px;
             color: #ffffff;
             opacity: 0;
-            animation: fadeUp 1s ease-out 0.4s forwards;
+            animation: fadeUp 1s ease-out 0.2s forwards;
             letter-spacing: -1px;
         }
 
-        h1.title .highlight {
+        h2.title .highlight {
             color: var(--cyan-400);
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .icons-row {
-            display: flex;
-            gap: 100px;
-            margin-bottom: 60px;
-        }
-
-        .icon-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out forwards;
-        }
-
-        .icon-block:nth-child(1) { animation-delay: 0.6s; }
-        .icon-block:nth-child(2) { animation-delay: 0.8s; }
-
-        .icon-circle {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: rgba(6, 182, 212, 0.1);
-            border: 2px solid rgba(6, 182, 212, 0.3);
+        .diagram-frame {
+            background: rgba(248, 250, 252, 0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 56px;
-            color: var(--cyan-400);
-        }
-
-        .icon-label {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .bullets {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.0s forwards;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
         }
 
-        .bullet-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 24px;
+        .diagram-frame svg {
+            display: block;
+            height: 620px;
+            width: auto;
+        }
+
+        .source-label {
+            margin-top: 12px;
+            font-size: 14px;
             color: var(--text-muted);
-        }
-
-        .bullet-item .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--cyan-400);
-            flex-shrink: 0;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
         }
 
         .accent {
@@ -207,35 +173,81 @@
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
 
-        <div class="accent" style="width: 500px; height: 500px; top: 5%; left: 5%;"></div>
-        <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 15%;"></div>
+        <div class="accent" style="width: 500px; height: 500px; top: 8%; left: 8%;"></div>
+        <div class="accent" style="width: 400px; height: 400px; bottom: 12%; right: 10%;"></div>
 
         <div class="content">
-            <div class="section-label">Element</div>
+            <span class="section-label">Przykład</span>
+            <h2 class="title">Sprzedaż biletu w <span class="highlight">kinie</span></h2>
 
-            <h1 class="title"><span class="highlight">Aktor</span></h1>
+            <div class="diagram-frame">
+                <!-- Static SVG from domainstorytelling.org — all animations removed -->
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="204 144 622 807" version="1.1"><defs><marker id="activity-arrow" viewBox="0 0 20 20" refX="11" refY="10" markerWidth="10" markerHeight="10" orient="auto"><path d="M 1 5 L 11 10 L 1 15 Z" style="fill: black; stroke-width: 1px; stroke-linecap: round; stroke-dasharray: 10000px, 1px; stroke: black;"/></marker></defs>
 
-            <div class="icons-row">
-                <div class="icon-block">
-                    <div class="icon-circle"><i class="ti ti-user"></i></div>
-                    <div class="icon-label">Człowiek</div>
-                </div>
-                <div class="icon-block">
-                    <div class="icon-circle"><i class="ti ti-device-desktop"></i></div>
-                    <div class="icon-label">System</div>
-                </div>
+<!-- Groups -->
+<g><g class="djs-visual"><rect x="0" y="0" width="212" height="174" rx="0" ry="0" style="stroke: black; stroke-width: 2px; fill: none;" transform="translate(228,284)"/><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);" transform="translate(228,284)"><tspan x="8" y="18.8">ticket sales</tspan></text></g></g>
+<g><g class="djs-visual"><rect x="0" y="0" width="215" height="260" rx="0" ry="0" style="stroke: black; stroke-width: 2px; fill: none;" transform="translate(225,568)"/><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);" transform="translate(225,568)"><tspan x="8" y="18.8">movie projection</tspan></text></g></g>
+<g><g class="djs-visual"><rect x="0" y="0" width="306" height="191" rx="0" ry="0" style="stroke: black; stroke-width: 2px; fill: none;" transform="translate(500,278)"/><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);" transform="translate(500,278)"><tspan x="8" y="18.8">snack sales</tspan></text></g></g>
+<g><g class="djs-visual"><rect x="0" y="0" width="328" height="298" rx="0" ry="0" style="stroke: black; stroke-width: 2px; fill: none;" transform="translate(492,530)"/><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);" transform="translate(492,530)"><tspan x="8" y="18.8">entrance control</tspan></text></g></g>
+
+<!-- Actors -->
+<g transform="translate(292,150)"><g class="djs-visual"><svg fill="black" viewBox="0 0 24 26" xmlns="http://www.w3.org/2000/svg" width="75" height="75"><path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/><path d="M0 0h24v24H0z" fill="none"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="15.125" y="75">cashier</tspan></text></g></g>
+
+<g transform="translate(388,474)"><g class="djs-visual"><svg fill="black" viewBox="0 0 24 26" xmlns="http://www.w3.org/2000/svg" width="75" height="75"><path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/><path d="M0 0h24v24H0z" fill="none"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="6.375" y="75">moviegoer</tspan></text></g></g>
+
+<g transform="translate(598,150)"><g class="djs-visual"><svg fill="black" viewBox="0 0 24 26" xmlns="http://www.w3.org/2000/svg" width="75" height="75"><path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/><path d="M0 0h24v24H0z" fill="none"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="1.625" y="75">concession </tspan><tspan x="20.375" y="89">stand</tspan></text></g></g>
+
+<g transform="translate(643,870)"><g class="djs-visual"><svg fill="black" viewBox="0 0 24 26" xmlns="http://www.w3.org/2000/svg" width="75" height="75"><path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/><path d="M0 0h24v24H0z" fill="none"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="19.875" y="75">usher</tspan></text></g></g>
+
+<g transform="translate(330,870)"><g class="djs-visual"><svg fill="black" viewBox="0 0 24 26" xmlns="http://www.w3.org/2000/svg" width="75" height="75"><path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/><path d="M0 0h24v24H0z" fill="none"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="1.375" y="75">projectionist</tspan></text></g></g>
+
+<!-- Work Objects: tickets -->
+<g transform="translate(292,317)"><g class="djs-visual"><svg fill="black" xmlns="http://www.w3.org/2000/svg" width="48.75" height="48.75" viewBox="0 0 24 28" x="12.5" y="12.5"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="21.75" y="74.75">ticket</tspan></text></g></g>
+
+<g transform="translate(722,583)"><g class="djs-visual"><svg fill="black" xmlns="http://www.w3.org/2000/svg" width="48.75" height="48.75" viewBox="0 0 24 28" x="12.5" y="12.5"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="21.75" y="74.75">ticket</tspan></text></g></g>
+
+<g transform="translate(629,657)"><g class="djs-visual"><svg fill="black" xmlns="http://www.w3.org/2000/svg" width="48.75" height="48.75" viewBox="0 0 24 28" x="12.5" y="12.5"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="21.75" y="74.75">ticket</tspan></text></g></g>
+
+<!-- Work Object: snacks -->
+<g transform="translate(598,340)"><g class="djs-visual"><svg viewBox="0 0 24 24" width="48.75" height="48.75" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="12.5" y="12.5"><image width="24" height="24" xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJub25lIiBkPSJNMCAwaDI0djI0SDBWMHoiLz48cGF0aCBkPSJNMSAyMS45OGMwIC41Ni40NSAxLjAxIDEuMDEgMS4wMUgxNWMuNTYgMCAxLjAxLS40NSAxLjAxLTEuMDFWMjFIMXYuOTh6TTguNSA4Ljk5QzQuNzUgOC45OSAxIDExIDEgMTVoMTVjMC00LTMuNzUtNi4wMS03LjUtNi4wMXpNMy42MiAxM2MxLjExLTEuNTUgMy40Ny0yLjAxIDQuODgtMi4wMXMzLjc3LjQ2IDQuODggMi4wMUgzLjYyek0xIDE3aDE1djJIMXpNMTggNVYxaC0ydjRoLTVsLjIzIDJoOS41NmwtMS40IDE0SDE4djJoMS43MmMuODQgMCAxLjUzLS42NSAxLjYzLTEuNDdMMjMgNWgtNXoiLz48L3N2Zz4="/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="1.625" y="74.75">snacks and </tspan><tspan x="18.75" y="88.75">drinks</tspan></text></g></g>
+
+<!-- Work Objects: movies -->
+<g transform="translate(245,670)"><g class="djs-visual"><svg fill="black" xmlns="http://www.w3.org/2000/svg" width="48.75" height="48.75" viewBox="0 0 24 26" x="12.5" y="12.5"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm6 10h-4V5h4v14zm4-2h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="19.375" y="74.75">movie</tspan></text></g></g>
+
+<g transform="translate(335,670)"><g class="djs-visual"><svg fill="black" xmlns="http://www.w3.org/2000/svg" width="48.75" height="48.75" viewBox="0 0 24 26" x="12.5" y="12.5"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm6 10h-4V5h4v14zm4-2h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: rgb(0,0,0);"><tspan x="19.375" y="74.75">movie</tspan></text></g></g>
+
+<!-- Annotation: optional -->
+<g transform="translate(720,373)"><g class="djs-visual"><rect x="0" y="0" width="60" height="30" rx="0" ry="0" style="stroke: none; stroke-width: 2px; fill: none;"/><path d="m 0, 0 m 10,0 l -10,0 l 0,30 l 10,0" style="fill: none; stroke-width: 2px; stroke: black;"/><text style="font-family: Arial, sans-serif; font-size: 12px; font-weight: normal; fill: black;"><tspan x="5" y="15.8">optional</tspan></text></g></g>
+
+<!-- Connection: optional dashed -->
+<g><g class="djs-visual"><polyline points="678,388 719,388" style="stroke: black; stroke-width: 1.5px; stroke-linejoin: round; stroke-dasharray: 5px, 5px;"/></g></g>
+
+<!-- Activity 1: moviegoer buys ticket from cashier -->
+<g><g class="djs-visual"><polyline points="415,474 351,399" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="399.75" y="432">buys</tspan></text><circle cx="397" cy="454" r="11" style="fill: white; stroke: black;"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="393" y="458">1</tspan></text></g></g>
+<g><g class="djs-visual"><polyline points="330,317 330,235" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="344" y="276">from</tspan></text></g></g>
+
+<!-- Activity 2: buys snacks -->
+<g><g class="djs-visual"><polyline points="449,493 598,410" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="537.65" y="461.65">buys</tspan></text><circle cx="469" cy="480.06" r="11" style="fill: white; stroke: black;"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="465" y="484.06">2</tspan></text></g></g>
+<g><g class="djs-visual"><polyline points="636,340 636,254" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="650" y="297">from</tspan></text></g></g>
+
+<!-- Activity 3: shows ticket to usher -->
+<g><g class="djs-visual"><polyline points="465,525 550,609 722,609" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="617.25" y="624">shows</tspan></text><circle cx="485" cy="539.89" r="11" style="fill: white; stroke: black;"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="481" y="543.89">3</tspan></text></g></g>
+<g><g class="djs-visual"><polyline points="760,668 760,888 720,888" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="774" y="778">to</tspan></text></g></g>
+
+<!-- Activity 4: usher checks ticket -->
+<g><g class="djs-visual"><polyline points="667,870 667,742" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="681" y="806">checks</tspan></text><circle cx="667" cy="850" r="11" style="fill: white; stroke: black;"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="663" y="854">4</tspan></text></g></g>
+<g><g class="djs-visual"><polyline points="629,695 510,695 443,554" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="507.4" y="710">and grants entrance </tspan><tspan x="507.4" y="724">to</tspan></text></g></g>
+
+<!-- Activity 5: projectionist starts movie -->
+<g><g class="djs-visual"><polyline points="373,871 373,755" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="387" y="813">starts</tspan></text><circle cx="373" cy="851" r="11" style="fill: white; stroke: black;"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="369" y="855">5</tspan></text></g></g>
+<g><g class="djs-visual"><polyline points="383,675 417,559" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="406.72" y="619.72">for</tspan></text></g></g>
+
+<!-- Activity 6: moviegoer watches movie -->
+<g><g class="djs-visual"><polyline points="388,553 283,610 283,670" style="stroke: black; fill: none; stroke-width: 1.5px; stroke-linejoin: round; marker-end: url(#activity-arrow);"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="351.08" y="587">watches</tspan></text><circle cx="368" cy="563.83" r="11" style="fill: white; stroke: black;"/><text style="font-family: Arial, sans-serif; font-size: 11px; font-weight: normal; fill: black;"><tspan x="364" y="567.83">6</tspan></text></g></g>
+
+</svg>
             </div>
-
-            <div class="bullets">
-                <div class="bullet-item">
-                    <div class="dot"></div>
-                    <span>Wykonuje działanie</span>
-                </div>
-                <div class="bullet-item">
-                    <div class="dot"></div>
-                    <span>Na diagramie tylko raz</span>
-                </div>
-            </div>
+            <span class="source-label">źródło: domainstorytelling.org</span>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

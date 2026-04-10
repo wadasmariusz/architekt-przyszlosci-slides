@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 03 - Twórcy techniki</title>
+    <title>Slide 03 - Pięć elementów notacji</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <style>
@@ -50,8 +50,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 1000px;
-            height: 1000px;
+            width: 900px;
+            height: 900px;
             background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -82,7 +82,7 @@
             font-size: 56px;
             font-weight: 800;
             line-height: 1.2;
-            margin-bottom: 60px;
+            margin-bottom: 70px;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.4s forwards;
@@ -94,63 +94,47 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .authors-row {
+        .elements-row {
             display: flex;
-            gap: 60px;
-            margin-bottom: 50px;
+            gap: 28px;
         }
 
-        .author-card {
+        .element-card {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 56px 64px;
-            width: 380px;
+            padding: 40px 24px 36px;
+            width: 240px;
             backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 16px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out forwards;
         }
 
-        .author-card:nth-child(1) { animation-delay: 0.6s; }
-        .author-card:nth-child(2) { animation-delay: 0.8s; }
+        .element-card:nth-child(1) { animation-delay: 0.6s; }
+        .element-card:nth-child(2) { animation-delay: 0.75s; }
+        .element-card:nth-child(3) { animation-delay: 0.9s; }
+        .element-card:nth-child(4) { animation-delay: 1.05s; }
+        .element-card:nth-child(5) { animation-delay: 1.2s; }
 
-        .author-card .icon {
-            font-size: 56px;
+        .element-card .icon {
+            font-size: 44px;
             color: var(--cyan-400);
-            margin-bottom: 28px;
         }
 
-        .author-card .name {
-            font-size: 28px;
+        .element-card .label {
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-main);
         }
 
-        .concept {
-            font-size: 26px;
+        .element-card .desc {
+            font-size: 15px;
             color: var(--text-muted);
-            margin-bottom: 40px;
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 1.0s forwards;
-            font-style: italic;
-        }
-
-        .takeaway {
-            background: rgba(6, 182, 212, 0.06);
-            border: 1px solid rgba(6, 182, 212, 0.25);
-            border-radius: 16px;
-            padding: 28px 48px;
-            font-size: 24px;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.3s forwards;
-        }
-
-        .takeaway strong {
-            color: var(--cyan-400);
+            line-height: 1.4;
         }
 
         .accent {
@@ -209,24 +193,37 @@
         <div class="accent" style="width: 400px; height: 400px; bottom: 10%; right: 15%;"></div>
 
         <div class="content">
-            <div class="section-label">Geneza</div>
+            <div class="section-label">Notacja</div>
 
-            <h1 class="title">Skąd wziął się Domain <span class="highlight">Storytelling</span></h1>
+            <h1 class="title">Z czego składa się <span class="highlight">diagram</span></h1>
 
-            <div class="authors-row">
-                <div class="author-card">
+            <div class="elements-row">
+                <div class="element-card">
                     <div class="icon"><i class="ti ti-user"></i></div>
-                    <div class="name">Stefan Hofer</div>
+                    <div class="label">Aktor</div>
+                    <div class="desc">Osoba lub system. Na diagramie tylko raz.</div>
                 </div>
-                <div class="author-card">
-                    <div class="icon"><i class="ti ti-user"></i></div>
-                    <div class="name">Henning Schwentner</div>
+                <div class="element-card">
+                    <div class="icon"><i class="ti ti-package"></i></div>
+                    <div class="label">Obiekt roboczy</div>
+                    <div class="desc">Rzecz w procesie. Może się powtarzać.</div>
+                </div>
+                <div class="element-card">
+                    <div class="icon"><i class="ti ti-arrow-right"></i></div>
+                    <div class="label">Aktywność</div>
+                    <div class="desc">Strzałka z numerem. Buduje kolejność.</div>
+                </div>
+                <div class="element-card">
+                    <div class="icon"><i class="ti ti-note"></i></div>
+                    <div class="label">Adnotacja</div>
+                    <div class="desc">Komentarz na marginesie. Nie przerywa historii.</div>
+                </div>
+                <div class="element-card">
+                    <div class="icon"><i class="ti ti-layout-grid"></i></div>
+                    <div class="label">Grupa</div>
+                    <div class="desc">Zarys wokół fragmentu. Pokazuje granice.</div>
                 </div>
             </div>
-
-            <p class="concept">Opowieść zamiast notacji</p>
-
-            <div class="takeaway">Wspólne rozumienie zamiast <strong>formalizmu</strong></div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

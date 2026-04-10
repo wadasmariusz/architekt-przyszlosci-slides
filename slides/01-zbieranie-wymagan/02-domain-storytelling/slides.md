@@ -10,10 +10,14 @@ Domain Storytelling
 **Podtytuł:**
 Modelowanie procesów przez opowieść
 
+**Autorzy:**
+Stefan Hofer & Henning Schwentner
+
 **Layout:**
 
 * Dużo pustej przestrzeni
 * Jedno centralne hasło
+* Autorzy mniejszą czcionką pod podtytułem
 * Tło minimalistyczne / ciemne
 * Styl wprowadzający, spokojny
 
@@ -35,109 +39,108 @@ Ludzie naturalnie rozumieją historie
 
 **Layout:**
 
-* Kontrast między „formalną analizą” a „naturalnym opowiadaniem”
+* Kontrast między „formalną analizą" a „naturalnym opowiadaniem"
 * Mocne zdanie na dole
 
 ---
 
-## Slajd 3 - Twórcy techniki
-
-**Nagłówek:**
-Skąd wziął się Domain Storytelling
-
-**Treść:**
-
-* Stefan Hofer
-* Henning Schwentner
-* Opowieść zamiast notacji
-
-**Wyróżnienie:**
-Wspólne rozumienie zamiast formalizmu
-
----
-
-## Slajd 4 - Pięć elementów notacji
+## Slajd 3 - Pięć elementów notacji
 
 **Nagłówek:**
 Z czego składa się diagram
 
 **Treść:**
 
-* Aktor
-* Obiekt roboczy
-* Aktywność
-* Adnotacja
-* Grupa
+* **Aktor** — osoba lub system, który coś robi. Pojawia się na diagramie tylko raz.
+* **Obiekt roboczy** — rzecz, na której aktor operuje (zamówienie, ticket, raport). Może pojawiać się wielokrotnie.
+* **Aktywność** — strzałka z numerem łącząca aktora z obiektem. Numery tworzą kolejność historii.
+* **Adnotacja** — komentarz na marginesie. Obsługuje wyjątki bez przerywania głównej historii.
+* **Grupa** — zarys otaczający fragment diagramu. Pokazuje granice organizacyjne lub powtarzające się aktywności.
 
 **Layout:**
 
-* Lista 5 elementów
-* Każdy jako osobny blok / ikona
-* Czytelny układ kafelkowy
+* 5 elementów w układzie kafelkowym, każdy z ikoną i krótkim opisem
+* Jeden diagram = jedna historia
 
 ---
 
-## Slajd 5 - Aktor
+## Slajd 4 - Czas teraźniejszy
 
 **Nagłówek:**
-Aktor
+Ekspert zaczyna opowiadać
 
 **Treść:**
 
-* Człowiek lub system
-* Wykonuje działanie
-* Na diagramie tylko raz
-
-**Layout:**
-
-* Jedna ikona człowieka + jedna systemu
-* Minimalistyczne przykłady
-
----
-
-## Slajd 6 - Obiekt roboczy
-
-**Nagłówek:**
-Work Object
-
-**Treść:**
-
-* Zamówienie
-* Ticket
-* Raport
-* Plik
+* Wymagania piszemy w czasie przyszłym: „system powinien umożliwiać..."
+* Podczas sesji ekspert mówi w czasie teraźniejszym:
+* „Klient wypełnia formularz"
+* „Kasjer pobiera plan sali"
 
 **Wyróżnienie:**
-To „rzecz”, która przechodzi przez proces
+Mniej spekulacji, więcej konkretu — ekspert przestaje zgadywać i zaczyna opowiadać
 
 ---
 
-## Slajd 7 - Aktywność
+## Slajd 5 - Kino Metropolis
 
 **Nagłówek:**
-Aktywność
+Przykład: sprzedaż biletu w kinie
 
 **Treść:**
 
-* Wysyła
-* Waliduje
-* Zatwierdza
+1. Widz kupuje bilet u kasjera
+2. Opcjonalnie — kupuje przekąski przy barze
+3. Bileter sprawdza bilet i wpuszcza na salę
+4. Projekcjonista uruchamia seans
+5. Widz ogląda film
 
-**Dół slajdu (wyróżnienie):**
-Strzałki budują historię krok po kroku
+**Wyróżnienie:**
+Zero technikaliów — żadnych baz danych, API, systemów. Czysta historia biznesowa.
+
+---
+
+## Slajd 6 - Co widzi architekt
+
+**Nagłówek:**
+Biznes widzi proces — architekt widzi ryzyko
+
+**Treść:**
+
+* Plan sali to współdzielony zasób
+* Dwóch kasjerów szuka wolnych miejsc jednocześnie
+* Potencjalny konflikt współbieżności
+
+**Wyróżnienie:**
+Biznes opowiada proces swoimi słowami, a Ty słyszysz ryzyka których oni nie widzą
+
+---
+
+## Slajd 7 - Rola moderatora
+
+**Nagłówek:**
+Ty jesteś moderatorem
+
+**Treść:**
+
+* Eksperci opowiadają — Ty rysujesz
+* Ty słuchasz, Ty decydujesz co ląduje na diagramie
+* Ty zadajesz pytania
+
+**Wyróżnienie:**
+Bądź jak dziecko które dopiero poznaje świat — zacznij od tego co zwykłe
 
 ---
 
 ## Slajd 8 - Happy Path
 
 **Nagłówek:**
-Najpierw normalny przebieg
+Zawsze zaczynaj od Happy Path
 
 **Treść:**
 
-* Kto zaczyna?
-* Co dzieje się najpierw?
-* Jak wygląda standardowy scenariusz?
+* Żeby zrozumieć wyjątek, musisz najpierw wiedzieć co jest normą
+* Architekci i developerzy naturalnie myślą o tym co może pójść nie tak — to pułapka
+* Happy Path daje fundament, na którym budujesz resztę
 
 **Wyróżnienie:**
 Najpierw norma, potem wyjątki
@@ -147,170 +150,103 @@ Najpierw norma, potem wyjątki
 ## Slajd 9 - Wyjątki
 
 **Nagłówek:**
-A co jeśli coś pójdzie źle?
+A co jeśli coś pójdzie nie tak?
 
 **Treść:**
 
-* Nie przerywaj historii
-* Dodaj adnotację
-* Wróć później
-
-**Layout:**
-
-* 3 krótkie zasady
-* Jedna mocna myśl na końcu
-
----
-
-## Slajd 10 - Czas teraźniejszy
-
-**Nagłówek:**
-Ekspert zaczyna opowiadać
-
-**Treść:**
-
-* Klient wypełnia formularz
-* Kasjer pobiera plan sali
-* System działa „teraz”
+* Nie przerywaj historii — zapisz jako adnotację
+* Wróć do głównej opowieści
+* Po zakończeniu Happy Path — modeluj wyjątek na osobnym diagramie
 
 **Wyróżnienie:**
-Mniej spekulacji, więcej konkretu
+Jeden diagram, jedna historia
 
 ---
 
-## Slajd 11 - Kino Metropolis
+## Slajd 10 - Bez technologii
 
 **Nagłówek:**
-Przykład: sprzedaż biletu
-
-image_group{"aspect_ratio":"16:9","query":["domain storytelling cinema ticket example diagram","movie theater ticket purchase process illustration","cinema cashier customer workflow diagram"],"num_per_query":1}
-
-**Overlay tekstowy:**
-
-* Widz wybiera seans
-* Kasjer sprawdza miejsca
-* Sprzedaż biletu
-
----
-
-## Slajd 12 - Co widzi architekt
-
-**Nagłówek:**
-Biznes widzi proces
-Architekt widzi ryzyko
+Najpierw czysty biznes
 
 **Treść:**
 
-* Wspólny plan sali
-* Konflikt rezerwacji
-* Problem współbieżności
-
-**Layout:**
-
-* Kontrast dwóch perspektyw
-
----
-
-## Slajd 13 - Bez technologii
-
-**Nagłówek:**
-Najpierw biznes, nie system
-
-**Treść:**
-
-* Bez aplikacji
-* Bez baz danych
-* Bez workaroundów
+* Modeluj jakby żadnego oprogramowania nie było
+* Ludzie pracujący latami z legacy opisują proces przez pryzmat ograniczeń systemu
+* Po kilku latach nie wiedzą że to ograniczenie — myślą że to natura procesu
 
 **Dół slajdu (wyróżnienie):**
-Nie kopiuj ograniczeń legacy
+Kiedy prowadzisz sesję bez ekranu — ludzie odkrywają swoją domenę na nowo
 
 ---
 
-## Slajd 14 - Excel jako sygnał ostrzegawczy
+## Slajd 11 - Excel jako sygnał ostrzegawczy
 
 **Nagłówek:**
-„Eksportuję do Excela...”
+„Eksportuję do Excela i wklejam do drugiego systemu"
 
 **Treść:**
 
-* To może nie być proces
-* To może być obejście problemu
+* To nie jest proces biznesowy — to workaround
+* Ale dla osoby która robi to od pięciu lat — „to właśnie jest jak to działa"
+* Bez kontekstu starego systemu pojawiają się pytania: „po co w ogóle eksportujemy?"
 
 **Wyróżnienie:**
 Workaround ≠ wymaganie biznesowe
 
 ---
 
-## Slajd 15 - Zakres diagramu
+## Slajd 12 - Trzy wymiary zakresu
 
 **Nagłówek:**
-Trzy wymiary modelowania
+Zakres diagramu
 
 **Treść:**
 
-* Ziarnistość
-* As-Is / To-Be
-* Czystość domenowa
+* **Ziarnistość** — jak szczegółowy jest diagram (gruboziarnisty vs. drobnoziarnisty)
+* **Punkt w czasie** — As-Is (jak jest dziś) vs. To-Be (jak ma być po wdrożeniu)
+* **Czystość domenowa** — czysty biznes vs. diagram z systemami informatycznymi
 
-**Layout:**
-
-* 3 filary obok siebie
+**Wyróżnienie:**
+Kopiuj diagram przed każdą zmianą zakresu — masz historię decyzyjną
 
 ---
 
-## Slajd 16 - Ewolucja diagramów
+## Slajd 13 - Ewolucja diagramów
 
 **Nagłówek:**
 Od zrozumienia do projektu
 
 **Treść:**
 
-* Czysty biznes
-* Więcej szczegółów
-* Dodanie technologii
-* Projekt rozwiązania
+1. Czysty biznes, gruboziarnisty, as-is
+2. Więcej szczegółów
+3. Dodanie technologii
+4. Projekt rozwiązania — scyfryzowany, drobnoziarnisty, to-be
 
 **Layout:**
 
 * Sekwencja / progres kroków
+* Każde przejście to osobny diagram
 
 ---
 
-## Slajd 17 - Rozmowa ponad diagram
+## Slajd 14 - Rozmowa ponad diagram
 
 **Nagłówek:**
 Diagram to nie wszystko
 
 **Treść:**
 
-* Kontekst zostaje w sali
-* Emocje nie trafiają na obrazek
-* Rozmowa niesie wiedzę
+* Technika nie nazywa się Domain Story Writing — nazywa się Domain Storytelling
+* Kontekst, emocje, momenty „aha" zostają w sali
+* Developer który dostaje diagram mailem patrzy na obrazek, nie na wiedzę
 
 **Wyróżnienie:**
-Storytelling, nie Story Writing
+Rozmowa jest ważniejsza niż model
 
 ---
 
-## Slajd 18 - Narzędzie
-
-**Nagłówek:**
-Od czego zacząć
-
-**Treść:**
-
-* Egon.io
-* Darmowe narzędzie
-* Pilnuje poprawnej notacji
-
-**Layout:**
-
-* Prosty slajd rekomendacyjny
-
----
-
-## Slajd 19 - Podsumowanie
+## Slajd 15 - Podsumowanie
 
 **Nagłówek:**
 Najważniejsze wnioski
@@ -319,8 +255,11 @@ Najważniejsze wnioski
 
 * Słuchaj i rysuj
 * Happy Path najpierw
-* Oddziel biznes od technologii
+* Czysty biznes bez technologii jako punkt startowy
 * Rozmowa jest kluczowa
+
+**Narzędzie:**
+Egon.io — bezpłatne, stworzone przez autorów, pilnuje poprawnej notacji
 
 **Dół slajdu (wyróżnienie):**
 Najwięcej odkrywasz, gdy ekspert zaczyna opowiadać
