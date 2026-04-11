@@ -64,8 +64,6 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            max-width: 1400px;
-            margin-top: -40px;
         }
 
         .section-label {
@@ -83,7 +81,7 @@
             font-size: 64px;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 80px;
+            margin-bottom: 40px;
             color: #ffffff;
             opacity: 0;
             animation: fadeUp 1s ease-out 0.2s forwards;
@@ -95,85 +93,9 @@
             text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
         }
 
-        .board {
-            position: relative;
-            width: 1300px;
-            height: 480px;
-            background: #f5f0e8;
-            border-radius: 8px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        .board-svg {
             opacity: 0;
             animation: fadeUp 1s ease-out 0.5s forwards;
-            overflow: hidden;
-        }
-
-        .board-arrow {
-            position: absolute;
-            bottom: 24px;
-            left: 60px;
-            right: 60px;
-            height: 4px;
-            background: rgba(0,0,0,0.15);
-            border-radius: 2px;
-        }
-
-        .board-arrow::after {
-            content: '';
-            position: absolute;
-            right: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-left: 14px solid rgba(0,0,0,0.15);
-        }
-
-        .board-label-start,
-        .board-label-end {
-            position: absolute;
-            bottom: 36px;
-            font-size: 14px;
-            font-weight: 600;
-            color: rgba(0,0,0,0.3);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .board-label-start { left: 60px; }
-        .board-label-end { right: 60px; }
-
-        .stickies {
-            position: absolute;
-            inset: 0;
-        }
-
-        .sticky {
-            position: absolute;
-            width: 140px;
-            height: 90px;
-            background: #ff9800;
-            border-radius: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #1a1a1a;
-            box-shadow: 3px 3px 8px rgba(0,0,0,0.25);
-            line-height: 1.2;
-            box-sizing: border-box;
-            opacity: 0;
-        }
-
-        /* animacja pojawienia się karteczek */
-        .sticky { animation: stickyIn 0.5s ease-out forwards; }
-
-        @keyframes stickyIn {
-            from { opacity: 0; transform: translateY(-15px) rotate(0deg); }
-            to { opacity: 1; }
         }
 
         .accent {
@@ -235,30 +157,89 @@
             <p class="section-label">Faza 2</p>
             <h2 class="title"><span class="highlight">Porządkowanie</span></h2>
 
-            <div class="board">
-                <div class="board-arrow"></div>
-                <div class="board-label-start">Start</div>
-                <div class="board-label-end">Koniec</div>
+            <!--
+                SVG BOARD: viewBox="0 0 1300 500"
+                Każda karteczka to <g transform="translate(X, Y) rotate(R)">
+                X: 0–1160   Y: 0–360   (karteczka 140x90, board 1300x500)
+                Oś czasu na dole (y=460)
+            -->
+            <svg class="board-svg" width="1300" height="500" viewBox="0 0 1300 500" xmlns="http://www.w3.org/2000/svg">
+                <!-- biała tablica -->
+                <rect x="0" y="0" width="1300" height="500" rx="8" fill="#f5f0e8" />
 
-                <div class="stickies">
-                    <!-- BOARD: 1300 x 480px. Karteczka: 140 x 90px.
-                         x (left): 0 – 1160    y (top): 0 – 330
-                         Zmień left/top żeby przesuwać karteczkę -->
-                    <div class="sticky" style="left:10px;  top:80px;  transform:rotate(-4deg);  animation-delay:0.7s">Klient składa zamówienie</div>
-                    <div class="sticky" style="left:100px; top:140px; transform:rotate(2deg);   animation-delay:0.8s">Produkt wybrany</div>
-                    <div class="sticky" style="left:200px; top:60px;  transform:rotate(-1deg);  animation-delay:0.9s">Koszyk utworzony</div>
-                    <div class="sticky" style="left:300px; top:160px; transform:rotate(3deg);   animation-delay:1.0s">Płatność zatwierdzona</div>
-                    <div class="sticky" style="left:390px; top:50px;  transform:rotate(-2deg);  animation-delay:1.1s">Adres podany</div>
-                    <div class="sticky" style="left:180px; top:50px; transform:rotate(1.5deg); animation-delay:1.2s">Zamówienie przyjęte</div>
-                    <div class="sticky" style="left:570px; top:70px;  transform:rotate(-3deg);  animation-delay:1.3s">Faktura wystawiona</div>
-                    <div class="sticky" style="left:660px; top:40px; transform:rotate(2.5deg); animation-delay:1.4s">Produkt spakowany</div>
-                    <div class="sticky" style="left:750px; top:55px;  transform:rotate(-1.5deg);animation-delay:1.5s">Kurier przypisany</div>
-                    <div class="sticky" style="left:840px; top:60px; transform:rotate(1deg);   animation-delay:1.6s">Przesyłka wysłana</div>
-                    <div class="sticky" style="left:930px; top:65px;  transform:rotate(-2.5deg);animation-delay:1.7s">Klient powiadomiony</div>
-                    <div class="sticky" style="left:1020px;top:45px; transform:rotate(3.5deg); animation-delay:1.8s">Przesyłka dostarczona</div>
-                    <div class="sticky" style="left:1110px;top:70px;  transform:rotate(-1deg);  animation-delay:1.9s">Opinia wystawiona</div>
-                </div>
-            </div>
+                <!-- oś czasu -->
+                <line x1="60" y1="465" x2="1220" y2="465" stroke="rgba(0,0,0,0.15)" stroke-width="4" stroke-linecap="round"/>
+                <polygon points="1230,465 1216,457 1216,473" fill="rgba(0,0,0,0.15)"/>
+                <text x="60" y="455" fill="rgba(0,0,0,0.3)" font-size="14" font-weight="600" letter-spacing="2">START</text>
+                <text x="1170" y="455" fill="rgba(0,0,0,0.3)" font-size="14" font-weight="600" letter-spacing="2">KONIEC</text>
+
+                <!-- KARTECZKI: zmień translate(X,Y) żeby przesuwać, rotate(R) żeby obracać -->
+
+                <g transform="translate(20, 30) rotate(-3)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Klient składa</tspan><tspan x="70" dy="16">zamówienie</tspan></text>
+                </g>
+
+                <g transform="translate(110, 150) rotate(2)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="45" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a">Produkt wybrany</text>
+                </g>
+
+                <g transform="translate(200, 50) rotate(-1)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="45" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a">Koszyk utworzony</text>
+                </g>
+
+                <g transform="translate(300, 170) rotate(3)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Płatność</tspan><tspan x="70" dy="16">zatwierdzona</tspan></text>
+                </g>
+
+                <g transform="translate(400, 60) rotate(-2)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="45" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a">Adres podany</text>
+                </g>
+
+                <g transform="translate(490, 200) rotate(1.5)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Zamówienie</tspan><tspan x="70" dy="16">przyjęte</tspan></text>
+                </g>
+
+                <g transform="translate(580, 40) rotate(-2.5)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Faktura</tspan><tspan x="70" dy="16">wystawiona</tspan></text>
+                </g>
+
+                <g transform="translate(680, 160) rotate(2)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Produkt</tspan><tspan x="70" dy="16">spakowany</tspan></text>
+                </g>
+
+                <g transform="translate(780, 50) rotate(-1.5)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Kurier</tspan><tspan x="70" dy="16">przypisany</tspan></text>
+                </g>
+
+                <g transform="translate(870, 190) rotate(1)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Przesyłka</tspan><tspan x="70" dy="16">wysłana</tspan></text>
+                </g>
+
+                <g transform="translate(960, 70) rotate(-2)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Klient</tspan><tspan x="70" dy="16">powiadomiony</tspan></text>
+                </g>
+
+                <g transform="translate(1050, 180) rotate(3)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Przesyłka</tspan><tspan x="70" dy="16">dostarczona</tspan></text>
+                </g>
+
+                <g transform="translate(1140, 60) rotate(-1)">
+                    <rect width="140" height="90" rx="3" fill="#ff9800" filter="drop-shadow(3px 3px 4px rgba(0,0,0,0.25))"/>
+                    <text x="70" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a"><tspan x="70" dy="0">Opinia</tspan><tspan x="70" dy="16">wystawiona</tspan></text>
+                </g>
+            </svg>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
