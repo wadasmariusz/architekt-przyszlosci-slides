@@ -25,10 +25,15 @@
             overflow: hidden;
         }
 
-        .slide {
-            width: 100vw; height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            position: relative; overflow: hidden;
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .bg-grid {
@@ -79,7 +84,7 @@
 
         /* === Content === */
         .content {
-            position: relative; z-index: 2; text-align: center;
+            position: relative; z-index: 10; text-align: center;
             width: 100%; max-width: 1100px; padding: 0 3rem;
             display: flex; flex-direction: column; align-items: center;
         }
@@ -173,10 +178,37 @@
             from { opacity: 0; transform: translateY(24px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
-    <div class="slide">
+    <div class="stage" id="stage">
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
         <div class="particle"></div>
@@ -218,6 +250,27 @@
                 </div>
             </div>
         </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
     </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
 </body>
 </html>
