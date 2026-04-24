@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - Dlaczego w ogóle o tym mówimy?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === Title === */
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            margin-bottom: 3.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Three identical blocks === */
+        .blocks-row {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .block {
+            width: 220px;
+            height: 200px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            opacity: 0;
+            transition: border-color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .block:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.08);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.15);
+        }
+
+        .block:nth-child(1) { animation: fadeUp 0.8s ease-out 0.6s forwards; }
+        .block:nth-child(2) { animation: fadeUp 0.8s ease-out 0.9s forwards; }
+        .block:nth-child(3) { animation: fadeUp 0.8s ease-out 1.2s forwards; }
+
+        .block-icon {
+            font-size: 3.2rem;
+            line-height: 1;
+        }
+
+        .block-code {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            align-items: center;
+        }
+
+        .code-line {
+            width: 100px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(148,163,184,0.25);
+        }
+
+        .code-line:nth-child(2) { width: 75px; }
+        .code-line:nth-child(3) { width: 90px; }
+
+        .block-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #94a3b8;
+            letter-spacing: 1px;
+        }
+
+        /* === Question mark overlay === */
+        .question-mark {
+            position: absolute;
+            top: -2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            font-weight: 800;
+            color: #ef4444;
+            text-shadow: 0 0 30px rgba(239,68,68,0.4);
+            opacity: 0;
+            animation: popIn 0.6s ease-out 2s forwards;
+        }
+
+        @keyframes popIn {
+            0%   { opacity: 0; transform: translateX(-50%) scale(0.3); }
+            60%  { opacity: 1; transform: translateX(-50%) scale(1.2); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+
+        /* === Equal signs between blocks === */
+        .equal-sign {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            font-weight: 800;
+            color: rgba(148,163,184,0.4);
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.5s forwards;
+        }
+
+        .equal-sign:nth-of-type(1) { left: calc(220px + 0.4rem); }
+        .equal-sign:nth-of-type(2) { right: calc(220px + 0.4rem); }
+
+        /* === Bottom punchline === */
+        .punchline {
+            font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+            font-weight: 300;
+            color: #64748b;
+            max-width: 700px;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.4s forwards;
+        }
+
+        .punchline strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        .punchline .warn {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <h2 class="section-title">Dlaczego w ogóle <span class="highlight">o tym mówimy?</span></h2>
+
+            <div class="blocks-row">
+                <!-- Three identical blocks -->
+                <div class="block">
+                    <span class="block-icon">💳</span>
+                    <div class="block-code">
+                        <div class="code-line"></div>
+                        <div class="code-line"></div>
+                        <div class="code-line"></div>
+                    </div>
+                    <span class="block-label">Płatności</span>
+                </div>
+
+                <div class="block">
+                    <span class="block-icon">🔐</span>
+                    <div class="block-code">
+                        <div class="code-line"></div>
+                        <div class="code-line"></div>
+                        <div class="code-line"></div>
+                    </div>
+                    <span class="block-label">Logowanie</span>
+                </div>
+
+                <div class="block">
+                    <span class="block-icon">✉️</span>
+                    <div class="block-code">
+                        <div class="code-line"></div>
+                        <div class="code-line"></div>
+                        <div class="code-line"></div>
+                    </div>
+                    <span class="block-label">Maile</span>
+                </div>
+
+                <!-- Equal signs -->
+                <span class="equal-sign">=</span>
+                <span class="equal-sign">=</span>
+
+                <!-- Question mark -->
+                <div class="question-mark">⚠️</div>
+            </div>
+
+            <p class="punchline">Tyle samo energii w rzeczy, które <strong>wyróżniają firmę</strong>, co w te, które można kupić za <span class="warn">5$/mies.</span></p>
+        </div>
+    </div>
+</body>
+</html>

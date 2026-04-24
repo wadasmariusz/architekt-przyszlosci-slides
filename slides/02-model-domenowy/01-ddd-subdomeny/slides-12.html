@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - Pułapka #2: Over-engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 14%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 68%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 26%; left: 76%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 80%; left: 10%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 44%; left: 50%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 40%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 2; text-align: center;
+            width: 100%; max-width: 1100px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+            font-weight: 800; margin-bottom: 2.5rem;
+            opacity: 0; animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+        .section-title .warn { color: #ef4444; }
+
+        /* === VS layout === */
+        .vs-row {
+            display: flex;
+            align-items: stretch;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            width: 100%;
+        }
+
+        .vs-label {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #475569;
+            align-self: center;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 2.0s forwards;
+        }
+
+        /* === Simple box (CRUD) === */
+        .simple-box {
+            flex: 1;
+            border-radius: 16px;
+            background: rgba(34,197,94,0.06);
+            border: 1px solid rgba(34,197,94,0.25);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
+        }
+
+        .simple-icon {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .simple-label {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #86efac;
+        }
+
+        .simple-desc {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #64748b;
+        }
+
+        .simple-box .crud-stack {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .crud-chip {
+            font-size: 0.65rem;
+            padding: 0.3em 0.7em;
+            border-radius: 100px;
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.2);
+            color: #86efac;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* === Complex monster === */
+        .complex-box {
+            flex: 1.4;
+            border-radius: 16px;
+            background: rgba(239,68,68,0.05);
+            border: 1px solid rgba(239,68,68,0.2);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Start as simple, then grow */
+        .complex-box {
+            animation: growMonster 1s ease-out 1.2s forwards;
+        }
+
+        @keyframes growMonster {
+            0%   { opacity: 0; transform: scale(0.6); }
+            50%  { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .complex-icon {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .complex-label {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fca5a5;
+        }
+
+        .complex-desc {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Buzzword chips scattered */
+        .buzzwords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+            max-width: 320px;
+        }
+
+        .buzz {
+            font-size: 0.6rem;
+            padding: 0.25em 0.6em;
+            border-radius: 100px;
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.15);
+            color: #fca5a5;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            opacity: 0;
+        }
+
+        .buzz:nth-child(1) { animation: fadeIn 0.3s ease-out 1.8s forwards; }
+        .buzz:nth-child(2) { animation: fadeIn 0.3s ease-out 1.9s forwards; }
+        .buzz:nth-child(3) { animation: fadeIn 0.3s ease-out 2.0s forwards; }
+        .buzz:nth-child(4) { animation: fadeIn 0.3s ease-out 2.1s forwards; }
+        .buzz:nth-child(5) { animation: fadeIn 0.3s ease-out 2.2s forwards; }
+        .buzz:nth-child(6) { animation: fadeIn 0.3s ease-out 2.3s forwards; }
+
+        /* Burnout dev */
+        .burnout {
+            position: absolute;
+            bottom: 10px;
+            right: 14px;
+            font-size: 1.6rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 2.5s forwards;
+        }
+
+        /* === Punchline === */
+        .punchline {
+            font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+            font-weight: 300;
+            color: #64748b;
+            max-width: 700px;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.8s forwards;
+        }
+
+        .punchline strong {
+            color: #fca5a5;
+            font-weight: 600;
+        }
+
+        .punchline .good {
+            color: #86efac;
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title"><span class="warn">Pułapka #2</span> — Event sourcing w panelu zarządzania</h2>
+
+            <div class="vs-row">
+                <!-- Simple CRUD box -->
+                <div class="simple-box">
+                    <span class="simple-icon">📦</span>
+                    <span class="simple-label">CRUD</span>
+                    <span class="simple-desc">Wystarczy.</span>
+                    <div class="crud-stack">
+                        <span class="crud-chip">C</span>
+                        <span class="crud-chip">R</span>
+                        <span class="crud-chip">U</span>
+                        <span class="crud-chip">D</span>
+                    </div>
+                </div>
+
+                <span class="vs-label">vs</span>
+
+                <!-- Over-engineered monster -->
+                <div class="complex-box">
+                    <span class="complex-icon">🏗️</span>
+                    <span class="complex-label">Rube Goldberg Machine</span>
+                    <span class="complex-desc">"Bo się przyda"</span>
+                    <div class="buzzwords">
+                        <span class="buzz">CQRS</span>
+                        <span class="buzz">Event Sourcing</span>
+                        <span class="buzz">Saga</span>
+                        <span class="buzz">DDD Tactical</span>
+                        <span class="buzz">Eventual Consistency</span>
+                        <span class="buzz">Kafka</span>
+                    </div>
+                    <span class="burnout">🫠</span>
+                </div>
+            </div>
+
+            <p class="punchline"><strong>Over-engineering</strong> tam, gdzie wystarczył <span class="good">CRUD</span> + wypalenie na rzeczach, które nikogo nie interesują.</p>
+        </div>
+    </div>
+</body>
+</html>

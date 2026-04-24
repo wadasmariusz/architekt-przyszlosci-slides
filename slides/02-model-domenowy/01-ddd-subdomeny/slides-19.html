@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 19 - Podsumowanie: trzy rzeczy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px; animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 14%; left: 8%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 70%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 20%; left: 76%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 84%; left: 14%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 46%; left: 52%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 38%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 2; text-align: center;
+            width: 100%; max-width: 1100px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+            font-weight: 800; margin-bottom: 3.5rem;
+            opacity: 0; animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Three takeaways === */
+        .takeaways {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .takeaway {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            text-align: left;
+            opacity: 0;
+        }
+
+        .takeaway:nth-child(1) { animation: bounceIn 0.7s ease-out 0.6s forwards; }
+        .takeaway:nth-child(2) { animation: bounceIn 0.7s ease-out 1.2s forwards; }
+        .takeaway:nth-child(3) { animation: bounceIn 0.7s ease-out 1.8s forwards; }
+
+        @keyframes bounceIn {
+            0%   { opacity: 0; transform: translateY(30px) scale(0.95); }
+            60%  { opacity: 1; transform: translateY(-6px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .takeaway-num {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            color: var(--dark-bg);
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            box-shadow: 0 0 20px rgba(34,211,238,0.3);
+        }
+
+        .takeaway-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .takeaway-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            flex: 1;
+        }
+
+        .takeaway-main {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .takeaway-main .hl {
+            color: var(--cyan-400);
+        }
+
+        .takeaway-sub {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">Zabierz z tej lekcji <span class="highlight">trzy rzeczy</span></h2>
+
+            <div class="takeaways">
+                <div class="takeaway">
+                    <div class="takeaway-num">1</div>
+                    <span class="takeaway-icon">🔍</span>
+                    <div class="takeaway-body">
+                        <p class="takeaway-main">Subdomen się nie projektuje — tylko <span class="hl">odkrywa.</span></p>
+                        <p class="takeaway-sub">One już są w biznesie.</p>
+                    </div>
+                </div>
+
+                <div class="takeaway">
+                    <div class="takeaway-num">2</div>
+                    <span class="takeaway-icon">👑</span>
+                    <div class="takeaway-body">
+                        <p class="takeaway-main">Core to <span class="hl">przewaga konkurencyjna.</span></p>
+                        <p class="takeaway-sub">Nie "ważność". Nie wszystko jest Core.</p>
+                    </div>
+                </div>
+
+                <div class="takeaway">
+                    <div class="takeaway-num">3</div>
+                    <span class="takeaway-icon">🗺️</span>
+                    <div class="takeaway-body">
+                        <p class="takeaway-main">Typ subdomeny to <span class="hl">decyzja strategiczna.</span></p>
+                        <p class="takeaway-sub">Mówi, gdzie inwestować, gdzie solidnie pracować, a gdzie kupować gotowce.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

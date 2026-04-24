@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 05 - Subdomena ≠ Bounded Context</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 11%; left: 14%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 70%; left: 80%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 20%; left: 75%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 80%; left: 12%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 55%; left: 50%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 16%; left: 58%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === Title === */
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Two columns layout === */
+        .columns {
+            display: flex;
+            gap: 0;
+            width: 100%;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .col {
+            flex: 1;
+            padding: 2.2rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            opacity: 0;
+        }
+
+        .col--left {
+            animation: slideFromLeft 0.8s ease-out 0.6s forwards;
+            border-radius: 16px 0 0 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            border-right: none;
+        }
+
+        .col--right {
+            animation: slideFromRight 0.8s ease-out 0.6s forwards;
+            border-radius: 0 16px 16px 0;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            border-left: none;
+        }
+
+        /* Divider line */
+        .divider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: var(--cyan-500);
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.4s forwards;
+            z-index: 5;
+        }
+
+        .divider::after {
+            content: '≠';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark-bg);
+            background: var(--cyan-400);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            box-shadow: 0 0 20px rgba(34,211,238,0.4);
+            animation: pulseGlow 2s ease-in-out infinite 2s;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(34,211,238,0.4); }
+            50%      { box-shadow: 0 0 40px rgba(34,211,238,0.7); }
+        }
+
+        .col-icon {
+            font-size: 2.8rem;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+
+        .col-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .col--left .col-name {
+            color: #f59e0b;
+        }
+
+        .col--right .col-name {
+            color: var(--cyan-400);
+        }
+
+        .col-chip {
+            font-size: 0.75rem;
+            padding: 0.35em 1em;
+            border-radius: 100px;
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.2);
+            color: var(--cyan-400);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .col--left .col-chip {
+            background: rgba(245,158,11,0.08);
+            border-color: rgba(245,158,11,0.2);
+            color: #f59e0b;
+        }
+
+        .col-desc {
+            font-size: 1rem;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .col-action {
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .col--left .col-action {
+            color: #f59e0b;
+        }
+
+        .col--right .col-action {
+            color: var(--cyan-400);
+        }
+
+        /* Arrow between desc and action */
+        .col-arrow {
+            font-size: 1.2rem;
+            color: #64748b;
+        }
+
+        /* === Warning === */
+        .warning {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            background: rgba(239,68,68,0.06);
+            border: 1px solid rgba(239,68,68,0.2);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.8s forwards;
+        }
+
+        .warning-icon {
+            font-size: 1.3rem;
+        }
+
+        .warning-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fca5a5;
+            letter-spacing: 0.3px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <h2 class="section-title">Nie myl tych <span class="highlight">dwóch pojęć</span></h2>
+
+            <div class="columns">
+                <!-- Left: Subdomena -->
+                <div class="col col--left">
+                    <span class="col-icon">🏢</span>
+                    <span class="col-name">Subdomena</span>
+                    <span class="col-chip">przestrzeń problemu</span>
+                    <p class="col-desc">Co biznes robi</p>
+                    <span class="col-arrow">↓</span>
+                    <span class="col-action">Odkrywasz</span>
+                </div>
+
+                <!-- Divider with ≠ -->
+                <div class="divider"></div>
+
+                <!-- Right: Bounded Context -->
+                <div class="col col--right">
+                    <span class="col-icon">{ }</span>
+                    <span class="col-name">Bounded Context</span>
+                    <span class="col-chip">przestrzeń rozwiązania</span>
+                    <p class="col-desc">Jak modelujesz w kodzie</p>
+                    <span class="col-arrow">↓</span>
+                    <span class="col-action">Projektujesz</span>
+                </div>
+            </div>
+
+            <!-- Warning -->
+            <div class="warning">
+                <span class="warning-icon">⚠️</span>
+                <span class="warning-text">Mieszanie tych pojęć to pierwszy grzech DDD.</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 04 - Subdomen się nie projektuje</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 14%; left: 9%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 68%; left: 86%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 70%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 76%; left: 22%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 52%; left: 48%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 20%; left: 55%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === Magnifying glass over mini business map === */
+        .magnifier-area {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.2s forwards;
+        }
+
+        /* Mini business map tiles behind the lens */
+        .mini-map {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: grid;
+            grid-template-columns: repeat(3, 28px);
+            grid-template-rows: repeat(3, 28px);
+            gap: 6px;
+        }
+
+        .mini-tile {
+            border-radius: 4px;
+            opacity: 0.35;
+        }
+
+        .mini-tile:nth-child(1) { background: var(--cyan-500); }
+        .mini-tile:nth-child(2) { background: #f59e0b; }
+        .mini-tile:nth-child(3) { background: #64748b; }
+        .mini-tile:nth-child(4) { background: #8b5cf6; }
+        .mini-tile:nth-child(5) { background: var(--cyan-600); }
+        .mini-tile:nth-child(6) { background: #475569; }
+        .mini-tile:nth-child(7) { background: #d97706; }
+        .mini-tile:nth-child(8) { background: var(--cyan-700); }
+        .mini-tile:nth-child(9) { background: #7c3aed; }
+
+        /* Magnifying glass */
+        .lens {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--cyan-400);
+            box-shadow: 0 0 30px rgba(34,211,238,0.2), inset 0 0 40px rgba(6,182,212,0.08);
+            animation: lensHover 4s ease-in-out infinite;
+        }
+
+        .lens-handle {
+            position: absolute;
+            bottom: -18px;
+            right: -18px;
+            width: 40px;
+            height: 6px;
+            background: var(--cyan-500);
+            border-radius: 3px;
+            transform: rotate(45deg);
+            transform-origin: left center;
+        }
+
+        @keyframes lensHover {
+            0%, 100% { transform: translate(-50%, -50%) translateX(0px); }
+            50%      { transform: translate(-50%, -50%) translateX(12px); }
+        }
+
+        /* === Main statement === */
+        .main-statement {
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+        }
+
+        .main-statement .word {
+            display: inline-block;
+            opacity: 0;
+        }
+
+        .main-statement .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Staggered word animation */
+        .main-statement .word:nth-child(1)  { animation: fadeUp 0.5s ease-out 0.6s forwards; }
+        .main-statement .word:nth-child(2)  { animation: fadeUp 0.5s ease-out 0.75s forwards; }
+        .main-statement .word:nth-child(3)  { animation: fadeUp 0.5s ease-out 0.9s forwards; }
+        .main-statement .word:nth-child(4)  { animation: fadeUp 0.5s ease-out 1.05s forwards; }
+        .main-statement .word:nth-child(5)  { animation: fadeUp 0.5s ease-out 1.2s forwards; }
+        .main-statement .word:nth-child(6)  { animation: fadeUp 0.5s ease-out 1.5s forwards; }
+        .main-statement .word:nth-child(7)  { animation: fadeUp 0.5s ease-out 1.65s forwards; }
+        .main-statement .word:nth-child(8)  { animation: fadeUp 0.5s ease-out 1.8s forwards; }
+
+        /* === Supporting text === */
+        .supporting-text {
+            font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+            font-weight: 300;
+            color: #94a3b8;
+            max-width: 650px;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.2s forwards;
+        }
+
+        /* === Role badge === */
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.25);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.6s forwards;
+        }
+
+        .role-badge .icon {
+            font-size: 1.4rem;
+        }
+
+        .role-badge .text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f0f4f8;
+            letter-spacing: 0.5px;
+        }
+
+        .role-badge .text .highlight {
+            color: var(--cyan-400);
+        }
+
+        .role-badge .text s {
+            color: #64748b;
+            font-weight: 400;
+            text-decoration-color: rgba(239,68,68,0.5);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <!-- Magnifying glass over business map -->
+            <div class="magnifier-area">
+                <div class="mini-map">
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                    <div class="mini-tile"></div>
+                </div>
+                <div class="lens">
+                    <div class="lens-handle"></div>
+                </div>
+            </div>
+
+            <!-- Main statement — word by word -->
+            <p class="main-statement">
+                <span class="word">Subdomen</span>
+                <span class="word">się</span>
+                <span class="word">nie</span>
+                <span class="word">projektuje.</span>
+                <br>
+                <span class="word">Subdomeny</span>
+                <span class="word">się</span>
+                <span class="word highlight">odkrywa.</span>
+            </p>
+
+            <!-- Supporting text -->
+            <p class="supporting-text">
+                HR istnieje. Księgowość istnieje. Obsługa klienta istnieje — nawet zanim przyjdzie zespół developerski.
+            </p>
+
+            <!-- Role badge -->
+            <div class="role-badge">
+                <span class="icon">🔍</span>
+                <span class="text">Rola architekta: <span class="highlight">zidentyfikować</span>, <s>nie wymyślić</s></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

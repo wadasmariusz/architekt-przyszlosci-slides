@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Domena vs Subdomena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 10%; left: 12%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 72%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 22%; left: 68%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 82%; left: 18%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 92%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 15%; left: 45%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === Layout: two columns + diagram === */
+        .main-layout {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        /* === Domain circle diagram === */
+        .domain-diagram {
+            position: relative;
+            width: 340px;
+            height: 340px;
+            flex-shrink: 0;
+            opacity: 0;
+            animation: scaleIn 0.8s ease-out 0.3s forwards;
+        }
+
+        .domain-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(6,182,212,0.3);
+            background: rgba(6,182,212,0.03);
+        }
+
+        .domain-label {
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.6s forwards;
+        }
+
+        /* === Subdomain pieces inside the circle === */
+        .subdomain {
+            position: absolute;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #f0f4f8;
+            letter-spacing: 0.5px;
+            opacity: 0;
+        }
+
+        .subdomain--1 {
+            width: 120px; height: 80px;
+            top: 50px; left: 30px;
+            background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+            animation: popSubdomain 0.6s ease-out 1.0s forwards;
+        }
+
+        .subdomain--2 {
+            width: 100px; height: 70px;
+            top: 55px; right: 40px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            animation: popSubdomain 0.6s ease-out 1.3s forwards;
+        }
+
+        .subdomain--3 {
+            width: 130px; height: 65px;
+            bottom: 70px; left: 50px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            animation: popSubdomain 0.6s ease-out 1.6s forwards;
+        }
+
+        .subdomain--4 {
+            width: 90px; height: 75px;
+            bottom: 55px; right: 35px;
+            background: linear-gradient(135deg, #64748b, #475569);
+            animation: popSubdomain 0.6s ease-out 1.9s forwards;
+        }
+
+        .subdomain--5 {
+            width: 80px; height: 50px;
+            top: 145px; left: 125px;
+            background: linear-gradient(135deg, var(--cyan-600), var(--cyan-900));
+            animation: popSubdomain 0.6s ease-out 2.2s forwards;
+        }
+
+        @keyframes popSubdomain {
+            0%   { opacity: 0; transform: scale(0.4); }
+            70%  { opacity: 1; transform: scale(1.08); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* === Two columns with definitions === */
+        .definitions {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .def-card {
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            padding: 1.5rem 2rem;
+            opacity: 0;
+        }
+
+        .def-card:nth-child(1) {
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+        .def-card:nth-child(2) {
+            animation: fadeUp 0.8s ease-out 1.0s forwards;
+        }
+
+        .def-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
+        }
+
+        .def-card h3 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .def-card p {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .def-card .example {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .def-card .example strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        /* === Bottom quote === */
+        .quote {
+            font-size: clamp(1rem, 1.8vw, 1.3rem);
+            font-weight: 600;
+            font-style: italic;
+            color: #f0f4f8;
+            max-width: 700px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.6s forwards;
+            position: relative;
+            padding: 0 2rem;
+        }
+
+        .quote::before {
+            content: '\201C';
+            position: absolute;
+            left: -0.5rem;
+            top: -0.8rem;
+            font-size: 3.5rem;
+            font-style: normal;
+            color: var(--cyan-500);
+            opacity: 0.4;
+            line-height: 1;
+        }
+
+        .quote .highlight {
+            color: var(--cyan-400);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="main-layout">
+                <!-- Domain circle with subdomains -->
+                <div class="domain-diagram">
+                    <div class="domain-ring"></div>
+                    <span class="domain-label">Domena</span>
+                    <div class="subdomain subdomain--1">Kredyty</div>
+                    <div class="subdomain subdomain--2">Karty</div>
+                    <div class="subdomain subdomain--3">Przelewy</div>
+                    <div class="subdomain subdomain--4">KYC</div>
+                    <div class="subdomain subdomain--5">Ryzyko</div>
+                </div>
+
+                <!-- Definitions -->
+                <div class="definitions">
+                    <div class="def-card">
+                        <h3><span class="highlight">Domena</span></h3>
+                        <p>Cały obszar biznesowy firmy</p>
+                        <p class="example"><strong>Bank</strong> → bankowość &nbsp;|&nbsp; <strong>Uber</strong> → przewozy + marketplace</p>
+                    </div>
+                    <div class="def-card">
+                        <h3><span class="highlight">Subdomena</span></h3>
+                        <p>Logiczny, spójny wycinek domeny</p>
+                        <p class="example">Kredyty, Karty, Przelewy, KYC, Ryzyko…</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="quote">Domena istnieje, nawet jakbyś <span class="highlight">wyłączył wszystkie serwery.</span></p>
+        </div>
+    </div>
+</body>
+</html>

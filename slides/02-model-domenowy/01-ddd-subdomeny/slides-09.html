@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 09 - Supporting: solidna inżynieria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 10%; left: 12%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 74%; left: 84%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 22%; left: 80%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 84%; left: 16%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 50%; left: 46%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 16%; left: 56%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+            font-weight: 800;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .muted {
+            color: #94a3b8;
+        }
+
+        /* === Orbit diagram === */
+        .orbit-area {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin-bottom: 2rem;
+            flex-shrink: 0;
+        }
+
+        /* Orbit rings */
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(148,163,184,0.2);
+            top: 50%;
+            left: 50%;
+            opacity: 0;
+        }
+
+        .orbit-ring--1 {
+            width: 220px;
+            height: 220px;
+            transform: translate(-50%, -50%);
+            animation: fadeIn 0.6s ease-out 1.0s forwards;
+        }
+
+        .orbit-ring--2 {
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            animation: fadeIn 0.6s ease-out 1.2s forwards;
+        }
+
+        /* Core star center */
+        .core-star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--cyan-400) 0%, var(--cyan-600) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--dark-bg);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 0 40px rgba(34,211,238,0.4);
+            opacity: 0;
+            animation: starAppear 0.7s ease-out 0.5s forwards;
+            z-index: 3;
+        }
+
+        @keyframes starAppear {
+            0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            70%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Orbiting supporting items */
+        .orbit-item {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.85);
+            border: 1px solid rgba(148,163,184,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.2rem;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        .orbit-item .icon { font-size: 1.3rem; line-height: 1; }
+        .orbit-item .lbl {
+            font-size: 0.5rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Positions on orbit */
+        .orbit-item--1 {
+            top: 4px; left: 50%;
+            transform: translateX(-50%);
+            animation: orbitIn 0.6s ease-out 1.4s forwards;
+        }
+
+        .orbit-item--2 {
+            bottom: 4px; left: 50%;
+            transform: translateX(-50%);
+            animation: orbitIn 0.6s ease-out 1.7s forwards;
+        }
+
+        .orbit-item--3 {
+            top: 50%; left: 4px;
+            transform: translateY(-50%);
+            animation: orbitIn 0.6s ease-out 2.0s forwards;
+        }
+
+        @keyframes orbitIn {
+            from { opacity: 0; transform: translateX(-50%) scale(0.5); }
+            to   { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+
+        .orbit-item--3 {
+            animation-name: orbitInY;
+        }
+
+        @keyframes orbitInY {
+            from { opacity: 0; transform: translateY(-50%) scale(0.5); }
+            to   { opacity: 1; transform: translateY(-50%) scale(1); }
+        }
+
+        /* === Quote === */
+        .quote {
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            font-weight: 300;
+            font-style: italic;
+            color: #94a3b8;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 1.8rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.4s forwards;
+        }
+
+        /* === Critical rule === */
+        .rule-box {
+            padding: 1rem 2.2rem;
+            border-radius: 12px;
+            background: rgba(239,68,68,0.05);
+            border: 1px solid rgba(239,68,68,0.2);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.8s forwards;
+            max-width: 700px;
+        }
+
+        .rule-box p {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fca5a5;
+            line-height: 1.6;
+        }
+
+        .rule-box strong {
+            color: #f0f4f8;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">Supporting — ważne, ale <span class="muted">nie wyróżniające</span></h2>
+
+            <!-- Orbit diagram -->
+            <div class="orbit-area">
+                <div class="orbit-ring orbit-ring--1"></div>
+                <div class="orbit-ring orbit-ring--2"></div>
+
+                <div class="core-star">Core</div>
+
+                <div class="orbit-item orbit-item--1">
+                    <span class="icon">🔄</span>
+                    <span class="lbl">Zwroty</span>
+                </div>
+                <div class="orbit-item orbit-item--2">
+                    <span class="icon">📂</span>
+                    <span class="lbl">Katalog kategorii</span>
+                </div>
+                <div class="orbit-item orbit-item--3">
+                    <span class="icon">🖥️</span>
+                    <span class="lbl">Panel sprzedawcy</span>
+                </div>
+            </div>
+
+            <!-- Quote -->
+            <p class="quote">"Nikt nie wybiera Allegro dlatego, że mają najlepszy panel sprzedawcy."</p>
+
+            <!-- Critical rule -->
+            <div class="rule-box">
+                <p><strong>Supporting służy Core</strong> — nie odwrotnie. Jeśli Supporting dyktuje warunki Core'owi, coś jest do góry nogami.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

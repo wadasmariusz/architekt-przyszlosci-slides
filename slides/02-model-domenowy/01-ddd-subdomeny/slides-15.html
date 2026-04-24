@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 15 - Trzy pytania biznesowe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px; animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 8%; left: 18%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 76%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 22%; left: 70%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 80%; left: 14%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 52%; left: 44%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 12%; left: 54%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 2; text-align: center;
+            width: 100%; max-width: 1100px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+            font-weight: 800; margin-bottom: 3.5rem;
+            opacity: 0; animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Questions === */
+        .questions {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .question {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            text-align: left;
+            opacity: 0;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .question:hover {
+            border-color: var(--cyan-500);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 24px rgba(6,182,212,0.12);
+        }
+
+        .question:nth-child(1) { animation: fadeUp 0.8s ease-out 0.6s forwards; }
+        .question:nth-child(2) { animation: fadeUp 0.8s ease-out 1.2s forwards; }
+        .question:nth-child(3) { animation: fadeUp 0.8s ease-out 1.8s forwards; }
+
+        .q-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.1);
+            border: 2px solid var(--cyan-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .q-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .q-hint {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .q-hint strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">Trzy <span class="highlight">pytania biznesowe</span></h2>
+
+            <div class="questions">
+                <div class="question">
+                    <div class="q-number">1</div>
+                    <div class="q-body">
+                        <p class="q-text">Gdzie zmienia się odpowiedzialność?</p>
+                        <p class="q-hint">Inny <strong>dział</strong>, inne <strong>cele</strong>, inne <strong>wskaźniki</strong> — to granica subdomeny.</p>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="q-number">2</div>
+                    <div class="q-body">
+                        <p class="q-text">Jak wyglądałaby ta subdomena jako osobna firma?</p>
+                        <p class="q-hint">Czy ma swoich <strong>klientów</strong>? Własne <strong>miary sukcesu</strong>?</p>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="q-number">3</div>
+                    <div class="q-body">
+                        <p class="q-text">Co by się stało, gdybyśmy oddali ten obszar na zewnątrz?</p>
+                        <p class="q-hint">Odpowiedź klasyfikuje: <strong>Generic</strong>, <strong>Supporting</strong> lub <strong>Core</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Trzy typy subdomen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 10%; left: 15%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 75%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 22%; left: 78%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 85%; left: 10%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 50%; left: 45%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 52%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === Title === */
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            margin-bottom: 3.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Three cards === */
+        .cards {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            flex: 1;
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            opacity: 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        /* Core */
+        .card--core {
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.3);
+            box-shadow: 0 0 30px rgba(6,182,212,0.1);
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .card--core:hover {
+            box-shadow: 0 8px 40px rgba(6,182,212,0.25);
+        }
+
+        .card--core .card-icon {
+            color: var(--cyan-400);
+            text-shadow: 0 0 20px rgba(34,211,238,0.4);
+        }
+
+        .card--core .card-name {
+            color: var(--cyan-400);
+        }
+
+        /* Supporting */
+        .card--supporting {
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(148,163,184,0.2);
+            animation: fadeUp 0.8s ease-out 1.0s forwards;
+        }
+
+        .card--supporting:hover {
+            box-shadow: 0 8px 32px rgba(148,163,184,0.1);
+        }
+
+        .card--supporting .card-icon {
+            color: #94a3b8;
+        }
+
+        .card--supporting .card-name {
+            color: #cbd5e1;
+        }
+
+        /* Generic */
+        .card--generic {
+            background: rgba(17,24,39,0.5);
+            border: 1px solid rgba(100,116,139,0.15);
+            animation: fadeUp 0.8s ease-out 1.4s forwards;
+        }
+
+        .card--generic:hover {
+            box-shadow: 0 8px 32px rgba(100,116,139,0.1);
+        }
+
+        .card--generic .card-icon {
+            color: #64748b;
+        }
+
+        .card--generic .card-name {
+            color: #94a3b8;
+        }
+
+        .card-icon {
+            font-size: 3.2rem;
+            line-height: 1;
+        }
+
+        .card-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Glow ring around Core */
+        .card--core::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.2), transparent, rgba(6,182,212,0.2));
+            z-index: -1;
+            animation: coreGlow 3s ease-in-out infinite;
+        }
+
+        .card--core {
+            position: relative;
+        }
+
+        @keyframes coreGlow {
+            0%, 100% { opacity: 0.5; }
+            50%      { opacity: 1; }
+        }
+
+        /* === Bottom text === */
+        .bottom-text {
+            font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+            font-weight: 300;
+            color: #64748b;
+            max-width: 700px;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.8s forwards;
+        }
+
+        .bottom-text strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <h2 class="section-title">Nie wszystkie subdomeny są sobie <span class="highlight">równe</span></h2>
+
+            <div class="cards">
+                <!-- Core -->
+                <div class="card card--core">
+                    <span class="card-icon">👑</span>
+                    <span class="card-name">Core</span>
+                    <span class="card-desc">Przewaga konkurencyjna</span>
+                </div>
+
+                <!-- Supporting -->
+                <div class="card card--supporting">
+                    <span class="card-icon">🏛️</span>
+                    <span class="card-name">Supporting</span>
+                    <span class="card-desc">Wspiera, nie wyróżnia</span>
+                </div>
+
+                <!-- Generic -->
+                <div class="card card--generic">
+                    <span class="card-icon">📦</span>
+                    <span class="card-name">Generic</span>
+                    <span class="card-desc">Produkt z półki</span>
+                </div>
+            </div>
+
+            <p class="bottom-text">Ten podział zmienia wszystko — od <strong>architektury</strong>, przez <strong>zespół</strong>, po <strong>budżet</strong>.</p>
+        </div>
+    </div>
+</body>
+</html>

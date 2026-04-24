@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Pułapka #1: Zbudujmy własne</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 14%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 66%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 20%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 42%; left: 54%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 20%; left: 44%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .warn {
+            color: #ef4444;
+        }
+
+        /* === Timeline === */
+        .timeline {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 3rem;
+        }
+
+        /* Horizontal line */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 36px;
+            left: 60px;
+            right: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+            border-radius: 2px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.8s forwards;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 240px;
+            opacity: 0;
+        }
+
+        .step:nth-child(1) { animation: fadeUp 0.8s ease-out 1.0s forwards; }
+        .step:nth-child(2) { animation: fadeUp 0.8s ease-out 1.6s forwards; }
+        .step:nth-child(3) { animation: fadeUp 0.8s ease-out 2.2s forwards; }
+
+        .step-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .step:nth-child(1) .step-dot {
+            background: #22c55e;
+            box-shadow: 0 0 16px rgba(34,197,94,0.4);
+        }
+
+        .step:nth-child(2) .step-dot {
+            background: #eab308;
+            box-shadow: 0 0 16px rgba(234,179,8,0.4);
+        }
+
+        .step:nth-child(3) .step-dot {
+            background: #ef4444;
+            box-shadow: 0 0 16px rgba(239,68,68,0.4);
+        }
+
+        .step-month {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .step-card {
+            padding: 1.2rem 1.4rem;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(100,116,139,0.15);
+            backdrop-filter: blur(8px);
+            width: 100%;
+        }
+
+        .step-icon {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #f0f4f8;
+        }
+
+        .step:nth-child(1) .step-text { color: #86efac; }
+        .step:nth-child(2) .step-text { color: #fde047; }
+        .step:nth-child(3) .step-text { color: #fca5a5; }
+
+        .step-sub {
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: #64748b;
+            margin-top: 0.3rem;
+        }
+
+        /* === Curve SVG === */
+        .curve-container {
+            width: 100%;
+            max-width: 900px;
+            height: 100px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 2.8s forwards;
+        }
+
+        .curve-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .curve-path {
+            fill: none;
+            stroke: url(#curveGradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            animation: drawCurve 1.5s ease-out 3.0s forwards;
+        }
+
+        @keyframes drawCurve {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .curve-label {
+            font-size: 0.75rem;
+            fill: #64748b;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title"><span class="warn">Pułapka #1</span> — "Zbudujmy własne"</h2>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <div class="step">
+                    <div class="step-dot"></div>
+                    <span class="step-month">Miesiąc 1</span>
+                    <div class="step-card">
+                        <div class="step-icon">😎</div>
+                        <p class="step-text">"To proste, zróbmy sami"</p>
+                        <p class="step-sub">Entuzjazm na maksa</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-dot"></div>
+                    <span class="step-month">Miesiąc 6</span>
+                    <div class="step-card">
+                        <div class="step-icon">😰</div>
+                        <p class="step-text">OAuth, rotacja haseł, 2FA…</p>
+                        <p class="step-sub">Rośnie zakres</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-dot"></div>
+                    <span class="step-month">Miesiąc 12</span>
+                    <div class="step-card">
+                        <div class="step-icon">💀</div>
+                        <p class="step-text">Niedopracowana biblioteka + zero czasu na Core</p>
+                        <p class="step-sub">Wypalenie</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Declining curve -->
+            <div class="curve-container">
+                <svg viewBox="0 0 900 100" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="curveGradient" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#22c55e"/>
+                            <stop offset="50%" stop-color="#eab308"/>
+                            <stop offset="100%" stop-color="#ef4444"/>
+                        </linearGradient>
+                    </defs>
+                    <path class="curve-path" d="M 50,20 C 200,15 300,25 450,50 C 600,75 750,90 850,92"/>
+                    <text class="curve-label" x="30" y="16">energia</text>
+                    <text class="curve-label" x="820" y="88">czas →</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

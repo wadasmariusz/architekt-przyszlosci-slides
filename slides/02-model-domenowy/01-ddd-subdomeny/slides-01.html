@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 01 - Subdomeny w strategicznym DDD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0%   { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 15%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 70%; left: 85%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 30%; left: 75%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 80%; left: 20%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 50%; left: 50%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 20%; left: 60%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; }
+            80%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === Map fragments (abstract illustration) === */
+        .map-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 3.5rem;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.2s forwards;
+        }
+
+        .map-piece {
+            border-radius: 10px;
+            opacity: 0;
+            position: relative;
+        }
+
+        .map-piece:nth-child(1) {
+            width: 70px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--cyan-500), var(--cyan-700));
+            animation: slideFromLeft 0.7s ease-out 0.4s forwards;
+        }
+
+        .map-piece:nth-child(2) {
+            width: 100px;
+            height: 70px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            align-self: flex-end;
+            animation: slideFromBottom 0.7s ease-out 0.6s forwards;
+        }
+
+        .map-piece:nth-child(3) {
+            width: 55px;
+            height: 110px;
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            box-shadow: 0 0 30px rgba(34,211,238,0.3);
+            animation: slideFromTop 0.7s ease-out 0.8s forwards;
+        }
+
+        .map-piece:nth-child(4) {
+            width: 85px;
+            height: 60px;
+            background: linear-gradient(135deg, #64748b, #475569);
+            align-self: center;
+            animation: slideFromRight 0.7s ease-out 1.0s forwards;
+        }
+
+        .map-piece:nth-child(5) {
+            width: 65px;
+            height: 80px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            align-self: flex-end;
+            animation: slideFromBottom 0.7s ease-out 1.2s forwards;
+        }
+
+        .map-piece:nth-child(6) {
+            width: 90px;
+            height: 95px;
+            background: linear-gradient(135deg, var(--cyan-600), var(--cyan-900));
+            animation: slideFromTop 0.7s ease-out 1.4s forwards;
+        }
+
+        .map-piece:nth-child(7) {
+            width: 50px;
+            height: 65px;
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            align-self: center;
+            animation: slideFromRight 0.7s ease-out 1.6s forwards;
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-80px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(80px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideFromTop {
+            from { opacity: 0; transform: translateY(-60px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideFromBottom {
+            from { opacity: 0; transform: translateY(60px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Title === */
+        h1.title {
+            font-size: clamp(2.2rem, 5vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 1.8s forwards;
+            letter-spacing: -1px;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Subtitle === */
+        .subtitle {
+            font-size: clamp(1rem, 1.8vw, 1.35rem);
+            color: #94a3b8;
+            font-weight: 300;
+            letter-spacing: 2px;
+            max-width: 750px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 2.2s forwards;
+        }
+
+        .subtitle strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <!-- Abstract map pieces -->
+            <div class="map-container">
+                <div class="map-piece"></div>
+                <div class="map-piece"></div>
+                <div class="map-piece"></div>
+                <div class="map-piece"></div>
+                <div class="map-piece"></div>
+                <div class="map-piece"></div>
+                <div class="map-piece"></div>
+            </div>
+
+            <h1 class="title">Subdomeny w strategicznym <span class="highlight">DDD</span></h1>
+            <p class="subtitle"><strong>Core</strong>, <strong>Supporting</strong>, <strong>Generic</strong> — jak odkryć, co naprawdę buduje przewagę firmy</p>
+        </div>
+    </div>
+</body>
+</html>

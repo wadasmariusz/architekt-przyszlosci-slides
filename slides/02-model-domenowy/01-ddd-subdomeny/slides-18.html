@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 18 - DDD to rozmowa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px; animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 10%; left: 12%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 72%; left: 86%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 26%; left: 74%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 82%; left: 10%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 50%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 16%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 2; text-align: center;
+            width: 100%; max-width: 1100px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+            font-weight: 800; margin-bottom: 2.5rem;
+            opacity: 0; animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Two scenarios side by side === */
+        .scenarios {
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .scenario {
+            flex: 1;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            padding: 1.8rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            opacity: 0;
+        }
+
+        .scenario:nth-child(1) { animation: fadeUp 0.8s ease-out 0.6s forwards; }
+        .scenario:nth-child(2) { animation: fadeUp 0.8s ease-out 1.0s forwards; }
+
+        .scenario-label {
+            font-size: 0.7rem;
+            padding: 0.35em 1em;
+            border-radius: 100px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .scenario:nth-child(1) .scenario-label {
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.25);
+            color: #86efac;
+        }
+
+        .scenario:nth-child(2) .scenario-label {
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.25);
+            color: var(--cyan-400);
+        }
+
+        /* === Conversation visualization === */
+        .conversation {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .person {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            flex-shrink: 0;
+        }
+
+        .person-icon {
+            font-size: 2.4rem;
+            line-height: 1;
+        }
+
+        .person-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #64748b;
+            text-align: center;
+        }
+
+        /* Chat bubbles */
+        .bubbles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            flex: 1;
+            max-width: 140px;
+        }
+
+        .bubble {
+            padding: 0.4rem 0.7rem;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: 500;
+            line-height: 1.3;
+            opacity: 0;
+        }
+
+        .bubble--left {
+            background: rgba(6,182,212,0.12);
+            border: 1px solid rgba(6,182,212,0.2);
+            color: var(--cyan-400);
+            align-self: flex-start;
+            border-bottom-left-radius: 3px;
+        }
+
+        .bubble--right {
+            background: rgba(148,163,184,0.1);
+            border: 1px solid rgba(148,163,184,0.15);
+            color: #94a3b8;
+            align-self: flex-end;
+            border-bottom-right-radius: 3px;
+        }
+
+        /* Staggered bubble animations */
+        .scenario:nth-child(1) .bubble:nth-child(1) { animation: fadeIn 0.4s ease-out 1.4s forwards; }
+        .scenario:nth-child(1) .bubble:nth-child(2) { animation: fadeIn 0.4s ease-out 1.7s forwards; }
+        .scenario:nth-child(1) .bubble:nth-child(3) { animation: fadeIn 0.4s ease-out 2.0s forwards; }
+
+        .scenario:nth-child(2) .bubble:nth-child(1) { animation: fadeIn 0.4s ease-out 1.6s forwards; }
+        .scenario:nth-child(2) .bubble:nth-child(2) { animation: fadeIn 0.4s ease-out 1.9s forwards; }
+        .scenario:nth-child(2) .bubble:nth-child(3) { animation: fadeIn 0.4s ease-out 2.2s forwards; }
+
+        .scenario-desc {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: #64748b;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* === Bottom takeaway === */
+        .takeaway {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(6,182,212,0.2);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.6s forwards;
+        }
+
+        .takeaway-icon { font-size: 1.3rem; }
+
+        .takeaway-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f0f4f8;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .takeaway-text .highlight {
+            color: var(--cyan-400);
+        }
+
+        .takeaway-text s {
+            color: #64748b;
+            font-weight: 400;
+            text-decoration-color: rgba(239,68,68,0.5);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">Nie rób tego <span class="highlight">sam przy biurku</span></h2>
+
+            <div class="scenarios">
+                <!-- Ideal scenario -->
+                <div class="scenario">
+                    <span class="scenario-label">Ideał</span>
+                    <div class="conversation">
+                        <div class="person">
+                            <span class="person-icon">👨‍💻</span>
+                            <span class="person-label">Architekt</span>
+                        </div>
+                        <div class="bubbles">
+                            <div class="bubble bubble--left">Gdzie firma zarabia?</div>
+                            <div class="bubble bubble--right">Algorytm cenowy!</div>
+                            <div class="bubble bubble--left">To nasz Core.</div>
+                        </div>
+                        <div class="person">
+                            <span class="person-icon">👩‍💼</span>
+                            <span class="person-label">Domain Expert</span>
+                        </div>
+                    </div>
+                    <p class="scenario-desc">Usiądź z kimś, kto rozumie, gdzie firma zarabia</p>
+                </div>
+
+                <!-- Realistic scenario -->
+                <div class="scenario">
+                    <span class="scenario-label">A jeśli nie masz z kim?</span>
+                    <div class="conversation">
+                        <div class="person">
+                            <span class="person-icon">👨‍💻</span>
+                            <span class="person-label">Architekt</span>
+                        </div>
+                        <div class="bubbles">
+                            <div class="bubble bubble--left">Oto lista obszarów…</div>
+                            <div class="bubble bubble--right">Wstępna klasyfikacja:</div>
+                            <div class="bubble bubble--left">Dobry start!</div>
+                        </div>
+                        <div class="person">
+                            <span class="person-icon">🤖</span>
+                            <span class="person-label">AI</span>
+                        </div>
+                    </div>
+                    <p class="scenario-desc">Wrzuć listę obszarów, poproś o klasyfikację</p>
+                </div>
+            </div>
+
+            <div class="takeaway">
+                <span class="takeaway-icon">🎯</span>
+                <span class="takeaway-text">Cel: <s>nie uwierzyć</s>, tylko mieć <span class="highlight">od czego się odbić</span></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
