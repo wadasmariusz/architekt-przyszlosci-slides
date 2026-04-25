@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 16 - Klasyfikator decyzyjny</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px; animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 8%; left: 18%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 76%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 22%; left: 70%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 80%; left: 14%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 52%; left: 44%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 12%; left: 54%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10; text-align: center;
+            width: 100%; max-width: 1200px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* === Question node (root) === */
+        .question-node {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 2.5rem;
+            border-radius: 16px;
+            background: rgba(6,182,212,0.08);
+            border: 2px solid var(--cyan-500);
+            box-shadow: 0 0 32px rgba(6,182,212,0.15);
+            margin-bottom: 0;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .question-node .q-icon {
+            font-size: 2rem;
+            color: var(--cyan-400);
+        }
+
+        .question-node .q-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f0f4f8;
+            text-align: left;
+        }
+
+        /* === Connector lines === */
+        .connectors {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            width: 100%;
+            height: 60px;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.0s forwards;
+        }
+
+        .connector-svg {
+            width: 100%;
+            max-width: 900px;
+            height: 60px;
+        }
+
+        .connector-line {
+            stroke: var(--cyan-700);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+        }
+
+        .connector-line.line-1 { animation: drawLine 0.6s ease-out 1.2s forwards; }
+        .connector-line.line-2 { animation: drawLine 0.6s ease-out 1.5s forwards; }
+        .connector-line.line-3 { animation: drawLine 0.6s ease-out 1.8s forwards; }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* === Branch cards === */
+        .branches {
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1100px;
+            justify-content: center;
+        }
+
+        .branch {
+            flex: 1;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.8rem 1.5rem;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .branch:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.12);
+        }
+
+        .branch:nth-child(1) { animation: fadeUp 0.8s ease-out 1.4s forwards; }
+        .branch:nth-child(2) { animation: fadeUp 0.8s ease-out 1.8s forwards; }
+        .branch:nth-child(3) { animation: fadeUp 0.8s ease-out 2.2s forwards; }
+
+        .branch:nth-child(1):hover { border-color: #6b7280; }
+        .branch:nth-child(2):hover { border-color: var(--cyan-700); }
+        .branch:nth-child(3):hover { border-color: var(--cyan-400); }
+
+        .branch-answer {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.5;
+            font-style: italic;
+            min-height: 3em;
+            display: flex;
+            align-items: center;
+        }
+
+        .branch-arrow {
+            font-size: 1.4rem;
+            color: #475569;
+            opacity: 0;
+        }
+
+        .branch:nth-child(1) .branch-arrow { animation: fadeIn 0.4s ease-out 2.0s forwards; }
+        .branch:nth-child(2) .branch-arrow { animation: fadeIn 0.4s ease-out 2.4s forwards; }
+        .branch:nth-child(3) .branch-arrow { animation: fadeIn 0.4s ease-out 2.8s forwards; }
+
+        /* === Classification labels === */
+        .branch-label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.4rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            opacity: 0;
+        }
+
+        .branch:nth-child(1) .branch-label { animation: popIn 0.5s ease-out 2.2s forwards; }
+        .branch:nth-child(2) .branch-label { animation: popIn 0.5s ease-out 2.6s forwards; }
+        .branch:nth-child(3) .branch-label { animation: popIn 0.5s ease-out 3.0s forwards; }
+
+        .branch-label i { font-size: 1.2rem; }
+
+        /* Generic — grey */
+        .label--generic {
+            background: rgba(107,114,128,0.15);
+            border: 1px solid rgba(107,114,128,0.4);
+            color: #9ca3af;
+        }
+
+        /* Supporting — muted cyan */
+        .label--supporting {
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.3);
+            color: var(--cyan-600);
+        }
+
+        /* Core — bright cyan */
+        .label--core {
+            background: rgba(6,182,212,0.12);
+            border: 1px solid var(--cyan-500);
+            color: var(--cyan-400);
+            box-shadow: 0 0 16px rgba(6,182,212,0.2);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+            0%   { opacity: 0; transform: scale(0.6); }
+            70%  { transform: scale(1.08); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <!-- Root question -->
+            <div class="question-node">
+                <i class="ti ti-help-circle-filled q-icon"></i>
+                <span class="q-text">Co by się stało, gdybyśmy oddali ten obszar na zewnątrz?</span>
+            </div>
+
+            <!-- Connector lines -->
+            <div class="connectors">
+                <svg class="connector-svg" viewBox="0 0 900 60" preserveAspectRatio="xMidYMid meet">
+                    <path class="connector-line line-1" d="M450,0 L150,60" />
+                    <path class="connector-line line-2" d="M450,0 L450,60" />
+                    <path class="connector-line line-3" d="M450,0 L750,60" />
+                </svg>
+            </div>
+
+            <!-- Three branches -->
+            <div class="branches">
+                <!-- Generic -->
+                <div class="branch">
+                    <span class="branch-answer">"Nic, zaoszczędzilibyśmy czas"</span>
+                    <span class="branch-arrow"><i class="ti ti-arrow-down"></i></span>
+                    <div class="branch-label label--generic">
+                        <i class="ti ti-package"></i> Generic
+                    </div>
+                </div>
+
+                <!-- Supporting -->
+                <div class="branch">
+                    <span class="branch-answer">"Dałoby się, ale stracilibyśmy elastyczność"</span>
+                    <span class="branch-arrow"><i class="ti ti-arrow-down"></i></span>
+                    <div class="branch-label label--supporting">
+                        <i class="ti ti-building-columns"></i> Supporting
+                    </div>
+                </div>
+
+                <!-- Core -->
+                <div class="branch">
+                    <span class="branch-answer">"Stracilibyśmy przewagę konkurencyjną"</span>
+                    <span class="branch-arrow"><i class="ti ti-arrow-down"></i></span>
+                    <div class="branch-label label--core">
+                        <i class="ti ti-crown"></i> Core
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
