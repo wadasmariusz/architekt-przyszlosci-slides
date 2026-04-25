@@ -244,7 +244,7 @@
         .curve-container {
             width: 100%;
             max-width: 900px;
-            height: 100px;
+            height: 160px;
             opacity: 0;
             animation: fadeIn 0.8s ease-out 2.8s forwards;
         }
@@ -254,13 +254,19 @@
             height: 100%;
         }
 
+        .axis {
+            stroke: #475569;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
         .curve-path {
             fill: none;
             stroke: url(#curveGradient);
             stroke-width: 3;
             stroke-linecap: round;
-            stroke-dasharray: 600;
-            stroke-dashoffset: 600;
+            stroke-dasharray: 700;
+            stroke-dashoffset: 700;
             animation: drawCurve 1.5s ease-out 3.0s forwards;
         }
 
@@ -269,7 +275,16 @@
         }
 
         .curve-label {
-            font-size: 0.75rem;
+            font-size: 14px;
+            fill: #94a3b8;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .curve-tick {
+            font-size: 11px;
             fill: #64748b;
             font-family: 'Inter', sans-serif;
         }
@@ -362,19 +377,39 @@
                 </div>
             </div>
 
-            <!-- Declining curve -->
+            <!-- Declining curve chart -->
             <div class="curve-container">
-                <svg viewBox="0 0 900 100" preserveAspectRatio="none">
+                <svg viewBox="0 0 900 160" preserveAspectRatio="xMidYMid meet">
                     <defs>
                         <linearGradient id="curveGradient" x1="0" y1="0" x2="1" y2="0">
                             <stop offset="0%" stop-color="#22c55e"/>
                             <stop offset="50%" stop-color="#eab308"/>
                             <stop offset="100%" stop-color="#ef4444"/>
                         </linearGradient>
+                        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+                        </marker>
                     </defs>
-                    <path class="curve-path" d="M 50,20 C 200,15 300,25 450,50 C 600,75 750,90 850,92"/>
-                    <text class="curve-label" x="30" y="16">energia</text>
-                    <text class="curve-label" x="820" y="88">czas →</text>
+
+                    <!-- Y axis -->
+                    <line class="axis" x1="120" y1="20" x2="120" y2="130" marker-end="url(#arrowhead)" transform="rotate(180 120 75)"/>
+                    <!-- X axis -->
+                    <line class="axis" x1="120" y1="130" x2="800" y2="130" marker-end="url(#arrowhead)"/>
+
+                    <!-- Axis labels -->
+                    <text class="curve-label" x="80" y="30" text-anchor="end">energia</text>
+                    <text class="curve-label" x="810" y="135" text-anchor="start" dominant-baseline="middle">czas</text>
+
+                    <!-- X ticks -->
+                    <line class="axis" x1="220" y1="128" x2="220" y2="134"/>
+                    <line class="axis" x1="450" y1="128" x2="450" y2="134"/>
+                    <line class="axis" x1="680" y1="128" x2="680" y2="134"/>
+                    <text class="curve-tick" x="220" y="150" text-anchor="middle">M1</text>
+                    <text class="curve-tick" x="450" y="150" text-anchor="middle">M6</text>
+                    <text class="curve-tick" x="680" y="150" text-anchor="middle">M12</text>
+
+                    <!-- Declining curve -->
+                    <path class="curve-path" d="M 220,40 C 320,42 380,55 450,75 C 540,100 620,118 680,122"/>
                 </svg>
             </div>
         </div>
