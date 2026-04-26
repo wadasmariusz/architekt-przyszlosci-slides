@@ -51,11 +51,11 @@ Z czego składa się diagram
 
 **Treść:**
 
-* **Aktor** — osoba lub system, który coś robi. Pojawia się na diagramie tylko raz.
-* **Obiekt roboczy** — rzecz, na której aktor operuje (zamówienie, ticket, raport). Może pojawiać się wielokrotnie.
-* **Aktywność** — strzałka z numerem łącząca aktora z obiektem. Numery tworzą kolejność historii.
-* **Adnotacja** — komentarz na marginesie. Obsługuje wyjątki bez przerywania głównej historii.
-* **Grupa** — zarys otaczający fragment diagramu. Pokazuje granice organizacyjne lub powtarzające się aktywności.
+* **Aktor** - osoba lub system, który coś robi. Pojawia się na diagramie tylko raz.
+* **Obiekt roboczy** - rzecz, na której aktor operuje (zamówienie, ticket, raport). Może pojawiać się wielokrotnie.
+* **Aktywność** - strzałka z numerem łącząca aktora z obiektem. Numery tworzą kolejność historii.
+* **Adnotacja** - komentarz na marginesie. Obsługuje wyjątki bez przerywania głównej historii.
+* **Grupa** - zarys otaczający fragment diagramu. Pokazuje granice organizacyjne lub powtarzające się aktywności.
 
 **Layout:**
 
@@ -77,7 +77,7 @@ Ekspert zaczyna opowiadać
 * „Kasjer pobiera plan sali"
 
 **Wyróżnienie:**
-Mniej spekulacji, więcej konkretu — ekspert przestaje zgadywać i zaczyna opowiadać
+Mniej spekulacji, więcej konkretu - ekspert przestaje zgadywać i zaczyna opowiadać
 
 ---
 
@@ -89,20 +89,20 @@ Przykład: sprzedaż biletu w kinie
 **Treść:**
 
 1. Widz kupuje bilet u kasjera
-2. Opcjonalnie — kupuje przekąski przy barze
+2. Opcjonalnie - kupuje przekąski przy barze
 3. Bileter sprawdza bilet i wpuszcza na salę
 4. Projekcjonista uruchamia seans
 5. Widz ogląda film
 
 **Wyróżnienie:**
-Zero technikaliów — żadnych baz danych, API, systemów. Czysta historia biznesowa.
+Zero technikaliów - żadnych baz danych, API, systemów. Czysta historia biznesowa.
 
 ---
 
 ## Slajd 6 - Co widzi architekt
 
 **Nagłówek:**
-Biznes widzi proces — architekt widzi ryzyko
+Biznes widzi proces - architekt widzi ryzyko
 
 **Treść:**
 
@@ -122,12 +122,12 @@ Ty jesteś moderatorem
 
 **Treść:**
 
-* Eksperci opowiadają — Ty rysujesz
+* Eksperci opowiadają - Ty rysujesz
 * Ty słuchasz, Ty decydujesz co ląduje na diagramie
 * Ty zadajesz pytania
 
 **Wyróżnienie:**
-Bądź jak dziecko które dopiero poznaje świat — zacznij od tego co zwykłe
+Bądź jak dziecko które dopiero poznaje świat - zacznij od tego co zwykłe
 
 ---
 
@@ -139,7 +139,7 @@ Zawsze zaczynaj od Happy Path
 **Treść:**
 
 * Żeby zrozumieć wyjątek, musisz najpierw wiedzieć co jest normą
-* Architekci i developerzy naturalnie myślą o tym co może pójść nie tak — to pułapka
+* Architekci i developerzy naturalnie myślą o tym co może pójść nie tak - to pułapka
 * Happy Path daje fundament, na którym budujesz resztę
 
 **Wyróżnienie:**
@@ -154,9 +154,9 @@ A co jeśli coś pójdzie nie tak?
 
 **Treść:**
 
-* Nie przerywaj historii — zapisz jako adnotację
+* Nie przerywaj historii - zapisz jako adnotację
 * Wróć do głównej opowieści
-* Po zakończeniu Happy Path — modeluj wyjątek na osobnym diagramie
+* Po zakończeniu Happy Path - modeluj wyjątek na osobnym diagramie
 
 **Wyróżnienie:**
 Jeden diagram, jedna historia
@@ -172,10 +172,10 @@ Najpierw czysty biznes
 
 * Modeluj jakby żadnego oprogramowania nie było
 * Ludzie pracujący latami z legacy opisują proces przez pryzmat ograniczeń systemu
-* Po kilku latach nie wiedzą że to ograniczenie — myślą że to natura procesu
+* Po kilku latach nie wiedzą że to ograniczenie - myślą że to natura procesu
 
 **Dół slajdu (wyróżnienie):**
-Kiedy prowadzisz sesję bez ekranu — ludzie odkrywają swoją domenę na nowo
+Kiedy prowadzisz sesję bez ekranu - ludzie odkrywają swoją domenę na nowo
 
 ---
 
@@ -186,8 +186,8 @@ Kiedy prowadzisz sesję bez ekranu — ludzie odkrywają swoją domenę na nowo
 
 **Treść:**
 
-* To nie jest proces biznesowy — to workaround
-* Ale dla osoby która robi to od pięciu lat — „to właśnie jest jak to działa"
+* To nie jest proces biznesowy - to workaround
+* Ale dla osoby która robi to od pięciu lat - „to właśnie jest jak to działa"
 * Bez kontekstu starego systemu pojawiają się pytania: „po co w ogóle eksportujemy?"
 
 **Wyróżnienie:**
@@ -202,12 +202,12 @@ Zakres diagramu
 
 **Treść:**
 
-* **Ziarnistość** — jak szczegółowy jest diagram (gruboziarnisty vs. drobnoziarnisty)
-* **Punkt w czasie** — As-Is (jak jest dziś) vs. To-Be (jak ma być po wdrożeniu)
-* **Czystość domenowa** — czysty biznes vs. diagram z systemami informatycznymi
+* **Ziarnistość** - jak szczegółowy jest diagram (gruboziarnisty vs. drobnoziarnisty)
+* **Punkt w czasie** - As-Is (jak jest dziś) vs. To-Be (jak ma być po wdrożeniu)
+* **Czystość domenowa** - czysty biznes vs. diagram z systemami informatycznymi
 
 **Wyróżnienie:**
-Kopiuj diagram przed każdą zmianą zakresu — masz historię decyzyjną
+Kopiuj diagram przed każdą zmianą zakresu - masz historię decyzyjną
 
 ---
 
@@ -221,7 +221,7 @@ Od zrozumienia do projektu
 1. Czysty biznes, gruboziarnisty, as-is
 2. Więcej szczegółów
 3. Dodanie technologii
-4. Projekt rozwiązania — scyfryzowany, drobnoziarnisty, to-be
+4. Projekt rozwiązania - scyfryzowany, drobnoziarnisty, to-be
 
 **Layout:**
 
@@ -237,7 +237,7 @@ Diagram to nie wszystko
 
 **Treść:**
 
-* Technika nie nazywa się Domain Story Writing — nazywa się Domain Storytelling
+* Technika nie nazywa się Domain Story Writing - nazywa się Domain Storytelling
 * Kontekst, emocje, momenty „aha" zostają w sali
 * Developer który dostaje diagram mailem patrzy na obrazek, nie na wiedzę
 
@@ -259,7 +259,7 @@ Najważniejsze wnioski
 * Rozmowa jest kluczowa
 
 **Narzędzie:**
-Egon.io — bezpłatne, stworzone przez autorów, pilnuje poprawnej notacji
+Egon.io - bezpłatne, stworzone przez autorów, pilnuje poprawnej notacji
 
 **Dół slajdu (wyróżnienie):**
 Najwięcej odkrywasz, gdy ekspert zaczyna opowiadać

@@ -100,13 +100,13 @@ async function run() {
         } else {
           // Fallback: full page screenshot
           await page.screenshot({ path: outputPath, type: 'png' });
-          console.log(`  ⚠️  ${file} — brak elementu .stage, zrobiono full screenshot`);
+          console.log(`  ⚠️  ${file} - brak elementu .stage, zrobiono full screenshot`);
         }
 
         console.log(`  ✅ ${file} → screenshots/${pngName}`);
         totalScreenshots++;
       } catch (err) {
-        console.error(`  ❌ ${file} — błąd: ${err.message}`);
+        console.error(`  ❌ ${file} - błąd: ${err.message}`);
       } finally {
         await page.close();
       }

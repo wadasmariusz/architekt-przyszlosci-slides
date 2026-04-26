@@ -2,11 +2,11 @@
 
 ---
 
-## Slajd 1 — Tytułowy
+## Slajd 1 - Tytułowy
 
 **Zawartość:**
 - Tytuł główny: *Subdomeny w strategicznym DDD*
-- Podtytuł: *Core, Supporting, Generic — jak odkryć, co naprawdę buduje przewagę firmy*
+- Podtytuł: *Core, Supporting, Generic - jak odkryć, co naprawdę buduje przewagę firmy*
 - Numer lekcji / nazwa kursu (jeśli to część serii)
 
 **Grafika:** Abstrakcyjna ilustracja — mapa podzielona na kawałki o różnej "wadze" (różne wielkości, różne kolory). Sugeruje, że zaraz będziemy coś dzielić i klasyfikować.
