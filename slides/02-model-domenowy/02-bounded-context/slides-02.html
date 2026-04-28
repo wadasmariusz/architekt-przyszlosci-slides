@@ -246,52 +246,81 @@
         /* === Chaotic side (right) === */
         .side-chaos {
             position: absolute;
-            right: 30px;
-            bottom: 155px;
-            display: flex;
-            gap: 12px;
+            right: 20px;
+            bottom: 148px;
+            width: 320px;
+            height: 160px;
             opacity: 0;
             animation: fadeUp 0.6s ease-out 2.8s forwards;
         }
 
         .chaos-block {
-            width: 70px;
-            height: 55px;
+            position: absolute;
+            width: 52px;
+            height: 52px;
             border-radius: 10px;
-            border: 2px solid;
+            border: 1.5px solid;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0.5;
+            z-index: 2;
         }
-
-        .chaos-block:nth-child(1) { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.04); transform: rotate(-3deg); }
-        .chaos-block:nth-child(2) { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.03); transform: rotate(2deg) translateY(8px); }
-        .chaos-block:nth-child(3) { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.05); transform: rotate(-1deg) translateY(-5px); }
 
         .chaos-block i {
-            font-size: 1.3rem;
-            color: rgba(239,68,68,0.5);
+            font-size: 1.4rem;
         }
+
+        /* Row 1 */
+        .chaos-block:nth-child(1) { left: 10px;  top: 0;    border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); color: rgba(239,68,68,0.6); transform: rotate(-2deg); }
+        .chaos-block:nth-child(2) { left: 134px; top: 5px;   border-color: rgba(251,146,60,0.5); background: rgba(251,146,60,0.08); color: rgba(251,146,60,0.6); transform: rotate(1deg); }
+        .chaos-block:nth-child(3) { left: 258px; top: 0;     border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.06); color: rgba(239,68,68,0.55); transform: rotate(-1deg); }
+        /* Row 2 */
+        .chaos-block:nth-child(4) { left: 0;    top: 80px;  border-color: rgba(251,146,60,0.4); background: rgba(251,146,60,0.06); color: rgba(251,146,60,0.55); transform: rotate(2deg); }
+        .chaos-block:nth-child(5) { left: 124px; top: 85px;  border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.08); color: rgba(239,68,68,0.6); transform: rotate(-1.5deg); }
+        .chaos-block:nth-child(6) { left: 248px; top: 78px;  border-color: rgba(251,146,60,0.5); background: rgba(251,146,60,0.07); color: rgba(251,146,60,0.6); transform: rotate(1deg); }
 
         /* Chaotic connections */
         .chaos-lines {
             position: absolute;
-            right: 10px;
-            bottom: 145px;
-            width: 280px;
-            height: 90px;
+            right: 20px;
+            bottom: 148px;
+            width: 320px;
+            height: 160px;
             opacity: 0;
-            animation: fadeIn 0.5s ease-out 3.2s forwards;
+            z-index: 1;
         }
 
         .chaos-lines svg { width: 100%; height: 100%; }
 
         .chaos-line {
-            stroke: rgba(239,68,68,0.35);
-            stroke-width: 1.5;
+            stroke-width: 1.2;
             fill: none;
+            opacity: 0;
         }
+
+        .chaos-line--red    { stroke: rgba(239,68,68,0.35); }
+        .chaos-line--orange { stroke: rgba(251,146,60,0.30); }
+        .chaos-line--dim    { stroke: rgba(239,68,68,0.18); }
+
+        /* Staggered line appearance for dramatic effect */
+        .chaos-lines { animation: fadeIn 0.3s ease-out 3.0s forwards; }
+        .chaos-line:nth-child(1)  { animation: lineIn 0.3s ease-out 3.1s forwards; }
+        .chaos-line:nth-child(2)  { animation: lineIn 0.3s ease-out 3.2s forwards; }
+        .chaos-line:nth-child(3)  { animation: lineIn 0.3s ease-out 3.25s forwards; }
+        .chaos-line:nth-child(4)  { animation: lineIn 0.3s ease-out 3.3s forwards; }
+        .chaos-line:nth-child(5)  { animation: lineIn 0.3s ease-out 3.4s forwards; }
+        .chaos-line:nth-child(6)  { animation: lineIn 0.3s ease-out 3.45s forwards; }
+        .chaos-line:nth-child(7)  { animation: lineIn 0.3s ease-out 3.5s forwards; }
+        .chaos-line:nth-child(8)  { animation: lineIn 0.3s ease-out 3.55s forwards; }
+        .chaos-line:nth-child(9)  { animation: lineIn 0.3s ease-out 3.6s forwards; }
+        .chaos-line:nth-child(10) { animation: lineIn 0.3s ease-out 3.65s forwards; }
+        .chaos-line:nth-child(11) { animation: lineIn 0.3s ease-out 3.7s forwards; }
+        .chaos-line:nth-child(12) { animation: lineIn 0.3s ease-out 3.75s forwards; }
+        .chaos-line:nth-child(13) { animation: lineIn 0.3s ease-out 3.8s forwards; }
+        .chaos-line:nth-child(14) { animation: lineIn 0.3s ease-out 3.85s forwards; }
+        .chaos-line:nth-child(15) { animation: lineIn 0.3s ease-out 3.9s forwards; }
+
+        @keyframes lineIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* === "A potem..." text === */
         .then-text {
@@ -387,22 +416,41 @@
                     </svg>
                 </div>
 
-                <!-- Chaotic side -->
+                <!-- Chaotic side - 6 modules in grid with dense coupling -->
                 <div class="side-chaos">
-                    <div class="chaos-block"><i class="ti ti-box"></i></div>
-                    <div class="chaos-block"><i class="ti ti-box"></i></div>
-                    <div class="chaos-block"><i class="ti ti-box"></i></div>
+                    <!-- Row 1 -->
+                    <div class="chaos-block"><i class="ti ti-users"></i></div>
+                    <div class="chaos-block"><i class="ti ti-shopping-cart"></i></div>
+                    <div class="chaos-block"><i class="ti ti-credit-card"></i></div>
+                    <!-- Row 2 -->
+                    <div class="chaos-block"><i class="ti ti-truck-delivery"></i></div>
+                    <div class="chaos-block"><i class="ti ti-chart-bar"></i></div>
+                    <div class="chaos-block"><i class="ti ti-mail"></i></div>
                 </div>
                 <div class="chaos-lines">
-                    <svg viewBox="0 0 280 90" preserveAspectRatio="xMidYMid meet">
-                        <!-- Tangled connections -->
-                        <path class="chaos-line" d="M50,25 C90,5 120,70 170,30" />
-                        <path class="chaos-line" d="M30,45 C80,80 150,10 250,55" />
-                        <path class="chaos-line" d="M60,15 C100,60 160,20 230,70" />
-                        <path class="chaos-line" d="M40,55 C110,30 130,75 200,20" />
-                        <path class="chaos-line" d="M70,40 C140,5 180,65 260,35" />
-                        <path class="chaos-line" d="M20,30 C70,70 200,10 240,50" />
-                        <path class="chaos-line" d="M55,60 C130,25 170,80 250,15" />
+                    <svg viewBox="0 0 320 160" preserveAspectRatio="xMidYMid meet">
+                        <!--
+                            Block centers (approx):
+                            1: (50, 22)   2: (160, 27)   3: (265, 22)
+                            4: (40, 97)   5: (150, 102)  6: (270, 94)
+
+                            Every block connects to every other = 15 connections
+                        -->
+                        <!-- 1-2 --> <path class="chaos-line chaos-line--red"    d="M90,22 C120,8 130,15 120,27" />
+                        <!-- 1-3 --> <path class="chaos-line chaos-line--orange" d="M90,18 C150,0 200,5 225,22" />
+                        <!-- 1-4 --> <path class="chaos-line chaos-line--dim"    d="M50,44 C30,65 25,80 40,75" />
+                        <!-- 1-5 --> <path class="chaos-line chaos-line--red"    d="M55,44 C80,70 110,85 150,80" />
+                        <!-- 1-6 --> <path class="chaos-line chaos-line--orange" d="M70,44 C100,60 180,110 230,94" />
+                        <!-- 2-3 --> <path class="chaos-line chaos-line--red"    d="M200,27 C220,15 235,18 225,22" />
+                        <!-- 2-4 --> <path class="chaos-line chaos-line--dim"    d="M120,27 C90,50 60,75 80,97" />
+                        <!-- 2-5 --> <path class="chaos-line chaos-line--orange" d="M160,49 C155,65 152,75 150,80" />
+                        <!-- 2-6 --> <path class="chaos-line chaos-line--red"    d="M200,35 C230,55 250,70 270,72" />
+                        <!-- 3-4 --> <path class="chaos-line chaos-line--orange" d="M240,44 C200,70 100,90 80,97" />
+                        <!-- 3-5 --> <path class="chaos-line chaos-line--dim"    d="M250,44 C220,65 180,80 190,102" />
+                        <!-- 3-6 --> <path class="chaos-line chaos-line--red"    d="M265,44 C268,60 270,72 270,72" />
+                        <!-- 4-5 --> <path class="chaos-line chaos-line--orange" d="M80,97 C100,110 120,108 110,102" />
+                        <!-- 4-6 --> <path class="chaos-line chaos-line--dim"    d="M80,97 C130,120 200,115 230,94" />
+                        <!-- 5-6 --> <path class="chaos-line chaos-line--red"    d="M190,102 C210,110 230,105 230,94" />
                     </svg>
                 </div>
             </div>
