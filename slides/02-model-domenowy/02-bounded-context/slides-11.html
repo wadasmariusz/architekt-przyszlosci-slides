@@ -97,13 +97,17 @@
         }
 
         .section-title {
-            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
             font-weight: 800;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.3s forwards;
-            color: #94a3b8;
             max-width: 900px;
             line-height: 1.5;
+        }
+
+        .section-title .red {
+            color: var(--red-400);
+            text-shadow: 0 0 24px rgba(239,68,68,0.3);
         }
 
         /* === Diagram area === */
@@ -132,8 +136,8 @@
             opacity: 0;
         }
 
-        .node i { font-size: 1.4rem; color: #94a3b8; }
-        .node span { font-size: 0.6rem; font-weight: 600; color: #64748b; letter-spacing: 0.05em; }
+        .node i { font-size: 1.6rem; color: #94a3b8; }
+        .node span { font-size: 1rem; font-weight: 600; color: #64748b; letter-spacing: 0.05em; }
 
         .node:nth-child(1)  { top: 20px;  left: 80px;  animation: nodeIn 0.5s ease-out 0.8s forwards; }
         .node:nth-child(2)  { top: 10px;  left: 280px; animation: nodeIn 0.5s ease-out 0.9s forwards; }
@@ -206,9 +210,9 @@
             gap: 0.5rem;
         }
 
-        .db-icon i { font-size: 1.8rem; color: var(--red-400); }
+        .db-icon i { font-size: 1.6rem; color: var(--red-400); }
         .db-label {
-            font-size: 0.7rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--red-400);
             letter-spacing: 0.08em;
@@ -235,7 +239,7 @@
 
         /* === Punchline === */
         .punchline {
-            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-size: 1.4rem;
             font-weight: 800;
             opacity: 0;
             animation: popIn 0.7s ease-out 3.0s forwards;
@@ -247,7 +251,7 @@
         }
 
         .punchline-sub {
-            font-size: 0.95rem;
+            font-size: 1.4rem;
             font-weight: 300;
             color: #64748b;
             font-style: italic;
@@ -304,7 +308,7 @@
         <div class="corner corner--br"></div>
 
         <div class="content">
-            <p class="section-title">10 mikroserwisów, które współdzielą modele, odwołują się do tych samych tabel, mają cykliczne zależności...</p>
+            <h2 class="section-title"><span class="red">Rozproszony monolit</span></h2>
 
             <div class="diagram">
                 <!-- 10 microservice nodes -->
@@ -366,9 +370,6 @@
                     <span class="db-label">Wspólna baza danych</span>
                 </div>
             </div>
-
-            <h2 class="punchline"><span class="red">Rozproszony monolit</span></h2>
-            <p class="punchline-sub">Kupa błota rozrzucona po sieci</p>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
