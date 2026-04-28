@@ -88,7 +88,7 @@ async function run() {
     if (slideFilter) {
       files = files.filter(f => f.includes(slideFilter));
       if (files.length === 0) {
-        console.log(`\n⚠️  ${folder.rel} — brak slajdów pasujących do "${slideFilter}"`);
+        console.log(`\n⚠️  ${folder.rel} - brak slajdów pasujących do "${slideFilter}"`);
         continue;
       }
     }
@@ -134,7 +134,7 @@ async function run() {
           totalVideos++;
         }
       } catch (err) {
-        console.error(`  ❌ ${file} — błąd: ${err.message}`);
+        console.error(`  ❌ ${file} - błąd: ${err.message}`);
         await page.close().catch(() => {});
       } finally {
         await context.close();
