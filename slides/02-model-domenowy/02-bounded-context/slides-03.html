@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Wielka kula błota</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --red-400: #f87171;
+            --red-500: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--red-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10; text-align: center;
+            width: 100%; max-width: 1200px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* === Texts above image === */
+        .pain-points {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .pain-point {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #94a3b8;
+        }
+
+        .pain-point i {
+            font-size: 1.1rem;
+            color: var(--red-400);
+        }
+
+        /* === Central image area === */
+        .mud-visual {
+            position: relative;
+            width: 520px;
+            height: 380px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.8s forwards;
+        }
+
+        .mud-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 40px rgba(239,68,68,0.15));
+        }
+
+        /* === Floating labels around the image === */
+        .label {
+            position: absolute;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            background: rgba(17,24,39,0.85);
+            border: 1px solid rgba(239,68,68,0.25);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #94a3b8;
+            white-space: nowrap;
+            opacity: 0;
+            backdrop-filter: blur(6px);
+        }
+
+        .label i {
+            margin-right: 0.3rem;
+            color: var(--red-400);
+            font-size: 0.9rem;
+        }
+
+        .label:nth-child(2) { top: 10px;  left: -140px; animation: labelIn 0.5s ease-out 1.6s forwards; }
+        .label:nth-child(3) { top: 10px;  right: -120px; animation: labelIn 0.5s ease-out 1.9s forwards; }
+        .label:nth-child(4) { bottom: 60px; left: -130px; animation: labelIn 0.5s ease-out 2.2s forwards; }
+        .label:nth-child(5) { bottom: 60px; right: -100px; animation: labelIn 0.5s ease-out 2.5s forwards; }
+
+        @keyframes labelIn {
+            0%   { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* === Chaotic lines from labels to center === */
+        .chaos-svg {
+            position: absolute;
+            inset: -60px -160px;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 2.8s forwards;
+        }
+
+        .chaos-svg svg { width: 100%; height: 100%; }
+
+        .chaos-path {
+            stroke: rgba(239,68,68,0.2);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-dasharray: 6 4;
+        }
+
+        /* === Big Ball of Mud title === */
+        .mud-title {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: popIn 0.7s ease-out 3.2s forwards;
+        }
+
+        .mud-title .red {
+            color: var(--red-400);
+            text-shadow: 0 0 30px rgba(239,68,68,0.3);
+        }
+
+        @keyframes popIn {
+            0%   { opacity: 0; transform: scale(0.6); }
+            70%  { transform: scale(1.06); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <!-- Pain points -->
+            <div class="pain-points">
+                <div class="pain-point"><i class="ti ti-alert-triangle"></i> Każda zmiana wpływa na wiele innych miejsc</div>
+                <div class="pain-point"><i class="ti ti-alert-triangle"></i> System staje się trudny w utrzymaniu</div>
+            </div>
+
+            <!-- Central image with labels -->
+            <div class="mud-visual">
+                <img src="images/big-ball-of-mud.png" alt="Big Ball of Mud" class="mud-image">
+
+                <!-- Floating labels -->
+                <div class="label"><i class="ti ti-shopping-cart"></i> Zamówienia</div>
+                <div class="label"><i class="ti ti-credit-card"></i> Płatności</div>
+                <div class="label"><i class="ti ti-users"></i> Użytkownicy</div>
+                <div class="label"><i class="ti ti-chart-bar"></i> Raporty</div>
+
+                <!-- Chaotic dashed lines -->
+                <div class="chaos-svg">
+                    <svg viewBox="0 0 840 500" preserveAspectRatio="xMidYMid meet">
+                        <path class="chaos-path" d="M80,70 C200,30 300,200 420,250" />
+                        <path class="chaos-path" d="M740,70 C620,30 520,200 420,250" />
+                        <path class="chaos-path" d="M90,380 C200,420 300,280 420,250" />
+                        <path class="chaos-path" d="M720,380 C620,420 520,280 420,250" />
+                        <!-- Cross-connections -->
+                        <path class="chaos-path" d="M80,70 C250,180 580,400 720,380" />
+                        <path class="chaos-path" d="M90,380 C260,280 580,80 740,70" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Big title -->
+            <h2 class="mud-title"><span class="red">Big Ball of Mud</span></h2>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 04 - Czym jest Bounded Context?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10; text-align: center;
+            width: 100%; max-width: 1200px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 2rem;
+        }
+
+        /* === Title === */
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Definition chip === */
+        .definition {
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: #94a3b8;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .definition strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+        }
+
+        /* === Diagram area === */
+        .diagram {
+            position: relative;
+            width: 900px;
+            height: 420px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.9s forwards;
+        }
+
+        /* === Main box (bounded context) === */
+        .main-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 460px;
+            height: 320px;
+            border-radius: 20px;
+            border: 3px solid var(--cyan-500);
+            background: rgba(6,182,212,0.04);
+            box-shadow: 0 0 40px rgba(6,182,212,0.1), inset 0 0 60px rgba(6,182,212,0.03);
+            opacity: 0;
+            animation: boxDraw 0.8s ease-out 1.0s forwards;
+        }
+
+        @keyframes boxDraw {
+            0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .main-box-label {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.3rem 1.2rem;
+            border-radius: 100px;
+            background: var(--dark-bg);
+            border: 2px solid var(--cyan-500);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--cyan-400);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* === Inner icons (model, rules, processes) === */
+        .inner-items {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .inner-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            opacity: 0;
+        }
+
+        .inner-item:nth-child(1) { animation: bounceIn 0.6s ease-out 1.6s forwards; }
+        .inner-item:nth-child(2) { animation: bounceIn 0.6s ease-out 1.9s forwards; }
+        .inner-item:nth-child(3) { animation: bounceIn 0.6s ease-out 2.2s forwards; }
+
+        @keyframes bounceIn {
+            0%   { opacity: 0; transform: scale(0.3) translateY(20px); }
+            60%  { transform: scale(1.1) translateY(-4px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .inner-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .inner-icon i {
+            font-size: 2rem;
+            color: var(--cyan-400);
+        }
+
+        .inner-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        /* === Feature list inside box === */
+        .features {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 2.5s forwards;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #64748b;
+        }
+
+        .feature i {
+            font-size: 0.85rem;
+            color: var(--cyan-600);
+        }
+
+        /* === Ghost boxes (external contexts) === */
+        .ghost-box {
+            position: absolute;
+            border-radius: 14px;
+            border: 1px dashed rgba(148,163,184,0.2);
+            background: rgba(17,24,39,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .ghost-box i {
+            font-size: 1.4rem;
+            color: rgba(148,163,184,0.25);
+        }
+
+        .ghost-box:nth-child(1) {
+            width: 120px; height: 100px;
+            top: 30px; left: 20px;
+            animation: ghostIn 0.6s ease-out 2.8s forwards;
+        }
+
+        .ghost-box:nth-child(2) {
+            width: 100px; height: 110px;
+            bottom: 20px; left: 40px;
+            animation: ghostIn 0.6s ease-out 3.1s forwards;
+        }
+
+        .ghost-box:nth-child(3) {
+            width: 110px; height: 90px;
+            top: 40px; right: 30px;
+            animation: ghostIn 0.6s ease-out 3.4s forwards;
+        }
+
+        .ghost-box:nth-child(4) {
+            width: 95px; height: 105px;
+            bottom: 30px; right: 20px;
+            animation: ghostIn 0.6s ease-out 3.7s forwards;
+        }
+
+        @keyframes ghostIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+
+        /* === Blocked arrows === */
+        .blocked-arrow {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            opacity: 0;
+        }
+
+        .blocked-arrow i {
+            font-size: 1.2rem;
+        }
+
+        .blocked-arrow .arrow { color: rgba(148,163,184,0.3); }
+        .blocked-arrow .block { color: rgba(239,68,68,0.5); font-size: 1rem; }
+
+        .blocked-arrow:nth-child(5) {
+            top: 65px; left: 160px;
+            animation: ghostIn 0.5s ease-out 3.2s forwards;
+        }
+        .blocked-arrow:nth-child(6) {
+            bottom: 80px; left: 175px;
+            animation: ghostIn 0.5s ease-out 3.5s forwards;
+        }
+        .blocked-arrow:nth-child(7) {
+            top: 75px; right: 160px;
+            transform: scaleX(-1);
+            animation: ghostIn 0.5s ease-out 3.8s forwards;
+        }
+        .blocked-arrow:nth-child(8) {
+            bottom: 70px; right: 140px;
+            transform: scaleX(-1);
+            animation: ghostIn 0.5s ease-out 4.1s forwards;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">Czym jest <span class="highlight">Bounded Context?</span></h2>
+
+            <p class="definition"><strong>Biznesowo-techniczny</strong> podział systemu na autonomiczne części</p>
+
+            <!-- Diagram -->
+            <div class="diagram">
+                <!-- Ghost boxes (external contexts) -->
+                <div class="ghost-box"><i class="ti ti-box"></i></div>
+                <div class="ghost-box"><i class="ti ti-box"></i></div>
+                <div class="ghost-box"><i class="ti ti-box"></i></div>
+                <div class="ghost-box"><i class="ti ti-box"></i></div>
+
+                <!-- Blocked arrows -->
+                <div class="blocked-arrow">
+                    <i class="ti ti-arrow-right arrow"></i>
+                    <i class="ti ti-x block"></i>
+                </div>
+                <div class="blocked-arrow">
+                    <i class="ti ti-arrow-right arrow"></i>
+                    <i class="ti ti-x block"></i>
+                </div>
+                <div class="blocked-arrow">
+                    <i class="ti ti-arrow-right arrow"></i>
+                    <i class="ti ti-x block"></i>
+                </div>
+                <div class="blocked-arrow">
+                    <i class="ti ti-arrow-right arrow"></i>
+                    <i class="ti ti-x block"></i>
+                </div>
+
+                <!-- Main bounded context box -->
+                <div class="main-box">
+                    <span class="main-box-label">Bounded Context</span>
+
+                    <div class="inner-items">
+                        <div class="inner-item">
+                            <div class="inner-icon"><i class="ti ti-database"></i></div>
+                            <span class="inner-label">Modele</span>
+                        </div>
+                        <div class="inner-item">
+                            <div class="inner-icon"><i class="ti ti-shield-check"></i></div>
+                            <span class="inner-label">Reguły</span>
+                        </div>
+                        <div class="inner-item">
+                            <div class="inner-icon"><i class="ti ti-settings"></i></div>
+                            <span class="inner-label">Procesy</span>
+                        </div>
+                    </div>
+
+                    <div class="features">
+                        <div class="feature"><i class="ti ti-check"></i> Konkretny obszar biznesowy</div>
+                        <div class="feature"><i class="ti ti-check"></i> Własne modele i reguły</div>
+                        <div class="feature"><i class="ti ti-lock"></i> Chronione wnętrze</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - BC vs Moduł vs Mikroserwis</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10; text-align: center;
+            width: 100%; max-width: 1200px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 3rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Cards === */
+        .cards {
+            display: flex;
+            gap: 2.5rem;
+            width: 100%;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        .card {
+            flex: 1;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 2.5rem 2rem 2rem;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.7);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card:nth-child(1) {
+            border: 1px solid rgba(148,163,184,0.2);
+            animation: fadeUp 0.7s ease-out 0.6s forwards;
+        }
+        .card:nth-child(1):hover { box-shadow: 0 8px 32px rgba(148,163,184,0.08); }
+
+        .card:nth-child(2) {
+            border: 1px solid rgba(251,191,36,0.25);
+            animation: fadeUp 0.7s ease-out 1.0s forwards;
+        }
+        .card:nth-child(2):hover { box-shadow: 0 8px 32px rgba(251,191,36,0.1); }
+
+        .card:nth-child(3) {
+            border: 2px solid var(--cyan-500);
+            box-shadow: 0 0 30px rgba(6,182,212,0.08);
+            animation: fadeUp 0.7s ease-out 1.4s forwards;
+        }
+        .card:nth-child(3):hover { box-shadow: 0 8px 40px rgba(6,182,212,0.15); }
+
+        /* Icon */
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-icon i { font-size: 2.2rem; }
+
+        .card:nth-child(1) .card-icon {
+            background: rgba(148,163,184,0.08);
+            border: 2px solid rgba(148,163,184,0.25);
+        }
+        .card:nth-child(1) .card-icon i { color: #94a3b8; }
+
+        .card:nth-child(2) .card-icon {
+            background: rgba(251,191,36,0.08);
+            border: 2px solid rgba(251,191,36,0.3);
+        }
+        .card:nth-child(2) .card-icon i { color: #fbbf24; }
+
+        .card:nth-child(3) .card-icon {
+            background: rgba(6,182,212,0.1);
+            border: 2px solid rgba(6,182,212,0.35);
+            box-shadow: 0 0 20px rgba(6,182,212,0.12);
+        }
+        .card:nth-child(3) .card-icon i { color: var(--cyan-400); }
+
+        /* Title */
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .card:nth-child(1) .card-title { color: #94a3b8; }
+        .card:nth-child(2) .card-title { color: #fbbf24; }
+        .card:nth-child(3) .card-title { color: var(--cyan-400); }
+
+        /* Type chip */
+        .card-type {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.8rem;
+            border-radius: 100px;
+        }
+
+        .card:nth-child(1) .card-type {
+            background: rgba(148,163,184,0.08);
+            border: 1px solid rgba(148,163,184,0.2);
+            color: #64748b;
+        }
+
+        .card:nth-child(2) .card-type {
+            background: rgba(251,191,36,0.08);
+            border: 1px solid rgba(251,191,36,0.2);
+            color: #d97706;
+        }
+
+        .card:nth-child(3) .card-type {
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.2);
+            color: var(--cyan-600);
+        }
+
+        /* Description */
+        .card-desc {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Warning badge on mikroserwis */
+        .card-warning {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: auto;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            background: rgba(251,191,36,0.06);
+            border: 1px solid rgba(251,191,36,0.2);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #fbbf24;
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 1.8s forwards;
+        }
+
+        .card-warning i { font-size: 0.9rem; }
+
+        /* "Fundament" badge on BC */
+        .card-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: auto;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(6,182,212,0.2);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--cyan-400);
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 2.1s forwards;
+        }
+
+        .card-badge i { font-size: 0.9rem; }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">Te pojęcia często się <span class="highlight">mieszają</span></h2>
+
+            <div class="cards">
+                <!-- Moduł -->
+                <div class="card">
+                    <div class="card-icon"><i class="ti ti-folder"></i></div>
+                    <span class="card-title">Moduł</span>
+                    <span class="card-type">Pojęcie techniczne</span>
+                    <p class="card-desc">Ogólny podział kodu. Nie musi mieć związku z biznesem — to organizacja plików, nie odpowiedzialności.</p>
+                </div>
+
+                <!-- Mikroserwis -->
+                <div class="card">
+                    <div class="card-icon"><i class="ti ti-cloud"></i></div>
+                    <span class="card-title">Mikroserwis</span>
+                    <span class="card-type">Podział fizyczny</span>
+                    <p class="card-desc">Fizyczny podział systemu na niezależne procesy. Ale nie gwarantuje dobrego podziału domenowego.</p>
+                    <div class="card-warning">
+                        <i class="ti ti-alert-triangle"></i> Osobny deploy ≠ dobra granica
+                    </div>
+                </div>
+
+                <!-- Bounded Context -->
+                <div class="card">
+                    <div class="card-icon"><i class="ti ti-box"></i></div>
+                    <span class="card-title">Bounded Context</span>
+                    <span class="card-type">Podział domenowy</span>
+                    <p class="card-desc">Podział oparty o biznes. Fundament dla decyzji technicznych — najpierw granice, potem technologia.</p>
+                    <div class="card-badge">
+                        <i class="ti ti-star"></i> Fundament architektury
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

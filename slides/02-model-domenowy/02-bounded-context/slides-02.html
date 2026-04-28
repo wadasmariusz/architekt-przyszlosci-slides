@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - Problem: znajomy scenariusz</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10; text-align: center;
+            width: 100%; max-width: 1200px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 2.5rem;
+        }
+
+        /* === Title === */
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Bullet points === */
+        .bullets {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .bullet {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 1.4rem;
+            border-radius: 100px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            font-size: 1rem;
+            font-weight: 600;
+            color: #94a3b8;
+            opacity: 0;
+        }
+
+        .bullet i { font-size: 1.2rem; color: var(--cyan-400); }
+
+        .bullet:nth-child(1) { animation: fadeUp 0.6s ease-out 0.7s forwards; }
+        .bullet:nth-child(2) { animation: fadeUp 0.6s ease-out 1.0s forwards; }
+        .bullet:nth-child(3) { animation: fadeUp 0.6s ease-out 1.3s forwards; }
+
+        /* === Timeline === */
+        .timeline {
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+            height: 320px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.6s forwards;
+        }
+
+        /* Horizontal axis */
+        .timeline-axis {
+            position: absolute;
+            bottom: 140px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(148,163,184,0.2);
+        }
+
+        .timeline-axis::after {
+            content: '';
+            position: absolute;
+            left: 0; top: -1px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--cyan-500), #ef4444);
+            width: 0;
+            animation: axisGrow 1.5s ease-out 1.8s forwards;
+        }
+
+        @keyframes axisGrow { to { width: 100%; } }
+
+        /* Time labels */
+        .time-label {
+            position: absolute;
+            bottom: 110px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0;
+        }
+
+        .time-label--start {
+            left: 60px;
+            color: var(--cyan-400);
+            animation: fadeIn 0.4s ease-out 2.0s forwards;
+        }
+
+        .time-label--mid {
+            left: 50%;
+            transform: translateX(-50%);
+            color: #94a3b8;
+            animation: fadeIn 0.4s ease-out 2.6s forwards;
+        }
+
+        .time-label--end {
+            right: 60px;
+            color: #ef4444;
+            animation: fadeIn 0.4s ease-out 3.2s forwards;
+        }
+
+        /* === Clean side (left) === */
+        .side-clean {
+            position: absolute;
+            left: 30px;
+            bottom: 160px;
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 2.2s forwards;
+        }
+
+        .clean-block {
+            width: 70px;
+            height: 55px;
+            border-radius: 10px;
+            border: 2px solid var(--cyan-500);
+            background: rgba(6,182,212,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .clean-block i {
+            font-size: 1.3rem;
+            color: var(--cyan-400);
+        }
+
+        /* Clean connections */
+        .clean-lines {
+            position: absolute;
+            left: 30px;
+            bottom: 160px;
+            width: 240px;
+            height: 60px;
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 2.5s forwards;
+        }
+
+        .clean-lines svg { width: 100%; height: 100%; }
+
+        .clean-line {
+            stroke: var(--cyan-700);
+            stroke-width: 1.5;
+            fill: none;
+            opacity: 0.6;
+        }
+
+        /* === Chaotic side (right) === */
+        .side-chaos {
+            position: absolute;
+            right: 30px;
+            bottom: 155px;
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 2.8s forwards;
+        }
+
+        .chaos-block {
+            width: 70px;
+            height: 55px;
+            border-radius: 10px;
+            border: 2px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.5;
+        }
+
+        .chaos-block:nth-child(1) { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.04); transform: rotate(-3deg); }
+        .chaos-block:nth-child(2) { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.03); transform: rotate(2deg) translateY(8px); }
+        .chaos-block:nth-child(3) { border-color: rgba(239,68,68,0.5); background: rgba(239,68,68,0.05); transform: rotate(-1deg) translateY(-5px); }
+
+        .chaos-block i {
+            font-size: 1.3rem;
+            color: rgba(239,68,68,0.5);
+        }
+
+        /* Chaotic connections */
+        .chaos-lines {
+            position: absolute;
+            right: 10px;
+            bottom: 145px;
+            width: 280px;
+            height: 90px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 3.2s forwards;
+        }
+
+        .chaos-lines svg { width: 100%; height: 100%; }
+
+        .chaos-line {
+            stroke: rgba(239,68,68,0.35);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        /* === "A potem..." text === */
+        .then-text {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: #64748b;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 3.5s forwards;
+        }
+
+        .then-text strong {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">Zaczynamy <span class="highlight">świeży projekt...</span></h2>
+
+            <!-- Bullet points -->
+            <div class="bullets">
+                <div class="bullet"><i class="ti ti-sparkles"></i> Czysta architektura</div>
+                <div class="bullet"><i class="ti ti-rocket"></i> Nowe technologie</div>
+                <div class="bullet"><i class="ti ti-thumb-up"></i> Wszystko działa</div>
+            </div>
+
+            <!-- Timeline visualization -->
+            <div class="timeline">
+                <div class="then-text">A potem... mija <strong>rok, dwa...</strong></div>
+
+                <!-- Axis -->
+                <div class="timeline-axis"></div>
+                <span class="time-label time-label--start">Dzień 1</span>
+                <span class="time-label time-label--mid">6 miesięcy</span>
+                <span class="time-label time-label--end">2 lata</span>
+
+                <!-- Clean side -->
+                <div class="side-clean">
+                    <div class="clean-block"><i class="ti ti-box"></i></div>
+                    <div class="clean-block"><i class="ti ti-box"></i></div>
+                    <div class="clean-block"><i class="ti ti-box"></i></div>
+                </div>
+                <div class="clean-lines">
+                    <svg viewBox="0 0 240 60" preserveAspectRatio="xMidYMid meet">
+                        <line class="clean-line" x1="70" y1="30" x2="82" y2="30" />
+                        <line class="clean-line" x1="152" y1="30" x2="164" y2="30" />
+                    </svg>
+                </div>
+
+                <!-- Chaotic side -->
+                <div class="side-chaos">
+                    <div class="chaos-block"><i class="ti ti-box"></i></div>
+                    <div class="chaos-block"><i class="ti ti-box"></i></div>
+                    <div class="chaos-block"><i class="ti ti-box"></i></div>
+                </div>
+                <div class="chaos-lines">
+                    <svg viewBox="0 0 280 90" preserveAspectRatio="xMidYMid meet">
+                        <!-- Tangled connections -->
+                        <path class="chaos-line" d="M50,25 C90,5 120,70 170,30" />
+                        <path class="chaos-line" d="M30,45 C80,80 150,10 250,55" />
+                        <path class="chaos-line" d="M60,15 C100,60 160,20 230,70" />
+                        <path class="chaos-line" d="M40,55 C110,30 130,75 200,20" />
+                        <path class="chaos-line" d="M70,40 C140,5 180,65 260,35" />
+                        <path class="chaos-line" d="M20,30 C70,70 200,10 240,50" />
+                        <path class="chaos-line" d="M55,60 C130,25 170,80 250,15" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

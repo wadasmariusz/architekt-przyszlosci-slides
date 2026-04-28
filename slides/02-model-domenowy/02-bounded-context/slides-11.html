@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Rozproszony monolit</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --red-400: #f87171;
+            --red-500: #ef4444;
+            --amber: #fbbf24;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 70%);
+            top: 45%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--red-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10; text-align: center;
+            width: 100%; max-width: 1300px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            font-weight: 800;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+            color: #94a3b8;
+            max-width: 900px;
+            line-height: 1.5;
+        }
+
+        /* === Diagram area === */
+        .diagram {
+            position: relative;
+            width: 1000px;
+            height: 520px;
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 0.6s forwards;
+        }
+
+        /* === Micro service nodes === */
+        .node {
+            position: absolute;
+            width: 110px;
+            height: 90px;
+            border-radius: 14px;
+            border: 2px solid rgba(148,163,184,0.3);
+            background: rgba(17,24,39,0.8);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            opacity: 0;
+        }
+
+        .node i { font-size: 1.4rem; color: #94a3b8; }
+        .node span { font-size: 0.6rem; font-weight: 600; color: #64748b; letter-spacing: 0.05em; }
+
+        .node:nth-child(1)  { top: 20px;  left: 80px;  animation: nodeIn 0.5s ease-out 0.8s forwards; }
+        .node:nth-child(2)  { top: 10px;  left: 280px; animation: nodeIn 0.5s ease-out 0.9s forwards; }
+        .node:nth-child(3)  { top: 30px;  left: 500px; animation: nodeIn 0.5s ease-out 1.0s forwards; }
+        .node:nth-child(4)  { top: 10px;  left: 700px; animation: nodeIn 0.5s ease-out 1.1s forwards; }
+        .node:nth-child(5)  { top: 20px;  left: 880px; animation: nodeIn 0.5s ease-out 1.2s forwards; }
+        .node:nth-child(6)  { top: 170px; left: 30px;  animation: nodeIn 0.5s ease-out 1.0s forwards; }
+        .node:nth-child(7)  { top: 160px; left: 440px; animation: nodeIn 0.5s ease-out 1.1s forwards; }
+        .node:nth-child(8)  { top: 170px; left: 660px; animation: nodeIn 0.5s ease-out 1.2s forwards; }
+        .node:nth-child(9)  { top: 160px; left: 870px; animation: nodeIn 0.5s ease-out 1.3s forwards; }
+        .node:nth-child(10) { top: 170px; left: 210px; animation: nodeIn 0.5s ease-out 1.15s forwards; }
+
+        @keyframes nodeIn {
+            0%   { opacity: 0; transform: scale(0.7); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* === Chaotic lines SVG === */
+        .chaos-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            animation: linesGrow 1s ease-out 1.6s forwards;
+        }
+
+        @keyframes linesGrow {
+            0%   { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .chaos-lines svg { width: 100%; height: 100%; }
+
+        .dep-line {
+            stroke: rgba(239,68,68,0.2);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .dep-line-thick {
+            stroke: rgba(239,68,68,0.35);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 6 4;
+        }
+
+        /* === Shared DB at bottom === */
+        .shared-db {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 2.0s forwards;
+        }
+
+        .db-icon {
+            width: 120px;
+            height: 70px;
+            border-radius: 12px;
+            background: rgba(239,68,68,0.06);
+            border: 2px solid rgba(239,68,68,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .db-icon i { font-size: 1.8rem; color: var(--red-400); }
+        .db-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--red-400);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Lines from nodes to DB */
+        .db-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 2.4s forwards;
+        }
+
+        .db-lines svg { width: 100%; height: 100%; }
+
+        .db-line {
+            stroke: rgba(239,68,68,0.15);
+            stroke-width: 1;
+            fill: none;
+            stroke-dasharray: 4 3;
+        }
+
+        /* === Punchline === */
+        .punchline {
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 800;
+            opacity: 0;
+            animation: popIn 0.7s ease-out 3.0s forwards;
+        }
+
+        .punchline .red {
+            color: var(--red-400);
+            text-shadow: 0 0 24px rgba(239,68,68,0.3);
+        }
+
+        .punchline-sub {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: #64748b;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 3.5s forwards;
+        }
+
+        @keyframes popIn {
+            0%   { opacity: 0; transform: scale(0.6); }
+            70%  { transform: scale(1.06); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <p class="section-title">10 mikroserwisów, które współdzielą modele, odwołują się do tych samych tabel, mają cykliczne zależności...</p>
+
+            <div class="diagram">
+                <!-- 10 microservice nodes -->
+                <div class="node"><i class="ti ti-server"></i><span>auth-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>order-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>payment-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>shipping-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>notify-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>user-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>invoice-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>catalog-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>report-svc</span></div>
+                <div class="node"><i class="ti ti-server"></i><span>cart-svc</span></div>
+
+                <!-- Chaotic dependency lines between nodes -->
+                <div class="chaos-lines">
+                    <svg viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet">
+                        <!-- Cross connections -->
+                        <path class="dep-line" d="M135,110 C200,140 260,90 335,70" />
+                        <path class="dep-line" d="M335,100 C420,130 480,80 555,90" />
+                        <path class="dep-line" d="M555,120 C640,100 680,70 755,70" />
+                        <path class="dep-line" d="M755,100 C820,120 860,80 935,80" />
+                        <path class="dep-line" d="M85,210 C150,150 250,100 335,70" />
+                        <path class="dep-line" d="M265,210 C340,170 400,130 555,90" />
+                        <path class="dep-line-thick" d="M135,110 C300,180 500,160 715,210" />
+                        <path class="dep-line-thick" d="M935,80 C800,150 400,180 85,210" />
+                        <path class="dep-line" d="M495,210 C520,150 600,130 755,70" />
+                        <path class="dep-line" d="M715,210 C750,160 800,120 935,80" />
+                        <path class="dep-line" d="M925,210 C860,170 700,150 555,90" />
+                        <path class="dep-line-thick" d="M265,210 C400,250 600,220 925,210" />
+                        <path class="dep-line" d="M495,210 C350,180 200,130 135,110" />
+                        <path class="dep-line" d="M715,210 C580,180 400,160 265,210" />
+                        <path class="dep-line" d="M335,70 C480,120 620,170 925,210" />
+                    </svg>
+                </div>
+
+                <!-- Lines to shared DB -->
+                <div class="db-lines">
+                    <svg viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet">
+                        <line class="db-line" x1="135" y1="110" x2="500" y2="420" />
+                        <line class="db-line" x1="335" y1="100" x2="500" y2="420" />
+                        <line class="db-line" x1="555" y1="120" x2="500" y2="420" />
+                        <line class="db-line" x1="755" y1="100" x2="500" y2="420" />
+                        <line class="db-line" x1="935" y1="80"  x2="500" y2="420" />
+                        <line class="db-line" x1="85"  y1="260" x2="500" y2="420" />
+                        <line class="db-line" x1="265" y1="260" x2="500" y2="420" />
+                        <line class="db-line" x1="495" y1="260" x2="500" y2="420" />
+                        <line class="db-line" x1="715" y1="260" x2="500" y2="420" />
+                        <line class="db-line" x1="925" y1="260" x2="500" y2="420" />
+                    </svg>
+                </div>
+
+                <!-- Shared database -->
+                <div class="shared-db">
+                    <div class="db-icon">
+                        <i class="ti ti-database"></i>
+                        <i class="ti ti-database"></i>
+                    </div>
+                    <span class="db-label">Wspólna baza danych</span>
+                </div>
+            </div>
+
+            <h2 class="punchline"><span class="red">Rozproszony monolit</span></h2>
+            <p class="punchline-sub">Kupa błota rozrzucona po sieci</p>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

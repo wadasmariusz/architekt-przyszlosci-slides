@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - Rezerwacja w różnych kontekstach</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --amber: #fbbf24;
+            --purple: #a78bfa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 700px; height: 700px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: bgpulse 6s ease-in-out infinite;
+        }
+        @keyframes bgpulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 8%;  animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10; text-align: center;
+            width: 100%; max-width: 1300px; padding: 0 3rem;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 2.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Two boxes layout === */
+        .boxes-row {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            width: 100%;
+        }
+
+        /* === Context box === */
+        .ctx-box {
+            flex: 1;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            opacity: 0;
+            position: relative;
+        }
+
+        .ctx-box--a {
+            border: 2px solid rgba(251,191,36,0.3);
+            background: rgba(251,191,36,0.03);
+            animation: fadeUp 0.7s ease-out 0.6s forwards;
+        }
+
+        .ctx-box--b {
+            border: 2px solid rgba(167,139,250,0.3);
+            background: rgba(167,139,250,0.03);
+            animation: fadeUp 0.7s ease-out 1.0s forwards;
+        }
+
+        .ctx-box-label {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.25rem 1rem;
+            border-radius: 100px;
+            background: var(--dark-bg);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .ctx-box--a .ctx-box-label { border: 2px solid rgba(251,191,36,0.4); color: var(--amber); }
+        .ctx-box--b .ctx-box-label { border: 2px solid rgba(167,139,250,0.4); color: var(--purple); }
+
+        /* Same word, different look */
+        .ctx-word {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .ctx-box--a .ctx-word { color: var(--amber); }
+        .ctx-box--b .ctx-word { color: var(--purple); }
+
+        .ctx-meaning {
+            font-size: 1rem;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Icons row inside box */
+        .ctx-icons {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .ctx-icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .ctx-icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ctx-icon-circle i { font-size: 1.6rem; }
+
+        .ctx-box--a .ctx-icon-circle {
+            background: rgba(251,191,36,0.08);
+            border: 1px solid rgba(251,191,36,0.25);
+        }
+        .ctx-box--a .ctx-icon-circle i { color: var(--amber); }
+
+        .ctx-box--b .ctx-icon-circle {
+            background: rgba(167,139,250,0.08);
+            border: 1px solid rgba(167,139,250,0.25);
+        }
+        .ctx-box--b .ctx-icon-circle i { color: var(--purple); }
+
+        .ctx-icon-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* Properties list */
+        .ctx-props {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .ctx-prop {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #64748b;
+        }
+
+        .ctx-prop i { font-size: 0.85rem; }
+        .ctx-box--a .ctx-prop i { color: rgba(251,191,36,0.6); }
+        .ctx-box--b .ctx-prop i { color: rgba(167,139,250,0.6); }
+
+        /* === Divider between boxes === */
+        .divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            flex-shrink: 0;
+            gap: 0.6rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.5s forwards;
+        }
+
+        .divider-line {
+            width: 2px;
+            flex: 1;
+            background: rgba(239,68,68,0.2);
+        }
+
+        .divider-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(239,68,68,0.08);
+            border: 2px solid rgba(239,68,68,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .divider-icon i { font-size: 1.3rem; color: #f87171; }
+
+        /* === Bottom note === */
+        .bottom-note {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 2.0s forwards;
+        }
+
+        .note-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #94a3b8;
+        }
+
+        .note-item i { font-size: 1rem; color: var(--cyan-400); }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <h2 class="section-title">To samo słowo, <span class="highlight">inne znaczenie</span></h2>
+
+            <div class="boxes-row">
+                <!-- Context A -->
+                <div class="ctx-box ctx-box--a">
+                    <span class="ctx-box-label">Kontekst: Flota</span>
+                    <span class="ctx-word">Rezerwacja</span>
+                    <p class="ctx-meaning">Blokada auta na dany termin</p>
+
+                    <div class="ctx-icons">
+                        <div class="ctx-icon-item">
+                            <div class="ctx-icon-circle"><i class="ti ti-calendar"></i></div>
+                            <span class="ctx-icon-label">Termin</span>
+                        </div>
+                        <div class="ctx-icon-item">
+                            <div class="ctx-icon-circle"><i class="ti ti-car"></i></div>
+                            <span class="ctx-icon-label">Samochód</span>
+                        </div>
+                        <div class="ctx-icon-item">
+                            <div class="ctx-icon-circle"><i class="ti ti-clock"></i></div>
+                            <span class="ctx-icon-label">Czas trwania</span>
+                        </div>
+                    </div>
+
+                    <div class="ctx-props">
+                        <span class="ctx-prop"><i class="ti ti-check"></i> Dostępność pojazdu</span>
+                        <span class="ctx-prop"><i class="ti ti-check"></i> Konflikty terminów</span>
+                        <span class="ctx-prop"><i class="ti ti-check"></i> Status: wolny / zajęty</span>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-icon">
+                        <i class="ti ti-arrows-exchange"></i>
+                    </div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- Context B -->
+                <div class="ctx-box ctx-box--b">
+                    <span class="ctx-box-label">Kontekst: Umowy</span>
+                    <span class="ctx-word">Rezerwacja</span>
+                    <p class="ctx-meaning">Pełna umowa z ceną i płatnością</p>
+
+                    <div class="ctx-icons">
+                        <div class="ctx-icon-item">
+                            <div class="ctx-icon-circle"><i class="ti ti-file-text"></i></div>
+                            <span class="ctx-icon-label">Umowa</span>
+                        </div>
+                        <div class="ctx-icon-item">
+                            <div class="ctx-icon-circle"><i class="ti ti-currency-dollar"></i></div>
+                            <span class="ctx-icon-label">Cena</span>
+                        </div>
+                        <div class="ctx-icon-item">
+                            <div class="ctx-icon-circle"><i class="ti ti-credit-card"></i></div>
+                            <span class="ctx-icon-label">Płatność</span>
+                        </div>
+                    </div>
+
+                    <div class="ctx-props">
+                        <span class="ctx-prop"><i class="ti ti-check"></i> Warunki umowy</span>
+                        <span class="ctx-prop"><i class="ti ti-check"></i> Kalkulacja ceny</span>
+                        <span class="ctx-prop"><i class="ti ti-check"></i> Status: opłacona / nieopłacona</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom note -->
+            <div class="bottom-note">
+                <div class="note-item"><i class="ti ti-vocabulary"></i> Własny spójny język</div>
+                <div class="note-item"><i class="ti ti-shield-check"></i> Własne reguły biznesowe</div>
+                <div class="note-item"><i class="ti ti-ban"></i> Brak współdzielenia modeli</div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">
+            kamera 480 &times; 270
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
