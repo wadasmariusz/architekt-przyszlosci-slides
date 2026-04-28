@@ -168,11 +168,20 @@
         }
 
         /* === Inner icons (model, rules, processes) === */
-        .inner-items {
+        .main-box-content {
             position: absolute;
-            top: 50%;
+            top: 40px;
+            bottom: 24px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .inner-items {
             display: flex;
             gap: 2.5rem;
             align-items: center;
@@ -220,10 +229,6 @@
 
         /* === Feature list inside box === */
         .features {
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
             gap: 1rem;
             opacity: 0;
@@ -401,25 +406,27 @@
                 <div class="main-box">
                     <span class="main-box-label">Bounded Context</span>
 
-                    <div class="inner-items">
-                        <div class="inner-item">
-                            <div class="inner-icon"><i class="ti ti-database"></i></div>
-                            <span class="inner-label">Modele</span>
+                    <div class="main-box-content">
+                        <div class="inner-items">
+                            <div class="inner-item">
+                                <div class="inner-icon"><i class="ti ti-database"></i></div>
+                                <span class="inner-label">Modele</span>
+                            </div>
+                            <div class="inner-item">
+                                <div class="inner-icon"><i class="ti ti-shield-check"></i></div>
+                                <span class="inner-label">Reguły</span>
+                            </div>
+                            <div class="inner-item">
+                                <div class="inner-icon"><i class="ti ti-settings"></i></div>
+                                <span class="inner-label">Procesy</span>
+                            </div>
                         </div>
-                        <div class="inner-item">
-                            <div class="inner-icon"><i class="ti ti-shield-check"></i></div>
-                            <span class="inner-label">Reguły</span>
-                        </div>
-                        <div class="inner-item">
-                            <div class="inner-icon"><i class="ti ti-settings"></i></div>
-                            <span class="inner-label">Procesy</span>
-                        </div>
-                    </div>
 
-                    <div class="features">
-                        <div class="feature"><i class="ti ti-check"></i> Konkretny obszar biznesowy</div>
-                        <div class="feature"><i class="ti ti-check"></i> Własne modele i reguły</div>
-                        <div class="feature"><i class="ti ti-lock"></i> Chronione wnętrze</div>
+                        <div class="features">
+                            <div class="feature"><i class="ti ti-check"></i> Konkretny obszar biznesowy</div>
+                            <div class="feature"><i class="ti ti-check"></i> Własne modele i reguły</div>
+                            <div class="feature"><i class="ti ti-lock"></i> Chronione wnętrze</div>
+                        </div>
                     </div>
                 </div>
             </div>

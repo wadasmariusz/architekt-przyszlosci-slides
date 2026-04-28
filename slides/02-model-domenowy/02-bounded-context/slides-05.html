@@ -88,14 +88,14 @@
         /* === Content === */
         .content {
             position: relative; z-index: 10; text-align: center;
-            width: 100%; max-width: 1760px; padding: 60px 80px 0;
+            width: 100%; max-width: 1760px; padding: 30px 80px 0;
             display: flex; flex-direction: column; align-items: center;
             gap: 1.2rem;
         }
 
         /* === Title === */
         .section-title {
-            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
             font-weight: 800;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.3s forwards;
@@ -165,13 +165,13 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            min-height: 130px;
+            min-height: 170px;
         }
 
         .canvas-cell:last-child { border-right: none; }
 
         .cell-title {
-            font-size: 1rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: #f0f4f8;
             letter-spacing: 0.06em;
@@ -181,10 +181,10 @@
             gap: 0.5rem;
         }
 
-        .cell-title i { font-size: 1.15rem; color: var(--cyan-400); }
+        .cell-title i { font-size: 1.5rem; color: var(--cyan-400); }
 
         .cell-desc {
-            font-size: 0.85rem;
+            font-size: 1rem;
             font-weight: 300;
             color: #64748b;
             line-height: 1.5;
@@ -198,7 +198,7 @@
         }
 
         .cell-tag {
-            font-size: 0.78rem;
+            font-size: 1.1rem;
             padding: 0.25rem 0.65rem;
             border-radius: 4px;
             font-weight: 600;
@@ -222,7 +222,7 @@
         .row-mid {
             display: flex;
             border-bottom: 1px solid rgba(6,182,212,0.15);
-            min-height: 260px;
+            min-height: 320px;
         }
 
         .comm-cell {
@@ -241,7 +241,7 @@
         .comm-sub {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #64748b;
             letter-spacing: 0.05em;
@@ -296,7 +296,7 @@
         }
 
         .center-title {
-            font-size: 1.05rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: #f0f4f8;
             letter-spacing: 0.05em;
@@ -372,31 +372,30 @@
             <div class="canvas">
                 <!-- Name bar -->
                 <div class="canvas-name">
-                    <span class="name-label"><i class="ti ti-writing" style="margin-right:0.5rem;font-size:1.1rem"></i> Name: _______________</span>
-                    <span class="name-version">V5 &middot; github.com/ddd-crew/bounded-context-canvas</span>
+                    <span class="name-label"><i class="ti ti-writing" style="margin-right:0.5rem;font-size:1.1rem"></i> Nazwa: _______________</span>
                 </div>
 
                 <!-- Row 1: Purpose | Strategic Classification | Domain Roles -->
                 <div class="canvas-row row-1">
                     <div class="canvas-cell" style="flex:2">
-                        <div class="cell-title"><i class="ti ti-target"></i> Purpose</div>
-                        <div class="cell-desc">What benefits does this context provide, and how does it provide them? Describe the purpose from a business perspective.</div>
+                        <div class="cell-title"><i class="ti ti-target"></i> Cel</div>
+                        <div class="cell-desc">Jakie korzyści zapewnia ten kontekst i w jaki sposób je dostarcza? Opisz cel z perspektywy biznesowej.</div>
                     </div>
                     <div class="canvas-cell" style="flex:3">
-                        <div class="cell-title"><i class="ti ti-chart-dots-3"></i> Strategic Classification</div>
+                        <div class="cell-title"><i class="ti ti-chart-dots-3"></i> Klasyfikacja Strategiczna</div>
                         <div class="cell-tags">
-                            <span class="cell-tag tag--cyan">Domain: core / supporting / generic</span>
-                            <span class="cell-tag tag--yellow">Business Model: revenue / engagement / compliance</span>
-                            <span class="cell-tag tag--purple">Evolution: genesis / custom / product / commodity</span>
+                            <span class="cell-tag tag--cyan">Domena: główna / wspierająca / generyczna</span>
+                            <span class="cell-tag tag--yellow">Model biznesowy: przychód / zaangażowanie / zgodność</span>
+                            <span class="cell-tag tag--purple">Ewolucja: geneza / custom / produkt / towar</span>
                         </div>
                     </div>
                     <div class="canvas-cell" style="flex:1.5">
-                        <div class="cell-title"><i class="ti ti-users-group"></i> Domain Roles</div>
+                        <div class="cell-title"><i class="ti ti-users-group"></i> Role Domeny</div>
                         <div class="cell-tags">
-                            <span class="cell-tag tag--grey">draft context</span>
-                            <span class="cell-tag tag--grey">execution context</span>
-                            <span class="cell-tag tag--grey">analysis context</span>
-                            <span class="cell-tag tag--grey">gateway context</span>
+                            <span class="cell-tag tag--grey">kontekst szkicu</span>
+                            <span class="cell-tag tag--grey">kontekst wykonania</span>
+                            <span class="cell-tag tag--grey">kontekst analizy</span>
+                            <span class="cell-tag tag--grey">kontekst bramy</span>
                         </div>
                     </div>
                 </div>
@@ -405,12 +404,12 @@
                 <div class="row-mid">
                     <!-- Inbound Communication -->
                     <div class="comm-cell comm-cell--in">
-                        <div class="cell-title"><i class="ti ti-arrow-bar-to-right"></i> Inbound Communication</div>
-                        <div class="comm-sub"><span>Collaborator</span><span>Messages</span></div>
+                        <div class="cell-title"><i class="ti ti-arrow-bar-to-right"></i> Komunikacja Przychodząca</div>
+                        <div class="comm-sub"><span>Współpracownik</span><span>Komunikaty</span></div>
                         <div class="comm-messages">
-                            <span class="cell-tag tag--green">&lt;Query&gt;</span>
-                            <span class="cell-tag tag--blue">&lt;Command&gt;</span>
-                            <span class="cell-tag tag--yellow">&lt;Event&gt;</span>
+                            <span class="cell-tag tag--green">&lt;Zapytanie&gt;</span>
+                            <span class="cell-tag tag--blue">&lt;Komenda&gt;</span>
+                            <span class="cell-tag tag--yellow">&lt;Zdarzenie&gt;</span>
                         </div>
                         <div class="comm-arrow"></div>
                     </div>
@@ -418,26 +417,26 @@
                     <!-- Center: Ubiquitous Language + Business Decisions -->
                     <div class="center-cell">
                         <div class="center-section">
-                            <div class="center-title"><i class="ti ti-vocabulary" style="margin-right:0.4rem;font-size:1.1rem;color:var(--cyan-400)"></i> Ubiquitous Language</div>
-                            <div class="center-desc">Context-specific domain terminology</div>
-                            <div class="center-placeholder">&lt;Domain Term&gt; &mdash; &lt;definition&gt;</div>
+                            <div class="center-title"><i class="ti ti-vocabulary" style="margin-right:0.4rem;font-size:1.1rem;color:var(--cyan-400)"></i> Język Wszechobecny</div>
+                            <div class="center-desc">Terminologia domenowa specyficzna dla kontekstu</div>
+                            <div class="center-placeholder">&lt;Termin domenowy&gt; &mdash; &lt;definicja&gt;</div>
                         </div>
                         <div class="center-divider"></div>
                         <div class="center-section">
-                            <div class="center-title"><i class="ti ti-gavel" style="margin-right:0.4rem;font-size:1.1rem;color:var(--cyan-400)"></i> Business Decisions</div>
-                            <div class="center-desc">Key business rules, policies, and decisions</div>
-                            <div class="center-placeholder">&lt;Decision&gt;</div>
+                            <div class="center-title"><i class="ti ti-gavel" style="margin-right:0.4rem;font-size:1.1rem;color:var(--cyan-400)"></i> Decyzje Biznesowe</div>
+                            <div class="center-desc">Kluczowe reguły biznesowe, polityki i decyzje</div>
+                            <div class="center-placeholder">&lt;Decyzja&gt;</div>
                         </div>
                     </div>
 
                     <!-- Outbound Communication -->
                     <div class="comm-cell comm-cell--out">
-                        <div class="cell-title"><i class="ti ti-arrow-bar-right"></i> Outbound Communication</div>
-                        <div class="comm-sub"><span>Messages</span><span>Collaborator</span></div>
+                        <div class="cell-title"><i class="ti ti-arrow-bar-right"></i> Komunikacja Wychodząca</div>
+                        <div class="comm-sub"><span>Komunikaty</span><span>Współpracownik</span></div>
                         <div class="comm-messages">
-                            <span class="cell-tag tag--green">&lt;Query&gt;</span>
-                            <span class="cell-tag tag--blue">&lt;Command&gt;</span>
-                            <span class="cell-tag tag--yellow">&lt;Event&gt;</span>
+                            <span class="cell-tag tag--green">&lt;Zapytanie&gt;</span>
+                            <span class="cell-tag tag--blue">&lt;Komenda&gt;</span>
+                            <span class="cell-tag tag--yellow">&lt;Zdarzenie&gt;</span>
                         </div>
                         <div class="comm-arrow"></div>
                     </div>
@@ -446,16 +445,16 @@
                 <!-- Row 3 (bottom): Assumptions | Verification Metrics | Open Questions -->
                 <div class="canvas-row row-3">
                     <div class="canvas-cell">
-                        <div class="cell-title"><i class="ti ti-help-hexagon"></i> Assumptions</div>
-                        <div class="cell-desc">Describe which currently unverified assumptions went into this bounded context design.</div>
+                        <div class="cell-title"><i class="ti ti-help-hexagon"></i> Założenia</div>
+                        <div class="cell-desc">Opisz, jakie niezweryfikowane założenia zostały przyjęte przy projektowaniu tego bounded contextu.</div>
                     </div>
                     <div class="canvas-cell">
-                        <div class="cell-title"><i class="ti ti-chart-bar"></i> Verification Metrics</div>
-                        <div class="cell-desc">Describe metrics which can be used to (in)validate the current structure of this bounded context.</div>
+                        <div class="cell-title"><i class="ti ti-chart-bar"></i> Metryki Weryfikacji</div>
+                        <div class="cell-desc">Opisz metryki, które mogą posłużyć do walidacji lub podważenia obecnej struktury tego bounded contextu.</div>
                     </div>
                     <div class="canvas-cell">
-                        <div class="cell-title"><i class="ti ti-help-circle"></i> Open Questions</div>
-                        <div class="cell-desc">Capture any open questions or unresolved concerns about this context.</div>
+                        <div class="cell-title"><i class="ti ti-help-circle"></i> Otwarte Pytania</div>
+                        <div class="cell-desc">Zapisz wszelkie otwarte pytania lub nierozwiązane wątpliwości dotyczące tego kontekstu.</div>
                     </div>
                 </div>
             </div>
