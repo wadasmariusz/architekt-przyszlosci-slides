@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 09 - Upstream vs Downstream</title>
+    <title>Slide 24 - Co analizować</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -15,8 +15,6 @@
             --dark-bg: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --orange-500: #f59e0b;
-            --emerald-500: #10b981;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,10 +31,7 @@
             height: 1080px;
             position: relative;
             overflow: hidden;
-            background:
-                radial-gradient(circle at 20% 26%, rgba(34,211,238,0.14), transparent 32%),
-                radial-gradient(circle at 78% 60%, rgba(16,185,129,0.10), transparent 34%),
-                radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
         }
 
         .bg-grid {
@@ -52,6 +47,23 @@
         @keyframes gridMove {
             0% { background-position: 0 0; }
             100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 1100px;
+            height: 1100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 60%);
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.85; }
         }
 
         .corner {
@@ -81,40 +93,26 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 86px 130px 150px;
+            padding: 82px 130px 150px;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             text-align: center;
-            max-width: 1180px;
-            margin: 0 auto 36px;
+            max-width: 1260px;
+            margin: 0 auto 70px;
         }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-            color: var(--cyan-400);
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.25s forwards;
-        }
-
-        .eyebrow i { font-size: 32px; }
 
         h1.title {
             color: #ffffff;
             font-size: 78px;
             font-weight: 800;
-            line-height: 1.06;
+            line-height: 1.05;
             letter-spacing: -1px;
             margin-bottom: 16px;
             opacity: 0;
-            animation: fadeUp 0.9s ease-out 0.45s forwards;
+            animation: fadeUp 0.9s ease-out 0.3s forwards;
         }
 
         h1.title .highlight {
@@ -130,23 +128,66 @@
             font-weight: 400;
             line-height: 1.4;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.7s forwards;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
         }
 
-        .river-scene {
-            position: relative;
-            width: 1360px;
-            height: 590px;
-            margin: 0 auto;
+        /* ── Signals ── */
+        .signals {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 48px;
             opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.95s forwards;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
         }
 
-        .river-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 36px;
+        .signal {
+            width: 420px;
+            border-radius: 28px;
+            background: rgba(17,24,39,0.88);
+            border: 1px solid rgba(34,211,238,0.14);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.25);
+            padding: 40px 36px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+
+        .signal:nth-child(1) { animation-delay: 1.0s; }
+        .signal:nth-child(2) { animation-delay: 1.2s; }
+        .signal:nth-child(3) { animation-delay: 1.4s; }
+
+        .signal-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .signal-header i {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyan-400);
+            font-size: 28px;
+            background: rgba(34,211,238,0.08);
+        }
+
+        .signal-header strong {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .signal p {
+            color: var(--text-muted);
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.45;
         }
 
         @keyframes fadeIn {
@@ -157,11 +198,6 @@
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeUpCenter {
-            from { opacity: 0; transform: translate(-50%, 24px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
         }
 
         .camera-box {
@@ -196,17 +232,40 @@
 <body>
     <div class="stage" id="stage">
         <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
         <div class="corner corner--tl"></div>
         <div class="corner corner--br"></div>
 
         <main class="content">
             <header class="header">
-                <h1 class="title">Upstream<span class="highlight"> VS </span>Downstream</h1>
-                <p class="subtitle">Upstream jest bliżej źródła decyzji. Downstream pracuje z tym, co do niego dopłynie.</p>
+                <h1 class="title">Masz mapę. <span class="highlight">Co szukasz?</span></h1>
+                <p class="subtitle">Trzy sygnały które mówią ci gdzie patrzeć.</p>
             </header>
 
-            <section class="river-scene" aria-label="Metafora rzeki: upstream, przepływ i downstream">
-                <img src="images/rzeka-metafora.png" alt="Metafora rzeki: upstream, przepływ i downstream" class="river-img">
+            <section class="signals">
+                <article class="signal">
+                    <div class="signal-header">
+                        <i class="ti ti-link"></i>
+                        <strong>Łańcuchy zależności</strong>
+                    </div>
+                    <p>A zależy od B, B od C, C od D. Zmiana w D przechodzi przez trzy backlogi — najwolniejsza ścieżka w projekcie.</p>
+                </article>
+
+                <article class="signal">
+                    <div class="signal-header">
+                        <i class="ti ti-arrows-maximize"></i>
+                        <strong>God Context</strong>
+                    </div>
+                    <p>Kontekst z za dużą liczbą strzałek wchodzących. Pięć teamów od niego zależy — bottleneck i single point of failure.</p>
+                </article>
+
+                <article class="signal">
+                    <div class="signal-header">
+                        <i class="ti ti-shield-off"></i>
+                        <strong>Conformist bez ACL</strong>
+                    </div>
+                    <p>Core Domain bezpośrednio zależy od vendora który może zmienić API bez pytania. Nazwij ryzyko wprost.</p>
+                </article>
             </section>
         </main>
 

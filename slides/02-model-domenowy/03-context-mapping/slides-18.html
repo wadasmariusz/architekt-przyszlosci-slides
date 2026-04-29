@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 14 - Customer / Supplier</title>
+    <title>Slide 18 - Conformist</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -15,9 +15,6 @@
             --dark-bg: #030712;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --orange-500: #f59e0b;
-            --emerald-500: #10b981;
-            --violet-500: #8b5cf6;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,10 +31,7 @@
             height: 1080px;
             position: relative;
             overflow: hidden;
-            background:
-                radial-gradient(circle at 22% 38%, rgba(34,211,238,0.14), transparent 31%),
-                radial-gradient(circle at 78% 42%, rgba(139,92,246,0.12), transparent 32%),
-                radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
         }
 
         .bg-grid {
@@ -53,6 +47,23 @@
         @keyframes gridMove {
             0% { background-position: 0 0; }
             100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 1100px;
+            height: 1100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 60%);
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.85; }
         }
 
         .corner {
@@ -93,22 +104,6 @@
             margin: 0 auto 60px;
         }
 
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-            color: var(--cyan-400);
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.25s forwards;
-        }
-
-        .eyebrow i { font-size: 32px; }
-
         h1.title {
             color: #ffffff;
             font-size: 78px;
@@ -117,11 +112,11 @@
             letter-spacing: -1px;
             margin-bottom: 16px;
             opacity: 0;
-            animation: fadeUp 0.9s ease-out 0.45s forwards;
+            animation: fadeUp 0.9s ease-out 0.3s forwards;
         }
 
         h1.title .highlight {
-            background: linear-gradient(135deg, var(--cyan-400), var(--violet-500));
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -133,10 +128,10 @@
             font-weight: 400;
             line-height: 1.4;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.7s forwards;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
         }
 
-        /* ── Main diagram ── */
+        /* ── Diagram ── */
         .diagram {
             flex: 1;
             display: flex;
@@ -145,14 +140,15 @@
             gap: 0;
             position: relative;
             opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.95s forwards;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
         }
 
+        /* ── Nodes ── */
         .node {
-            width: 340px;
+            width: 360px;
             border-radius: 32px;
             background: rgba(17,24,39,0.88);
-            border: 2px solid rgba(255,255,255,0.08);
+            border: 2px solid rgba(34,211,238,0.18);
             box-shadow: 0 24px 70px rgba(0,0,0,0.3);
             padding: 40px 36px;
             text-align: center;
@@ -160,14 +156,14 @@
             animation: fadeUp 0.6s ease-out forwards;
         }
 
-        .node--supplier {
+        .node--vendor {
             border-color: rgba(34,211,238,0.3);
-            animation-delay: 1.1s;
+            animation-delay: 1.0s;
         }
 
-        .node--customer {
-            border-color: rgba(139,92,246,0.3);
-            animation-delay: 1.3s;
+        .node--ours {
+            border-color: rgba(34,211,238,0.14);
+            animation-delay: 1.2s;
         }
 
         .node i.node-icon {
@@ -180,14 +176,16 @@
             margin-bottom: 20px;
             font-size: 36px;
             background: rgba(255,255,255,0.04);
+            color: var(--cyan-400);
         }
 
-        .node--supplier i.node-icon { color: var(--cyan-400); }
-        .node--customer i.node-icon { color: var(--violet-500); }
+        .node--ours i.node-icon {
+            color: var(--text-muted);
+        }
 
         .node h2 {
             color: #ffffff;
-            font-size: 38px;
+            font-size: 36px;
             font-weight: 800;
             margin-bottom: 12px;
         }
@@ -196,22 +194,22 @@
             display: inline-block;
             padding: 8px 20px;
             border-radius: 999px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
 
-        .node--supplier .role-tag {
-            background: rgba(34,211,238,0.12);
-            border: 1px solid rgba(34,211,238,0.28);
+        .node--vendor .role-tag {
+            background: rgba(34,211,238,0.1);
+            border: 1px solid rgba(34,211,238,0.24);
             color: #a5f3fc;
         }
 
-        .node--customer .role-tag {
-            background: rgba(139,92,246,0.12);
-            border: 1px solid rgba(139,92,246,0.28);
-            color: #c4b5fd;
+        .node--ours .role-tag {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-muted);
         }
 
         .node .desc {
@@ -222,25 +220,25 @@
             margin-top: 16px;
         }
 
-        /* ── Arrow between nodes ── */
+        /* ── Arrow ── */
         .arrow-zone {
-            width: 220px;
+            width: 240px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 14px;
             opacity: 0;
-            animation: fadeIn 0.6s ease-out 1.5s forwards;
+            animation: fadeIn 0.6s ease-out 1.4s forwards;
         }
 
         .arrow-line {
             width: 160px;
             height: 6px;
             border-radius: 3px;
-            background: linear-gradient(90deg, var(--cyan-400), var(--violet-500));
+            background: linear-gradient(90deg, var(--cyan-400), rgba(34,211,238,0.3));
             position: relative;
-            box-shadow: 0 0 24px rgba(34,211,238,0.18);
+            box-shadow: 0 0 24px rgba(34,211,238,0.12);
         }
 
         .arrow-line::after {
@@ -251,90 +249,60 @@
             transform: translateY(-50%);
             border-top: 14px solid transparent;
             border-bottom: 14px solid transparent;
-            border-left: 24px solid var(--violet-500);
-            filter: drop-shadow(0 0 12px rgba(139,92,246,0.3));
+            border-left: 24px solid rgba(34,211,238,0.3);
         }
 
         .arrow-label {
-            color: var(--orange-500);
+            color: var(--cyan-400);
             font-size: 16px;
             font-weight: 800;
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
 
-        /* ── Bottleneck hint ── */
-        .bottleneck-hint {
+        .no-negotiate {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .no-negotiate i {
+            color: var(--cyan-600);
+            font-size: 18px;
+        }
+
+        /* ── Callout ── */
+        .callout {
             position: absolute;
-            bottom: -20px;
+            bottom: 60px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
+            padding: 18px 32px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.94);
+            border: 1px solid rgba(34,211,238,0.2);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            white-space: nowrap;
+            z-index: 20;
             opacity: 0;
-            animation: fadeUp 0.6s ease-out 2.0s forwards;
+            animation: fadeUpCenter 0.65s ease-out 1.8s forwards;
         }
 
-        .queue-visual {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .queue-item {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            background: rgba(139,92,246,0.10);
-            border: 1px solid rgba(139,92,246,0.22);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--violet-500);
-            font-size: 22px;
-            opacity: 0;
-            animation: queueIn 0.4s ease-out forwards;
-        }
-
-        .queue-item:nth-child(1) { animation-delay: 2.1s; }
-        .queue-item:nth-child(2) { animation-delay: 2.25s; }
-        .queue-item:nth-child(3) { animation-delay: 2.4s; }
-
-        @keyframes queueIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 0.9; transform: translateX(0); }
-        }
-
-        .queue-arrow {
-            color: rgba(255,255,255,0.2);
-            font-size: 28px;
-            margin: 0 6px;
-        }
-
-        .queue-target {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            background: rgba(34,211,238,0.10);
-            border: 1px solid rgba(34,211,238,0.28);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .callout i {
             color: var(--cyan-400);
-            font-size: 22px;
-            opacity: 0;
-            animation: fadeIn 0.4s ease-out 2.0s forwards;
+            font-size: 28px;
         }
 
-        .hint-text {
-            color: var(--text-muted);
-            font-size: 17px;
-            font-weight: 600;
-            font-style: italic;
-            margin-left: 14px;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-out 2.55s forwards;
+        .callout span {
+            color: var(--cyan-400);
         }
 
         @keyframes fadeIn {
@@ -384,46 +352,39 @@
 <body>
     <div class="stage" id="stage">
         <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
         <div class="corner corner--tl"></div>
         <div class="corner corner--br"></div>
 
         <main class="content">
             <header class="header">
-                <h1 class="title"><span class="highlight">Customer & Supplier</span></h1>
-                <p class="subtitle">Supplier kontroluje model i tempo zmian. Customer adaptuje się do tego, co dostanie.</p>
+                <h1 class="title"><span class="highlight">Conformist</span></h1>
+                <p class="subtitle">Model upstream przenika do domeny.</p>
             </header>
 
             <section class="diagram">
-                <article class="node node--supplier">
-                    <i class="ti ti-package-export node-icon"></i>
-                    <h2>Supplier</h2>
-                    <div class="role-tag">control</div>
-                    <p class="desc">Decyduje o modelu, kontrakcie i backlogu zmian</p>
+                <article class="node node--vendor">
+                    <i class="ti ti-cloud node-icon"></i>
+                    <h2>Vendor API</h2>
+                    <div class="role-tag">upstream</div>
+                    <p class="desc">Zewnętrzny kontrakt (Stripe, SendGrid, SaaS) - brak kontroli nad modelem</p>
                 </article>
 
                 <div class="arrow-zone">
                     <div class="arrow-line"></div>
-                    <span class="arrow-label">dostarcza</span>
+                    <span class="arrow-label">narzuca model</span>
+                    <div class="no-negotiate"><i class="ti ti-x"></i> brak negocjacji</div>
                 </div>
 
-                <article class="node node--customer">
-                    <i class="ti ti-package-import node-icon"></i>
-                    <h2>Customer</h2>
-                    <div class="role-tag">dependency</div>
-                    <p class="desc">Konsumuje i negocjuje miejsce w backlogu</p>
+                <article class="node node--ours">
+                    <i class="ti ti-building node-icon"></i>
+                    <h2>Nasz system</h2>
+                    <div class="role-tag">downstream</div>
+                    <p class="desc">Przyjmuje cudzy model bez wpływu na jego kształt</p>
                 </article>
-
-                <!-- Bottleneck hint: wielu downstreamów → jeden upstream -->
-                <div class="bottleneck-hint">
-                    <div class="queue-visual">
-                        <div class="queue-item"><i class="ti ti-package-import"></i></div>
-                        <div class="queue-item"><i class="ti ti-package-import"></i></div>
-                        <div class="queue-item"><i class="ti ti-package-import"></i></div>
-                        <span class="queue-arrow"><i class="ti ti-chevrons-right"></i></span>
-                        <div class="queue-target"><i class="ti ti-package-export"></i></div>
-                    </div>
-                </div>
             </section>
+
+            <div class="callout"><i class="ti ti-alert-triangle"></i> Model vendora <span>wsiąka w Twój kod</span> = ryzyko</div>
         </main>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
