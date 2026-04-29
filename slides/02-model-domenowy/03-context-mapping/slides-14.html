@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 12 - Partnership</title>
+    <title>Slide 14 - Customer / Supplier</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -18,6 +18,7 @@
             --orange-500: #f59e0b;
             --emerald-500: #10b981;
             --violet-500: #8b5cf6;
+            --rose-500: #f43f5e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,9 +36,9 @@
             position: relative;
             overflow: hidden;
             background:
-                radial-gradient(circle at 22% 36%, rgba(34,211,238,0.14), transparent 31%),
-                radial-gradient(circle at 78% 36%, rgba(16,185,129,0.12), transparent 31%),
-                radial-gradient(circle at 50% 72%, rgba(139,92,246,0.10), transparent 36%),
+                radial-gradient(circle at 22% 38%, rgba(34,211,238,0.14), transparent 31%),
+                radial-gradient(circle at 78% 42%, rgba(139,92,246,0.12), transparent 32%),
+                radial-gradient(circle at 50% 74%, rgba(245,158,11,0.08), transparent 35%),
                 radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
         }
 
@@ -83,12 +84,12 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 84px 130px 150px;
+            padding: 82px 130px 150px;
         }
 
         .header {
             text-align: center;
-            max-width: 1220px;
+            max-width: 1260px;
             margin: 0 auto 42px;
         }
 
@@ -120,7 +121,7 @@
         }
 
         h1.title .highlight {
-            background: linear-gradient(135deg, var(--cyan-400), var(--emerald-500));
+            background: linear-gradient(135deg, var(--cyan-400), var(--violet-500));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -135,216 +136,235 @@
             animation: fadeUp 0.8s ease-out 0.7s forwards;
         }
 
-        .partnership-map {
+        .customer-supplier {
             position: relative;
-            width: 1380px;
+            width: 1400px;
             height: 592px;
             margin: 0 auto;
             opacity: 0;
             animation: fadeIn 0.75s ease-out 0.95s forwards;
         }
 
-        .shared-field {
+        .market-lane {
             position: absolute;
-            left: 410px;
-            right: 410px;
-            top: 80px;
-            height: 340px;
-            border-radius: 46px;
+            left: 46px;
+            right: 46px;
+            top: 52px;
+            height: 370px;
+            border-radius: 44px;
             background:
-                linear-gradient(180deg, rgba(15,23,42,0.88), rgba(3,7,18,0.78)),
-                radial-gradient(circle at 50% 12%, rgba(34,211,238,0.14), transparent 54%);
-            border: 2px solid rgba(255,255,255,0.1);
-            box-shadow:
-                0 32px 90px rgba(0,0,0,0.34),
-                inset 0 0 0 1px rgba(34,211,238,0.08);
+                linear-gradient(90deg, rgba(6,182,212,0.08), rgba(15,23,42,0.78) 48%, rgba(139,92,246,0.1)),
+                rgba(3,7,18,0.58);
+            border: 2px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 90px rgba(0,0,0,0.34);
+            overflow: hidden;
         }
 
-        .shared-field::before,
-        .shared-field::after {
+        .market-lane::before {
             content: '';
             position: absolute;
+            left: 80px;
+            right: 80px;
             top: 50%;
-            width: 312px;
-            height: 4px;
+            height: 2px;
             transform: translateY(-50%);
-            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.7), rgba(16,185,129,0.7), transparent);
-            box-shadow: 0 0 26px rgba(34,211,238,0.36);
+            background: linear-gradient(90deg, rgba(34,211,238,0.18), rgba(245,158,11,0.34), rgba(139,92,246,0.2));
         }
 
-        .shared-field::before { right: 100%; }
-        .shared-field::after { left: 100%; }
-
-        .team {
+        .side {
             position: absolute;
-            top: 114px;
-            width: 330px;
-            height: 340px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.1);
-            background:
-                radial-gradient(circle at 50% 35%, rgba(255,255,255,0.08), transparent 32%),
-                rgba(3,7,18,0.58);
+            top: 82px;
+            width: 310px;
+            height: 230px;
+            border-radius: 36px;
+            background: rgba(3,7,18,0.62);
+            border: 1px solid rgba(255,255,255,0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 26px 70px rgba(0,0,0,0.32);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+            opacity: 0;
+            animation: fadeUp 0.58s ease-out forwards;
         }
 
-        .team--left {
-            left: 34px;
-            animation: teamInLeft 0.65s ease-out 1.05s both;
+        .side--supplier {
+            left: 90px;
+            animation-delay: 1.08s;
         }
 
-        .team--right {
-            right: 34px;
-            animation: teamInRight 0.65s ease-out 1.05s both;
+        .side--customer {
+            right: 90px;
+            animation-delay: 1.22s;
         }
 
-        .team::after {
-            content: '';
-            position: absolute;
-            inset: 20px;
-            border-radius: 50%;
-            border: 1px dashed rgba(255,255,255,0.14);
-        }
-
-        .team-icon {
-            width: 92px;
-            height: 92px;
-            border-radius: 30px;
+        .side i {
+            width: 76px;
+            height: 76px;
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 22px;
-            font-size: 46px;
+            margin-bottom: 20px;
+            font-size: 38px;
             background: rgba(255,255,255,0.05);
-            position: relative;
-            z-index: 1;
         }
 
-        .team--left .team-icon { color: var(--cyan-400); }
-        .team--right .team-icon { color: var(--emerald-500); }
+        .side--supplier i { color: var(--cyan-400); }
+        .side--customer i { color: var(--violet-500); }
 
-        .team h2 {
-            position: relative;
-            z-index: 1;
+        .side h2 {
             color: #ffffff;
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 800;
             line-height: 1;
             letter-spacing: 0;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
-        .team p {
-            position: relative;
-            z-index: 1;
+        .side p {
             color: var(--text-muted);
-            font-size: 21px;
+            font-size: 20px;
             font-weight: 600;
             line-height: 1.25;
             max-width: 220px;
         }
 
-        .rituals {
+        .delivery-arrow {
             position: absolute;
-            inset: 34px 58px;
-            display: grid;
-            grid-template-rows: repeat(3, 1fr);
-            gap: 18px;
-        }
-
-        .ritual {
-            position: relative;
-            display: grid;
-            grid-template-columns: 62px 1fr 62px;
-            align-items: center;
-            min-height: 72px;
-            border-radius: 26px;
-            background: rgba(255,255,255,0.045);
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
+            left: 416px;
+            right: 416px;
+            top: 164px;
+            height: 56px;
             opacity: 0;
-            animation: fadeUp 0.55s ease-out forwards;
+            animation: arrowIn 0.7s ease-out 1.38s forwards;
         }
 
-        .ritual:nth-child(1) { animation-delay: 1.35s; }
-        .ritual:nth-child(2) { animation-delay: 1.55s; }
-        .ritual:nth-child(3) { animation-delay: 1.75s; }
-
-        .ritual::before {
+        .delivery-arrow::before {
             content: '';
             position: absolute;
-            left: 62px;
-            right: 62px;
+            left: 0;
+            right: 36px;
             top: 50%;
-            height: 2px;
-            transform: translateY(-50%);
-            background: linear-gradient(90deg, rgba(34,211,238,0.7), rgba(16,185,129,0.7));
-        }
-
-        .ritual i {
-            position: relative;
-            z-index: 1;
-            justify-self: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            background: rgba(3,7,18,0.72);
-            border: 1px solid rgba(255,255,255,0.12);
-        }
-
-        .ritual i:first-child { color: var(--cyan-400); }
-        .ritual i:last-child { color: var(--emerald-500); }
-
-        .ritual strong {
-            position: relative;
-            z-index: 2;
-            justify-self: center;
-            padding: 10px 18px;
+            height: 10px;
             border-radius: 999px;
-            color: #ffffff;
-            background: rgba(3,7,18,0.9);
-            font-size: 24px;
-            font-weight: 800;
-            line-height: 1;
-            white-space: nowrap;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+            transform: translateY(-50%);
+            background: linear-gradient(90deg, var(--cyan-400), var(--orange-500), var(--violet-500));
+            box-shadow: 0 0 34px rgba(34,211,238,0.24);
         }
 
-        .dependency {
+        .delivery-arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 0;
+            height: 0;
+            transform: translateY(-50%);
+            border-top: 29px solid transparent;
+            border-bottom: 29px solid transparent;
+            border-left: 52px solid var(--violet-500);
+            filter: drop-shadow(0 0 18px rgba(139,92,246,0.34));
+        }
+
+        @keyframes arrowIn {
+            from { opacity: 0; transform: scaleX(0.7); transform-origin: left center; }
+            to { opacity: 1; transform: scaleX(1); transform-origin: left center; }
+        }
+
+        .contract-badge {
             position: absolute;
             left: 50%;
-            bottom: 80px;
+            top: 102px;
             transform: translateX(-50%);
             display: flex;
             align-items: center;
-            gap: 16px;
-            color: #fef3c7;
-            font-size: 22px;
-            font-weight: 800;
-            line-height: 1;
-            padding: 16px 24px;
+            gap: 14px;
+            padding: 15px 22px;
             border-radius: 999px;
+            color: #fef3c7;
             background: rgba(245,158,11,0.12);
             border: 1px solid rgba(245,158,11,0.32);
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1;
             opacity: 0;
-            animation: fadeUpCenter 0.65s ease-out 2.05s forwards;
+            animation: fadeUpCenter 0.58s ease-out 1.65s forwards;
         }
 
-        .dependency i {
+        .contract-badge i {
             color: var(--orange-500);
-            font-size: 26px;
+            font-size: 24px;
         }
 
-        .takeaway {
+        .backlog {
+            position: absolute;
+            left: 50%;
+            bottom: 36px;
+            width: 560px;
+            min-height: 142px;
+            transform: translateX(-50%);
+            border-radius: 34px;
+            background: rgba(17,24,39,0.88);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+            padding: 22px 24px;
+            opacity: 0;
+            animation: fadeUpCenter 0.62s ease-out 1.85s forwards;
+        }
+
+        .backlog-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            font-size: 23px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 17px;
+        }
+
+        .backlog-title i {
+            color: var(--orange-500);
+            font-size: 27px;
+        }
+
+        .tickets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .ticket {
+            min-height: 58px;
+            border-radius: 18px;
+            padding: 13px 14px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.12;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .ticket span {
+            display: block;
+            margin-top: 6px;
+            color: var(--text-muted);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .ticket--hot {
+            background: rgba(245,158,11,0.14);
+            border-color: rgba(245,158,11,0.34);
+        }
+
+        .ticket--hot span { color: #fef3c7; }
+
+        .caption {
             position: absolute;
             left: 50%;
             bottom: 0;
@@ -361,17 +381,15 @@
             font-weight: 700;
             white-space: nowrap;
             opacity: 0;
-            animation: fadeUpCenter 0.7s ease-out 2.25s forwards;
+            animation: fadeUpCenter 0.65s ease-out 2.15s forwards;
         }
 
-        .takeaway i {
+        .caption i {
             color: var(--cyan-400);
             font-size: 28px;
         }
 
-        .takeaway span {
-            color: var(--cyan-400);
-        }
+        .caption span { color: var(--cyan-400); }
 
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -386,16 +404,6 @@
         @keyframes fadeUpCenter {
             from { opacity: 0; transform: translate(-50%, 24px); }
             to { opacity: 1; transform: translate(-50%, 0); }
-        }
-
-        @keyframes teamInLeft {
-            from { opacity: 0; transform: translateX(-32px) scale(0.96); }
-            to { opacity: 1; transform: translateX(0) scale(1); }
-        }
-
-        @keyframes teamInRight {
-            from { opacity: 0; transform: translateX(32px) scale(0.96); }
-            to { opacity: 1; transform: translateX(0) scale(1); }
         }
 
         .camera-box {
@@ -435,42 +443,39 @@
 
         <main class="content">
             <header class="header">
-                <h1 class="title"><span class="highlight">Partnership</span></h1>
+                <div class="eyebrow"><i class="ti ti-arrow-right"></i> Customer / Supplier</div>
+                <h1 class="title">Jedna strona <span class="highlight">dostarcza</span>, druga konsumuje</h1>
+                <p class="subtitle">To już nie jest pełna symetria. Supplier ma własny backlog, a Customer negocjuje miejsce na potrzebną zmianę.</p>
             </header>
 
-            <section class="partnership-map" aria-label="Dwa zespoły połączone symetrycznie">
-                <div class="shared-field">
-                    <div class="rituals">
-                        <div class="ritual">
-                            <i class="ti ti-users-group"></i>
-                            <strong>Wspólne planowanie</strong>
-                            <i class="ti ti-users-group"></i>
-                        </div>
-                        <div class="ritual">
-                            <i class="ti ti-git-merge"></i>
-                            <strong>Wspólne decyzje</strong>
-                            <i class="ti ti-git-merge"></i>
-                        </div>
-                        <div class="ritual">
-                            <i class="ti ti-rocket"></i>
-                            <strong>Wspólne deploymenty</strong>
-                            <i class="ti ti-rocket"></i>
+            <section class="customer-supplier" aria-label="Strzałka od upstream do downstream">
+                <div class="market-lane">
+                    <article class="side side--supplier">
+                        <i class="ti ti-package-export"></i>
+                        <h2>Supplier</h2>
+                        <p>dostarcza capability i planuje backlog</p>
+                    </article>
+
+                    <div class="delivery-arrow"></div>
+                    <div class="contract-badge"><i class="ti ti-file-description"></i> kontrakt i priorytety</div>
+
+                    <article class="side side--customer">
+                        <i class="ti ti-package-import"></i>
+                        <h2>Customer</h2>
+                        <p>konsumuje zmianę i zgłasza potrzebę</p>
+                    </article>
+
+                    <div class="backlog">
+                        <div class="backlog-title"><i class="ti ti-list-details"></i> Negocjacje backlogu</div>
+                        <div class="tickets">
+                            <div class="ticket ticket--hot">Zmiana API<span>customer</span></div>
+                            <div class="ticket">Tech debt<span>supplier</span></div>
+                            <div class="ticket">Nowy feature<span>roadmapa</span></div>
                         </div>
                     </div>
                 </div>
 
-                <article class="team team--left">
-                    <div class="team-icon"><i class="ti ti-code"></i></div>
-                    <h2>Zespół A</h2>
-                </article>
-
-                <article class="team team--right">
-                    <div class="team-icon"><i class="ti ti-sitemap"></i></div>
-                    <h2>Zespół B</h2>
-                </article>
-
-                <div class="dependency"><i class="ti ti-link"></i> wysoka zależność, wysoka synchronizacja</div>
-                <div class="takeaway"><i class="ti ti-handshake"></i> Partnership to<span>wspólna odpowiedzialność</span></div>
+                <div class="caption"><i class="ti ti-route"></i> Relacja jest kierunkowa: <span>upstream decyduje, downstream zależy</span></div>
             </section>
         </main>
 
