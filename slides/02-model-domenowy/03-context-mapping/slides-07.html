@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07 - Socio-Technical Architecture</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --orange-500: #f59e0b;
+            --violet-500: #8b5cf6;
+            --emerald-500: #10b981;
+            --rose-500: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 1100px;
+            height: 1100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 60%);
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.85; }
+        }
+
+        .accent {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.12;
+            z-index: 0;
+        }
+
+        .accent--left {
+            width: 520px;
+            height: 520px;
+            top: 11%;
+            left: 8%;
+            background: var(--cyan-400);
+        }
+
+        .accent--right {
+            width: 420px;
+            height: 420px;
+            right: 12%;
+            bottom: 14%;
+            background: var(--emerald-500);
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(5) { top: 14%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(6) { top: 72%; left: 86%; animation-delay: 1.5s; }
+        .particle:nth-child(7) { top: 30%; left: 78%; animation-delay: 3s; }
+        .particle:nth-child(8) { top: 82%; left: 22%; animation-delay: 4.5s; }
+        .particle:nth-child(9) { top: 48%; left: 51%; animation-delay: 6s; }
+        .particle:nth-child(10) { top: 20%; left: 62%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 82px 120px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto 34px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            color: #ffffff;
+            font-size: 76px;
+            font-weight: 800;
+            line-height: 1.06;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 27px;
+            font-weight: 400;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
+        }
+
+        .diagram {
+            position: relative;
+            width: 1320px;
+            height: 610px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.95s forwards;
+        }
+
+        .panel {
+            position: absolute;
+            top: 38px;
+            width: 455px;
+            height: 500px;
+            border-radius: 30px;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(10,14,23,0.82));
+            box-shadow: 0 28px 80px rgba(0,0,0,0.34);
+            padding: 32px;
+        }
+
+        .panel--teams {
+            left: 0;
+            border-color: rgba(34,211,238,0.24);
+        }
+
+        .panel--system {
+            right: 0;
+            border-color: rgba(16,185,129,0.24);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #ffffff;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 26px;
+        }
+
+        .panel-title i {
+            color: var(--cyan-400);
+            font-size: 34px;
+        }
+
+        .panel--system .panel-title i { color: var(--emerald-500); }
+
+        .node-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .node {
+            height: 72px;
+            border-radius: 18px;
+            border: 2px solid rgba(34,211,238,0.25);
+            background: rgba(3,7,18,0.38);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 20px;
+            color: var(--text-muted);
+            font-size: 22px;
+            font-weight: 700;
+            opacity: 0;
+            animation: nodeIn 0.55s ease-out forwards;
+        }
+
+        .node i {
+            color: var(--cyan-400);
+            font-size: 26px;
+        }
+
+        .panel--system .node {
+            border-color: rgba(16,185,129,0.25);
+        }
+
+        .panel--system .node i { color: var(--emerald-500); }
+
+        .node:nth-child(1) { animation-delay: 1.1s; }
+        .node:nth-child(2) { animation-delay: 1.25s; }
+        .node:nth-child(3) { animation-delay: 1.4s; }
+        .node:nth-child(4) { animation-delay: 1.55s; }
+
+        @keyframes nodeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .links {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .links svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .influence-line {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 760;
+            stroke-dashoffset: 760;
+            animation: drawLine 1.25s ease-out forwards;
+        }
+
+        .influence-line--sales { stroke: rgba(34,211,238,0.72); animation-delay: 1.75s; }
+        .influence-line--payments { stroke: rgba(139,92,246,0.72); animation-delay: 1.95s; }
+        .influence-line--support { stroke: rgba(245,158,11,0.72); animation-delay: 2.15s; }
+        .influence-line--platform { stroke: rgba(16,185,129,0.72); animation-delay: 2.35s; }
+
+        .link-dot {
+            fill: rgba(3,7,18,0.96);
+            stroke-width: 4;
+            opacity: 0;
+            animation: fadeIn 0.45s ease-out 2.55s forwards;
+        }
+
+        .link-dot--cyan { stroke: rgba(34,211,238,0.78); }
+        .link-dot--violet { stroke: rgba(139,92,246,0.78); }
+        .link-dot--orange { stroke: rgba(245,158,11,0.78); }
+        .link-dot--green { stroke: rgba(16,185,129,0.78); }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .law-box {
+            position: absolute;
+            left: 50%;
+            top: 212px;
+            width: 310px;
+            transform: translateX(-50%);
+            border-radius: 26px;
+            border: 1px solid rgba(34,211,238,0.28);
+            background: rgba(6,182,212,0.08);
+            padding: 24px 28px;
+            text-align: center;
+            opacity: 0;
+            animation: lawIn 0.65s ease-out 2.6s forwards;
+        }
+
+        .law-box i {
+            color: var(--cyan-400);
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .law-box strong {
+            display: block;
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .law-box span {
+            color: var(--text-muted);
+            font-size: 18px;
+            line-height: 1.35;
+            font-weight: 600;
+        }
+
+        @keyframes lawIn {
+            from { opacity: 0; transform: translate(-50%, 20px) scale(0.94); }
+            to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+
+        .takeaway {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            padding: 18px 30px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(17,24,39,0.92);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeUpCenter 0.7s ease-out 2.9s forwards;
+        }
+
+        .takeaway span {
+            color: var(--cyan-400);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUpCenter {
+            from { opacity: 0; transform: translate(-50%, 24px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="accent accent--left"></div>
+        <div class="accent accent--right"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <main class="content">
+            <header class="header">
+                <h1 class="title">Architektura to <span class="highlight">kod i organizacja</span></h1>
+            </header>
+
+            <section class="diagram" aria-label="Struktura zespołów wpływa na strukturę systemu">
+                <div class="panel panel--teams">
+                    <div class="panel-title"><i class="ti ti-users-group"></i> Zespoły</div>
+                    <div class="node-list">
+                        <div class="node"><i class="ti ti-user-star"></i> Zespół sprzedaży</div>
+                        <div class="node"><i class="ti ti-credit-card"></i> Zespół płatności</div>
+                        <div class="node"><i class="ti ti-headset"></i> Zespół obsługi</div>
+                        <div class="node"><i class="ti ti-server-2"></i> Zespół platformy</div>
+                    </div>
+                </div>
+
+                <div class="links">
+                    <svg viewBox="0 0 1320 610" preserveAspectRatio="xMidYMid meet">
+                        <path class="influence-line influence-line--sales" d="M455 154 C570 126 750 126 865 154" />
+                        <path class="influence-line influence-line--payments" d="M455 244 C584 224 736 224 865 244" />
+                        <path class="influence-line influence-line--support" d="M455 334 C584 354 736 354 865 334" />
+                        <path class="influence-line influence-line--platform" d="M455 424 C570 482 750 482 865 424" />
+                        <circle class="link-dot link-dot--cyan" cx="455" cy="154" r="8" />
+                        <circle class="link-dot link-dot--cyan" cx="865" cy="154" r="8" />
+                        <circle class="link-dot link-dot--violet" cx="455" cy="244" r="8" />
+                        <circle class="link-dot link-dot--violet" cx="865" cy="244" r="8" />
+                        <circle class="link-dot link-dot--orange" cx="455" cy="334" r="8" />
+                        <circle class="link-dot link-dot--orange" cx="865" cy="334" r="8" />
+                        <circle class="link-dot link-dot--green" cx="455" cy="424" r="8" />
+                        <circle class="link-dot link-dot--green" cx="865" cy="424" r="8" />
+                    </svg>
+                </div>
+
+                <div class="law-box">
+                    <i class="ti ti-arrows-right-left"></i>
+                    <strong>Prawo Conveya</strong>
+                </div>
+
+                <div class="panel panel--system">
+                    <div class="panel-title"><i class="ti ti-apps"></i> System</div>
+                    <div class="node-list">
+                        <div class="node"><i class="ti ti-shopping-cart"></i> Moduł sprzedaży</div>
+                        <div class="node"><i class="ti ti-receipt"></i> Moduł płatności</div>
+                        <div class="node"><i class="ti ti-message-circle"></i> Moduł obsługi</div>
+                        <div class="node"><i class="ti ti-database"></i> Platforma techniczna</div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

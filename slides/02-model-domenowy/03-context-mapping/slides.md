@@ -64,12 +64,6 @@
 
 ## Slajd 5 — Context Mapping
 
-**Treść:**
-
-* Narzędzie do zrozumienia zależności
-* Pokazuje relacje między kontekstami
-* Pokazuje relacje między zespołami
-
 **Grafika:**
 
 * Prosta mapa kontekstów z relacjami

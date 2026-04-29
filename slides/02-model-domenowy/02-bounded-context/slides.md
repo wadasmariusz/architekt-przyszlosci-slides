@@ -68,10 +68,6 @@
     - Procesy - jak to przebiega po kolei
     - Logika - to, co wszystko spina
 
-**Grafika:** Duży „box" narysowany w stylu canvasowym (jak na tablicy / whiteboard). Wewnątrz cztery wyraźne sekcje z ikonami i krótkimi etykietami. Estetyka „ręcznego rysunku" (hand-drawn style) - żeby nawiązać do koncepcji canvasu.
-
-**Animacja:** Box pojawia się jako pierwszy (rysuje się obwódka), a potem kolejno „wpadają" do środka cztery elementy - każdy z lekkim efektem bounce.
-
 ---
 
 ## Slajd 6 - Wejścia do kontekstu

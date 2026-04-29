@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 09 - Upstream vs Downstream</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --orange-500: #f59e0b;
+            --emerald-500: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 20% 26%, rgba(34,211,238,0.14), transparent 32%),
+                radial-gradient(circle at 78% 60%, rgba(16,185,129,0.10), transparent 34%),
+                radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 36px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            color: #ffffff;
+            font-size: 78px;
+            font-weight: 800;
+            line-height: 1.06;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 27px;
+            font-weight: 400;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
+        }
+
+        .river-scene {
+            position: relative;
+            width: 1360px;
+            height: 590px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.95s forwards;
+        }
+
+        .river-panel {
+            position: absolute;
+            inset: 22px 0 42px;
+            border-radius: 36px;
+            border: 2px solid rgba(255,255,255,0.08);
+            background:
+                linear-gradient(180deg, rgba(17,24,39,0.86), rgba(10,14,23,0.72)),
+                radial-gradient(circle at 18% 20%, rgba(34,211,238,0.14), transparent 34%);
+            box-shadow: 0 28px 80px rgba(0,0,0,0.34);
+            overflow: hidden;
+        }
+
+        .river-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .river-bed {
+            fill: none;
+            stroke: rgba(34,211,238,0.12);
+            stroke-width: 150;
+            stroke-linecap: round;
+        }
+
+        .river-flow {
+            fill: none;
+            stroke: url(#riverGradient);
+            stroke-width: 70;
+            stroke-linecap: round;
+            stroke-dasharray: 1400;
+            stroke-dashoffset: 1400;
+            filter: drop-shadow(0 0 28px rgba(34,211,238,0.24));
+            animation: drawRiver 1.8s ease-out 1.05s forwards;
+        }
+
+        .river-line {
+            fill: none;
+            stroke: rgba(255,255,255,0.22);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-dasharray: 14 18;
+            animation: drift 9s linear infinite;
+        }
+
+        @keyframes drawRiver {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes drift {
+            to { stroke-dashoffset: -160; }
+        }
+
+        .point {
+            position: absolute;
+            width: 250px;
+            min-height: 138px;
+            border-radius: 28px;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.92);
+            box-shadow: 0 22px 60px rgba(0,0,0,0.28);
+            padding: 24px;
+            opacity: 0;
+            animation: pointIn 0.65s ease-out forwards;
+        }
+
+        .point--upstream {
+            top: 80px;
+            left: 78px;
+            border-color: rgba(34,211,238,0.34);
+            animation-delay: 1.25s;
+        }
+
+        .point--flow {
+            top: 284px;
+            left: 554px;
+            border-color: rgba(245,158,11,0.34);
+            animation-delay: 1.45s;
+        }
+
+        .point--downstream {
+            top: 122px;
+            right: 88px;
+            border-color: rgba(16,185,129,0.34);
+            animation-delay: 1.65s;
+        }
+
+        @keyframes pointIn {
+            from { opacity: 0; transform: translateY(22px) scale(0.94); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .point i {
+            display: inline-flex;
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 30px;
+            background: rgba(3,7,18,0.48);
+        }
+
+        .point--upstream i { color: var(--cyan-400); }
+        .point--flow i { color: var(--orange-500); }
+        .point--downstream i { color: var(--emerald-500); }
+
+        .point h2 {
+            color: #ffffff;
+            font-size: 30px;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .point p {
+            color: var(--text-muted);
+            font-size: 20px;
+            line-height: 1.35;
+            font-weight: 600;
+        }
+
+        .river-label {
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 18px;
+            border-radius: 999px;
+            background: rgba(3,7,18,0.72);
+            border: 1px solid rgba(34,211,238,0.24);
+            color: #a5f3fc;
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.95s forwards;
+        }
+
+        .river-label--source { top: 244px; left: 272px; }
+        .river-label--mouth { top: 404px; right: 284px; color: #bbf7d0; border-color: rgba(16,185,129,0.24); }
+
+        .rule {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 28px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.94);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+            font-size: 25px;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeUpCenter 0.7s ease-out 2.1s forwards;
+        }
+
+        .rule i {
+            color: var(--cyan-400);
+            font-size: 28px;
+        }
+
+        .rule span {
+            color: var(--cyan-400);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUpCenter {
+            from { opacity: 0; transform: translate(-50%, 24px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <main class="content">
+            <header class="header">
+                <h1 class="title">Relacja płynie <span class="highlight">w jednym kierunku</span></h1>
+                <p class="subtitle">Upstream jest bliżej źródła decyzji. Downstream pracuje z tym, co do niego dopłynie.</p>
+            </header>
+
+            <section class="river-scene" aria-label="Metafora rzeki: upstream, przepływ i downstream">
+                <div class="river-panel"></div>
+
+                <svg class="river-svg" viewBox="0 0 1360 590" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <linearGradient id="riverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="rgba(34,211,238,0.82)" />
+                            <stop offset="55%" stop-color="rgba(6,182,212,0.72)" />
+                            <stop offset="100%" stop-color="rgba(16,185,129,0.78)" />
+                        </linearGradient>
+                    </defs>
+                    <path class="river-bed" d="M150 318 C318 178 504 404 678 298 C840 198 976 312 1210 222" />
+                    <path class="river-flow" d="M150 318 C318 178 504 404 678 298 C840 198 976 312 1210 222" />
+                    <path class="river-line" d="M210 316 C360 224 504 348 656 294 C824 234 968 292 1138 238" />
+                    <path class="river-line" d="M232 350 C380 272 506 408 704 332 C854 276 970 336 1130 276" />
+                </svg>
+
+                <article class="point point--upstream">
+                    <i class="ti ti-source-code"></i>
+                    <h2>Upstream</h2>
+                    <p>Decyduje o modelu, kontrakcie i kierunku zmian.</p>
+                </article>
+
+                <article class="point point--flow">
+                    <i class="ti ti-arrow-right"></i>
+                    <h2>Przepływ</h2>
+                    <p>Zmiany płyną dalej przez API, eventy albo proces.</p>
+                </article>
+
+                <article class="point point--downstream">
+                    <i class="ti ti-delta"></i>
+                    <h2>Downstream</h2>
+                    <p>Dostosowuje się do tego, co przychodzi z góry.</p>
+                </article>
+
+                <div class="river-label river-label--source"><i class="ti ti-droplet"></i> źródło decyzji</div>
+                <div class="river-label river-label--mouth"><i class="ti ti-waves-electricity"></i> miejsce adaptacji</div>
+            </section>
+        </main>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 03 - Gdzie pojawia się problem</title>
+    <title>Slide 04 - Przykład z życia</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -16,7 +16,6 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --orange-500: #f59e0b;
-            --violet-500: #8b5cf6;
             --rose-500: #f43f5e;
             --emerald-500: #10b981;
         }
@@ -90,11 +89,11 @@
         }
 
         .accent--right {
-            width: 430px;
-            height: 430px;
-            right: 13%;
-            bottom: 9%;
-            background: var(--rose-500);
+            width: 420px;
+            height: 420px;
+            right: 11%;
+            bottom: 11%;
+            background: var(--orange-500);
         }
 
         .particle {
@@ -146,11 +145,11 @@
             position: relative;
             z-index: 10;
             width: 100%;
+            max-width: 1180px;
             padding: 0 170px;
-            display: grid;
-            grid-template-columns: 1fr 670px;
+            display: flex;
             align-items: center;
-            gap: 82px;
+            justify-content: center;
         }
 
         .copy {
@@ -178,10 +177,10 @@
         }
 
         h1.title {
-            max-width: 870px;
-            margin-bottom: 42px;
+            max-width: 900px;
+            margin-bottom: 34px;
             color: #ffffff;
-            font-size: 78px;
+            font-size: 72px;
             font-weight: 800;
             line-height: 1.08;
             letter-spacing: -1px;
@@ -202,19 +201,19 @@
             flex-direction: column;
             gap: 18px;
             width: 100%;
-            max-width: 820px;
+            max-width: 920px;
         }
 
         .point {
             display: flex;
             align-items: center;
             gap: 18px;
-            padding: 20px 26px;
+            padding: 22px 28px;
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 18px;
             background: rgba(17,24,39,0.62);
             color: var(--text-muted);
-            font-size: 30px;
+            font-size: 31px;
             font-weight: 600;
             line-height: 1.25;
             opacity: 0;
@@ -224,6 +223,7 @@
         .point:nth-child(1) { animation: fadeUp 0.7s ease-out 0.75s forwards; }
         .point:nth-child(2) { animation: fadeUp 0.7s ease-out 0.95s forwards; }
         .point:nth-child(3) { animation: fadeUp 0.7s ease-out 1.15s forwards; }
+        .point:nth-child(4) { animation: fadeUp 0.7s ease-out 1.35s forwards; }
 
         .point i {
             flex: 0 0 auto;
@@ -241,181 +241,6 @@
         .point strong {
             color: #ffffff;
             font-weight: 600;
-        }
-
-        .integration-map {
-            position: relative;
-            width: 670px;
-            height: 650px;
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.5s forwards;
-        }
-
-        .map-frame {
-            position: absolute;
-            inset: 22px 8px 62px;
-            border: 2px solid rgba(148,163,184,0.18);
-            border-radius: 28px;
-            background: linear-gradient(135deg, rgba(15,23,42,0.84), rgba(3,7,18,0.66));
-            box-shadow: 0 28px 80px rgba(0,0,0,0.34);
-        }
-
-        .context {
-            position: absolute;
-            width: 178px;
-            height: 112px;
-            border: 2px solid rgba(6,182,212,0.42);
-            border-radius: 18px;
-            background: rgba(17,24,39,0.88);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 8px;
-            padding: 0 20px;
-            opacity: 0;
-            animation: contextIn 0.55s ease-out forwards;
-        }
-
-        .context i {
-            color: var(--cyan-400);
-            font-size: 30px;
-        }
-
-        .context strong {
-            color: #ffffff;
-            font-size: 24px;
-            line-height: 1;
-        }
-
-        .context span {
-            color: var(--text-muted);
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .context--a { top: 80px; left: 54px; animation-delay: 0.75s; }
-        .context--b { top: 80px; right: 52px; border-color: rgba(245,158,11,0.46); animation-delay: 0.95s; }
-        .context--b i { color: var(--orange-500); }
-        .context--c { top: 306px; left: 54px; border-color: rgba(139,92,246,0.46); animation-delay: 1.15s; }
-        .context--c i { color: var(--violet-500); }
-        .context--d { top: 306px; right: 52px; border-color: rgba(16,185,129,0.46); animation-delay: 1.35s; }
-        .context--d i { color: var(--emerald-500); }
-
-        @keyframes contextIn {
-            from { opacity: 0; transform: scale(0.72) translateY(18px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .arrows {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        .arrows svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
-
-        .arrow {
-            fill: none;
-            stroke: rgba(148,163,184,0.36);
-            stroke-width: 2;
-            stroke-dasharray: 620;
-            stroke-dashoffset: 620;
-            animation: drawArrow 1.35s ease-out forwards;
-        }
-
-        .arrow--hot {
-            stroke: rgba(244,63,94,0.78);
-            stroke-width: 3;
-        }
-
-        .arrow:nth-child(2) { animation-delay: 1.55s; }
-        .arrow:nth-child(3) { animation-delay: 1.75s; }
-        .arrow:nth-child(4) { animation-delay: 1.95s; }
-        .arrow:nth-child(5) { animation-delay: 2.15s; }
-
-        @keyframes drawArrow {
-            to { stroke-dashoffset: 0; }
-        }
-
-        .delay {
-            position: absolute;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 14px;
-            border: 1px solid rgba(244,63,94,0.38);
-            border-radius: 999px;
-            background: rgba(244,63,94,0.1);
-            color: #fecdd3;
-            font-size: 15px;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeIn 0.45s ease-out forwards;
-        }
-
-        .delay i {
-            color: var(--rose-500);
-            font-size: 19px;
-        }
-
-        .delay--one { top: 146px; left: 276px; animation-delay: 2.25s; }
-        .delay--two { top: 264px; right: 132px; animation-delay: 2.45s; }
-        .delay--three { top: 426px; left: 252px; animation-delay: 2.65s; }
-
-        .backlog {
-            position: absolute;
-            left: 50%;
-            bottom: 30px;
-            width: 330px;
-            transform: translateX(-50%);
-            padding: 18px 22px;
-            border: 1px solid rgba(245,158,11,0.36);
-            border-radius: 18px;
-            background: rgba(245,158,11,0.08);
-            opacity: 0;
-            animation: backlogIn 0.7s ease-out 2.85s forwards;
-        }
-
-        .backlog-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-            color: var(--orange-500);
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .queue {
-            display: grid;
-            gap: 7px;
-        }
-
-        .queue span {
-            display: block;
-            height: 12px;
-            border-radius: 999px;
-            background: rgba(245,158,11,0.2);
-        }
-
-        .queue span:nth-child(1) { width: 92%; }
-        .queue span:nth-child(2) { width: 74%; }
-        .queue span:nth-child(3) { width: 86%; }
-        .queue span:nth-child(4) { width: 56%; }
-
-        @keyframes backlogIn {
-            from { opacity: 0; transform: translate(-50%, 24px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
         }
 
         @keyframes fadeIn {
@@ -474,71 +299,28 @@
         <div class="corner corner--br"></div>
 
         <main class="content">
-            <section class="copy" aria-label="Gdzie pojawia się problem">
-                <div class="eyebrow"><i class="ti ti-route"></i> Integracje</div>
-                <h1 class="title">Problem pojawia się <span class="highlight">na styku kontekstów</span></h1>
+            <section class="copy" aria-label="Przykład z życia">
+                <div class="eyebrow"><i class="ti ti-briefcase-2"></i> Przykład z życia</div>
+                <h1 class="title">Zależność kończy się często <span class="highlight">obejściem</span></h1>
 
                 <div class="points">
                     <div class="point">
-                        <i class="ti ti-arrows-exchange"></i>
-                        <span>Konteksty muszą się <strong>integrować</strong></span>
+                        <i class="ti ti-arrow-right-to-arc"></i>
+                        <span>Zespół A potrzebuje zmiany od zespołu B</span>
                     </div>
                     <div class="point">
-                        <i class="ti ti-users-group"></i>
-                        <span>Zależności między <strong>zespołami</strong></span>
+                        <i class="ti ti-ticket"></i>
+                        <span>Ticket trafia do backlogu</span>
                     </div>
                     <div class="point">
-                        <i class="ti ti-stack-pop"></i>
-                        <span>Bottlenecki w <strong>backlogach</strong></span>
+                        <i class="ti ti-hourglass-high"></i>
+                        <span>Czas oczekiwania prowadzi do workaroundu</span>
+                    </div>
+                    <div class="point">
+                        <i class="ti ti-bug"></i>
+                        <span>Workaround wraca później jako bug</span>
                     </div>
                 </div>
-            </section>
-
-            <section class="integration-map" aria-label="Strzałki między kontekstami z oznaczonym opóźnieniem">
-                <div class="map-frame"></div>
-
-                <div class="arrows">
-                    <svg viewBox="0 0 670 650" preserveAspectRatio="xMidYMid meet">
-                        <defs>
-                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-                                <path d="M0,0 L10,5 L0,10 Z" fill="rgba(148,163,184,0.72)" />
-                            </marker>
-                            <marker id="arrowhead-hot" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-                                <path d="M0,0 L10,5 L0,10 Z" fill="rgba(244,63,94,0.9)" />
-                            </marker>
-                        </defs>
-                        <path class="arrow" marker-end="url(#arrowhead)" d="M232 136 C294 112 354 112 434 136" />
-                        <path class="arrow arrow--hot" marker-end="url(#arrowhead-hot)" d="M489 192 C520 247 520 302 489 356" />
-                        <path class="arrow" marker-end="url(#arrowhead)" d="M438 416 C358 448 292 448 232 416" />
-                        <path class="arrow arrow--hot" marker-end="url(#arrowhead-hot)" d="M146 356 C112 301 112 248 146 192" />
-                    </svg>
-                </div>
-
-                <div class="context context--a">
-                    <i class="ti ti-box"></i>
-                    <strong>Kontekst A</strong>
-                    <span>Zespół A</span>
-                </div>
-                <div class="context context--b">
-                    <i class="ti ti-box"></i>
-                    <strong>Kontekst B</strong>
-                    <span>Zespół B</span>
-                </div>
-                <div class="context context--c">
-                    <i class="ti ti-box"></i>
-                    <strong>Kontekst C</strong>
-                    <span>Zespół C</span>
-                </div>
-                <div class="context context--d">
-                    <i class="ti ti-box"></i>
-                    <strong>Kontekst D</strong>
-                    <span>Zespół D</span>
-                </div>
-
-                <div class="delay delay--one"><i class="ti ti-clock-hour-4"></i> Czekanie</div>
-                <div class="delay delay--two"><i class="ti ti-lock"></i> Blokada</div>
-                <div class="delay delay--three"><i class="ti ti-hourglass-high"></i> Opóźnienie</div>
-
             </section>
         </main>
 

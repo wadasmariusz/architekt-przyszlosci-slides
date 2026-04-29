@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Co pokazuje Context Map</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --orange-500: #f59e0b;
+            --violet-500: #8b5cf6;
+            --rose-500: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 24% 28%, rgba(34,211,238,0.12), transparent 30%),
+                radial-gradient(circle at 76% 62%, rgba(244,63,94,0.10), transparent 32%),
+                radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 96px 120px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 46px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            color: #ffffff;
+            font-size: 76px;
+            font-weight: 800;
+            line-height: 1.06;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 27px;
+            font-weight: 400;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
+        }
+
+        .diagnostics {
+            position: relative;
+            width: 1180px;
+            height: 420px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .lens {
+            position: relative;
+            min-height: 420px;
+            border-radius: 28px;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(10,14,23,0.82));
+            box-shadow: 0 28px 80px rgba(0,0,0,0.34);
+            padding: 30px 28px;
+            overflow: hidden;
+            opacity: 0;
+            animation: lensIn 0.75s ease-out forwards;
+        }
+
+        .lens:nth-child(1) { animation-delay: 0.95s; }
+        .lens:nth-child(2) { animation-delay: 1.12s; }
+        .lens:nth-child(3) { animation-delay: 1.29s; }
+
+        @keyframes lensIn {
+            from { opacity: 0; transform: translateY(26px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .lens::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            opacity: 0.16;
+            pointer-events: none;
+        }
+
+        .lens--wait::before {
+            background: radial-gradient(circle at 50% 30%, var(--orange-500), transparent 42%);
+        }
+
+        .lens--power::before {
+            background: radial-gradient(circle at 50% 30%, var(--cyan-400), transparent 42%);
+        }
+
+        .lens--bottleneck::before {
+            background: radial-gradient(circle at 50% 30%, var(--rose-500), transparent 42%);
+        }
+
+        .lens-head {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .lens-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(3,7,18,0.45);
+            flex: 0 0 auto;
+        }
+
+        .lens--wait .lens-icon { color: var(--orange-500); }
+        .lens--power .lens-icon { color: var(--cyan-400); }
+        .lens--bottleneck .lens-icon { color: var(--rose-500); }
+
+        .lens-head h2 {
+            color: #ffffff;
+            font-size: 31px;
+            line-height: 1.05;
+        }
+
+        .lens-head span {
+            display: block;
+            margin-top: 8px;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .visual {
+            position: relative;
+            z-index: 2;
+            height: 270px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(3,7,18,0.38);
+            overflow: hidden;
+        }
+
+        .queue {
+            position: absolute;
+            inset: 30px 34px;
+            display: grid;
+            gap: 16px;
+            align-content: center;
+        }
+
+        .queue-row {
+            height: 34px;
+            border-radius: 999px;
+            background: rgba(245,158,11,0.13);
+            border: 1px solid rgba(245,158,11,0.22);
+            overflow: hidden;
+        }
+
+        .queue-row::after {
+            content: '';
+            display: block;
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, rgba(245,158,11,0.35), rgba(245,158,11,0.8));
+            animation: fillBar 1s ease-out forwards;
+        }
+
+        .queue-row:nth-child(1)::after { animation-delay: 1.45s; width: 86%; }
+        .queue-row:nth-child(2)::after { animation-delay: 1.6s; width: 64%; }
+        .queue-row:nth-child(3)::after { animation-delay: 1.75s; width: 72%; }
+        .queue-row:nth-child(4)::after { animation-delay: 1.9s; width: 42%; }
+
+        @keyframes fillBar {
+            from { transform: scaleX(0); transform-origin: left; }
+            to { transform: scaleX(1); transform-origin: left; }
+        }
+
+        .power-pyramid {
+            position: absolute;
+            inset: 24px 18px;
+            display: grid;
+            grid-template-rows: 62px 62px 62px;
+            gap: 18px;
+            align-content: center;
+        }
+
+        .power-tier {
+            justify-self: center;
+            border-radius: 18px;
+            border: 1px solid rgba(34,211,238,0.26);
+            background: rgba(34,211,238,0.09);
+            color: #e0f2fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeUp 0.55s ease-out forwards;
+        }
+
+        .power-tier i {
+            font-size: 21px;
+            flex: 0 0 auto;
+        }
+
+        .power-tier:nth-child(1) { width: 150px; animation-delay: 1.45s; }
+        .power-tier:nth-child(2) { width: 230px; animation-delay: 1.65s; }
+        .power-tier:nth-child(3) { width: 260px; animation-delay: 1.85s; }
+
+        .heatmap {
+            position: absolute;
+            inset: 30px 40px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .heat-cell {
+            border-radius: 14px;
+            background: rgba(148,163,184,0.08);
+            border: 1px solid rgba(255,255,255,0.05);
+            opacity: 0;
+            animation: heatIn 0.45s ease-out forwards;
+        }
+
+        .heat-cell:nth-child(1) { animation-delay: 1.4s; }
+        .heat-cell:nth-child(2) { animation-delay: 1.45s; }
+        .heat-cell:nth-child(3) { animation-delay: 1.5s; }
+        .heat-cell:nth-child(4) { animation-delay: 1.55s; }
+        .heat-cell:nth-child(5) { animation-delay: 1.6s; }
+        .heat-cell:nth-child(6) { animation-delay: 1.65s; }
+        .heat-cell:nth-child(7) { animation-delay: 1.7s; }
+        .heat-cell:nth-child(8) { animation-delay: 1.75s; background: rgba(244,63,94,0.18); border-color: rgba(244,63,94,0.32); }
+        .heat-cell:nth-child(9) { animation-delay: 1.8s; background: rgba(244,63,94,0.3); border-color: rgba(244,63,94,0.48); }
+        .heat-cell:nth-child(10) { animation-delay: 1.85s; }
+        .heat-cell:nth-child(11) { animation-delay: 1.9s; }
+        .heat-cell:nth-child(12) { animation-delay: 1.95s; background: rgba(244,63,94,0.24); border-color: rgba(244,63,94,0.36); }
+        .heat-cell:nth-child(13) { animation-delay: 2s; background: rgba(244,63,94,0.55); border-color: rgba(244,63,94,0.72); box-shadow: 0 0 32px rgba(244,63,94,0.35); }
+        .heat-cell:nth-child(14) { animation-delay: 2.05s; background: rgba(244,63,94,0.2); border-color: rgba(244,63,94,0.34); }
+        .heat-cell:nth-child(15) { animation-delay: 2.1s; }
+        .heat-cell:nth-child(16) { animation-delay: 2.15s; }
+        .heat-cell:nth-child(17) { animation-delay: 2.2s; }
+        .heat-cell:nth-child(18) { animation-delay: 2.25s; }
+        .heat-cell:nth-child(19) { animation-delay: 2.3s; }
+        .heat-cell:nth-child(20) { animation-delay: 2.35s; }
+
+        @keyframes heatIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .statement {
+            position: relative;
+            z-index: 2;
+            min-height: 116px;
+            padding: 20px 22px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: var(--text-muted);
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .statement strong {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <main class="content">
+            <header class="header">
+                <h1 class="title">Context Map jako </br><span class="highlight">panel diagnostyczny</span></h1>
+            </header>
+
+            <section class="diagnostics" aria-label="Trzy diagnozy Context Map">
+                <article class="lens lens--wait">
+                    <div class="lens-head">
+                        <div class="lens-icon"><i class="ti ti-hourglass-high"></i></div>
+                        <div>
+                            <h2>Kto czeka</h2>
+                            <span>kolejki i opóźnienia</span>
+                        </div>
+                    </div>
+                    <div class="visual">
+                        <div class="queue">
+                            <div class="queue-row"></div>
+                            <div class="queue-row"></div>
+                            <div class="queue-row"></div>
+                            <div class="queue-row"></div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="lens lens--power">
+                    <div class="lens-head">
+                        <div class="lens-icon"><i class="ti ti-crown"></i></div>
+                        <div>
+                            <h2>Kto decyduje</h2>
+                            <span>Wpływ</span>
+                        </div>
+                    </div>
+                    <div class="visual">
+                        <div class="power-pyramid">
+                            <div class="power-tier"><i class="ti ti-crown"></i> Upstream</div>
+                            <div class="power-tier"><i class="ti ti-arrows-exchange"></i> Kontrakt</div>
+                            <div class="power-tier"><i class="ti ti-user-down"></i> Downstream</div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="lens lens--bottleneck">
+                    <div class="lens-head">
+                        <div class="lens-icon"><i class="ti ti-alert-triangle"></i></div>
+                        <div>
+                            <h2>Gdzie blokuje</h2>
+                            <span>bottlenecki</span>
+                        </div>
+                    </div>
+                    <div class="visual">
+                        <div class="heatmap">
+                            <div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div>
+                            <div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div>
+                            <div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div>
+                            <div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
