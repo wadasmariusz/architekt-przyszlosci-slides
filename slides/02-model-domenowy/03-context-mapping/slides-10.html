@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - Wpływ upstream</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #030712;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --orange-500: #f59e0b;
+            --violet-500: #8b5cf6;
+            --emerald-500: #10b981;
+            --rose-500: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 45%, rgba(244,63,94,0.12), transparent 30%),
+                radial-gradient(circle at 20% 25%, rgba(34,211,238,0.10), transparent 32%),
+                radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 34px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            color: #ffffff;
+            font-size: 78px;
+            font-weight: 800;
+            line-height: 1.06;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--rose-500), var(--orange-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 27px;
+            font-weight: 400;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
+        }
+
+        .impact-board {
+            position: relative;
+            width: 1360px;
+            height: 590px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.95s forwards;
+        }
+
+        .board-bg {
+            position: absolute;
+            inset: 18px 0 44px;
+            border-radius: 36px;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: linear-gradient(180deg, rgba(17,24,39,0.86), rgba(10,14,23,0.72));
+            box-shadow: 0 28px 80px rgba(0,0,0,0.34);
+            overflow: hidden;
+        }
+
+        .impact-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .impact-line {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 760;
+            stroke-dashoffset: 760;
+            animation: drawLine 1.2s ease-out forwards;
+        }
+
+        .impact-line--change { stroke: rgba(34,211,238,0.72); animation-delay: 1.25s; }
+        .impact-line--fail { stroke: rgba(244,63,94,0.86); stroke-width: 5; animation-delay: 1.55s; }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .component {
+            position: absolute;
+            width: 250px;
+            min-height: 128px;
+            border-radius: 28px;
+            border: 2px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.94);
+            box-shadow: 0 22px 60px rgba(0,0,0,0.28);
+            padding: 24px;
+            opacity: 0;
+            animation: componentIn 0.65s ease-out forwards;
+        }
+
+        .component i {
+            display: inline-flex;
+            width: 52px;
+            height: 52px;
+            border-radius: 17px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 29px;
+            background: rgba(3,7,18,0.48);
+        }
+
+        .component h2 {
+            color: #ffffff;
+            font-size: 28px;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .component p {
+            color: var(--text-muted);
+            font-size: 18px;
+            line-height: 1.35;
+            font-weight: 600;
+        }
+
+        .component--upstream {
+            left: 50%;
+            top: 192px;
+            width: 290px;
+            min-height: 168px;
+            transform: translateX(-50%);
+            border-color: rgba(244,63,94,0.5);
+            background:
+                radial-gradient(circle at 50% 0%, rgba(244,63,94,0.18), transparent 62%),
+                rgba(17,24,39,0.96);
+            animation: upstreamIn 0.65s ease-out 1.05s forwards;
+        }
+
+        .component--upstream i { color: var(--rose-500); }
+
+        .component--orders {
+            left: 96px;
+            top: 94px;
+            border-color: rgba(34,211,238,0.34);
+            animation-delay: 1.25s;
+        }
+
+        .component--mobile {
+            right: 96px;
+            top: 94px;
+            border-color: rgba(16,185,129,0.34);
+            animation-delay: 1.4s;
+        }
+
+        .component--payments {
+            left: 192px;
+            bottom: 104px;
+            border-color: rgba(139,92,246,0.36);
+            animation-delay: 1.55s;
+        }
+
+        .component--support {
+            right: 192px;
+            bottom: 104px;
+            border-color: rgba(245,158,11,0.36);
+            animation-delay: 1.7s;
+        }
+
+        .component--orders i { color: var(--cyan-400); }
+        .component--mobile i { color: var(--emerald-500); }
+        .component--payments i { color: var(--violet-500); }
+        .component--support i { color: var(--orange-500); }
+
+        @keyframes componentIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.94); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes upstreamIn {
+            from { opacity: 0; transform: translate(-50%, 20px) scale(0.94); }
+            to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+
+        .status {
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 999px;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 0.45s ease-out forwards;
+        }
+
+        .status--change {
+            top: 156px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #a5f3fc;
+            background: rgba(34,211,238,0.1);
+            border: 1px solid rgba(34,211,238,0.32);
+            animation-delay: 2s;
+        }
+
+        .status--blocked {
+            bottom: 156px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fecdd3;
+            background: rgba(244,63,94,0.12);
+            border: 1px solid rgba(244,63,94,0.36);
+            animation-delay: 2.2s;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            left: 50%;
+            top: 276px;
+            width: 310px;
+            height: 310px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid rgba(244,63,94,0.22);
+            opacity: 0;
+            animation: pulseRing 2.8s ease-out 1.9s infinite;
+        }
+
+        @keyframes pulseRing {
+            0% { opacity: 0.65; transform: translate(-50%, -50%) scale(0.72); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.35); }
+        }
+
+        .takeaway {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 28px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.94);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeUpCenter 0.7s ease-out 2.45s forwards;
+        }
+
+        .takeaway i {
+            color: var(--rose-500);
+            font-size: 28px;
+        }
+
+        .takeaway span {
+            color: #fecdd3;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUpCenter {
+            from { opacity: 0; transform: translate(-50%, 24px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <main class="content">
+            <header class="header">
+                <h1 class="title">Jedna zmiana może </br><span class="highlight">zatrzymać wiele modułów</span></h1>
+                <p class="subtitle">Jeśli upstream zmieni kontrakt albo przestanie działać, downstream nie ma z czym pracować.</p>
+            </header>
+
+            <section class="impact-board" aria-label="Jeden komponent blokujący kilka innych">
+                <div class="board-bg"></div>
+                <div class="pulse-ring"></div>
+
+                <svg class="impact-svg" viewBox="0 0 1360 590" preserveAspectRatio="xMidYMid meet">
+                    <path class="impact-line impact-line--change" d="M680 270 C560 170 440 140 346 158" />
+                    <path class="impact-line impact-line--change" d="M680 270 C800 170 920 140 1014 158" />
+                    <path class="impact-line impact-line--fail" d="M680 322 C548 400 452 428 442 404" />
+                    <path class="impact-line impact-line--fail" d="M680 322 C812 400 908 428 918 404" />
+                </svg>
+
+                <article class="component component--upstream">
+                    <i class="ti ti-server-bolt"></i>
+                    <h2>Upstream API</h2>
+                    <p>Zmienia kontrakt albo przestaje odpowiadać.</p>
+                </article>
+
+                <article class="component component--orders">
+                    <i class="ti ti-shopping-cart"></i>
+                    <h2>Zamówienia</h2>
+                    <p>Nie mogą pobrać aktualnych reguł.</p>
+                </article>
+
+                <article class="component component--mobile">
+                    <i class="ti ti-device-mobile"></i>
+                    <h2>Aplikacja</h2>
+                    <p>Niepełne dane.</p>
+                </article>
+
+                <article class="component component--payments">
+                    <i class="ti ti-credit-card"></i>
+                    <h2>Płatności</h2>
+                    <p>Czekają na nowy format danych.</p>
+                </article>
+
+                <article class="component component--support">
+                    <i class="ti ti-headset"></i>
+                    <h2>Obsługa</h2>
+                    <p>Dostaje zgłoszenia bez pełnego kontekstu.</p>
+                </article>
+
+                <div class="status status--change"><i class="ti ti-refresh"></i> zmiana upstream</div>
+                <div class="status status--blocked"><i class="ti ti-lock"></i> blokada downstream</div>
+
+                <div class="takeaway"><i class="ti ti-alert-triangle"></i> Awaria upstream = <span>blokada downstream</span></div>
+            </section>
+        </main>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
