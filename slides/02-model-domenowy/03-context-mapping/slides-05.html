@@ -226,6 +226,8 @@
         .relation {
             fill: none;
             stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
             stroke-dasharray: 760;
             stroke-dashoffset: 760;
             animation: drawLine 1.2s ease-out forwards;
@@ -335,7 +337,7 @@
         }
 
         .label--one {
-            top: 178px;
+            top: 166px;
             left: 492px;
             color: #a5f3fc;
             border: 1px solid rgba(34,211,238,0.25);
@@ -344,8 +346,8 @@
         }
 
         .label--two {
-            top: 360px;
-            left: 318px;
+            top: 288px;
+            left: 172px;
             color: #ddd6fe;
             border: 1px solid rgba(139,92,246,0.25);
             background: rgba(139,92,246,0.08);
@@ -353,8 +355,8 @@
         }
 
         .label--three {
-            top: 360px;
-            right: 308px;
+            top: 288px;
+            right: 138px;
             color: #bbf7d0;
             border: 1px solid rgba(16,185,129,0.25);
             background: rgba(16,185,129,0.08);
@@ -364,7 +366,7 @@
         .legend {
             position: absolute;
             left: 50%;
-            bottom: -2px;
+            bottom: -64px;
             transform: translateX(-50%);
             display: flex;
             gap: 18px;
@@ -383,6 +385,7 @@
             color: var(--text-muted);
             font-size: 16px;
             font-weight: 700;
+            white-space: nowrap;
         }
 
         .legend-swatch {
@@ -465,11 +468,9 @@
                 <div class="map-surface"></div>
 
                 <svg class="map-svg" viewBox="0 0 1240 620" preserveAspectRatio="xMidYMid meet">
-                    <path class="relation relation--cyan" d="M332 142 C450 110 548 110 908 142" />
-                    <path class="relation relation--violet" d="M270 398 C386 354 490 330 620 312" />
-                    <path class="relation relation--emerald" d="M970 398 C854 354 750 330 620 312" />
-                    <path class="relation relation--orange" d="M908 194 C850 266 796 314 690 386" />
-                    <path class="relation relation--rose" d="M332 194 C390 266 444 314 550 386" />
+                    <path class="relation relation--cyan" d="M332 134 C500 94 740 94 908 134" />
+                    <path class="relation relation--violet" d="M212 194 C212 270 300 318 300 412" />
+                    <path class="relation relation--emerald" d="M1028 194 C1028 270 940 318 940 412" />
                 </svg>
 
                 <article class="context context--sales">
