@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Najkrótsze rozróżnienie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 800px; height: 800px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 8%;  left: 22%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 68%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 76%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 82%; left: 12%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 52%; left: 42%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 15%; left: 58%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10;
+            width: 100%; height: 100%;
+            padding: 80px 130px 150px;
+        }
+
+        /* === Eyebrow === */
+        .eyebrow {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            text-align: center;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        /* === Title === */
+        h1.title {
+            font-size: 62px;
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -1px;
+            text-align: center;
+            margin-bottom: 3.5rem;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Two columns === */
+        .columns {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0;
+            align-items: stretch;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .column {
+            padding: 2.5rem 3rem;
+            opacity: 0;
+        }
+
+        .column--left {
+            animation: slideFromLeft 0.8s ease-out 1.0s forwards;
+        }
+
+        .column--right {
+            animation: slideFromRight 0.8s ease-out 1.3s forwards;
+        }
+
+        /* === Divider === */
+        .divider {
+            position: relative;
+            width: 3px;
+            background: linear-gradient(180deg, transparent 0%, rgba(100,116,139,0.3) 20%, rgba(100,116,139,0.3) 80%, transparent 100%);
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.9s forwards;
+        }
+
+        .divider-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(17,24,39,0.9);
+            border: 2px solid rgba(100,116,139,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #64748b;
+            z-index: 2;
+            opacity: 0;
+            animation: scaleIn 0.5s ease-out 1.6s forwards;
+        }
+
+        /* === Column header === */
+        .col-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 1.2rem;
+        }
+
+        .column--left .col-icon {
+            background: rgba(245,158,11,0.10);
+            color: #f59e0b;
+        }
+
+        .column--right .col-icon {
+            background: rgba(6,182,212,0.10);
+            color: var(--cyan-400);
+        }
+
+        .col-label {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.6rem;
+        }
+
+        .column--left .col-label { color: rgba(245,158,11,0.6); }
+        .column--right .col-label { color: rgba(6,182,212,0.6); }
+
+        .col-title {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .column--left .col-title { color: #f59e0b; }
+        .column--right .col-title { color: var(--cyan-400); }
+
+        .col-desc {
+            font-size: 26px;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .col-desc strong {
+            color: #f0f4f8;
+            font-weight: 600;
+        }
+
+        /* === Bottom quote === */
+        .bottom-quote {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 22px;
+            font-weight: 300;
+            color: #64748b;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.0s forwards;
+        }
+
+        .bottom-quote strong {
+            color: #94a3b8;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="eyebrow">Slajd 03 · Najkrótsze rozróżnienie</div>
+
+            <h1 class="title">Subdomena patrzy od strony <span class="highlight">biznesu</span>,<br>Bounded Context od strony <span class="highlight">modelu</span></h1>
+
+            <div class="columns">
+                <!-- Left: Subdomena -->
+                <div class="column column--left">
+                    <div class="col-icon"><i class="ti ti-building"></i></div>
+                    <div class="col-label">Problem Space</div>
+                    <div class="col-title">Subdomena</div>
+                    <div class="col-desc">
+                        Jaki <strong>fragment problemu biznesowego</strong> analizujemy?
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <div class="divider-badge">≠</div>
+                </div>
+
+                <!-- Right: Bounded Context -->
+                <div class="column column--right">
+                    <div class="col-icon"><i class="ti ti-box"></i></div>
+                    <div class="col-label">Solution / Model Space</div>
+                    <div class="col-title">Bounded Context</div>
+                    <div class="col-desc">
+                        Gdzie obowiązuje <strong>konkretny model</strong>?<br>
+                        Gdzie pojęcia mają <strong>jedno, spójne znaczenie</strong>?
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-quote">
+                <strong>Biznes</strong> mówi co istnieje — <strong>model</strong> mówi jak to rozumiemy
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

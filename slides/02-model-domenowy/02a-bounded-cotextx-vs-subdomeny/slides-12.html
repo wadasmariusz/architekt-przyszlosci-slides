@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - Dopiero razem dają dobrą architekturę</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 750px; height: 750px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 22%; left: 12%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 72%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 35%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 22%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 58%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 12%; left: 45%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === Header === */
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 60px;
+        }
+
+        .eyebrow {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Convergence diagram === */
+        .diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            max-width: 1300px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .source-card {
+            width: 340px;
+            padding: 36px 32px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.7);
+            backdrop-filter: blur(8px);
+            text-align: center;
+            opacity: 0;
+        }
+
+        .source-card--business {
+            border: 1px solid rgba(245,158,11,0.25);
+            animation: slideFromLeft 0.8s ease-out 1.0s forwards;
+        }
+
+        .source-card--model {
+            border: 1px solid rgba(139,92,246,0.25);
+            animation: slideFromRight 0.8s ease-out 1.0s forwards;
+        }
+
+        .source-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .source-card--business .source-icon {
+            background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.25);
+        }
+
+        .source-card--model .source-icon {
+            background: rgba(139,92,246,0.12);
+            border: 1px solid rgba(139,92,246,0.25);
+        }
+
+        .source-icon i {
+            font-size: 30px;
+        }
+
+        .source-card--business .source-icon i { color: #f59e0b; }
+        .source-card--model .source-icon i { color: #8b5cf6; }
+
+        .source-name {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .source-card--business .source-name { color: #f59e0b; }
+        .source-card--model .source-name { color: #8b5cf6; }
+
+        .source-desc {
+            font-size: 18px;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* === Arrows SVG === */
+        .arrows-svg {
+            width: 180px;
+            height: 220px;
+            flex-shrink: 0;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 1.6s forwards;
+        }
+
+        .arrow-line {
+            stroke: rgba(6,182,212,0.5);
+            stroke-width: 2.5;
+            fill: none;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: drawLink 1s ease-out 1.8s forwards;
+        }
+
+        .arrow-head {
+            fill: rgba(6,182,212,0.6);
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 2.4s forwards;
+        }
+
+        /* === Result card === */
+        .result-card {
+            width: 380px;
+            padding: 40px 36px;
+            border-radius: 20px;
+            background: rgba(6,182,212,0.06);
+            border: 2px solid rgba(6,182,212,0.3);
+            backdrop-filter: blur(8px);
+            text-align: center;
+            opacity: 0;
+            animation: scaleIn 0.8s ease-out 2.2s forwards;
+            box-shadow: 0 0 40px rgba(6,182,212,0.1);
+        }
+
+        .result-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 24px rgba(34,211,238,0.3);
+        }
+
+        .result-icon i {
+            font-size: 34px;
+            color: var(--dark-bg);
+        }
+
+        .result-name {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .result-name .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .result-desc {
+            font-size: 18px;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* === Bullet points below === */
+        .points {
+            display: flex;
+            gap: 32px;
+            margin-top: 50px;
+            max-width: 1200px;
+        }
+
+        .point {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 26px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            flex: 1;
+            opacity: 0;
+        }
+
+        .point:nth-child(1) { animation: fadeUp 0.6s ease-out 2.6s forwards; }
+        .point:nth-child(2) { animation: fadeUp 0.6s ease-out 2.8s forwards; }
+        .point:nth-child(3) { animation: fadeUp 0.6s ease-out 3.0s forwards; }
+
+        .point i {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.11);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .point-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        .point-text strong {
+            color: #e2e8f0;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes drawLink {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Slajd 12 · Połączenie perspektyw</div>
+                <h1 class="title">Dopiero <span class="highlight">razem</span> dają dobrą architekturę</h1>
+            </div>
+
+            <!-- Convergence diagram -->
+            <div class="diagram">
+                <!-- Left: Business -->
+                <div class="source-card source-card--business">
+                    <div class="source-icon"><i class="ti ti-building"></i></div>
+                    <div class="source-name">Subdomena</div>
+                    <div class="source-desc">Pomaga <strong>zrozumieć biznes</strong> i jego naturalny podział</div>
+                </div>
+
+                <!-- Arrows converging -->
+                <svg class="arrows-svg" viewBox="0 0 180 220">
+                    <!-- Top arrow (from left card) -->
+                    <path class="arrow-line" d="M 10 60 Q 90 60 140 110" />
+                    <polygon class="arrow-head" points="135,100 148,113 130,113" />
+                    <!-- Bottom arrow (from right card) -->
+                    <path class="arrow-line" d="M 170 60 Q 90 60 140 110" style="animation-delay: 2.0s;" />
+                    <polygon class="arrow-head" points="135,100 148,113 130,113" />
+                    <!-- Down arrow to result -->
+                    <path class="arrow-line" d="M 140 115 L 140 180" style="animation-delay: 2.2s; stroke-dasharray: 80; stroke-dashoffset: 80;" />
+                    <polygon class="arrow-head" points="132,175 148,175 140,192" style="animation-delay: 2.6s;" />
+                </svg>
+
+                <!-- Right: Model -->
+                <div class="source-card source-card--model">
+                    <div class="source-icon"><i class="ti ti-topology-star-3"></i></div>
+                    <div class="source-name">Bounded Context</div>
+                    <div class="source-desc">Pomaga <strong>bezpiecznie modelować</strong> i wyznaczać granice</div>
+                </div>
+            </div>
+
+            <!-- Result below arrows -->
+            <div class="result-card" style="margin-top: -30px;">
+                <div class="result-icon"><i class="ti ti-hexagons"></i></div>
+                <div class="result-name"><span class="highlight">Sensowna architektura</span></div>
+                <div class="result-desc">Wyznaczanie granic systemu na bazie obu perspektyw</div>
+            </div>
+
+            <!-- Three points -->
+            <div class="points">
+                <div class="point">
+                    <i class="ti ti-building"></i>
+                    <div class="point-text"><strong>Subdomena</strong> — rozumiesz biznes</div>
+                </div>
+                <div class="point">
+                    <i class="ti ti-topology-star-3"></i>
+                    <div class="point-text"><strong>Bounded Context</strong> — modelujesz bezpiecznie</div>
+                </div>
+                <div class="point">
+                    <i class="ti ti-arrows-join-2"></i>
+                    <div class="point-text"><strong>Razem</strong> — wyznaczasz sensowne granice</div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
