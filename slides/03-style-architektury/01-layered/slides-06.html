@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Przykład: system rezerwacji wizyt</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 20%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 72%; left: 80%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 22%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 82%; left: 14%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 55%; left: 46%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 56%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Layout === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 40px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1 {
+            font-size: 50px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Main area: two columns === */
+        .main-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            max-width: 1660px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        /* === Left: case description === */
+        .case-box {
+            border-radius: 20px;
+            background: rgba(17,24,39,0.6);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            padding: 36px 40px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .case-box-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .case-box-title i {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .case-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .case-item:last-child { border-bottom: none; }
+
+        .case-item i {
+            font-size: 20px;
+            color: var(--cyan-400);
+            flex: 0 0 auto;
+        }
+
+        .case-subtitle {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 28px;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.75s forwards;
+        }
+
+        /* === Right: flow diagram === */
+        .flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 520px;
+            padding: 22px 30px;
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+        }
+
+        .flow-step:nth-child(1) {
+            background: rgba(34,211,238,0.08);
+            border: 1px solid rgba(34,211,238,0.2);
+            animation: slideFromRight 0.7s ease-out 0.7s forwards;
+        }
+
+        .flow-step:nth-child(3) {
+            background: rgba(139,92,246,0.08);
+            border: 1px solid rgba(139,92,246,0.2);
+            animation: slideFromRight 0.7s ease-out 0.9s forwards;
+        }
+
+        .flow-step:nth-child(5) {
+            background: rgba(245,158,11,0.08);
+            border: 1px solid rgba(245,158,11,0.2);
+            animation: slideFromRight 0.7s ease-out 1.1s forwards;
+        }
+
+        .flow-step:nth-child(7) {
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.2);
+            animation: slideFromRight 0.7s ease-out 1.3s forwards;
+        }
+
+        .flow-step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            flex: 0 0 auto;
+        }
+
+        .flow-step:nth-child(1) .flow-step-num { background: rgba(34,211,238,0.2); color: var(--cyan-400); }
+        .flow-step:nth-child(3) .flow-step-num { background: rgba(139,92,246,0.2); color: #8b5cf6; }
+        .flow-step:nth-child(5) .flow-step-num { background: rgba(245,158,11,0.2); color: #f59e0b; }
+        .flow-step:nth-child(7) .flow-step-num { background: rgba(16,185,129,0.2); color: #10b981; }
+
+        .flow-step-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .flow-step-label {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flow-step:nth-child(1) .flow-step-label { color: var(--cyan-400); }
+        .flow-step:nth-child(3) .flow-step-label { color: #8b5cf6; }
+        .flow-step:nth-child(5) .flow-step-label { color: #f59e0b; }
+        .flow-step:nth-child(7) .flow-step-label { color: #10b981; }
+
+        .flow-step-desc {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .flow-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 28px;
+            opacity: 0;
+        }
+
+        .flow-arrow:nth-of-type(2) { animation: fadeIn 0.5s ease-out 0.85s forwards; }
+        .flow-arrow:nth-of-type(4) { animation: fadeIn 0.5s ease-out 1.05s forwards; }
+        .flow-arrow:nth-of-type(6) { animation: fadeIn 0.5s ease-out 1.25s forwards; }
+
+        .flow-arrow i {
+            font-size: 20px;
+            color: rgba(148,163,184,0.5);
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <i class="ti ti-calendar-event"></i>
+                    Przykład zastosowania
+                </div>
+                <h1>System <span class="highlight">rezerwacji wizyt</span></h1>
+            </div>
+
+            <div class="main-area">
+                <!-- Left: case description -->
+                <div class="case-box">
+                    <div class="case-box-title">
+                        <i class="ti ti-user"></i>
+                        Co robi użytkownik?
+                    </div>
+                    <div class="case-item"><i class="ti ti-user-plus"></i> Zakłada konto</div>
+                    <div class="case-item"><i class="ti ti-search"></i> Przegląda terminy</div>
+                    <div class="case-item"><i class="ti ti-calendar-check"></i> Rezerwuje wizyty</div>
+                    <div class="case-item"><i class="ti ti-calendar-x"></i> Odwołuje rezerwacje</div>
+                </div>
+
+                <!-- Right: layer flow -->
+                <div class="flow">
+                    <div class="flow-step">
+                        <div class="flow-step-num">1</div>
+                        <div class="flow-step-text">
+                            <div class="flow-step-label">Controller</div>
+                            <div class="flow-step-desc">Odbiera żądanie HTTP</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow"><i class="ti ti-chevron-down"></i></div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">2</div>
+                        <div class="flow-step-text">
+                            <div class="flow-step-label">Service</div>
+                            <div class="flow-step-desc">Uruchamia przypadek użycia</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow"><i class="ti ti-chevron-down"></i></div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">3</div>
+                        <div class="flow-step-text">
+                            <div class="flow-step-label">Repository</div>
+                            <div class="flow-step-desc">Zapisuje dane rezerwacji</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow"><i class="ti ti-chevron-down"></i></div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">4</div>
+                        <div class="flow-step-text">
+                            <div class="flow-step-label">Response</div>
+                            <div class="flow-step-desc">Wynik wraca do klienta</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
