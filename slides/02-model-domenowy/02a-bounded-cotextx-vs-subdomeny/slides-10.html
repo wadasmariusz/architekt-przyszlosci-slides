@@ -93,6 +93,10 @@
             width: 100%;
             height: 100%;
             padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* === Header === */
@@ -155,12 +159,12 @@
             border: 1px solid rgba(245,158,11,0.25);
             animation: fadeUp 0.6s ease-out 1.2s forwards;
         }
-        .phase:nth-child(2) {
+        .phase:nth-child(3) {
             background: rgba(6,182,212,0.05);
             border: 1px solid rgba(6,182,212,0.25);
             animation: fadeUp 0.6s ease-out 1.5s forwards;
         }
-        .phase:nth-child(3) {
+        .phase:nth-child(5) {
             background: rgba(139,92,246,0.05);
             border: 1px solid rgba(139,92,246,0.25);
             animation: fadeUp 0.6s ease-out 1.8s forwards;
@@ -188,12 +192,12 @@
             border: 1px solid rgba(245,158,11,0.30);
             color: #f59e0b;
         }
-        .phase:nth-child(2) .phase-icon {
+        .phase:nth-child(3) .phase-icon {
             background: rgba(6,182,212,0.12);
             border: 1px solid rgba(6,182,212,0.30);
             color: var(--cyan-400);
         }
-        .phase:nth-child(3) .phase-icon {
+        .phase:nth-child(5) .phase-icon {
             background: rgba(139,92,246,0.12);
             border: 1px solid rgba(139,92,246,0.30);
             color: #8b5cf6;
@@ -225,8 +229,8 @@
         }
 
         .phase:nth-child(1) .phase-item i { color: #f59e0b; font-size: 18px; }
-        .phase:nth-child(2) .phase-item i { color: var(--cyan-400); font-size: 18px; }
-        .phase:nth-child(3) .phase-item i { color: #8b5cf6; font-size: 18px; }
+        .phase:nth-child(3) .phase-item i { color: var(--cyan-400); font-size: 18px; }
+        .phase:nth-child(5) .phase-item i { color: #8b5cf6; font-size: 18px; }
 
         /* === Arrows between phases === */
         .arrow {
@@ -309,7 +313,6 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Slajd 10 · Gdzie 1:1 nie wystarcza</div>
                 <h1 class="title">Wynajem samochodów: jeden obszar biznesowy, <span class="highlight">kilka modeli</span></h1>
             </div>
 
@@ -361,8 +364,6 @@
                 </div>
             </div>
 
-            <!-- Punchline -->
-            <div class="punchline">To samo „wynajmujemy auto" — <strong>zupełnie inne reguły</strong> na każdym etapie.</div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

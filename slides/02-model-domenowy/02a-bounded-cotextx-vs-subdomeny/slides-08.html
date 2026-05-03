@@ -92,7 +92,11 @@
             position: relative; z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 86px 130px 150px;
+            padding: 80px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* === Header === */
@@ -127,86 +131,84 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
 
-        /* === Diagram: overlapping rectangles === */
+        /* === Diagram: side-by-side cards === */
         .diagram-area {
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 0;
             margin: 0 auto;
-            max-width: 900px;
-            position: relative;
-            height: 320px;
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 1.0s forwards;
+            max-width: 1200px;
         }
 
-        .overlap-container {
-            position: relative;
-            width: 680px;
-            height: 260px;
-        }
-
-        .rect {
-            position: absolute;
+        .card {
             border-radius: 20px;
-            padding: 32px 40px;
+            padding: 40px 48px;
+            text-align: center;
+            width: 420px;
+            opacity: 0;
+        }
+
+        .card--subdomain {
+            background: rgba(6,182,212,0.05);
+            border: 2px solid rgba(6,182,212,0.25);
+            animation: slideFromLeft 0.8s ease-out 1.0s forwards;
+        }
+
+        .card--context {
+            background: rgba(6,182,212,0.05);
+            border: 2px solid rgba(6,182,212,0.25);
+            animation: slideFromRight 0.8s ease-out 1.3s forwards;
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.10);
+            color: var(--cyan-400);
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            width: 440px;
-            height: 220px;
+            font-size: 30px;
+            margin: 0 auto 18px;
         }
 
-        .rect-subdomain {
-            top: 20px;
-            left: 0;
-            background: rgba(245,158,11,0.06);
-            border: 2px solid rgba(245,158,11,0.35);
-            opacity: 0;
-            animation: slideFromLeft 0.8s ease-out 1.2s forwards;
-        }
-
-        .rect-context {
-            top: 20px;
-            right: 0;
-            background: rgba(6,182,212,0.06);
-            border: 2px solid rgba(6,182,212,0.35);
-            opacity: 0;
-            animation: slideFromRight 0.8s ease-out 1.5s forwards;
-        }
-
-        .rect-label {
+        .card-label {
             font-size: 14px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 8px;
+            color: var(--cyan-400);
+            margin-bottom: 10px;
         }
 
-        .rect-subdomain .rect-label { color: #f59e0b; }
-        .rect-context .rect-label { color: var(--cyan-400); }
-
-        .rect-name {
-            font-size: 24px;
+        .card-name {
+            font-size: 26px;
             font-weight: 800;
             color: #f0f4f8;
             line-height: 1.3;
+            margin-bottom: 8px;
         }
 
-        .rect-desc {
-            font-size: 16px;
+        .card-desc {
+            font-size: 17px;
             font-weight: 300;
             color: #94a3b8;
-            margin-top: 6px;
         }
 
-        /* Overlap zone indicator */
-        .overlap-badge {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
+        /* Connector between cards */
+        .map-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 0 32px;
+            opacity: 0;
+            animation: scaleIn 0.6s ease-out 1.6s forwards;
+        }
+
+        .map-badge {
             width: 68px;
             height: 68px;
             border-radius: 50%;
@@ -215,11 +217,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 800;
             color: #10b981;
-            opacity: 0;
-            animation: scaleIn 0.6s ease-out 1.9s forwards;
+        }
+
+        .map-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #10b981;
+            text-align: center;
+            line-height: 1.4;
         }
 
         /* === Bottom points === */
@@ -288,8 +296,8 @@
             to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes scaleIn {
-            from { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
-            to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            from { opacity: 0; transform: scale(0.4); }
+            to   { opacity: 1; transform: scale(1); }
         }
         @keyframes slideFromLeft {
             from { opacity: 0; transform: translateX(-60px); }
@@ -340,24 +348,28 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Slajd 08 · Ale to nie znaczy, że są oderwane</div>
-                <h1 class="title">Najlepiej, gdy da się mapować <span class="highlight">blisko 1:1</span><br>— ale nie zakładamy tego z góry</h1>
+                <h1 class="title">Idealnie, gdy da się mapować <span class="highlight"> 1:1</span><br> ale nie zakładamy tego z góry</h1>
             </div>
 
-            <!-- Diagram: two overlapping rectangles -->
+            <!-- Diagram: side-by-side cards -->
             <div class="diagram-area">
-                <div class="overlap-container">
-                    <div class="rect rect-subdomain">
-                        <div class="rect-label">Subdomena</div>
-                        <div class="rect-name">Obszar biznesowy</div>
-                        <div class="rect-desc">co istnieje w rzeczywistości firmy</div>
-                    </div>
-                    <div class="rect rect-context">
-                        <div class="rect-label">Bounded Context</div>
-                        <div class="rect-name">Granica modelu</div>
-                        <div class="rect-desc">gdzie pojęcia są spójne</div>
-                    </div>
-                    <div class="overlap-badge">≈</div>
+                <div class="card card--subdomain">
+                    <div class="card-icon"><i class="ti ti-building"></i></div>
+                    <div class="card-label">Subdomena</div>
+                    <div class="card-name">Obszar biznesowy</div>
+                    <div class="card-desc">co istnieje w rzeczywistości firmy</div>
+                </div>
+
+                <div class="map-connector">
+                    <div class="map-badge">≈</div>
+                    <div class="map-label">1:1</div>
+                </div>
+
+                <div class="card card--context">
+                    <div class="card-icon"><i class="ti ti-box"></i></div>
+                    <div class="card-label">Bounded Context</div>
+                    <div class="card-name">Granica modelu</div>
+                    <div class="card-desc">gdzie pojęcia są spójne</div>
                 </div>
             </div>
 
@@ -377,8 +389,6 @@
                 </div>
             </div>
 
-            <!-- Punchline -->
-            <div class="punchline">Czasem tak — ale to jest <strong>wynik analizy</strong>, nie założenie początkowe.</div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
