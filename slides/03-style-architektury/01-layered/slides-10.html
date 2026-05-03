@@ -181,9 +181,12 @@
 
         .check-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 22px;
+            justify-content: center;
+            gap: 14px;
             padding: 26px 30px;
+            text-align: center;
             border-radius: 16px;
             background: rgba(17,24,39,0.7);
             border: 1px solid rgba(16,185,129,0.12);
@@ -222,6 +225,7 @@
         .check-text {
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 4px;
         }
 
@@ -311,10 +315,6 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-circle-check"></i>
-                    Zastosowanie
-                </div>
                 <h1>Kiedy architektura warstwowa <span class="highlight">sprawdza się najlepiej?</span></h1>
             </div>
 
@@ -324,7 +324,6 @@
                     <div class="check-icon"><i class="ti ti-app-window"></i></div>
                     <div class="check-text">
                         <div class="check-title">Proste i średnio złożone systemy</div>
-                        <div class="check-desc">Gdzie domena biznesowa nie wymaga zaawansowanego modelowania</div>
                     </div>
                 </div>
 
@@ -333,7 +332,6 @@
                     <div class="check-icon"><i class="ti ti-database"></i></div>
                     <div class="check-text">
                         <div class="check-title">Aplikacje CRUD</div>
-                        <div class="check-desc">Systemy oparte głównie na operacjach tworzenia, odczytu, edycji i usuwania</div>
                     </div>
                 </div>
 
@@ -342,7 +340,6 @@
                     <div class="check-icon"><i class="ti ti-settings"></i></div>
                     <div class="check-text">
                         <div class="check-title">Panele administracyjne</div>
-                        <div class="check-desc">Backoffice i narzędzia wewnętrzne z przewidywalnym przepływem</div>
                     </div>
                 </div>
 
@@ -351,32 +348,12 @@
                     <div class="check-icon"><i class="ti ti-building"></i></div>
                     <div class="check-text">
                         <div class="check-title">Systemy wewnętrzne</div>
-                        <div class="check-desc">Aplikacje firmowe o ograniczonej skali i stabilnych wymaganiach</div>
                     </div>
                 </div>
-
-                <!-- 5 -->
-                <div class="check-item">
-                    <div class="check-icon"><i class="ti ti-rocket"></i></div>
-                    <div class="check-text">
-                        <div class="check-title">Szybkie uporządkowanie projektu</div>
-                        <div class="check-desc">Gdy potrzebujesz natychmiast nadać strukturę istniejącemu kodowi</div>
-                    </div>
-                </div>
-
-                <!-- 6 -->
-                <div class="check-item">
-                    <div class="check-icon"><i class="ti ti-users-group"></i></div>
-                    <div class="check-text">
-                        <div class="check-title">Wspólny model pracy zespołu</div>
-                        <div class="check-desc">Prosty schemat, który każdy w zespole szybko zrozumie i zastosuje</div>
-                    </div>
-                </div>
-            </div>
 
             <div class="footer-note">
                 <i class="ti ti-bulb"></i>
-                Dobry start, gdy domena nie jest jeszcze bardzo złożona
+                Dobry start, gdy domena nie jest złożona
             </div>
         </div>
 

@@ -131,6 +131,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
         .header {
@@ -183,9 +184,12 @@
 
         .warn-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 22px;
+            justify-content: center;
+            gap: 14px;
             padding: 30px 32px;
+            text-align: center;
             border-radius: 16px;
             background: rgba(17,24,39,0.7);
             border: 1px solid rgba(249,115,22,0.12);
@@ -222,6 +226,7 @@
         .warn-text {
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 5px;
         }
 
@@ -241,8 +246,7 @@
 
         /* === Comparison visual === */
         .comparison {
-            margin-top: auto;
-            margin-bottom: 10px;
+            margin-top: 30px;
             display: flex;
             align-items: center;
             gap: 40px;
@@ -332,10 +336,6 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-alert-triangle"></i>
-                    Ograniczenia
-                </div>
                 <h1>Kiedy warstwy mogą być <span class="highlight">niewystarczające?</span></h1>
             </div>
 
@@ -345,7 +345,6 @@
                     <div class="warn-icon"><i class="ti ti-puzzle"></i></div>
                     <div class="warn-text">
                         <div class="warn-title">Złożona domena biznesowa</div>
-                        <div class="warn-desc">Gdy reguły biznesowe są skomplikowane i wymagają dedykowanego modelowania</div>
                     </div>
                 </div>
 
@@ -354,7 +353,6 @@
                     <div class="warn-icon"><i class="ti ti-layout-grid"></i></div>
                     <div class="warn-text">
                         <div class="warn-title">Wiele niezależnych obszarów</div>
-                        <div class="warn-desc">System obejmuje różne konteksty biznesowe, które powinny ewoluować osobno</div>
                     </div>
                 </div>
 
@@ -363,7 +361,6 @@
                     <div class="warn-icon"><i class="ti ti-separator"></i></div>
                     <div class="warn-text">
                         <div class="warn-title">Potrzeba mocnych granic</div>
-                        <div class="warn-desc">Moduły wymagają wyraźnej izolacji, aby zmiany w jednym nie wpływały na inne</div>
                     </div>
                 </div>
 
@@ -372,7 +369,6 @@
                     <div class="warn-icon"><i class="ti ti-git-branch"></i></div>
                     <div class="warn-text">
                         <div class="warn-title">Technika ≠ struktura biznesu</div>
-                        <div class="warn-desc">Organizacja techniczna nie oddaje realnej struktury i procesów biznesowych</div>
                     </div>
                 </div>
             </div>

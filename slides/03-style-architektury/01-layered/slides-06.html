@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 06 - Przykład: system rezerwacji wizyt</title>
+    <title>Slide 06 - Jak wygląda projekt w architekturze warstwowej?</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --cyan-400: #22d3ee;
@@ -61,7 +61,7 @@
             border-radius: 50%;
             background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 65%);
             top: 50%;
-            left: 50%;
+            left: 30%;
             transform: translate(-50%, -50%);
             animation: bgPulse 6s ease-in-out infinite;
         }
@@ -125,13 +125,11 @@
             padding: 60px 80px 160px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
 
         .eyebrow {
@@ -140,7 +138,7 @@
             gap: 14px;
             margin-bottom: 18px;
             color: var(--cyan-400);
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             letter-spacing: 4px;
             text-transform: uppercase;
@@ -148,10 +146,10 @@
             animation: fadeUp 0.8s ease-out 0.25s forwards;
         }
 
-        .eyebrow i { font-size: 30px; }
+        .eyebrow i { font-size: 28px; }
 
         h1 {
-            font-size: 52px;
+            font-size: 50px;
             font-weight: 800;
             line-height: 1.15;
             letter-spacing: -1px;
@@ -167,125 +165,136 @@
             background-clip: text;
         }
 
-        /* === Horizontal Flow === */
-        .flow-container {
+        /* === Two-column layout === */
+        .columns {
             display: flex;
+            gap: 80px;
+            flex: 1;
             align-items: center;
             justify-content: center;
-            gap: 0;
-            width: 100%;
-            max-width: 1680px;
             opacity: 0;
             animation: fadeIn 0.8s ease-out 0.5s forwards;
         }
 
-        .flow-node {
+        /* === Left: folder tree === */
+        .tree-panel {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(6, 182, 212, 0.15);
+            border-radius: 20px;
+            padding: 40px 44px;
+            backdrop-filter: blur(12px);
+            min-width: 460px;
+        }
+
+        .tree-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .tree-item {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 18px;
+            gap: 14px;
+            padding: 12px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 500;
             opacity: 0;
         }
 
-        .flow-node:nth-child(1) { animation: scaleIn 0.6s ease-out 0.6s forwards; }
-        .flow-node:nth-child(3) { animation: scaleIn 0.6s ease-out 0.8s forwards; }
-        .flow-node:nth-child(5) { animation: scaleIn 0.6s ease-out 1.0s forwards; }
-        .flow-node:nth-child(7) { animation: scaleIn 0.6s ease-out 1.2s forwards; }
-        .flow-node:nth-child(9) { animation: scaleIn 0.6s ease-out 1.4s forwards; }
+        .tree-item:nth-child(2) { animation: slideRight 0.5s ease-out 0.7s forwards; }
+        .tree-item:nth-child(3) { animation: slideRight 0.5s ease-out 0.85s forwards; }
+        .tree-item:nth-child(4) { animation: slideRight 0.5s ease-out 1.0s forwards; }
+        .tree-item:nth-child(5) { animation: slideRight 0.5s ease-out 1.15s forwards; }
+        .tree-item:nth-child(6) { animation: slideRight 0.5s ease-out 1.3s forwards; }
 
-        .flow-icon {
-            width: 130px;
-            height: 130px;
-            border-radius: 28px;
+        .tree-item i {
+            font-size: 24px;
+            width: 32px;
+            text-align: center;
+        }
+
+        .tree-item:nth-child(2) i { color: #818cf8; }
+        .tree-item:nth-child(3) i { color: var(--cyan-400); }
+        .tree-item:nth-child(4) i { color: #a78bfa; }
+        .tree-item:nth-child(5) i { color: #fbbf24; }
+        .tree-item:nth-child(6) i { color: #34d399; }
+
+        .tree-item:nth-child(2) .folder-name { color: #818cf8; }
+        .tree-item:nth-child(3) .folder-name { color: var(--cyan-400); }
+        .tree-item:nth-child(4) .folder-name { color: #a78bfa; }
+        .tree-item:nth-child(5) .folder-name { color: #fbbf24; }
+        .tree-item:nth-child(6) .folder-name { color: #34d399; }
+
+        .folder-name {
+            font-weight: 500;
+        }
+
+        /* === Right: descriptions === */
+        .desc-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 520px;
+        }
+
+        .desc-card {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 56px;
-            backdrop-filter: blur(8px);
+            gap: 20px;
+            padding: 22px 28px;
+            border-radius: 16px;
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.08);
+            opacity: 0;
         }
 
-        .flow-node:nth-child(1) .flow-icon {
-            background: rgba(99,102,241,0.12);
-            border: 1.5px solid rgba(99,102,241,0.3);
-            color: #818cf8;
+        .desc-card:nth-child(1) { animation: slideLeft 0.5s ease-out 0.9s forwards; }
+        .desc-card:nth-child(2) { animation: slideLeft 0.5s ease-out 1.05s forwards; }
+        .desc-card:nth-child(3) { animation: slideLeft 0.5s ease-out 1.2s forwards; }
+        .desc-card:nth-child(4) { animation: slideLeft 0.5s ease-out 1.35s forwards; }
+        .desc-card:nth-child(5) { animation: slideLeft 0.5s ease-out 1.5s forwards; }
+
+        .desc-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
-        .flow-node:nth-child(3) .flow-icon {
-            background: rgba(34,211,238,0.12);
-            border: 1.5px solid rgba(34,211,238,0.3);
-            color: var(--cyan-400);
-        }
+        .desc-card:nth-child(1) .desc-dot { background: #818cf8; }
+        .desc-card:nth-child(2) .desc-dot { background: var(--cyan-400); }
+        .desc-card:nth-child(3) .desc-dot { background: #a78bfa; }
+        .desc-card:nth-child(4) .desc-dot { background: #fbbf24; }
+        .desc-card:nth-child(5) .desc-dot { background: #34d399; }
 
-        .flow-node:nth-child(5) .flow-icon {
-            background: rgba(139,92,246,0.12);
-            border: 1.5px solid rgba(139,92,246,0.3);
-            color: #a78bfa;
-        }
-
-        .flow-node:nth-child(7) .flow-icon {
-            background: rgba(245,158,11,0.12);
-            border: 1.5px solid rgba(245,158,11,0.3);
-            color: #fbbf24;
-        }
-
-        .flow-node:nth-child(9) .flow-icon {
-            background: rgba(16,185,129,0.12);
-            border: 1.5px solid rgba(16,185,129,0.3);
-            color: #34d399;
-        }
-
-        .flow-label {
-            font-size: 21px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            text-align: center;
-        }
-
-        .flow-node:nth-child(1) .flow-label { color: #818cf8; }
-        .flow-node:nth-child(3) .flow-label { color: var(--cyan-400); }
-        .flow-node:nth-child(5) .flow-label { color: #a78bfa; }
-        .flow-node:nth-child(7) .flow-label { color: #fbbf24; }
-        .flow-node:nth-child(9) .flow-label { color: #34d399; }
-
-        .flow-desc {
-            font-size: 17px;
+        .desc-text {
+            font-size: 20px;
             font-weight: 300;
             color: var(--text-muted);
-            text-align: center;
-            max-width: 180px;
             line-height: 1.4;
         }
 
-        .flow-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 90px;
-            opacity: 0;
-        }
-
-        .flow-arrow:nth-child(2) { animation: fadeIn 0.4s ease-out 0.75s forwards; }
-        .flow-arrow:nth-child(4) { animation: fadeIn 0.4s ease-out 0.95s forwards; }
-        .flow-arrow:nth-child(6) { animation: fadeIn 0.4s ease-out 1.15s forwards; }
-        .flow-arrow:nth-child(8) { animation: fadeIn 0.4s ease-out 1.35s forwards; }
-
-        .flow-arrow i {
-            font-size: 34px;
-            color: rgba(148,163,184,0.45);
+        .desc-text strong {
+            color: var(--text-main);
+            font-weight: 600;
         }
 
         /* === Bottom note === */
         .bottom-note {
-            margin-top: 56px;
+            margin-top: 40px;
             font-size: 22px;
             font-weight: 300;
             color: var(--text-muted);
             text-align: center;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.6s forwards;
+            animation: fadeUp 0.8s ease-out 1.7s forwards;
             border-top: 1px solid rgba(6,182,212,0.15);
-            padding-top: 28px;
+            padding-top: 24px;
         }
 
         .bottom-note strong {
@@ -304,9 +313,14 @@
             to { opacity: 1; }
         }
 
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.7); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes slideRight {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideLeft {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .camera-box {
@@ -354,56 +368,38 @@
 
         <div class="content">
             <div class="header">
-                <h1>Przepływ przez <span class="highlight">warstwy</span></h1>
+                <h1>Jak wygląda projekt w <span class="highlight">architekturze warstwowej</span>?</h1>
             </div>
 
-            <div class="flow-container">
-                <!-- User -->
-                <div class="flow-node">
-                    <div class="flow-icon"><i class="ti ti-user"></i></div>
-                    <div class="flow-label">Użytkownik</div>
-                    <div class="flow-desc">Wysyła żądanie</div>
-                </div>
-
-                <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
-
-                <!-- Controller -->
-                <div class="flow-node">
-                    <div class="flow-icon"><i class="ti ti-api"></i></div>
-                    <div class="flow-label">Controller</div>
-                    <div class="flow-desc">Odbiera dane wejściowe</div>
-                </div>
-
-                <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
-
-                <!-- Service -->
-                <div class="flow-node">
-                    <div class="flow-icon"><i class="ti ti-settings"></i></div>
-                    <div class="flow-label">Service</div>
-                    <div class="flow-desc">Sprawdza reguły i logikę</div>
-                </div>
-
-                <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
-
-                <!-- Repository -->
-                <div class="flow-node">
-                    <div class="flow-icon"><i class="ti ti-database"></i></div>
-                    <div class="flow-label">Repository</div>
-                    <div class="flow-desc">Zapisuje rezerwację</div>
-                </div>
-
-                <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
-
-                <!-- Response -->
-                <div class="flow-node">
-                    <div class="flow-icon"><i class="ti ti-circle-check"></i></div>
-                    <div class="flow-label">Odpowiedź</div>
-                    <div class="flow-desc">Wizyta zarezerwowana</div>
+            <div class="columns">
+                <!-- Left: folder tree -->
+                <div class="tree-panel">
+                    <div class="tree-title">src/</div>
+                    <div class="tree-item">
+                        <i class="ti ti-folder-filled"></i>
+                        <span class="folder-name">controllers/</span>
+                    </div>
+                    <div class="tree-item">
+                        <i class="ti ti-folder-filled"></i>
+                        <span class="folder-name">services/</span>
+                    </div>
+                    <div class="tree-item">
+                        <i class="ti ti-folder-filled"></i>
+                        <span class="folder-name">repositories/</span>
+                    </div>
+                    <div class="tree-item">
+                        <i class="ti ti-folder-filled"></i>
+                        <span class="folder-name">models/</span>
+                    </div>
+                    <div class="tree-item">
+                        <i class="ti ti-folder-filled"></i>
+                        <span class="folder-name">infrastructure/</span>
+                    </div>
                 </div>
             </div>
 
             <div class="bottom-note">
-                <strong>Każda warstwa</strong> wykonuje tylko swoją odpowiedzialność.
+                Projekt jest organizowany według <strong>odpowiedzialności technicznych</strong>.
             </div>
         </div>
 
