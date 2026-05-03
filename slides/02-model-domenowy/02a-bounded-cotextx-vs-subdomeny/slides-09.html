@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 09 - Flota pojazdów: kiedy 1:1 ma sens</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 750px; height: 750px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 18%; left: 14%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 68%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 78%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 82%; left: 18%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 25%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Header === */
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 50px;
+        }
+
+        .eyebrow {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 50px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Diagram: single frame === */
+        .diagram-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            max-width: 1000px;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.0s forwards;
+        }
+
+        .single-frame {
+            position: relative;
+            width: 720px;
+            border-radius: 24px;
+            background: rgba(6,182,212,0.04);
+            border: 2px solid rgba(6,182,212,0.30);
+            padding: 36px 44px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .frame-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 4px;
+        }
+
+        .frame-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(6,182,212,0.10);
+            border: 1px solid rgba(6,182,212,0.30);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .frame-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .frame-label {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan-400);
+        }
+
+        .frame-name {
+            font-size: 26px;
+            font-weight: 800;
+            color: #f0f4f8;
+        }
+
+        .frame-subtitle {
+            font-size: 16px;
+            font-weight: 300;
+            color: #94a3b8;
+        }
+
+        /* Concept chips inside the frame */
+        .concepts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .concept {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.12);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .concept:nth-child(1) { animation: fadeUp 0.5s ease-out 1.4s forwards; }
+        .concept:nth-child(2) { animation: fadeUp 0.5s ease-out 1.6s forwards; }
+        .concept:nth-child(3) { animation: fadeUp 0.5s ease-out 1.8s forwards; }
+        .concept:nth-child(4) { animation: fadeUp 0.5s ease-out 2.0s forwards; }
+
+        .concept i {
+            color: var(--cyan-400);
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .concept-text {
+            font-size: 20px;
+            font-weight: 400;
+            color: #cbd5e1;
+        }
+
+        /* === Right side: badge === */
+        .badge-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            animation: scaleIn 0.7s ease-out 2.3s forwards;
+        }
+
+        .eq-badge {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(6,182,212,0.15));
+            border: 2px solid rgba(6,182,212,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--cyan-400);
+        }
+
+        .badge-labels {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .badge-label--sub { color: var(--cyan-400); }
+        .badge-label--ctx { color: var(--cyan-400); }
+
+        /* === Layout: two-column === */
+        .main-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 80px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* === Punchline === */
+        .punchline {
+            text-align: center;
+            margin: 44px auto 0;
+            font-size: 22px;
+            font-weight: 600;
+            color: #64748b;
+            font-style: italic;
+            max-width: 800px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 2.7s forwards;
+        }
+
+        .punchline strong {
+            color: var(--cyan-400);
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.4); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Flota pojazdów: <span class="highlight">Subdomeny i Bounded Context</span></h1>
+            </div>
+
+            <div class="main-area">
+                <!-- Diagram: single cohesive frame -->
+                <div class="diagram-area">
+                    <div class="single-frame">
+                        <div class="frame-header">
+                            <div class="frame-icon"><i class="ti ti-car"></i></div>
+                            <div class="frame-titles">
+                                <div class="frame-label">1 Subdomena = 1 Bounded Context</div>
+                                <div class="frame-name">Flota pojazdów</div>
+                                <div class="frame-subtitle">Pojęcia spójne w całym obszarze</div>
+                            </div>
+                        </div>
+
+                        <div class="concepts">
+                            <div class="concept">
+                                <i class="ti ti-calendar-check"></i>
+                                <span class="concept-text">Dostępność</span>
+                            </div>
+                            <div class="concept">
+                                <i class="ti ti-tool"></i>
+                                <span class="concept-text">Stan techniczny</span>
+                            </div>
+                            <div class="concept">
+                                <i class="ti ti-building"></i>
+                                <span class="concept-text">Przypisanie do oddziału</span>
+                            </div>
+                            <div class="concept">
+                                <i class="ti ti-category"></i>
+                                <span class="concept-text">Klasy pojazdów</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Punchline -->
+            <div class="punchline">Jeden kontekst może być <strong>naturalnym wyborem</strong></div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - Wynajem samochodów: jeden obszar, kilka modeli</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 750px; height: 750px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 22%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 74%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 35%; left: 70%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 12%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 55%; left: 48%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 20%; left: 65%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Header === */
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 40px;
+        }
+
+        .eyebrow {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 46px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Process timeline === */
+        .timeline {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.0s forwards;
+        }
+
+        .phase {
+            flex: 1;
+            max-width: 320px;
+            border-radius: 20px;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            opacity: 0;
+        }
+
+        .phase:nth-child(1) {
+            background: rgba(245,158,11,0.05);
+            border: 1px solid rgba(245,158,11,0.25);
+            animation: fadeUp 0.6s ease-out 1.2s forwards;
+        }
+        .phase:nth-child(3) {
+            background: rgba(6,182,212,0.05);
+            border: 1px solid rgba(6,182,212,0.25);
+            animation: fadeUp 0.6s ease-out 1.5s forwards;
+        }
+        .phase:nth-child(5) {
+            background: rgba(139,92,246,0.05);
+            border: 1px solid rgba(139,92,246,0.25);
+            animation: fadeUp 0.6s ease-out 1.8s forwards;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .phase-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .phase:nth-child(1) .phase-icon {
+            background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.30);
+            color: #f59e0b;
+        }
+        .phase:nth-child(3) .phase-icon {
+            background: rgba(6,182,212,0.12);
+            border: 1px solid rgba(6,182,212,0.30);
+            color: var(--cyan-400);
+        }
+        .phase:nth-child(5) .phase-icon {
+            background: rgba(139,92,246,0.12);
+            border: 1px solid rgba(139,92,246,0.30);
+            color: #8b5cf6;
+        }
+
+        .phase-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #f0f4f8;
+        }
+
+        .phase-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .phase-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(17,24,39,0.7);
+            backdrop-filter: blur(6px);
+            font-size: 17px;
+            font-weight: 400;
+            color: #cbd5e1;
+        }
+
+        .phase:nth-child(1) .phase-item i { color: #f59e0b; font-size: 18px; }
+        .phase:nth-child(3) .phase-item i { color: var(--cyan-400); font-size: 18px; }
+        .phase:nth-child(5) .phase-item i { color: #8b5cf6; font-size: 18px; }
+
+        /* === Arrows between phases === */
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+            margin-top: 60px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 2.1s forwards;
+        }
+
+        .arrow i {
+            font-size: 28px;
+            color: #475569;
+        }
+
+        /* === Punchline === */
+        .punchline {
+            text-align: center;
+            margin: 36px auto 0;
+            font-size: 21px;
+            font-weight: 600;
+            color: #64748b;
+            font-style: italic;
+            max-width: 900px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 2.5s forwards;
+        }
+
+        .punchline strong {
+            color: var(--cyan-400);
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Wynajem samochodów: jeden obszar biznesowy, <span class="highlight">kilka modeli</span></h1>
+            </div>
+
+            <div class="timeline">
+                <!-- Phase 1: Rezerwacja -->
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-icon"><i class="ti ti-calendar-event"></i></div>
+                        <div class="phase-name">Rezerwacja</div>
+                    </div>
+                    <div class="phase-items">
+                        <div class="phase-item"><i class="ti ti-clock"></i> Termin</div>
+                        <div class="phase-item"><i class="ti ti-check"></i> Dostępność</div>
+                        <div class="phase-item"><i class="ti ti-map-pin"></i> Miejsce odbioru/zwrotu</div>
+                        <div class="phase-item"><i class="ti ti-tag"></i> Warunki oferty</div>
+                    </div>
+                </div>
+
+                <div class="arrow"><i class="ti ti-chevron-right"></i></div>
+
+                <!-- Phase 2: Wydanie auta -->
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-icon"><i class="ti ti-key"></i></div>
+                        <div class="phase-name">Wydanie auta</div>
+                    </div>
+                    <div class="phase-items">
+                        <div class="phase-item"><i class="ti ti-id"></i> Uprawnienia klienta</div>
+                        <div class="phase-item"><i class="ti ti-gas-station"></i> Paliwo</div>
+                        <div class="phase-item"><i class="ti ti-road"></i> Przebieg</div>
+                        <div class="phase-item"><i class="ti ti-car"></i> Stan pojazdu</div>
+                    </div>
+                </div>
+
+                <div class="arrow"><i class="ti ti-chevron-right"></i></div>
+
+                <!-- Phase 3: Zwrot i rozliczenie -->
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-icon"><i class="ti ti-receipt"></i></div>
+                        <div class="phase-name">Zwrot i rozliczenie</div>
+                    </div>
+                    <div class="phase-items">
+                        <div class="phase-item"><i class="ti ti-alert-circle"></i> Opóźnienia</div>
+                        <div class="phase-item"><i class="ti ti-alert-triangle"></i> Uszkodzenia</div>
+                        <div class="phase-item"><i class="ti ti-coin"></i> Dopłaty</div>
+                        <div class="phase-item"><i class="ti ti-ruler-2"></i> Limit kilometrów</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Biznes widzi jeden obszar, model może widzieć kilka perspektyw</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+
+        .bg-glow {
+            position: absolute; width: 750px; height: 750px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan-400); opacity: 0; animation: float 8s ease-in-out infinite;
+        }
+        .particle:nth-child(3) { top: 12%; left: 20%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 72%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 35%; left: 70%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 25%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 22%; left: 42%; animation-delay: 2s; }
+
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(0) scale(1); }
+            20%  { opacity: 0.8; } 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corner accents === */
+        .corner { position: absolute; width: 60px; height: 60px; z-index: 1; }
+        .corner::before, .corner::after { content: ''; position: absolute; background: var(--cyan-700); }
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative; z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+        }
+
+        /* === Header === */
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        /* === Main area: two columns === */
+        .main-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* === Left column: context === */
+        .context-col {
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.0s forwards;
+        }
+
+        .context-label {
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #f59e0b;
+            margin-bottom: 1.2rem;
+        }
+
+        .context-example {
+            font-size: 34px;
+            font-weight: 800;
+            color: #f0f4f8;
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .context-items {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .context-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 24px;
+            font-weight: 400;
+            color: #94a3b8;
+        }
+
+        .context-item i {
+            color: #f59e0b;
+            font-size: 22px;
+        }
+
+        .context-bottom {
+            margin-top: 2.5rem;
+            padding: 18px 24px;
+            border-radius: 14px;
+            background: rgba(245,158,11,0.06);
+            border: 1px solid rgba(245,158,11,0.18);
+            font-size: 22px;
+            font-weight: 300;
+            color: #f59e0b;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.4s forwards;
+        }
+
+        .context-bottom strong {
+            font-weight: 700;
+        }
+
+        /* === Right column: diagram === */
+        .diagram-col {
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
+        }
+
+        .outer-frame {
+            border: 2px solid rgba(139,92,246,0.35);
+            border-radius: 24px;
+            padding: 28px;
+            position: relative;
+            background: rgba(139,92,246,0.04);
+        }
+
+        .outer-frame-label {
+            position: absolute;
+            top: -16px;
+            left: 28px;
+            background: var(--dark-bg);
+            padding: 4px 18px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8b5cf6;
+            border: 1px solid rgba(139,92,246,0.3);
+            border-radius: 8px;
+        }
+
+        .inner-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 12px;
+        }
+
+        .inner-card {
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            padding: 22px 20px;
+            text-align: center;
+            opacity: 0;
+        }
+
+        .inner-card:nth-child(1) { animation: scaleIn 0.6s ease-out 1.6s forwards; }
+        .inner-card:nth-child(2) { animation: scaleIn 0.6s ease-out 1.8s forwards; }
+        .inner-card:nth-child(3) { animation: scaleIn 0.6s ease-out 2.0s forwards; }
+        .inner-card:nth-child(4) { animation: scaleIn 0.6s ease-out 2.2s forwards; }
+
+        .inner-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.10);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 12px;
+        }
+
+        .inner-card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            margin-bottom: 6px;
+        }
+
+        .inner-card-desc {
+            font-size: 16px;
+            font-weight: 300;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* === Diagram bottom note === */
+        .diagram-note {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 300;
+            color: #8b5cf6;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 2.5s forwards;
+        }
+
+        .diagram-note i {
+            margin-right: 6px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 480px; height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .slide-logo {
+            position: absolute; z-index: 100;
+            bottom: 40px; left: 40px;
+            height: 100px; width: auto;
+            opacity: 0.85; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Biznes widzi <span class="highlight">jeden obszar</span>,<br>model może widzieć <span class="highlight">kilka perspektyw</span></h1>
+            </div>
+
+            <div class="main-area">
+                <!-- Left: business perspective -->
+                <div class="context-col">
+                    <div class="context-label"><i class="ti ti-building"></i> Perspektywa biznesowa</div>
+                    <div class="context-example">Wynajem samochodów</div>
+                    <div class="context-items">
+                        <div class="context-item"><i class="ti ti-check"></i> Rezerwacja</div>
+                        <div class="context-item"><i class="ti ti-check"></i> Wydanie pojazdu</div>
+                        <div class="context-item"><i class="ti ti-check"></i> Zwrot pojazdu</div>
+                        <div class="context-item"><i class="ti ti-check"></i> Rozliczenie</div>
+                    </div>
+                    <div class="context-bottom">
+                        <strong>Biznesowo:</strong> jeden większy obszar
+                    </div>
+                </div>
+
+                <!-- Right: model perspective (diagram) -->
+                <div class="diagram-col">
+                    <div class="outer-frame">
+                        <div class="outer-frame-label">Wynajem samochodów</div>
+                        <div class="inner-grid">
+                            <div class="inner-card">
+                                <div class="inner-card-icon"><i class="ti ti-calendar-event"></i></div>
+                                <div class="inner-card-title">Rezerwacja</div>
+                                <div class="inner-card-desc">terminy, dostępność, oferty</div>
+                            </div>
+                            <div class="inner-card">
+                                <div class="inner-card-icon"><i class="ti ti-key"></i></div>
+                                <div class="inner-card-title">Wydanie</div>
+                                <div class="inner-card-desc">uprawnienia, stan, paliwo</div>
+                            </div>
+                            <div class="inner-card">
+                                <div class="inner-card-icon"><i class="ti ti-refresh"></i></div>
+                                <div class="inner-card-title">Zwrot</div>
+                                <div class="inner-card-desc">uszkodzenia, przebieg, stan</div>
+                            </div>
+                            <div class="inner-card">
+                                <div class="inner-card-icon"><i class="ti ti-receipt"></i></div>
+                                <div class="inner-card-title">Rozliczenie</div>
+                                <div class="inner-card-desc">dopłaty, limity, opóźnienia</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="diagram-note">
+                        <i class="ti ti-arrow-fork"></i> Różne reguły, różne pojęcia, różne odpowiedzialności
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
