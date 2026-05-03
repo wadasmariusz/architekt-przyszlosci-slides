@@ -64,7 +64,7 @@
             width: 800px;
             height: 800px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(249,115,22,0.07) 0%, transparent 65%);
+            background: radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 65%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -145,7 +145,7 @@
             align-items: center;
             gap: 14px;
             margin-bottom: 22px;
-            color: var(--orange-400);
+            color: var(--cyan-400);
             font-size: 24px;
             font-weight: 600;
             letter-spacing: 4px;
@@ -167,7 +167,7 @@
         }
 
         h1 .highlight {
-            background: linear-gradient(135deg, var(--orange-400), #ea580c);
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -192,15 +192,15 @@
             text-align: center;
             border-radius: 16px;
             background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(249,115,22,0.12);
+            border: 1px solid rgba(6,182,212,0.12);
             backdrop-filter: blur(8px);
             opacity: 0;
             transition: border-color 0.3s, background 0.3s, transform 0.3s;
         }
 
         .warn-item:hover {
-            border-color: var(--orange-400);
-            background: rgba(249,115,22,0.05);
+            border-color: var(--cyan-400);
+            background: rgba(6,182,212,0.05);
             transform: translateY(-4px);
         }
 
@@ -218,9 +218,9 @@
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            background: rgba(249,115,22,0.08);
-            border: 1.5px solid rgba(249,115,22,0.2);
-            color: var(--orange-400);
+            background: rgba(6,182,212,0.08);
+            border: 1.5px solid rgba(6,182,212,0.2);
+            color: var(--cyan-400);
         }
 
         .warn-text {
@@ -283,6 +283,21 @@
             background: rgba(249,115,22,0.06);
             border: 1px solid rgba(249,115,22,0.2);
             color: var(--orange-400);
+        }
+
+        .warn-item--orange .warn-icon {
+            background: rgba(249,115,22,0.08);
+            border-color: rgba(249,115,22,0.2);
+            color: var(--orange-400);
+        }
+
+        .warn-item--orange .warn-title {
+            color: var(--orange-400);
+        }
+
+        .warn-item--orange:hover {
+            border-color: var(--orange-400);
+            background: rgba(249,115,22,0.05);
         }
 
         /* === Animations === */
