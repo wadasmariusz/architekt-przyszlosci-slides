@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 05 - Najczęstszy układ warstw</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 10%; left: 14%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 68%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 78%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 85%; left: 18%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 52%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 25%; left: 62%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Layout === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            padding: 0 170px;
+            display: grid;
+            grid-template-columns: 1fr 560px;
+            align-items: center;
+            gap: 100px;
+        }
+
+        /* === Left side === */
+        .left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            color: #ffffff;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .layer-desc {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .layer-desc-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 22px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.5);
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .layer-desc-item:nth-child(1) { animation: fadeUp 0.7s ease-out 0.6s forwards; }
+        .layer-desc-item:nth-child(2) { animation: fadeUp 0.7s ease-out 0.75s forwards; }
+        .layer-desc-item:nth-child(3) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
+        .layer-desc-item:nth-child(4) { animation: fadeUp 0.7s ease-out 1.05s forwards; }
+
+        .layer-desc-item i {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .layer-desc-item:nth-child(1) i { background: rgba(34,211,238,0.12); color: var(--cyan-400); }
+        .layer-desc-item:nth-child(2) i { background: rgba(139,92,246,0.12); color: #8b5cf6; }
+        .layer-desc-item:nth-child(3) i { background: rgba(245,158,11,0.12); color: #f59e0b; }
+        .layer-desc-item:nth-child(4) i { background: rgba(16,185,129,0.12); color: #10b981; }
+
+        .layer-desc-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .layer-desc-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .layer-desc-detail {
+            font-size: 17px;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        /* === Right side — Stack diagram === */
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.5s forwards;
+        }
+
+        .stack-layer {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 36px;
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+        }
+
+        .stack-layer:first-child { border-radius: 20px 20px 0 0; }
+        .stack-layer:last-child { border-radius: 0 0 20px 20px; }
+
+        .stack-layer:nth-child(1) {
+            background: rgba(34,211,238,0.08);
+            border-color: rgba(34,211,238,0.2);
+            animation: slideFromTop 0.7s ease-out 0.6s forwards;
+        }
+        .stack-layer:nth-child(2) {
+            background: rgba(139,92,246,0.08);
+            border-color: rgba(139,92,246,0.2);
+            animation: slideFromTop 0.7s ease-out 0.8s forwards;
+        }
+        .stack-layer:nth-child(3) {
+            background: rgba(245,158,11,0.08);
+            border-color: rgba(245,158,11,0.2);
+            animation: slideFromTop 0.7s ease-out 1.0s forwards;
+        }
+        .stack-layer:nth-child(4) {
+            background: rgba(16,185,129,0.08);
+            border-color: rgba(16,185,129,0.2);
+            animation: slideFromTop 0.7s ease-out 1.2s forwards;
+        }
+
+        .stack-label {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .stack-layer:nth-child(1) .stack-label { color: var(--cyan-400); }
+        .stack-layer:nth-child(2) .stack-label { color: #8b5cf6; }
+        .stack-layer:nth-child(3) .stack-label { color: #f59e0b; }
+        .stack-layer:nth-child(4) .stack-label { color: #10b981; }
+
+        .stack-folder {
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--text-muted);
+            font-family: 'Inter', monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* Arrows between layers */
+        .stack-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 32px;
+            opacity: 0;
+        }
+
+        .stack-arrow:nth-of-type(2) { animation: fadeIn 0.5s ease-out 0.9s forwards; }
+        .stack-arrow:nth-of-type(4) { animation: fadeIn 0.5s ease-out 1.1s forwards; }
+        .stack-arrow:nth-of-type(6) { animation: fadeIn 0.5s ease-out 1.3s forwards; }
+
+        .stack-arrow i {
+            font-size: 22px;
+            color: rgba(148,163,184,0.5);
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideFromTop {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="left">
+
+                <h1>Popularny <br><span class="highlight">układ warstw</span></h1>
+
+                <div class="layer-desc">
+                    <div class="layer-desc-item">
+                        <i class="ti ti-api"></i>
+                        <div class="layer-desc-text">
+                            <div class="layer-desc-name">Controllers / API</div>
+                            <div class="layer-desc-detail">Przyjmowanie żądań i zwracanie odpowiedzi</div>
+                        </div>
+                    </div>
+                    <div class="layer-desc-item">
+                        <i class="ti ti-settings"></i>
+                        <div class="layer-desc-text">
+                            <div class="layer-desc-name">Services</div>
+                            <div class="layer-desc-detail">Realizacja logiki aplikacyjnej</div>
+                        </div>
+                    </div>
+                    <div class="layer-desc-item">
+                        <i class="ti ti-database"></i>
+                        <div class="layer-desc-text">
+                            <div class="layer-desc-name">Repositories, ORM</div>
+                            <div class="layer-desc-detail">Dostęp do danych i persystencja</div>
+                        </div>
+                    </div>
+                    <div class="layer-desc-item">
+                        <i class="ti ti-cpu"></i>
+                        <div class="layer-desc-text">
+                            <div class="layer-desc-name">Database</div>
+                            <div class="layer-desc-detail">Elementy wspierające działanie systemu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

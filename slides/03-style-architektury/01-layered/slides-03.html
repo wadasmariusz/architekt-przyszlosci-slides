@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Po co stosować architekturę warstwową?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 18%; left: 12%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 90%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 78%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 76%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 52%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 14%; left: 62%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Layout === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 50px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            color: #ffffff;
+            font-size: 68px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.4s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Comparison area === */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            align-items: center;
+            gap: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* === Problem side === */
+        .side-problem {
+            opacity: 0;
+            animation: slideFromLeft 0.8s ease-out 0.6s forwards;
+        }
+
+        .side-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .side-problem .side-label {
+            color: #f43f5e;
+        }
+
+        .side-solution .side-label {
+            color: #10b981;
+        }
+
+        /* Chaos diagram */
+        .chaos-diagram {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.5);
+            border: 1px solid rgba(244,63,94,0.15);
+            backdrop-filter: blur(6px);
+            overflow: hidden;
+        }
+
+        .chaos-node {
+            position: absolute;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .chaos-node--ui {
+            background: rgba(34,211,238,0.15);
+            border: 1px solid rgba(34,211,238,0.35);
+            top: 30px; left: 40px;
+        }
+
+        .chaos-node--logic1 {
+            background: rgba(139,92,246,0.15);
+            border: 1px solid rgba(139,92,246,0.35);
+            top: 110px; left: 260px;
+        }
+
+        .chaos-node--db1 {
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.35);
+            top: 40px; right: 50px;
+        }
+
+        .chaos-node--logic2 {
+            background: rgba(139,92,246,0.15);
+            border: 1px solid rgba(139,92,246,0.35);
+            top: 200px; left: 60px;
+        }
+
+        .chaos-node--db2 {
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.35);
+            top: 280px; left: 280px;
+        }
+
+        .chaos-node--ui2 {
+            background: rgba(34,211,238,0.15);
+            border: 1px solid rgba(34,211,238,0.35);
+            top: 300px; right: 40px;
+        }
+
+        .chaos-node--mix {
+            background: rgba(244,63,94,0.12);
+            border: 1px solid rgba(244,63,94,0.3);
+            top: 190px; right: 70px;
+        }
+
+        .chaos-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .chaos-line {
+            stroke: rgba(244,63,94,0.25);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-dasharray: 6 4;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: scaleIn 0.6s ease-out 0.9s forwards;
+        }
+
+        .divider-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(17,24,39,0.9);
+            border: 2px solid rgba(148,163,184,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .divider-circle i {
+            font-size: 28px;
+            color: var(--text-muted);
+        }
+
+        /* === Solution side === */
+        .side-solution {
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.8s forwards;
+        }
+
+        .order-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(17,24,39,0.5);
+            border: 1px solid rgba(16,185,129,0.15);
+            backdrop-filter: blur(6px);
+        }
+
+        .order-layer {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 28px 30px;
+        }
+
+        .order-layer:not(:last-child) {
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .order-layer-icon {
+            flex: 0 0 auto;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .order-layer:nth-child(1) .order-layer-icon {
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+        }
+
+        .order-layer:nth-child(2) .order-layer-icon {
+            background: rgba(139,92,246,0.12);
+            color: #8b5cf6;
+        }
+
+        .order-layer:nth-child(3) .order-layer-icon {
+            background: rgba(245,158,11,0.12);
+            color: #f59e0b;
+        }
+
+        .order-layer-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .order-layer-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .order-layer-desc {
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        .order-arrow {
+            display: flex;
+            justify-content: center;
+            padding: 6px 0;
+        }
+
+        .order-arrow i {
+            font-size: 22px;
+            color: rgba(16,185,129,0.4);
+        }
+
+        /* Benefits row */
+        .benefits {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 40px auto 0;
+            justify-content: center;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 26px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.6);
+            border: 1px solid rgba(6,182,212,0.12);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .benefit:nth-child(1) { animation: fadeUp 0.6s ease-out 1.2s forwards; }
+        .benefit:nth-child(2) { animation: fadeUp 0.6s ease-out 1.35s forwards; }
+        .benefit:nth-child(3) { animation: fadeUp 0.6s ease-out 1.5s forwards; }
+
+        .benefit i {
+            font-size: 24px;
+            color: var(--cyan-400);
+        }
+
+        .benefit span {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <main class="content">
+            <div class="header">
+                <h1 class="title">Po co stosować architekturę <span class="highlight">warstwową</span>?</h1>
+            </div>
+
+            <div class="comparison">
+                <!-- Problem side -->
+                <section class="side-problem">
+                    <div class="side-label">
+                        <i class="ti ti-alert-triangle"></i>
+                        Bez struktury
+                    </div>
+                    <div class="chaos-diagram">
+                        <svg class="chaos-svg" viewBox="0 0 560 380">
+                            <line class="chaos-line" x1="130" y1="55" x2="310" y2="135" />
+                            <line class="chaos-line" x1="310" y1="135" x2="470" y2="65" />
+                            <line class="chaos-line" x1="130" y1="55" x2="120" y2="225" />
+                            <line class="chaos-line" x1="120" y1="225" x2="340" y2="305" />
+                            <line class="chaos-line" x1="470" y1="65" x2="420" y2="215" />
+                            <line class="chaos-line" x1="420" y1="215" x2="470" y2="325" />
+                            <line class="chaos-line" x1="310" y1="135" x2="340" y2="305" />
+                            <line class="chaos-line" x1="120" y1="225" x2="420" y2="215" />
+                        </svg>
+                        <div class="chaos-node chaos-node--ui">UI</div>
+                        <div class="chaos-node chaos-node--logic1">Logika</div>
+                        <div class="chaos-node chaos-node--db1">Baza</div>
+                        <div class="chaos-node chaos-node--logic2">Walidacja</div>
+                        <div class="chaos-node chaos-node--db2">SQL</div>
+                        <div class="chaos-node chaos-node--ui2">Widok</div>
+                        <div class="chaos-node chaos-node--mix">Wszystko razem</div>
+                    </div>
+                </section>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <div class="divider-circle">
+                        <i class="ti ti-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Solution side -->
+                <section class="side-solution">
+                    <div class="side-label">
+                        <i class="ti ti-check"></i>
+                        Z warstwami
+                    </div>
+                    <div class="order-diagram">
+                        <div class="order-layer">
+                            <div class="order-layer-icon"><i class="ti ti-device-desktop"></i></div>
+                            <div class="order-layer-text">
+                                <span class="order-layer-name">Prezentacja</span>
+                                <span class="order-layer-desc">Interfejs i API</span>
+                            </div>
+                        </div>
+                        <div class="order-arrow"><i class="ti ti-arrow-narrow-down"></i></div>
+                        <div class="order-layer">
+                            <div class="order-layer-icon"><i class="ti ti-settings"></i></div>
+                            <div class="order-layer-text">
+                                <span class="order-layer-name">Logika biznesowa</span>
+                                <span class="order-layer-desc">Reguły i przypadki użycia</span>
+                            </div>
+                        </div>
+                        <div class="order-arrow"><i class="ti ti-arrow-narrow-down"></i></div>
+                        <div class="order-layer">
+                            <div class="order-layer-icon"><i class="ti ti-database"></i></div>
+                            <div class="order-layer-text">
+                                <span class="order-layer-name">Dostęp do danych</span>
+                                <span class="order-layer-desc">Persystencja i odczyt</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - Najczęstsze błędy w architekturze warstwowej</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --red-400: #f87171;
+            --red-500: #ef4444;
+            --rose-500: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(239,68,68,0.07) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 16%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 72%; left: 82%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 82%; left: 18%; animation-delay: 4.8s; }
+        .particle:nth-child(7) { top: 48%; left: 55%; animation-delay: 5.8s; }
+        .particle:nth-child(8) { top: 22%; left: 42%; animation-delay: 2.3s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Layout === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 6px;
+            color: var(--red-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Error items === */
+        .errors {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .error-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 22px 26px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(239,68,68,0.12);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: border-color 0.3s, background 0.3s, transform 0.3s;
+        }
+
+        .error-item:hover {
+            border-color: var(--red-400);
+            background: rgba(239,68,68,0.05);
+            transform: translateY(-3px);
+        }
+
+        .error-item:nth-child(1) { animation: fadeUp 0.7s ease-out 0.55s forwards; }
+        .error-item:nth-child(2) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
+        .error-item:nth-child(3) { animation: fadeUp 0.7s ease-out 0.85s forwards; }
+        .error-item:nth-child(4) { animation: fadeUp 0.7s ease-out 1.0s forwards; }
+        .error-item:nth-child(5) { animation: fadeUp 0.7s ease-out 1.15s forwards; }
+
+        .error-icon {
+            flex: 0 0 auto;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(239,68,68,0.08);
+            border: 1.5px solid rgba(239,68,68,0.2);
+            color: var(--red-400);
+        }
+
+        .error-text {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .error-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .error-label {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(239,68,68,0.1);
+            color: var(--red-400);
+            border: 1px solid rgba(239,68,68,0.15);
+            margin-top: 2px;
+            width: fit-content;
+        }
+
+        /* === Diagram (right col) === */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.3s forwards;
+        }
+
+        .diagram-title {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .diagram {
+            position: relative;
+            width: 340px;
+            height: 420px;
+        }
+
+        .layer-box {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .layer-controller {
+            top: 0;
+            background: rgba(6,182,212,0.08);
+            border: 1.5px solid rgba(6,182,212,0.25);
+            color: var(--cyan-400);
+        }
+
+        .layer-service {
+            top: 120px;
+            background: rgba(139,92,246,0.08);
+            border: 1.5px solid rgba(139,92,246,0.25);
+            color: #a78bfa;
+        }
+
+        .layer-repo {
+            top: 240px;
+            background: rgba(16,185,129,0.08);
+            border: 1.5px solid rgba(16,185,129,0.25);
+            color: #34d399;
+        }
+
+        .layer-db {
+            top: 340px;
+            height: 60px;
+            border-radius: 12px;
+            background: rgba(100,116,139,0.08);
+            border: 1.5px solid rgba(100,116,139,0.25);
+            color: #94a3b8;
+            font-size: 15px;
+        }
+
+        /* Correct arrow */
+        .arrow-correct {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            background: rgba(148,163,184,0.2);
+        }
+
+        .arrow-correct-1 { top: 80px; height: 40px; }
+        .arrow-correct-2 { top: 200px; height: 40px; }
+        .arrow-correct-3 { top: 320px; height: 20px; }
+
+        /* Wrong arrow — controller directly to repo */
+        .arrow-wrong {
+            position: absolute;
+            top: 70px;
+            right: -10px;
+            width: 60px;
+            height: 190px;
+            border: 2px dashed var(--red-400);
+            border-left: none;
+            border-radius: 0 16px 16px 0;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 1.8s forwards;
+        }
+
+        .arrow-wrong::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: -6px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 10px solid var(--red-400);
+        }
+
+        .wrong-label {
+            position: absolute;
+            top: 150px;
+            right: -130px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.25);
+            color: var(--red-400);
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 2.0s forwards;
+        }
+
+        .wrong-label i { font-size: 16px; }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="left-col">
+                <div>
+                    <h1>Najczęstsze <span class="highlight">błędy</span> w architekturze warstwowej</h1>
+                </div>
+
+                <div class="errors">
+                    <!-- 1 -->
+                    <div class="error-item">
+                        <div class="error-icon"><i class="ti ti-code"></i></div>
+                        <div class="error-text">
+                            <div class="error-title">Logika biznesowa w kontrolerach</div>
+                        </div>
+                    </div>
+
+                    <!-- 2 -->
+                    <div class="error-item">
+                        <div class="error-icon"><i class="ti ti-stack-2"></i></div>
+                        <div class="error-text">
+                            <div class="error-title">Ogromne serwisy zawierające wszystko</div>
+                        </div>
+                    </div>
+
+                    <!-- 3 -->
+                    <div class="error-item">
+                        <div class="error-icon"><i class="ti ti-database"></i></div>
+                        <div class="error-text">
+                            <div class="error-title">Logika biznesowa w repozytoriach</div>
+                        </div>
+                    </div>
+
+                    <!-- 4 -->
+                    <div class="error-item">
+                        <div class="error-icon"><i class="ti ti-lock"></i></div>
+                        <div class="error-text">
+                            <div class="error-title">Model zależny od bazy lub frameworka</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="diagram-title">Błędny przepływ</div>
+                <div class="diagram">
+                    <div class="layer-box layer-controller">Controller</div>
+                    <div class="arrow-correct arrow-correct-1"></div>
+                    <div class="layer-box layer-service">Service</div>
+                    <div class="arrow-correct arrow-correct-2"></div>
+                    <div class="layer-box layer-repo">Repository</div>
+                    <div class="arrow-correct arrow-correct-3"></div>
+                    <div class="layer-box layer-db"><i class="ti ti-database" style="margin-right:8px;font-size:18px;"></i> Database</div>
+
+                    <!-- Wrong shortcut arrow: Controller → Repository -->
+                    <div class="arrow-wrong"></div>
+                    <div class="wrong-label">
+                        <i class="ti ti-x"></i>
+                        Pominięty Service!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
