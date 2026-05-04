@@ -559,11 +559,15 @@
                 // Catalog → Orders (right edge to left edge)
                 makeArrow(catalog.right, catalog.cy, orders.left, orders.cy);
 
-                // Orders → Payments (bottom edge to top edge)
-                makeArrow(orders.cx, orders.bottom, payments.cx, payments.top);
+                // Orders → Payments (bottom of orders to top of payments, offset to right side)
+                var opX = orders.cx + (orders.right - orders.cx) * 0.4;
+                var ppX = payments.cx + (payments.right - payments.cx) * 0.4;
+                makeArrow(opX, orders.bottom, ppX, payments.top);
 
-                // Orders → Notifications (bottom-left to top-right of notifications)
-                makeArrow(orders.left, orders.bottom, notifications.right, notifications.top);
+                // Orders → Notifications (bottom-left of orders to top-right of notifications)
+                var onX = orders.cx - (orders.cx - orders.left) * 0.4;
+                var ntX = notifications.cx + (notifications.right - notifications.cx) * 0.4;
+                makeArrow(onX, orders.bottom, ntX, notifications.top);
             }
 
             // Draw after cards have animated in
