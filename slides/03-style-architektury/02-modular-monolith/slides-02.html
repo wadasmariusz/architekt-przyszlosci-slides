@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - Czym jest modularny monolit?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 18%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 68%; left: 80%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 65%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 50px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow i {
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Comparison area === */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .comparison-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .comparison-col--left {
+            opacity: 0;
+            animation: slideFromLeft 0.8s ease-out 0.6s forwards;
+        }
+
+        .comparison-col--right {
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.8s forwards;
+        }
+
+        .col-label {
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .col-label--bad {
+            color: #f43f5e;
+        }
+
+        .col-label--good {
+            color: #10b981;
+        }
+
+        /* Monolith blocks */
+        .monolith-block {
+            width: 360px;
+            height: 340px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .monolith-block--classic {
+            background: rgba(244,63,94,0.06);
+            border: 2px solid rgba(244,63,94,0.25);
+        }
+
+        .monolith-block--modular {
+            background: rgba(16,185,129,0.04);
+            border: 2px solid rgba(16,185,129,0.25);
+        }
+
+        /* Spaghetti lines inside classic monolith */
+        .spaghetti-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .spaghetti-svg line {
+            stroke: rgba(244,63,94,0.35);
+            stroke-width: 1.5;
+        }
+
+        .spaghetti-svg circle {
+            fill: rgba(244,63,94,0.5);
+        }
+
+        /* Modular segments */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 12px;
+            padding: 24px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .module-segment {
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+        }
+
+        .module-segment i {
+            font-size: 32px;
+        }
+
+        .module-segment span {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .module-segment--cyan {
+            background: rgba(34,211,238,0.1);
+            border: 1px solid rgba(34,211,238,0.3);
+        }
+
+        .module-segment--cyan i { color: var(--cyan-400); }
+        .module-segment--cyan span { color: var(--cyan-400); }
+
+        .module-segment--purple {
+            background: rgba(139,92,246,0.1);
+            border: 1px solid rgba(139,92,246,0.3);
+        }
+
+        .module-segment--purple i { color: #8b5cf6; }
+        .module-segment--purple span { color: #8b5cf6; }
+
+        .module-segment--amber {
+            background: rgba(245,158,11,0.1);
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+
+        .module-segment--amber i { color: #f59e0b; }
+        .module-segment--amber span { color: #f59e0b; }
+
+        .module-segment--emerald {
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .module-segment--emerald i { color: #10b981; }
+        .module-segment--emerald span { color: #10b981; }
+
+        /* VS divider */
+        .divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+            animation: scaleIn 0.6s ease-out 1s forwards;
+        }
+
+        .divider-line {
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(180deg, transparent, rgba(148,163,184,0.3), transparent);
+        }
+
+        .vs-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(17,24,39,0.9);
+            border: 2px solid rgba(148,163,184,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* Bottom quote */
+        .bottom-quote {
+            text-align: center;
+            margin-top: 44px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.3s forwards;
+        }
+
+        .bottom-quote p {
+            font-size: 26px;
+            font-weight: 300;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .bottom-quote strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+
+                <h1>Czym jest <span class="highlight">modularny monolit</span>?</h1>
+            </div>
+
+            <div class="comparison">
+                <!-- Classic monolith -->
+                <div class="comparison-col comparison-col--left">
+                    <div class="col-label col-label--bad">Monolit klasyczny</div>
+                    <div class="monolith-block monolith-block--classic">
+                        <svg class="spaghetti-svg" viewBox="0 0 360 340">
+                            <!-- Random nodes -->
+                            <circle cx="80" cy="60" r="8"/>
+                            <circle cx="180" cy="40" r="8"/>
+                            <circle cx="290" cy="70" r="8"/>
+                            <circle cx="60" cy="150" r="8"/>
+                            <circle cx="160" cy="130" r="8"/>
+                            <circle cx="270" cy="160" r="8"/>
+                            <circle cx="100" cy="230" r="8"/>
+                            <circle cx="200" cy="220" r="8"/>
+                            <circle cx="300" cy="240" r="8"/>
+                            <circle cx="130" cy="300" r="8"/>
+                            <circle cx="240" cy="290" r="8"/>
+                            <!-- Chaotic connections -->
+                            <line x1="80" y1="60" x2="270" y2="160"/>
+                            <line x1="180" y1="40" x2="100" y2="230"/>
+                            <line x1="290" y1="70" x2="60" y2="150"/>
+                            <line x1="60" y1="150" x2="300" y2="240"/>
+                            <line x1="160" y1="130" x2="240" y2="290"/>
+                            <line x1="270" y1="160" x2="130" y2="300"/>
+                            <line x1="100" y1="230" x2="290" y2="70"/>
+                            <line x1="200" y1="220" x2="80" y2="60"/>
+                            <line x1="300" y1="240" x2="180" y2="40"/>
+                            <line x1="130" y1="300" x2="200" y2="220"/>
+                            <line x1="240" y1="290" x2="60" y2="150"/>
+                            <line x1="80" y1="60" x2="200" y2="220"/>
+                            <line x1="160" y1="130" x2="300" y2="240"/>
+                            <line x1="270" y1="160" x2="100" y2="230"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- VS divider -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="vs-circle">VS</div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- Modular monolith -->
+                <div class="comparison-col comparison-col--right">
+                    <div class="col-label col-label--good">Modularny monolit</div>
+                    <div class="monolith-block monolith-block--modular">
+                        <div class="modules-grid">
+                            <div class="module-segment module-segment--cyan">
+                                <i class="ti ti-shopping-cart"></i>
+                                <span>Zamówienia</span>
+                            </div>
+                            <div class="module-segment module-segment--purple">
+                                <i class="ti ti-credit-card"></i>
+                                <span>Płatności</span>
+                            </div>
+                            <div class="module-segment module-segment--amber">
+                                <i class="ti ti-users"></i>
+                                <span>Użytkownicy</span>
+                            </div>
+                            <div class="module-segment module-segment--emerald">
+                                <i class="ti ti-mail"></i>
+                                <span>Powiadomienia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

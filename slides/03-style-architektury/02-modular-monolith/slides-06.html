@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Przykładowa struktura modułu (C#)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                    linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 8%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 68%; left: 82%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 22%; left: 78%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 82%; left: 25%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 55%; left: 45%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 18%; left: 55%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+            display: grid;
+            grid-template-columns: 1fr 520px;
+            align-items: center;
+            gap: 80px;
+        }
+
+        /* === Left: Tree === */
+        .left-col {
+            opacity: 0;
+            animation: slideFromLeft 0.8s ease-out 0.3s forwards;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow i {
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tree-container {
+            border-radius: 20px;
+            padding: 36px 40px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            font-family: 'Inter', monospace;
+        }
+
+        .tree-root {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(6,182,212,0.15);
+        }
+
+        .tree-root i {
+            font-size: 28px;
+        }
+
+        .tree-group {
+            margin-left: 28px;
+            margin-bottom: 12px;
+        }
+
+        .tree-group-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: rgba(6,182,212,0.04);
+        }
+
+        .tree-group-label i {
+            font-size: 20px;
+            color: var(--cyan-600);
+        }
+
+        .tree-file {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 400;
+            color: rgba(148,163,184,0.8);
+            padding: 5px 14px 5px 42px;
+        }
+
+        .tree-file i {
+            font-size: 16px;
+            color: rgba(148,163,184,0.5);
+        }
+
+        .tree-file .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-left: 6px;
+        }
+
+        .badge-interface {
+            background: rgba(139,92,246,0.15);
+            color: #a78bfa;
+            border: 1px solid rgba(139,92,246,0.3);
+        }
+
+        .badge-internal {
+            background: rgba(251,146,60,0.12);
+            color: #fb923c;
+            border: 1px solid rgba(251,146,60,0.25);
+        }
+
+        .tree-public {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #10b981;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(16,185,129,0.2);
+            padding: 14px 14px;
+            margin-left: 28px;
+            border-radius: 12px;
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+
+        .tree-public i {
+            font-size: 22px;
+        }
+
+        .tree-public-label {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(16,185,129,0.7);
+            margin-left: auto;
+        }
+
+        /* === Right: explanation === */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.8s forwards;
+        }
+
+        .info-card {
+            border-radius: 16px;
+            padding: 28px 32px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--cyan-400);
+        }
+
+        .info-card-header i {
+            font-size: 24px;
+        }
+
+        .info-card p {
+            font-size: 17px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .info-card .hl {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .lock-card {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            border-radius: 16px;
+            padding: 24px 32px;
+            background: rgba(239,68,68,0.04);
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+
+        .lock-card i {
+            font-size: 32px;
+            color: #f43f5e;
+            flex: 0 0 auto;
+        }
+
+        .lock-card p {
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .lock-card strong {
+            color: #f43f5e;
+            font-weight: 600;
+        }
+
+        /* === Conclusion === */
+        .conclusion {
+            position: absolute;
+            bottom: 160px;
+            left: 130px;
+            right: 560px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.4s forwards;
+        }
+
+        .conclusion-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 36px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .conclusion-box i {
+            font-size: 26px;
+            color: var(--cyan-400);
+        }
+
+        .conclusion-box p {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .conclusion-box .hl {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<div class="stage" id="stage">
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--br"></div>
+
+    <div class="content">
+        <!-- Left: file tree -->
+        <div class="left-col">
+            <h1>Przykładowy <span class="highlight">moduł</span> <span style="font-size:32px;color:var(--text-muted);font-weight:400;">C#</span></h1>
+
+            <div class="tree-container">
+                <div class="tree-root">
+                    <i class="ti ti-shopping-cart"></i>
+                    Orders/
+                </div>
+
+                <div class="tree-group">
+                    <div class="tree-group-label">
+                        <i class="ti ti-folder"></i>
+                        /Domain
+                    </div>
+                    <div class="tree-file"><i class="ti ti-file"></i> Order.cs <span class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> OrderStatus.cs <span class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> IOrderRepository.cs <span class="badge badge-interface">interface</span></div>
+                </div>
+
+                <div class="tree-group">
+                    <div class="tree-group-label">
+                        <i class="ti ti-folder"></i>
+                        /Application
+                    </div>
+                    <div class="tree-file"><i class="ti ti-file"></i> PlaceOrderHandler.cs <span class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> CancelOrderHandler.cs <span class="badge badge-internal">internal</span></div>
+                </div>
+
+                <div class="tree-group">
+                    <div class="tree-group-label">
+                        <i class="ti ti-folder"></i>
+                        /Infrastructure
+                    </div>
+                    <div class="tree-file"><i class="ti ti-file"></i> OrderRepository.cs <span class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> DbContext.cs <span class="badge badge-internal">internal</span></div>
+                </div>
+
+                <div class="tree-group">
+                    <div class="tree-group-label">
+                        <i class="ti ti-folder"></i>
+                        /Api
+                    </div>
+                    <div class="tree-file"><i class="ti ti-file"></i> OrdersController.cs <span class="badge badge-internal">internal</span></div>
+                </div>
+
+                <div class="tree-public">
+                    <i class="ti ti-world"></i>
+                    IOrdersModule.cs
+                    <span class="tree-public-label">← publiczny kontrakt</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: explanation cards -->
+        <div class="right-col">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="ti ti-eye"></i>
+                    Widoczność
+                </div>
+                <p>Inne moduły widzą <span class="hl">tylko IOrdersModule</span>.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="ti ti-layers-intersect"></i>
+                    Wewnętrzna architektura
+                </div>
+                <p>Każdy moduł ma własne warstwy: <span class="hl">Domain</span>, <span class="hl">Application</span>, <span class="hl">Infrastructure</span> i <span class="hl">Api</span>.</p>
+            </div>
+
+            <div class="lock-card">
+                <i class="ti ti-lock"></i>
+                <p><strong>Enkapsulacja</strong> - słowo kluczowe <strong>internal</strong> sprawia, że klasy i interfejsy nie mogą być używane przez inne projekty/assembly.</p>
+            </div>
+        </div>
+    </div>
+
+    <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+    <div class="camera-box">kamera 480 &times; 270</div>
+</div>
+
+<script>
+    (function () {
+        const stage = document.getElementById('stage');
+        function rescale() {
+            const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+            stage.style.transformOrigin = 'top left';
+            stage.style.transform = 'scale(' + scale + ')';
+            stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+            stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+        }
+        window.addEventListener('resize', rescale);
+        rescale();
+    })();
+</script>
+</body>
+</html>

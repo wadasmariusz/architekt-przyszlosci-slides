@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Jak moduły się komunikują?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 8%; animation-delay: 0.5s; }
+        .particle:nth-child(4) { top: 68%; left: 90%; animation-delay: 2s; }
+        .particle:nth-child(5) { top: 25%; left: 78%; animation-delay: 3.5s; }
+        .particle:nth-child(6) { top: 82%; left: 15%; animation-delay: 5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 1s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 4s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 50px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow i {
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Flow timeline === */
+        .flow-area {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .flow-steps {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 0;
+            position: relative;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 240px;
+            opacity: 0;
+        }
+
+        .flow-step:nth-child(1) { animation: bounceIn 0.7s ease-out 0.6s forwards; }
+        .flow-step:nth-child(3) { animation: bounceIn 0.7s ease-out 1.0s forwards; }
+        .flow-step:nth-child(5) { animation: bounceIn 0.7s ease-out 1.4s forwards; }
+        .flow-step:nth-child(7) { animation: bounceIn 0.7s ease-out 1.8s forwards; }
+
+        .step-number {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark-bg);
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            box-shadow: 0 0 24px rgba(34,211,238,0.3);
+            margin-bottom: 18px;
+            flex-shrink: 0;
+        }
+
+        .step-icon-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        .step-icon-wrap.ic-http {
+            background: rgba(6,182,212,0.10);
+            border: 1px solid rgba(6,182,212,0.25);
+            color: var(--cyan-400);
+        }
+
+        .step-icon-wrap.ic-orders {
+            background: rgba(139,92,246,0.10);
+            border: 1px solid rgba(139,92,246,0.25);
+            color: #a78bfa;
+        }
+
+        .step-icon-wrap.ic-event {
+            background: rgba(245,158,11,0.10);
+            border: 1px solid rgba(245,158,11,0.25);
+            color: #f59e0b;
+        }
+
+        .step-icon-wrap.ic-notify {
+            background: rgba(16,185,129,0.10);
+            border: 1px solid rgba(16,185,129,0.25);
+            color: #10b981;
+        }
+
+        .step-card {
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            padding: 22px 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .step-title {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .step-desc {
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .step-tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tag-http {
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.25);
+            color: var(--cyan-400);
+        }
+
+        .tag-internal {
+            background: rgba(139,92,246,0.08);
+            border: 1px solid rgba(139,92,246,0.25);
+            color: #a78bfa;
+        }
+
+        .tag-event {
+            background: rgba(245,158,11,0.08);
+            border: 1px solid rgba(245,158,11,0.25);
+            color: #f59e0b;
+        }
+
+        .tag-action {
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.25);
+            color: #10b981;
+        }
+
+        /* === Arrows between steps === */
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 50px;
+            margin-top: 120px;
+            opacity: 0;
+        }
+
+        .flow-arrow:nth-child(2) { animation: fadeIn 0.5s ease-out 0.9s forwards; }
+        .flow-arrow:nth-child(4) { animation: fadeIn 0.5s ease-out 1.3s forwards; }
+        .flow-arrow:nth-child(6) { animation: fadeIn 0.5s ease-out 1.7s forwards; }
+
+        .flow-arrow i {
+            font-size: 32px;
+            color: rgba(148,163,184,0.5);
+        }
+
+        /* === Conclusion === */
+        .conclusion {
+            text-align: center;
+            margin-top: 48px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.4s forwards;
+        }
+
+        .conclusion-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 36px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .conclusion-box i {
+            font-size: 24px;
+            color: var(--cyan-400);
+        }
+
+        .conclusion-box p {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .conclusion-box .hl {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Jak moduły się <span class="highlight">komunikują</span>?</h1>
+            </div>
+
+            <!-- Flow diagram -->
+            <div class="flow-area">
+                <div class="flow-steps">
+                    <!-- Step 1 -->
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon-wrap ic-http">
+                            <i class="ti ti-world-www"></i>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-title">Żądanie HTTP</div>
+                            <div class="step-desc">Klient wysyła request do modułu Zamówień</div>
+                            <div class="step-tag tag-http">HTTP</div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flow-arrow">
+                        <i class="ti ti-chevron-right"></i>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon-wrap ic-orders">
+                            <i class="ti ti-clipboard-check"></i>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-title">Walidacja + zapis</div>
+                            <div class="step-desc">Moduł Zamówień waliduje dane i zapisuje zamówienie</div>
+                            <div class="step-tag tag-internal">Logika wewnętrzna</div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flow-arrow">
+                        <i class="ti ti-chevron-right"></i>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon-wrap ic-event">
+                            <i class="ti ti-broadcast"></i>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-title">Zdarzenie</div>
+                            <div class="step-desc">Publikacja zdarzenia <strong>OrderPlaced</strong></div>
+                            <div class="step-tag tag-event">Event</div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flow-arrow">
+                        <i class="ti ti-chevron-right"></i>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-icon-wrap ic-notify">
+                            <i class="ti ti-mail-forward"></i>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-title">Reakcja</div>
+                            <div class="step-desc">Moduł Powiadomień nasłuchuje i wysyła e-mail</div>
+                            <div class="step-tag tag-action">Consumer eventu</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conclusion -->
+                <div class="conclusion">
+                    <div class="conclusion-box">
+                        <i class="ti ti-info-circle"></i>
+                        <p>Komunikacja przez <span class="hl">kontrakt lub zdarzenie</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

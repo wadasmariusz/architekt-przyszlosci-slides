@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - Anty-wzorzec: zbyt ciasne połączenia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --red-500: #ef4444;
+            --red-rose: #f43f5e;
+            --emerald: #10b981;
+            --orange: #f59e0b;
+            --purple: #8b5cf6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background === */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(244,63,94,0.08) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 10%; left: 22%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 72%; left: 78%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 25%; left: 68%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 12%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 52%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 22%; left: 55%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 44px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--red-rose);
+            margin-bottom: 16px;
+        }
+
+        .eyebrow i {
+            font-size: 18px;
+        }
+
+        h1 {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .highlight-warn {
+            background: linear-gradient(135deg, var(--red-rose), var(--red-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Chain diagram === */
+        .chain-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .chain-module {
+            width: 200px;
+            padding: 22px 16px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(244,63,94,0.2);
+            backdrop-filter: blur(8px);
+            text-align: center;
+            opacity: 0;
+            position: relative;
+        }
+
+        .chain-module:nth-child(1) { animation: scaleIn 0.6s ease-out 0.6s forwards; }
+        .chain-module:nth-child(3) { animation: scaleIn 0.6s ease-out 0.9s forwards; }
+        .chain-module:nth-child(5) { animation: scaleIn 0.6s ease-out 1.2s forwards; }
+        .chain-module:nth-child(7) { animation: scaleIn 0.6s ease-out 1.5s forwards; }
+        .chain-module:nth-child(9) { animation: scaleIn 0.6s ease-out 1.8s forwards; }
+
+        .chain-module .mod-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: rgba(244,63,94,0.08);
+            border: 1px solid rgba(244,63,94,0.15);
+            color: var(--red-rose);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 12px;
+        }
+
+        .chain-module .mod-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .chain-module .mod-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+
+        /* Arrows between modules */
+        .chain-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 0 6px;
+            opacity: 0;
+        }
+
+        .chain-arrow:nth-child(2) { animation: fadeIn 0.5s ease-out 0.85s forwards; }
+        .chain-arrow:nth-child(4) { animation: fadeIn 0.5s ease-out 1.15s forwards; }
+        .chain-arrow:nth-child(6) { animation: fadeIn 0.5s ease-out 1.45s forwards; }
+        .chain-arrow:nth-child(8) { animation: fadeIn 0.5s ease-out 1.75s forwards; }
+
+        .chain-arrow i {
+            font-size: 24px;
+            color: var(--red-rose);
+        }
+
+        .chain-arrow .sync-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--red-rose);
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        /* Red border around entire chain */
+        .chain-wrapper {
+            position: relative;
+            padding: 28px 36px;
+            border: 2px solid rgba(244,63,94,0.3);
+            border-radius: 20px;
+            margin: 0 auto 40px;
+            max-width: 1300px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 2.1s forwards;
+        }
+
+        .chain-wrapper::before {
+            content: 'ŁAŃCUCH SYNCHRONICZNYCH ZALEŻNOŚCI';
+            position: absolute;
+            top: -13px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-bg);
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--red-rose);
+        }
+
+        /* Problem description */
+        .problem-text {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.5;
+            max-width: 900px;
+            margin: 0 auto 36px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.4s forwards;
+        }
+
+        .problem-text strong {
+            color: var(--red-rose);
+            font-weight: 600;
+        }
+
+        /* Bottom conclusion */
+        .conclusion {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 30px;
+            border-radius: 16px;
+            background: rgba(244,63,94,0.04);
+            border: 1px solid rgba(244,63,94,0.18);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.7s forwards;
+        }
+
+        .conclusion-icon {
+            flex: 0 0 auto;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(244,63,94,0.1);
+            color: var(--red-rose);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .conclusion-text {
+            font-size: 21px;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .conclusion-text strong {
+            color: var(--red-rose);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <i class="ti ti-alert-triangle"></i>
+                    Anty-wzorzec
+                </div>
+                <h1>Zbyt <span class="highlight-warn">ciasne połączenia</span> między modułami</h1>
+            </div>
+
+            <div class="chain-wrapper">
+                <div class="chain-area">
+                    <!-- Module 1 -->
+                    <div class="chain-module">
+                        <div class="mod-icon"><i class="ti ti-shopping-cart"></i></div>
+                        <div class="mod-name">Zamówienia</div>
+                        <div class="mod-label">wywołuje →</div>
+                    </div>
+
+                    <div class="chain-arrow">
+                        <i class="ti ti-arrow-right"></i>
+                        <span class="sync-label">sync</span>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div class="chain-module">
+                        <div class="mod-icon"><i class="ti ti-credit-card"></i></div>
+                        <div class="mod-name">Płatności</div>
+                        <div class="mod-label">wywołuje →</div>
+                    </div>
+
+                    <div class="chain-arrow">
+                        <i class="ti ti-arrow-right"></i>
+                        <span class="sync-label">sync</span>
+                    </div>
+
+                    <!-- Module 3 -->
+                    <div class="chain-module">
+                        <div class="mod-icon"><i class="ti ti-truck-delivery"></i></div>
+                        <div class="mod-name">Dostawa</div>
+                        <div class="mod-label">wywołuje →</div>
+                    </div>
+
+                    <div class="chain-arrow">
+                        <i class="ti ti-arrow-right"></i>
+                        <span class="sync-label">sync</span>
+                    </div>
+
+                    <!-- Module 4 -->
+                    <div class="chain-module">
+                        <div class="mod-icon"><i class="ti ti-bell"></i></div>
+                        <div class="mod-name">Powiadomienia</div>
+                        <div class="mod-label">wywołuje →</div>
+                    </div>
+
+                    <div class="chain-arrow">
+                        <i class="ti ti-arrow-right"></i>
+                        <span class="sync-label">sync</span>
+                    </div>
+
+                    <!-- Module 5 -->
+                    <div class="chain-module">
+                        <div class="mod-icon"><i class="ti ti-users"></i></div>
+                        <div class="mod-name">Użytkownicy</div>
+                        <div class="mod-label">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-text">
+                Każde połączenie wymaga <strong>odpowiedzi tu i teraz</strong>.<br>
+                Awaria jednego modułu zatrzymuje cały łańcuch.
+            </div>
+
+            <div class="conclusion">
+                <div class="conclusion-icon">
+                    <i class="ti ti-link-off"></i>
+                </div>
+                <div class="conclusion-text">
+                    Formalnie moduły, praktycznie <strong>jeden duży łańcuch zależności</strong>.
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

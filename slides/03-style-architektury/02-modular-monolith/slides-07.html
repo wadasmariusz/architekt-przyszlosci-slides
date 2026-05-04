@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07 - System wypożyczalni samochodów — podział na moduły</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 10%; left: 14%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 72%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 18%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 48%; left: 52%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 16%; left: 62%; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 50px 130px 130px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 30px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow i {
+            font-size: 32px;
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram === */
+        .diagram-area {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: scaleIn 0.8s ease-out 0.7s forwards;
+        }
+
+        .app-boundary {
+            position: relative;
+            border: 2px solid rgba(6,182,212,0.25);
+            border-radius: 24px;
+            padding: 50px 80px 40px;
+            background: rgba(17,24,39,0.3);
+        }
+
+        .app-label {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 28px;
+            border-radius: 100px;
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.3);
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+            white-space: nowrap;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 40px 80px;
+        }
+
+        .module-card {
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            animation: bounceIn 0.7s ease-out forwards;
+        }
+
+        .module-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .module-card:nth-child(1) { animation-delay: 1.0s; }
+        .module-card:nth-child(2) { animation-delay: 1.2s; }
+        .module-card:nth-child(3) { animation-delay: 1.4s; }
+        .module-card:nth-child(4) { animation-delay: 1.6s; }
+
+        .module-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 36px;
+        }
+
+        .module-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .module-desc {
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Module colors */
+        .mod-catalog {
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(6,182,212,0.25);
+        }
+        .mod-catalog .module-icon {
+            background: rgba(6,182,212,0.12);
+            color: var(--cyan-400);
+        }
+
+        .mod-orders {
+            background: rgba(139,92,246,0.06);
+            border: 1px solid rgba(139,92,246,0.25);
+        }
+        .mod-orders .module-icon {
+            background: rgba(139,92,246,0.12);
+            color: #a78bfa;
+        }
+
+        .mod-payments {
+            background: rgba(245,158,11,0.06);
+            border: 1px solid rgba(245,158,11,0.25);
+        }
+        .mod-payments .module-icon {
+            background: rgba(245,158,11,0.12);
+            color: #f59e0b;
+        }
+
+        .mod-notifications {
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.25);
+        }
+        .mod-notifications .module-icon {
+            background: rgba(16,185,129,0.12);
+            color: #10b981;
+        }
+
+        /* === SVG arrows === */
+        .arrows-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .arrow-line {
+            stroke: rgba(148,163,184,0.3);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+            animation: drawArrow 1.2s ease-out forwards;
+        }
+
+        .arrow-line:nth-child(1) { animation-delay: 1.8s; }
+        .arrow-line:nth-child(2) { animation-delay: 2.0s; }
+        .arrow-line:nth-child(3) { animation-delay: 2.2s; }
+
+        .arrow-head {
+            fill: rgba(148,163,184,0.4);
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .arrow-head:nth-child(4) { animation-delay: 2.4s; }
+        .arrow-head:nth-child(5) { animation-delay: 2.6s; }
+        .arrow-head:nth-child(6) { animation-delay: 2.8s; }
+
+        @keyframes drawArrow {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* === Arrow labels === */
+        .arrow-label {
+            position: absolute;
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: rgba(17,24,39,0.9);
+            border: 1px solid rgba(148,163,184,0.15);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+            z-index: 6;
+        }
+
+        .arrow-label:nth-child(1) { animation-delay: 2.5s; }
+        .arrow-label:nth-child(2) { animation-delay: 2.7s; }
+        .arrow-label:nth-child(3) { animation-delay: 2.9s; }
+
+        .arrow-labels-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 6;
+        }
+
+        /* === Conclusion === */
+        .conclusion {
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.8s forwards;
+        }
+
+        .conclusion-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 36px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .conclusion-box i {
+            font-size: 24px;
+            color: var(--cyan-400);
+        }
+
+        .conclusion-box p {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .conclusion-box .hl {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Wypożyczalnia samochodów</h1>
+            </div>
+
+            <!-- Diagram -->
+            <div class="diagram-area">
+                <div class="app-boundary">
+                    <div class="app-label"><i class="ti ti-package" style="margin-right: 8px;"></i> Jeden deployment</div>
+
+                    <div class="modules-grid">
+                        <!-- Katalog pojazdów -->
+                        <div class="module-card mod-catalog">
+                            <div class="module-icon">
+                                <i class="ti ti-car"></i>
+                            </div>
+                            <div class="module-name">Katalog pojazdów</div>
+                            <div class="module-desc">Modele, dostępność, parametry</div>
+                        </div>
+
+                        <!-- Zamówienia -->
+                        <div class="module-card mod-orders">
+                            <div class="module-icon">
+                                <i class="ti ti-clipboard-list"></i>
+                            </div>
+                            <div class="module-name">Zamówienia</div>
+                            <div class="module-desc">Rezerwacje, status, walidacja</div>
+                        </div>
+
+                        <!-- Płatności -->
+                        <div class="module-card mod-payments">
+                            <div class="module-icon">
+                                <i class="ti ti-credit-card"></i>
+                            </div>
+                            <div class="module-name">Płatności</div>
+                            <div class="module-desc">Obciążenia, faktury, zwroty</div>
+                        </div>
+
+                        <!-- Powiadomienia -->
+                        <div class="module-card mod-notifications">
+                            <div class="module-icon">
+                                <i class="ti ti-bell-ringing"></i>
+                            </div>
+                            <div class="module-name">Powiadomienia</div>
+                            <div class="module-desc">E-mail, SMS, push</div>
+                        </div>
+                    </div>
+
+                    <!-- SVG arrows between modules -->
+                    <svg class="arrows-svg" viewBox="0 0 1000 480" preserveAspectRatio="xMidYMid meet">
+                        <!-- Catalog → Orders (top row, left to right) -->
+                        <path class="arrow-line" d="M380,100 C420,100 440,100 470,100" />
+                        <polygon class="arrow-head" points="468,95 480,100 468,105" />
+
+                        <!-- Orders → Payments (top-right to bottom-right) -->
+                        <path class="arrow-line" d="M680,180 C680,220 680,260 680,300" />
+                        <polygon class="arrow-head" points="675,298 680,310 685,298" />
+
+                        <!-- Orders → Notifications (top-right to bottom-left) -->
+                        <path class="arrow-line" d="M580,180 C480,240 380,260 320,300" />
+                        <polygon class="arrow-head" points="315,295 318,308 327,298" />
+                    </svg>
+                </div>
+
+                <!-- Conclusion -->
+                <div class="conclusion">
+                    <div class="conclusion-box">
+                        <i class="ti ti-plug-connected"></i>
+                        <p>Komunikacja tylko przez <span class="hl">publiczne interfejsy</span> modułów</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
