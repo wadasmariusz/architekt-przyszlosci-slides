@@ -172,7 +172,7 @@
         .warnings {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 12px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -181,7 +181,7 @@
             display: flex;
             align-items: center;
             gap: 22px;
-            padding: 22px 30px;
+            padding: 16px 30px;
             border-radius: 16px;
             background: rgba(17,24,39,0.7);
             border: 1px solid rgba(239,68,68,0.15);
@@ -202,6 +202,8 @@
         .warn-item:nth-child(3) { animation: slideFromLeft 0.7s ease-out 1.0s forwards; }
         .warn-item:nth-child(4) { animation: slideFromLeft 0.7s ease-out 1.2s forwards; }
         .warn-item:nth-child(5) { animation: slideFromLeft 0.7s ease-out 1.4s forwards; }
+        .warn-item:nth-child(6) { animation: slideFromLeft 0.7s ease-out 1.6s forwards; }
+        .warn-item:nth-child(7) { animation: slideFromLeft 0.7s ease-out 1.8s forwards; }
 
         .warn-icon {
             flex: 0 0 auto;
@@ -218,7 +220,7 @@
         }
 
         .warn-text {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 400;
             color: var(--text-muted);
             line-height: 1.5;
@@ -285,47 +287,57 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-alert-triangle"></i>
-                    Uwaga
-                </div>
                 <h1>Pułapki i <span class="highlight-warn">słabe strony</span></h1>
             </div>
 
             <div class="warnings">
                 <div class="warn-item">
                     <div class="warn-icon">
-                        <i class="ti ti-shield-off"></i>
-                    </div>
-                    <div class="warn-text"><strong>Brak wymuszenia granic</strong> — infrastruktura ich nie chroni, wymagają dyscypliny zespołu</div>
-                </div>
-
-                <div class="warn-item">
-                    <div class="warn-icon">
                         <i class="ti ti-arrows-maximize"></i>
                     </div>
-                    <div class="warn-text"><strong>Skalowanie tylko całości</strong> — nie da się skalować pojedynczych modułów niezależnie</div>
+                    <div class="warn-text"><strong>Trudniejsze skalowanie</strong></div>
                 </div>
 
                 <div class="warn-item">
                     <div class="warn-icon">
-                        <i class="ti ti-database"></i>
+                        <i class="ti ti-flame"></i>
                     </div>
-                    <div class="warn-text"><strong>Wspólna baza danych</strong> — łatwo rozmywa granice między modułami</div>
+                    <div class="warn-text"><strong>Silne współdzielenie procesu i zasobów</strong></div>
                 </div>
 
                 <div class="warn-item">
                     <div class="warn-icon">
-                        <i class="ti ti-masks-theater"></i>
+                        <i class="ti ti-link-off"></i>
                     </div>
-                    <div class="warn-text"><strong>Pozorna modularność</strong> — ładne foldery, ale pod spodem silne sprzężenie</div>
+                    <div class="warn-text"><strong>Ryzyko ukrytych zależności</strong></div>
+                </div>
+
+                <div class="warn-item">
+                    <div class="warn-icon">
+                        <i class="ti ti-package"></i>
+                    </div>
+                    <div class="warn-text"><strong>Wspólne wdrożenie</strong></div>
+                </div>
+
+                <div class="warn-item">
+                    <div class="warn-icon">
+                        <i class="ti ti-hourglass"></i>
+                    </div>
+                    <div class="warn-text"><strong>Dłuższy czas buildów i testów</strong></div>
                 </div>
 
                 <div class="warn-item">
                     <div class="warn-icon">
                         <i class="ti ti-users-group"></i>
                     </div>
-                    <div class="warn-text"><strong>Wymaga dojrzałości</strong> — świadomość domenowa i organizacyjna są kluczowe</div>
+                    <div class="warn-text"><strong>Mniejsza niezależność zespołów</strong></div>
+                </div>
+
+                <div class="warn-item">
+                    <div class="warn-icon">
+                        <i class="ti ti-lock"></i>
+                    </div>
+                    <div class="warn-text"><strong>Ograniczona swoboda technologiczna</strong></div>
                 </div>
             </div>
         </div>

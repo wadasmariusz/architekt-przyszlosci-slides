@@ -18,8 +18,8 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --text-dim: #64748b;
-            --emerald: #10b981;
-            --emerald-dark: #059669;
+            --accent: #22d3ee;
+            --accent-dark: #0891b2;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -147,7 +147,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 3px;
-            color: var(--emerald);
+            color: var(--accent);
             margin-bottom: 16px;
         }
 
@@ -181,7 +181,7 @@
             flex: 1;
             border-radius: 20px;
             background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(16,185,129,0.15);
+            border: 1px solid rgba(6,182,212,0.15);
             backdrop-filter: blur(8px);
             padding: 40px 36px;
             display: flex;
@@ -192,10 +192,10 @@
         }
 
         .card:hover {
-            border-color: var(--emerald);
-            background: rgba(16,185,129,0.06);
+            border-color: var(--accent);
+            background: rgba(6,182,212,0.06);
             transform: translateY(-6px);
-            box-shadow: 0 8px 32px rgba(16,185,129,0.12);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.12);
         }
 
         .card:nth-child(1) { animation: bounceIn 0.7s ease-out 0.6s forwards; }
@@ -206,13 +206,13 @@
             width: 64px;
             height: 64px;
             border-radius: 16px;
-            background: rgba(16,185,129,0.08);
-            border: 1px solid rgba(16,185,129,0.18);
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.18);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 30px;
-            color: var(--emerald);
+            color: var(--accent);
         }
 
         .card-check {
@@ -223,7 +223,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: var(--emerald);
+            color: var(--accent);
         }
 
         .card-check i {
@@ -306,10 +306,6 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-checklist"></i>
-                    Decyzja architektoniczna
-                </div>
                 <h1>Kiedy warto wybrać <span class="highlight">modularny monolit</span>?</h1>
             </div>
 
@@ -324,7 +320,6 @@
                         Dobry wybór
                     </div>
                     <div class="card-title">Kilka wyraźnych obszarów biznesowych</div>
-                    <div class="card-desc">System ma naturalne granice domenowe, ale skala ruchu i zespołu nie uzasadnia inwestycji w mikroserwisy.</div>
                 </div>
 
                 <!-- Card 2 -->
@@ -337,7 +332,6 @@
                         Dobry wybór
                     </div>
                     <div class="card-title">Mały lub średni zespół</div>
-                    <div class="card-desc">Zespół nie chce inwestować w infrastrukturę rozproszoną — service mesh, orchestrację kontenerów, distributed tracing.</div>
                 </div>
 
                 <!-- Card 3 -->
@@ -350,7 +344,6 @@
                         Dobry wybór
                     </div>
                     <div class="card-title">Faza intensywnych zmian</div>
-                    <div class="card-desc">Produkt dojrzewa, granice domenowe jeszcze się kształtują — łatwiej je przesuwać w jednym deploymencie niż między serwisami.</div>
                 </div>
             </div>
         </div>

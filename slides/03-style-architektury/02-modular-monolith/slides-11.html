@@ -132,14 +132,15 @@
             width: 100%;
             height: 100%;
             padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .header {
             text-align: center;
             max-width: 1180px;
             margin: 0 auto 36px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.3s forwards;
         }
 
         .eyebrow {
@@ -175,29 +176,28 @@
         /* === Evolution section === */
         .evolution {
             display: flex;
-            gap: 32px;
+            gap: 0;
             justify-content: center;
             align-items: flex-start;
             margin-bottom: 36px;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .version {
-            flex: 0 0 310px;
+            flex: 0 0 240px;
             border-radius: 16px;
             background: rgba(17,24,39,0.7);
             border: 1px solid rgba(239,68,68,0.12);
             backdrop-filter: blur(8px);
             overflow: hidden;
-            opacity: 0;
         }
 
-        .version:nth-child(1) { animation: scaleIn 0.7s ease-out 0.6s forwards; }
-        .version:nth-child(2) { animation: scaleIn 0.7s ease-out 0.9s forwards; }
-        .version:nth-child(3) { animation: scaleIn 0.7s ease-out 1.2s forwards; }
-
-        .version:nth-child(1) { border-color: rgba(6,182,212,0.2); }
-        .version:nth-child(2) { border-color: rgba(245,158,11,0.25); }
-        .version:nth-child(3) { border-color: rgba(244,63,94,0.3); }
+        .version:nth-of-type(1) { border-color: rgba(6,182,212,0.2); }
+        .version:nth-of-type(2) { border-color: rgba(245,158,11,0.25); }
+        .version:nth-of-type(3) { border-color: rgba(244,63,94,0.3); }
+        .version:nth-of-type(4) { border-color: rgba(139,92,246,0.3); }
 
         .version-header {
             padding: 16px 22px;
@@ -208,22 +208,28 @@
             font-size: 16px;
         }
 
-        .version:nth-child(1) .version-header {
+        .version:nth-of-type(1) .version-header {
             background: rgba(6,182,212,0.06);
             color: var(--cyan-400);
             border-bottom: 1px solid rgba(6,182,212,0.12);
         }
 
-        .version:nth-child(2) .version-header {
+        .version:nth-of-type(2) .version-header {
             background: rgba(245,158,11,0.06);
             color: var(--orange);
             border-bottom: 1px solid rgba(245,158,11,0.15);
         }
 
-        .version:nth-child(3) .version-header {
+        .version:nth-of-type(3) .version-header {
             background: rgba(244,63,94,0.06);
             color: var(--red-rose);
             border-bottom: 1px solid rgba(244,63,94,0.15);
+        }
+
+        .version:nth-of-type(4) .version-header {
+            background: rgba(139,92,246,0.06);
+            color: var(--purple);
+            border-bottom: 1px solid rgba(139,92,246,0.15);
         }
 
         .version-header i {
@@ -259,9 +265,10 @@
             flex-shrink: 0;
         }
 
-        .version:nth-child(1) .field-dot { background: var(--cyan-400); }
-        .version:nth-child(2) .field-dot { background: var(--orange); }
-        .version:nth-child(3) .field-dot { background: var(--red-rose); }
+        .version:nth-of-type(1) .field-dot { background: var(--cyan-400); }
+        .version:nth-of-type(2) .field-dot { background: var(--orange); }
+        .version:nth-of-type(3) .field-dot { background: var(--red-rose); }
+        .version:nth-of-type(4) .field-dot { background: var(--purple); }
 
         .field-new {
             color: var(--orange);
@@ -284,22 +291,28 @@
             letter-spacing: 1px;
         }
 
-        .version:nth-child(1) .version-badge {
+        .version:nth-of-type(1) .version-badge {
             background: rgba(6,182,212,0.08);
             border: 1px solid rgba(6,182,212,0.2);
             color: var(--cyan-400);
         }
 
-        .version:nth-child(2) .version-badge {
+        .version:nth-of-type(2) .version-badge {
             background: rgba(245,158,11,0.08);
             border: 1px solid rgba(245,158,11,0.2);
             color: var(--orange);
         }
 
-        .version:nth-child(3) .version-badge {
+        .version:nth-of-type(3) .version-badge {
             background: rgba(244,63,94,0.08);
             border: 1px solid rgba(244,63,94,0.2);
             color: var(--red-rose);
+        }
+
+        .version:nth-of-type(4) .version-badge {
+            background: rgba(139,92,246,0.08);
+            border: 1px solid rgba(139,92,246,0.2);
+            color: var(--purple);
         }
 
         /* === Arrow between versions === */
@@ -308,13 +321,11 @@
             align-items: center;
             justify-content: center;
             align-self: center;
+            flex-shrink: 0;
+            width: 50px;
             font-size: 28px;
             color: var(--text-dim);
-            opacity: 0;
         }
-
-        .arrow:nth-child(2) { animation: fadeIn 0.5s ease-out 0.85s forwards; }
-        .arrow:nth-child(4) { animation: fadeIn 0.5s ease-out 1.15s forwards; }
 
         /* === Solution === */
         .solution {
@@ -328,8 +339,6 @@
             background: rgba(16,185,129,0.05);
             border: 1px solid rgba(16,185,129,0.2);
             backdrop-filter: blur(8px);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.6s forwards;
         }
 
         .solution-icon {
@@ -418,10 +427,6 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-alert-triangle"></i>
-                    Anty-wzorzec
-                </div>
                 <h1>Jeden <span class="highlight-warn">wspólny model</span> dla wszystkich</h1>
             </div>
 
@@ -439,10 +444,11 @@
                         <div class="field"><span class="field-dot"></span> email</div>
                         <div class="field"><span class="field-dot"></span> password</div>
                         <div class="field"><span class="field-dot"></span> createdAt</div>
+                        <div class="field"><span class="field-dot"></span> ...</div>
                         <div class="class-name">}</div>
                         <div class="version-badge">
                             <i class="ti ti-check"></i>
-                            5 pól — OK
+                            7 pól
                         </div>
                     </div>
                 </div>
@@ -467,10 +473,11 @@
                         <div class="field field-new"><span class="field-dot"></span> invoiceEmail</div>
                         <div class="field field-new"><span class="field-dot"></span> taxId</div>
                         <div class="field field-new"><span class="field-dot"></span> lastPaymentDate</div>
+                        <div class="field field-new"><span class="field-dot"></span> ...</div>
                         <div class="class-name">}</div>
                         <div class="version-badge">
                             <i class="ti ti-alert-circle"></i>
-                            12 pól — Płatności dołożyły swoje
+                            18 pól
                         </div>
                     </div>
                 </div>
@@ -499,7 +506,32 @@
                         <div class="class-name">}</div>
                         <div class="version-badge">
                             <i class="ti ti-flame"></i>
-                            20+ pól — logika 3 modułów
+                            30+ pól - logika 3 modułów
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow">
+                    <i class="ti ti-chevron-right"></i>
+                </div>
+
+                <!-- Version 4 -->
+                <div class="version">
+                    <div class="version-header">
+                        <i class="ti ti-skull"></i>
+                        Wersja 4
+                    </div>
+                    <div class="version-body">
+                        <div class="class-name">class User {</div>
+                        <div class="field"><span class="field-dot"></span> 50+ pól z 5 modułów</div>
+                        <div class="field field-chaos"><span class="field-dot"></span> isAdmin / role / tier</div>
+                        <div class="field field-chaos"><span class="field-dot"></span> sprzeczne walidacje</div>
+                        <div class="field field-chaos"><span class="field-dot"></span> nullable everywhere</div>
+                        <div class="field field-chaos"><span class="field-dot"></span> god object</div>
+                        <div class="class-name">}</div>
+                        <div class="version-badge">
+                            <i class="ti ti-alert-octagon"></i>
+                            God Object
                         </div>
                     </div>
                 </div>
@@ -510,7 +542,7 @@
                     <i class="ti ti-bulb"></i>
                 </div>
                 <div class="solution-text">
-                    <strong>Każdy moduł ma swój lokalny widok użytkownika</strong> — z polami, które naprawdę potrzebuje.
+                    <strong>Każdy moduł powinienien mieć swój lokalny model użytkownika</strong>.
                 </div>
             </div>
         </div>
