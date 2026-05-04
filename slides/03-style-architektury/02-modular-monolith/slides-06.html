@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slide 06 - Przykładowa struktura modułu (C#)</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,7 +19,11 @@
             --text-muted: #94a3b8;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             background: var(--dark-bg);
@@ -42,16 +46,19 @@
         .bg-grid {
             position: absolute;
             inset: 0;
-            background-image:
-                    linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
             background-size: 60px 60px;
             animation: gridMove 20s linear infinite;
         }
 
         @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 60px 60px;
+            }
         }
 
         .bg-glow {
@@ -59,7 +66,7 @@
             width: 700px;
             height: 700px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 65%);
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.10) 0%, transparent 65%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -67,8 +74,14 @@
         }
 
         @keyframes bgPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.15);
+                opacity: 0.9;
+            }
         }
 
         .particle {
@@ -81,17 +94,54 @@
             animation: float 8s ease-in-out infinite;
         }
 
-        .particle:nth-child(3) { top: 12%; left: 8%; animation-delay: 0s; }
-        .particle:nth-child(4) { top: 68%; left: 82%; animation-delay: 1.5s; }
-        .particle:nth-child(5) { top: 22%; left: 78%; animation-delay: 3s; }
-        .particle:nth-child(6) { top: 82%; left: 25%; animation-delay: 4.5s; }
-        .particle:nth-child(7) { top: 55%; left: 45%; animation-delay: 6s; }
-        .particle:nth-child(8) { top: 18%; left: 55%; animation-delay: 2s; }
+        .particle:nth-child(3) {
+            top: 12%;
+            left: 8%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(4) {
+            top: 68%;
+            left: 82%;
+            animation-delay: 1.5s;
+        }
+
+        .particle:nth-child(5) {
+            top: 22%;
+            left: 78%;
+            animation-delay: 3s;
+        }
+
+        .particle:nth-child(6) {
+            top: 82%;
+            left: 25%;
+            animation-delay: 4.5s;
+        }
+
+        .particle:nth-child(7) {
+            top: 55%;
+            left: 45%;
+            animation-delay: 6s;
+        }
+
+        .particle:nth-child(8) {
+            top: 18%;
+            left: 55%;
+            animation-delay: 2s;
+        }
 
         @keyframes float {
-            0% { opacity: 0; transform: translateY(0) scale(1); }
-            20%, 80% { opacity: 0.8; }
-            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(1);
+            }
+            20%, 80% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-120px) scale(0.5);
+            }
         }
 
         .corner {
@@ -108,13 +158,43 @@
             background: var(--cyan-700);
         }
 
-        .corner--tl { top: 30px; left: 30px; }
-        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
-        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+        .corner--tl {
+            top: 30px;
+            left: 30px;
+        }
 
-        .corner--br { bottom: 30px; right: 30px; }
-        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
-        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+        .corner--tl::before {
+            width: 24px;
+            height: 2px;
+            top: 0;
+            left: 0;
+        }
+
+        .corner--tl::after {
+            width: 2px;
+            height: 24px;
+            top: 0;
+            left: 0;
+        }
+
+        .corner--br {
+            bottom: 30px;
+            right: 30px;
+        }
+
+        .corner--br::before {
+            width: 24px;
+            height: 2px;
+            bottom: 0;
+            right: 0;
+        }
+
+        .corner--br::after {
+            width: 2px;
+            height: 24px;
+            bottom: 0;
+            right: 0;
+        }
 
         /* === Content === */
         .content {
@@ -169,8 +249,8 @@
         .tree-container {
             border-radius: 20px;
             padding: 36px 40px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.15);
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(6, 182, 212, 0.15);
             backdrop-filter: blur(8px);
             font-family: 'Inter', monospace;
         }
@@ -184,7 +264,7 @@
             color: var(--cyan-400);
             margin-bottom: 16px;
             padding-bottom: 16px;
-            border-bottom: 1px solid rgba(6,182,212,0.15);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.15);
         }
 
         .tree-root i {
@@ -206,7 +286,7 @@
             margin-bottom: 8px;
             padding: 8px 14px;
             border-radius: 10px;
-            background: rgba(6,182,212,0.04);
+            background: rgba(6, 182, 212, 0.04);
         }
 
         .tree-group-label i {
@@ -220,13 +300,13 @@
             gap: 10px;
             font-size: 18px;
             font-weight: 400;
-            color: rgba(148,163,184,0.8);
+            color: rgba(148, 163, 184, 0.8);
             padding: 5px 14px 5px 42px;
         }
 
         .tree-file i {
             font-size: 16px;
-            color: rgba(148,163,184,0.5);
+            color: rgba(148, 163, 184, 0.5);
         }
 
         .tree-file .badge {
@@ -238,15 +318,15 @@
         }
 
         .badge-interface {
-            background: rgba(139,92,246,0.15);
+            background: rgba(139, 92, 246, 0.15);
             color: #a78bfa;
-            border: 1px solid rgba(139,92,246,0.3);
+            border: 1px solid rgba(139, 92, 246, 0.3);
         }
 
         .badge-internal {
-            background: rgba(251,146,60,0.12);
+            background: rgba(251, 146, 60, 0.12);
             color: #fb923c;
-            border: 1px solid rgba(251,146,60,0.25);
+            border: 1px solid rgba(251, 146, 60, 0.25);
         }
 
         .tree-public {
@@ -258,12 +338,12 @@
             color: #10b981;
             margin-top: 16px;
             padding-top: 16px;
-            border-top: 1px solid rgba(16,185,129,0.2);
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
             padding: 14px 14px;
             margin-left: 28px;
             border-radius: 12px;
-            background: rgba(16,185,129,0.06);
-            border: 1px solid rgba(16,185,129,0.2);
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .tree-public i {
@@ -273,7 +353,7 @@
         .tree-public-label {
             font-size: 14px;
             font-weight: 400;
-            color: rgba(16,185,129,0.7);
+            color: rgba(16, 185, 129, 0.7);
             margin-left: auto;
         }
 
@@ -289,8 +369,8 @@
         .info-card {
             border-radius: 16px;
             padding: 28px 32px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.15);
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(6, 182, 212, 0.15);
             backdrop-filter: blur(8px);
         }
 
@@ -329,8 +409,8 @@
             gap: 18px;
             border-radius: 16px;
             padding: 24px 32px;
-            background: rgba(239,68,68,0.04);
-            border: 1px solid rgba(239,68,68,0.2);
+            background: rgba(239, 68, 68, 0.04);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         .lock-card i {
@@ -368,8 +448,8 @@
             gap: 16px;
             padding: 18px 36px;
             border-radius: 16px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.2);
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(6, 182, 212, 0.2);
             backdrop-filter: blur(8px);
         }
 
@@ -394,18 +474,36 @@
 
         /* === Animations === */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideFromLeft {
-            from { opacity: 0; transform: translateX(-60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         @keyframes slideFromRight {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .camera-box {
@@ -415,10 +513,10 @@
             width: 480px;
             height: 270px;
             z-index: 100;
-            border: 2px dashed rgba(255,255,255,0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
             border-radius: 12px;
-            background: rgba(0,0,0,0.4);
-            color: rgba(255,255,255,0.3);
+            background: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -454,7 +552,8 @@
     <div class="content">
         <!-- Left: file tree -->
         <div class="left-col">
-            <h1>Przykładowy <span class="highlight">moduł</span> <span style="font-size:32px;color:var(--text-muted);font-weight:400;">C#</span></h1>
+            <h1>Przykładowy <span class="highlight">moduł</span> <span
+                    style="font-size:32px;color:var(--text-muted);font-weight:400;"></span></h1>
 
             <div class="tree-container">
                 <div class="tree-root">
@@ -467,9 +566,12 @@
                         <i class="ti ti-folder"></i>
                         /Domain
                     </div>
-                    <div class="tree-file"><i class="ti ti-file"></i> Order.cs <span class="badge badge-internal">internal</span></div>
-                    <div class="tree-file"><i class="ti ti-file"></i> OrderStatus.cs <span class="badge badge-internal">internal</span></div>
-                    <div class="tree-file"><i class="ti ti-file"></i> IOrderRepository.cs <span class="badge badge-interface">interface</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> Order.cs <span class="badge badge-internal">internal</span>
+                    </div>
+                    <div class="tree-file"><i class="ti ti-file"></i> OrderStatus.cs <span class="badge badge-internal">internal</span>
+                    </div>
+                    <div class="tree-file"><i class="ti ti-file"></i> IOrderRepository.cs <span
+                            class="badge badge-interface">interface</span></div>
                 </div>
 
                 <div class="tree-group">
@@ -477,8 +579,10 @@
                         <i class="ti ti-folder"></i>
                         /Application
                     </div>
-                    <div class="tree-file"><i class="ti ti-file"></i> PlaceOrderHandler.cs <span class="badge badge-internal">internal</span></div>
-                    <div class="tree-file"><i class="ti ti-file"></i> CancelOrderHandler.cs <span class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> PlaceOrderHandler.cs <span
+                            class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> CancelOrderHandler.cs <span
+                            class="badge badge-internal">internal</span></div>
                 </div>
 
                 <div class="tree-group">
@@ -486,8 +590,10 @@
                         <i class="ti ti-folder"></i>
                         /Infrastructure
                     </div>
-                    <div class="tree-file"><i class="ti ti-file"></i> OrderRepository.cs <span class="badge badge-internal">internal</span></div>
-                    <div class="tree-file"><i class="ti ti-file"></i> DbContext.cs <span class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> OrderRepository.cs <span
+                            class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> DbContext.cs <span class="badge badge-internal">internal</span>
+                    </div>
                 </div>
 
                 <div class="tree-group">
@@ -495,7 +601,8 @@
                         <i class="ti ti-folder"></i>
                         /Api
                     </div>
-                    <div class="tree-file"><i class="ti ti-file"></i> OrdersController.cs <span class="badge badge-internal">internal</span></div>
+                    <div class="tree-file"><i class="ti ti-file"></i> OrdersController.cs <span
+                            class="badge badge-internal">internal</span></div>
                 </div>
 
                 <div class="tree-public">
@@ -521,23 +628,30 @@
                     <i class="ti ti-layers-intersect"></i>
                     Wewnętrzna architektura
                 </div>
-                <p>Każdy moduł ma własne warstwy: <span class="hl">Domain</span>, <span class="hl">Application</span>, <span class="hl">Infrastructure</span> i <span class="hl">Api</span>.</p>
+                <p>Każdy moduł ma własne warstwy np: <span class="hl">Domain</span>, <span class="hl">Application</span>,
+                    <span class="hl">Infrastructure</span> i <span class="hl">Api</span>.</p>
             </div>
 
-            <div class="lock-card">
-                <i class="ti ti-lock"></i>
-                <p><strong>Enkapsulacja</strong> - słowo kluczowe <strong>internal</strong> sprawia, że klasy i interfejsy nie mogą być używane przez inne projekty/assembly.</p>
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="ti ti-lock"></i>
+                    Enkapsulacja
+                </div>
+                <p>Klasy i interfejsy nie mogą być używane przez inne projekty/assembly.</p>
             </div>
+                
         </div>
     </div>
 
-    <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+    <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości"
+         class="slide-logo">
     <div class="camera-box">kamera 480 &times; 270</div>
 </div>
 
 <script>
     (function () {
         const stage = document.getElementById('stage');
+
         function rescale() {
             const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
             stage.style.transformOrigin = 'top left';
@@ -545,6 +659,7 @@
             stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
             stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
         }
+
         window.addEventListener('resize', rescale);
         rescale();
     })();

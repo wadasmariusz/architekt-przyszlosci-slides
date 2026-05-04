@@ -287,8 +287,8 @@
             color: #10b981;
         }
 
-        /* === SVG arrows === */
-        .arrows-svg {
+        /* === Arrows overlay === */
+        .arrows-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -298,62 +298,24 @@
             z-index: 5;
         }
 
-        .arrow-line {
-            stroke: rgba(148,163,184,0.3);
+        .arrows-overlay line {
+            stroke: rgba(148,163,184,0.35);
             stroke-width: 2;
-            fill: none;
-            stroke-dasharray: 400;
-            stroke-dashoffset: 400;
-            animation: drawArrow 1.2s ease-out forwards;
+            stroke-dasharray: 8 6;
         }
 
-        .arrow-line:nth-child(1) { animation-delay: 1.8s; }
-        .arrow-line:nth-child(2) { animation-delay: 2.0s; }
-        .arrow-line:nth-child(3) { animation-delay: 2.2s; }
+        .arrows-overlay polygon {
+            fill: rgba(148,163,184,0.5);
+        }
 
-        .arrow-head {
-            fill: rgba(148,163,184,0.4);
+        .arrows-overlay .arrow-group {
             opacity: 0;
-            animation: fadeIn 0.3s ease-out forwards;
+            animation: fadeIn 0.6s ease-out forwards;
         }
 
-        .arrow-head:nth-child(4) { animation-delay: 2.4s; }
-        .arrow-head:nth-child(5) { animation-delay: 2.6s; }
-        .arrow-head:nth-child(6) { animation-delay: 2.8s; }
-
-        @keyframes drawArrow {
-            to { stroke-dashoffset: 0; }
-        }
-
-        /* === Arrow labels === */
-        .arrow-label {
-            position: absolute;
-            padding: 4px 12px;
-            border-radius: 8px;
-            background: rgba(17,24,39,0.9);
-            border: 1px solid rgba(148,163,184,0.15);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
-            white-space: nowrap;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-out forwards;
-            z-index: 6;
-        }
-
-        .arrow-label:nth-child(1) { animation-delay: 2.5s; }
-        .arrow-label:nth-child(2) { animation-delay: 2.7s; }
-        .arrow-label:nth-child(3) { animation-delay: 2.9s; }
-
-        .arrow-labels-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 6;
-        }
+        .arrows-overlay .arrow-group:nth-child(1) { animation-delay: 1.8s; }
+        .arrows-overlay .arrow-group:nth-child(2) { animation-delay: 2.0s; }
+        .arrows-overlay .arrow-group:nth-child(3) { animation-delay: 2.2s; }
 
         /* === Conclusion === */
         .conclusion {
@@ -507,20 +469,8 @@
                         </div>
                     </div>
 
-                    <!-- SVG arrows between modules -->
-                    <svg class="arrows-svg" viewBox="0 0 1000 480" preserveAspectRatio="xMidYMid meet">
-                        <!-- Catalog → Orders (top row, left to right) -->
-                        <path class="arrow-line" d="M380,100 C420,100 440,100 470,100" />
-                        <polygon class="arrow-head" points="468,95 480,100 468,105" />
-
-                        <!-- Orders → Payments (top-right to bottom-right) -->
-                        <path class="arrow-line" d="M680,180 C680,220 680,260 680,300" />
-                        <polygon class="arrow-head" points="675,298 680,310 685,298" />
-
-                        <!-- Orders → Notifications (top-right to bottom-left) -->
-                        <path class="arrow-line" d="M580,180 C480,240 380,260 320,300" />
-                        <polygon class="arrow-head" points="315,295 318,308 327,298" />
-                    </svg>
+                    <!-- Arrows drawn by JS -->
+                    <svg class="arrows-overlay" id="arrowsSvg"></svg>
                 </div>
 
                 <!-- Conclusion -->
@@ -549,6 +499,75 @@
             }
             window.addEventListener('resize', rescale);
             rescale();
+
+            // Draw arrows between module cards
+            function drawArrows() {
+                const svg = document.getElementById('arrowsSvg');
+                const boundary = svg.parentElement;
+                const cards = boundary.querySelectorAll('.module-card');
+                if (cards.length < 4) return;
+
+                const bRect = boundary.getBoundingClientRect();
+
+                function cardCenter(card) {
+                    const r = card.getBoundingClientRect();
+                    return {
+                        cx: r.left + r.width / 2 - bRect.left,
+                        cy: r.top + r.height / 2 - bRect.top,
+                        right: r.right - bRect.left,
+                        left: r.left - bRect.left,
+                        top: r.top - bRect.top,
+                        bottom: r.bottom - bRect.top
+                    };
+                }
+
+                const catalog = cardCenter(cards[0]);
+                const orders = cardCenter(cards[1]);
+                const payments = cardCenter(cards[2]);
+                const notifications = cardCenter(cards[3]);
+
+                svg.setAttribute('viewBox', '0 0 ' + bRect.width + ' ' + bRect.height);
+                svg.innerHTML = '';
+
+                const ns = 'http://www.w3.org/2000/svg';
+
+                function makeArrow(x1, y1, x2, y2) {
+                    const g = document.createElementNS(ns, 'g');
+                    g.classList.add('arrow-group');
+
+                    const line = document.createElementNS(ns, 'line');
+                    line.setAttribute('x1', x1);
+                    line.setAttribute('y1', y1);
+                    line.setAttribute('x2', x2);
+                    line.setAttribute('y2', y2);
+                    g.appendChild(line);
+
+                    // Arrowhead
+                    const angle = Math.atan2(y2 - y1, x2 - x1);
+                    const size = 8;
+                    const ax = x2 - size * Math.cos(angle - 0.4);
+                    const ay = y2 - size * Math.sin(angle - 0.4);
+                    const bx = x2 - size * Math.cos(angle + 0.4);
+                    const by = y2 - size * Math.sin(angle + 0.4);
+                    const poly = document.createElementNS(ns, 'polygon');
+                    poly.setAttribute('points', x2+','+y2+' '+ax+','+ay+' '+bx+','+by);
+                    g.appendChild(poly);
+
+                    svg.appendChild(g);
+                }
+
+                // Catalog → Orders (right edge to left edge)
+                makeArrow(catalog.right, catalog.cy, orders.left, orders.cy);
+
+                // Orders → Payments (bottom edge to top edge)
+                makeArrow(orders.cx, orders.bottom, payments.cx, payments.top);
+
+                // Orders → Notifications (bottom-left to top-right of notifications)
+                makeArrow(orders.left, orders.bottom, notifications.right, notifications.top);
+            }
+
+            // Draw after cards have animated in
+            setTimeout(drawArrows, 100);
         })();
     </script>
 </body>
