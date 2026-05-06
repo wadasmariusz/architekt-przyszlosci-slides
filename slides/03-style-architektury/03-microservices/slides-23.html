@@ -173,7 +173,7 @@
         /* === Two-column layout === */
         .main-area {
             display: grid;
-            grid-template-columns: 1fr 580px;
+            grid-template-columns: 1fr 2fr;
             align-items: center;
             gap: 80px;
             max-width: 1660px;
@@ -272,80 +272,6 @@
             animation: scaleIn 1s ease-out 0.6s forwards;
         }
 
-        /* SVG tree illustration */
-        .tree-host {
-            fill: none;
-            stroke: #64748b;
-            stroke-width: 4;
-            stroke-linecap: round;
-            opacity: 0.5;
-        }
-
-        .tree-host-fill {
-            fill: rgba(100,116,139,0.12);
-        }
-
-        .fig-vine {
-            fill: none;
-            stroke: var(--emerald);
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-dasharray: 400;
-            stroke-dashoffset: 400;
-            animation: drawVine 2.5s ease-out 1.2s forwards;
-        }
-
-        .fig-vine-2 {
-            animation-delay: 1.6s;
-        }
-
-        .fig-vine-3 {
-            animation-delay: 2.0s;
-        }
-
-        .fig-leaf {
-            fill: var(--emerald);
-            opacity: 0;
-            animation: popIn 0.6s ease-out forwards;
-        }
-
-        .fig-leaf:nth-of-type(1) { animation-delay: 2.2s; }
-        .fig-leaf:nth-of-type(2) { animation-delay: 2.5s; }
-        .fig-leaf:nth-of-type(3) { animation-delay: 2.8s; }
-        .fig-leaf:nth-of-type(4) { animation-delay: 3.0s; }
-        .fig-leaf:nth-of-type(5) { animation-delay: 3.2s; }
-
-        .fig-root {
-            fill: none;
-            stroke: var(--emerald);
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-dasharray: 200;
-            stroke-dashoffset: 200;
-            animation: drawVine 2s ease-out 2.4s forwards;
-            opacity: 0.7;
-        }
-
-        .label-host {
-            fill: var(--text-muted);
-            font-size: 18px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            text-anchor: middle;
-        }
-
-        .label-fig {
-            fill: var(--emerald);
-            font-size: 18px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            text-anchor: middle;
-        }
-
-        @keyframes drawVine {
-            to { stroke-dashoffset: 0; }
-        }
-
         /* === Animations === */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -418,8 +344,7 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow"><i class="ti ti-plant-2"></i> Wzorzec migracji</div>
-                <div class="title"><span class="highlight">Strangler Fig</span> — Figowiec dusicielski</div>
+                <div class="title"><span class="highlight">Strangler Fig</span> - Figowiec dusicielski</div>
             </div>
 
             <div class="main-area">
@@ -442,57 +367,11 @@
                             <div class="step-text">Stopniowo <strong>zastępuje</strong> gospodarza</div>
                         </div>
                     </div>
-
-                    <div class="analogy">
-                        <i class="ti ti-arrow-right"></i>
-                        <div class="analogy-text">Dokładnie tak migrujesz <strong>monolit</strong> do <strong>mikroserwisów</strong>.</div>
-                    </div>
+                    
                 </div>
 
                 <div class="illustration">
-                    <svg width="480" height="520" viewBox="0 0 480 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Host tree trunk -->
-                        <path class="tree-host" d="M240 480 L240 160" stroke-width="28" opacity="0.2"/>
-                        <path class="tree-host" d="M240 480 L240 160" stroke-width="4"/>
-
-                        <!-- Host tree branches -->
-                        <path class="tree-host" d="M240 200 Q200 170 160 140"/>
-                        <path class="tree-host" d="M240 200 Q280 170 320 140"/>
-                        <path class="tree-host" d="M240 260 Q190 230 150 220"/>
-                        <path class="tree-host" d="M240 260 Q290 230 330 220"/>
-                        <path class="tree-host" d="M240 320 Q200 300 170 290"/>
-                        <path class="tree-host" d="M240 320 Q280 300 310 290"/>
-
-                        <!-- Host tree crown (faded) -->
-                        <ellipse class="tree-host-fill" cx="240" cy="130" rx="120" ry="80"/>
-                        <ellipse cx="240" cy="130" rx="120" ry="80" fill="none" stroke="#64748b" stroke-width="2" opacity="0.3"/>
-
-                        <!-- Host tree roots -->
-                        <path class="tree-host" d="M240 480 Q210 500 180 510" opacity="0.4"/>
-                        <path class="tree-host" d="M240 480 Q270 500 300 510" opacity="0.4"/>
-
-                        <!-- Label: host -->
-                        <text class="label-host" x="370" y="490">Monolit</text>
-
-                        <!-- Strangler fig vines wrapping around -->
-                        <path class="fig-vine" d="M260 100 Q300 120 290 180 Q270 220 300 260 Q310 300 280 340 Q260 380 270 420 Q280 460 260 490"/>
-                        <path class="fig-vine fig-vine-2" d="M220 110 Q180 140 190 200 Q210 240 180 280 Q170 320 200 360 Q220 400 210 440 Q200 470 220 490"/>
-                        <path class="fig-vine fig-vine-3" d="M250 90 Q310 100 320 160 Q310 200 330 240 Q340 270 320 310 Q300 340 310 380"/>
-
-                        <!-- Fig leaves (emerald dots/circles at vine tips) -->
-                        <circle class="fig-leaf" cx="260" cy="95" r="14" opacity="0"/>
-                        <circle class="fig-leaf" cx="215" cy="105" r="12" opacity="0"/>
-                        <circle class="fig-leaf" cx="290" cy="110" r="10" opacity="0"/>
-                        <circle class="fig-leaf" cx="180" cy="135" r="11" opacity="0"/>
-                        <circle class="fig-leaf" cx="310" cy="125" r="13" opacity="0"/>
-
-                        <!-- Fig aerial roots going down -->
-                        <path class="fig-root" d="M270 420 Q290 460 280 510"/>
-                        <path class="fig-root" d="M210 440 Q190 470 200 510"/>
-
-                        <!-- Label: fig -->
-                        <text class="label-fig" x="110" y="490">Mikroserwisy</text>
-                    </svg>
+                    <img src="iamges/strangler-fig.png" alt="Strangler Fig — etapy oplatania drzewa gospodarza" style="max-width: 100%; max-height: 620px; width: auto; height: auto; border-radius: 18px;">
                 </div>
             </div>
         </div>
