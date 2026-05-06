@@ -82,12 +82,12 @@
             animation: float 8s ease-in-out infinite;
         }
 
-        .particle:nth-child(3) { top: 18%; left: 14%; animation-delay: 0.5s; }
-        .particle:nth-child(4) { top: 65%; left: 82%; animation-delay: 2.0s; }
-        .particle:nth-child(5) { top: 28%; left: 68%; animation-delay: 3.5s; }
-        .particle:nth-child(6) { top: 75%; left: 22%; animation-delay: 5.0s; }
-        .particle:nth-child(7) { top: 42%; left: 48%; animation-delay: 6.5s; }
-        .particle:nth-child(8) { top: 22%; left: 55%; animation-delay: 1.2s; }
+        .particle:nth-child(3) { top: 18%; left: 8%; animation-delay: 0s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.5s; }
+        .particle:nth-child(5) { top: 28%; left: 72%; animation-delay: 3s; }
+        .particle:nth-child(6) { top: 78%; left: 22%; animation-delay: 4.5s; }
+        .particle:nth-child(7) { top: 45%; left: 55%; animation-delay: 6s; }
+        .particle:nth-child(8) { top: 12%; left: 48%; animation-delay: 2s; }
 
         @keyframes float {
             0% { opacity: 0; transform: translateY(0) scale(1); }
@@ -121,24 +121,20 @@
         .content {
             position: relative;
             z-index: 10;
+            text-align: center;
             width: 100%;
-            height: 100%;
-            padding: 82px 130px 165px;
+            max-width: 1200px;
+            padding: 0 3rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 48px;
         }
 
         .eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
             color: var(--cyan-400);
             font-size: 24px;
             font-weight: 600;
@@ -148,193 +144,90 @@
             animation: fadeUp 0.8s ease-out 0.25s forwards;
         }
 
-        .eyebrow i { font-size: 32px; }
+        .eyebrow i {
+            font-size: 32px;
+        }
 
-        .title {
+        h1.title {
+            margin-bottom: 52px;
             color: #ffffff;
             font-size: 72px;
             font-weight: 800;
-            line-height: 1.05;
+            line-height: 1.1;
             letter-spacing: -1px;
             opacity: 0;
             animation: fadeUp 0.9s ease-out 0.45s forwards;
         }
 
-        .title .thin {
-            color: var(--text-muted);
-            font-weight: 300;
-        }
-
-        .subtitle {
-            margin: 26px auto 0;
-            max-width: 1280px;
-            font-size: 31px;
-            font-weight: 600;
-            line-height: 1.32;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.7s forwards;
-        }
-
-        .subtitle strong {
-            color: var(--text-main);
-        }
-
-        .highlight {
+        h1.title .highlight {
             background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        /* === Autonomy map === */
-        .autonomy-map {
-            position: relative;
-            width: min(1510px, 100%);
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            align-items: stretch;
-            margin-top: 4px;
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.95s forwards;
-        }
-
-        .autonomy-map::before {
-            content: '';
-            position: absolute;
-            top: 130px;
-            left: 9%;
-            right: 9%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.3), rgba(16,185,129,0.28), rgba(139,92,246,0.3), transparent);
-            z-index: 0;
-        }
-
-        .autonomy-card {
-            position: relative;
-            z-index: 1;
-            min-height: 348px;
-            padding: 30px 32px 32px;
-            border: 1px solid rgba(255,255,255,0.09);
-            border-radius: 8px;
-            background:
-                linear-gradient(180deg, rgba(17,24,39,0.82), rgba(3,7,18,0.58)),
-                rgba(17,24,39,0.64);
-            box-shadow: 0 24px 70px rgba(0,0,0,0.22);
-            backdrop-filter: blur(8px);
+        /* === Points === */
+        .points {
             display: flex;
             flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 860px;
+        }
+
+        .point {
+            display: flex;
             align-items: center;
-            text-align: center;
+            gap: 24px;
+            padding: 24px 32px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            text-align: left;
             opacity: 0;
-            overflow: hidden;
         }
 
-        .autonomy-card:nth-child(1) { animation: liftIn 0.75s ease-out 1.15s forwards; }
-        .autonomy-card:nth-child(2) { animation: liftIn 0.75s ease-out 1.35s forwards; }
-        .autonomy-card:nth-child(3) { animation: liftIn 0.75s ease-out 1.55s forwards; }
+        .point:nth-child(1) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
+        .point:nth-child(2) { animation: fadeUp 0.7s ease-out 0.9s forwards; }
+        .point:nth-child(3) { animation: fadeUp 0.7s ease-out 1.1s forwards; }
 
-        .autonomy-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-top: 4px solid var(--accent);
-            background: linear-gradient(180deg, var(--accent-soft), transparent 32%);
-            opacity: 0.95;
-            pointer-events: none;
-        }
-
-        .card-icon {
-            position: relative;
-            width: 86px;
-            height: 86px;
+        .point-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            margin-bottom: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent);
-            background: rgba(255,255,255,0.045);
-            border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-            box-shadow: 0 0 38px var(--accent-soft);
-            font-size: 42px;
+            font-size: 28px;
         }
 
-        .card-icon::after {
-            content: '';
-            position: absolute;
-            inset: -13px;
-            border-radius: 50%;
-            border: 1px dashed color-mix(in srgb, var(--accent) 42%, transparent);
-            animation: spin 14s linear infinite;
+        .point:nth-child(1) .point-icon {
+            background: rgba(34,211,238,0.11);
+            color: var(--cyan-400);
         }
 
-        .card-kicker {
-            color: var(--accent);
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
+        .point:nth-child(2) .point-icon {
+            background: rgba(139,92,246,0.11);
+            color: #8b5cf6;
         }
 
-        .card-title {
-            color: #ffffff;
-            font-size: 34px;
-            font-weight: 800;
-            line-height: 1.08;
-            margin-bottom: 20px;
+        .point:nth-child(3) .point-icon {
+            background: rgba(16,185,129,0.11);
+            color: #10b981;
         }
 
-        .micro-list {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .micro-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 13px 16px;
-            border-radius: 8px;
-            color: var(--text-muted);
-            background: rgba(255,255,255,0.045);
-            border: 1px solid rgba(255,255,255,0.055);
-            font-size: 19px;
+        .point-text {
+            font-size: 28px;
             font-weight: 600;
-            line-height: 1.2;
-            text-align: left;
-        }
-
-        .micro-item i {
-            color: var(--accent);
-            font-size: 22px;
-            flex: 0 0 auto;
-        }
-
-        .takeaway {
-            width: min(1180px, 100%);
-            margin-top: 34px;
-            padding: 18px 34px;
-            border-radius: 8px;
-            background: rgba(3,7,18,0.72);
-            border: 1px solid rgba(34,211,238,0.18);
             color: var(--text-muted);
-            text-align: center;
-            font-size: 24px;
-            font-weight: 500;
-            line-height: 1.35;
-            opacity: 0;
-            animation: fadeUp 0.7s ease-out 1.9s forwards;
+            line-height: 1.4;
         }
 
-        .takeaway strong {
+        .point-text strong {
             color: var(--text-main);
+            font-weight: 700;
         }
 
         /* === Animations === */
@@ -346,15 +239,6 @@
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes liftIn {
-            0% { opacity: 0; transform: translateY(34px) scale(0.96); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
 
         .camera-box {
@@ -401,11 +285,28 @@
         <div class="corner corner--br"></div>
 
         <div class="content">
-            <div class="statement">
-                <div class="statement-line"><strong>Istotą mikroserwisów<span class="highlight"> jest niezależność</span>.</strong></div>
-            </div>
+            <h1 class="title">Istotą mikroserwisów<br>jest <span class="highlight">niezależność</span></h1>
 
-            <div class="divider"></div>
+            <div class="points">
+                <div class="point">
+                    <div class="point-icon">
+                        <i class="ti ti-rocket"></i>
+                    </div>
+                    <div class="point-text">Niezależne <strong>wdrożenia</strong></div>
+                </div>
+                <div class="point">
+                    <div class="point-icon">
+                        <i class="ti ti-bulb"></i>
+                    </div>
+                    <div class="point-text">Niezależne <strong>decyzje</strong></div>
+                </div>
+                <div class="point">
+                    <div class="point-icon">
+                        <i class="ti ti-users-group"></i>
+                    </div>
+                    <div class="point-text">Niezależne <strong>zespoły</strong></div>
+                </div>
+            </div>
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

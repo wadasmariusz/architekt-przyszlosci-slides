@@ -39,8 +39,9 @@
             background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
+            padding-top: 60px;
         }
 
         .bg-grid {
@@ -126,10 +127,10 @@
             z-index: 10;
             width: 100%;
             padding: 0 170px;
-            display: grid;
-            grid-template-columns: 1fr 620px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 110px;
+            gap: 60px;
         }
 
         .left {
@@ -158,6 +159,7 @@
             font-weight: 800;
             letter-spacing: -1px;
             line-height: 1.2;
+            text-align: center;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.45s forwards;
         }
@@ -229,8 +231,9 @@
         /* === Diagram === */
         .diagram {
             display: flex;
-            flex-direction: column;
-            gap: 48px;
+            flex-direction: row;
+            align-items: center;
+            gap: 60px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.6s forwards;
         }
@@ -306,7 +309,7 @@
         }
 
         .vs-label {
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: 800;
             color: #475569;
             letter-spacing: 4px;
@@ -314,12 +317,14 @@
             text-align: center;
             opacity: 0;
             animation: fadeIn 0.6s ease-out 1.0s forwards;
+            flex-shrink: 0;
         }
 
         .micro-row {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .micro-service {
@@ -383,7 +388,7 @@
         /* === Conclusion === */
         .conclusion {
             position: absolute;
-            bottom: 160px;
+            bottom: 340px;
             left: 170px;
             right: 560px;
             z-index: 10;
@@ -476,28 +481,7 @@
         <div class="corner corner--br"></div>
 
         <div class="content">
-            <div class="left">
-                <div class="eyebrow">
-                    <i class="ti ti-rocket"></i>
-                    Zaleta #1
-                </div>
                 <div class="title">Niezależne <span class="highlight">wdrożenie</span></div>
-
-                <div class="points">
-                    <div class="point">
-                        <i class="ti ti-lock"></i>
-                        <span>Modularny monolit: świetne granice, ale nadal <strong>jeden deploy</strong></span>
-                    </div>
-                    <div class="point">
-                        <i class="ti ti-rocket"></i>
-                        <span>Mikroserwisy: zespół płatności <strong>deployuje, kiedy chce</strong></span>
-                    </div>
-                    <div class="point">
-                        <i class="ti ti-shield-check"></i>
-                        <span>Bez pytania, bez ryzyka zetknięcia z <strong>niegotową zmianą</strong></span>
-                    </div>
-                </div>
-            </div>
 
             <div class="diagram">
                 <div class="diagram-section">
@@ -551,13 +535,6 @@
                         Każdy deployuje niezależnie
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="conclusion">
-            <div class="conclusion-box">
-                <i class="ti ti-bulb"></i>
-                <div class="conclusion-text">Przy 10 zespołach — to nie jest niuans. To jest <strong>game changer</strong>.</div>
             </div>
         </div>
 
