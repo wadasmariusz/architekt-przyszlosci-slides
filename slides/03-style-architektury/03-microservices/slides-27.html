@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 27 - Podsumowanie: co kupujesz</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --emerald: #10b981;
+            --purple: #8b5cf6;
+            --amber: #f59e0b;
+            --rose: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.09) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 14%; left: 8%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 68%; left: 90%; animation-delay: 1.7s; }
+        .particle:nth-child(5) { top: 32%; left: 78%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 76%; left: 16%; animation-delay: 4.6s; }
+        .particle:nth-child(7) { top: 52%; left: 48%; animation-delay: 6.0s; }
+        .particle:nth-child(8) { top: 22%; left: 64%; animation-delay: 2.1s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 52px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--emerald);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .title {
+            font-size: 58px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            margin-top: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Takeaway items === */
+        .takeaways {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .takeaway {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            padding: 28px 36px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.12);
+            backdrop-filter: blur(8px);
+            text-align: left;
+            opacity: 0;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .takeaway:hover {
+            border-color: var(--cyan-500);
+            transform: translateX(8px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.1);
+        }
+
+        .takeaway:nth-child(1) { animation: bounceIn 0.7s ease-out 0.8s forwards; }
+        .takeaway:nth-child(2) { animation: bounceIn 0.7s ease-out 1.05s forwards; }
+        .takeaway:nth-child(3) { animation: bounceIn 0.7s ease-out 1.3s forwards; }
+        .takeaway:nth-child(4) { animation: bounceIn 0.7s ease-out 1.55s forwards; }
+
+        .takeaway-num {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .takeaway:nth-child(1) .takeaway-num {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px rgba(34,211,238,0.3);
+        }
+
+        .takeaway:nth-child(2) .takeaway-num {
+            background: linear-gradient(135deg, var(--emerald), #059669);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px rgba(16,185,129,0.3);
+        }
+
+        .takeaway:nth-child(3) .takeaway-num {
+            background: linear-gradient(135deg, var(--amber), #d97706);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px rgba(245,158,11,0.3);
+        }
+
+        .takeaway:nth-child(4) .takeaway-num {
+            background: linear-gradient(135deg, var(--purple), #7c3aed);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px rgba(139,92,246,0.3);
+        }
+
+        .takeaway-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .takeaway:nth-child(1) .takeaway-icon {
+            background: rgba(34,211,238,0.1);
+            color: var(--cyan-400);
+        }
+
+        .takeaway:nth-child(2) .takeaway-icon {
+            background: rgba(16,185,129,0.1);
+            color: var(--emerald);
+        }
+
+        .takeaway:nth-child(3) .takeaway-icon {
+            background: rgba(245,158,11,0.1);
+            color: var(--amber);
+        }
+
+        .takeaway:nth-child(4) .takeaway-icon {
+            background: rgba(139,92,246,0.1);
+            color: var(--purple);
+        }
+
+        .takeaway-body {
+            flex: 1;
+        }
+
+        .takeaway-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .takeaway-desc {
+            font-size: 22px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow"><i class="ti ti-check"></i> Podsumowanie</div>
+                <div class="title">Co <span class="highlight">kupujesz</span></div>
+            </div>
+
+            <div class="takeaways">
+                <div class="takeaway">
+                    <div class="takeaway-num">1</div>
+                    <div class="takeaway-icon"><i class="ti ti-rocket"></i></div>
+                    <div class="takeaway-body">
+                        <div class="takeaway-title">Niezależne wdrożenie</div>
+                        <div class="takeaway-desc">Każdy zespół deployuje, kiedy chce — bez pytania i bez czekania</div>
+                    </div>
+                </div>
+
+                <div class="takeaway">
+                    <div class="takeaway-num">2</div>
+                    <div class="takeaway-icon"><i class="ti ti-arrows-maximize"></i></div>
+                    <div class="takeaway-body">
+                        <div class="takeaway-title">Łatwiejsze skalowanie</div>
+                        <div class="takeaway-desc">Skalujesz dokładnie to, co jest przeciążone — reszta bez zmian</div>
+                    </div>
+                </div>
+
+                <div class="takeaway">
+                    <div class="takeaway-num">3</div>
+                    <div class="takeaway-icon"><i class="ti ti-shield-check"></i></div>
+                    <div class="takeaway-body">
+                        <div class="takeaway-title">Wysoka dostępność</div>
+                        <div class="takeaway-desc">Jeden serwis pada — reszta systemu działa normalnie</div>
+                    </div>
+                </div>
+
+                <div class="takeaway">
+                    <div class="takeaway-num">4</div>
+                    <div class="takeaway-icon"><i class="ti ti-bolt"></i></div>
+                    <div class="takeaway-body">
+                        <div class="takeaway-title">Architektura, która przyspiesza</div>
+                        <div class="takeaway-desc">System wspiera pracę zespołów zamiast ją spowalniać</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - To samo, ale w mikroserwisach</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --green: #10b981;
+            --green-dim: rgba(16,185,129,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 20%; left: 11%; animation-delay: 0.2s; }
+        .particle:nth-child(4) { top: 68%; left: 80%; animation-delay: 1.6s; }
+        .particle:nth-child(5) { top: 32%; left: 70%; animation-delay: 3.3s; }
+        .particle:nth-child(6) { top: 75%; left: 18%; animation-delay: 4.6s; }
+        .particle:nth-child(7) { top: 52%; left: 48%; animation-delay: 6.0s; }
+        .particle:nth-child(8) { top: 16%; left: 58%; animation-delay: 2.4s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 44px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--green);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        .title {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.45s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram === */
+        .diagram-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 36px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.8s forwards;
+        }
+
+        /* Teams column */
+        .teams {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 22px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(16,185,129,0.15);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .team:nth-child(1) { animation: slideFromLeft 0.6s ease-out 1.0s forwards; }
+        .team:nth-child(2) { animation: slideFromLeft 0.6s ease-out 1.15s forwards; }
+        .team:nth-child(3) { animation: slideFromLeft 0.6s ease-out 1.3s forwards; }
+        .team:nth-child(4) { animation: slideFromLeft 0.6s ease-out 1.45s forwards; }
+        .team:nth-child(5) { animation: slideFromLeft 0.6s ease-out 1.6s forwards; }
+
+        .team-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .team:nth-child(1) .team-icon { background: rgba(34,211,238,0.15); color: #22d3ee; }
+        .team:nth-child(2) .team-icon { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .team:nth-child(3) .team-icon { background: rgba(16,185,129,0.15); color: #10b981; }
+        .team:nth-child(4) .team-icon { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .team:nth-child(5) .team-icon { background: rgba(244,63,94,0.15); color: #f43f5e; }
+
+        .team-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Arrows */
+        .arrows-area {
+            width: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .arrows-area svg {
+            width: 140px;
+            height: 360px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.8s forwards;
+        }
+
+        .arrow-line {
+            stroke: rgba(16,185,129,0.4);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+        }
+
+        .arrow-line:nth-child(1) { animation: drawLink 0.8s ease-out 2.0s forwards; }
+        .arrow-line:nth-child(2) { animation: drawLink 0.8s ease-out 2.15s forwards; }
+        .arrow-line:nth-child(3) { animation: drawLink 0.8s ease-out 2.3s forwards; }
+        .arrow-line:nth-child(4) { animation: drawLink 0.8s ease-out 2.45s forwards; }
+        .arrow-line:nth-child(5) { animation: drawLink 0.8s ease-out 2.6s forwards; }
+
+        .arrow-head {
+            fill: rgba(16,185,129,0.5);
+            opacity: 0;
+        }
+
+        .arrow-head:nth-child(6) { animation: fadeIn 0.4s ease-out 2.6s forwards; }
+        .arrow-head:nth-child(7) { animation: fadeIn 0.4s ease-out 2.75s forwards; }
+        .arrow-head:nth-child(8) { animation: fadeIn 0.4s ease-out 2.9s forwards; }
+        .arrow-head:nth-child(9) { animation: fadeIn 0.4s ease-out 3.05s forwards; }
+        .arrow-head:nth-child(10) { animation: fadeIn 0.4s ease-out 3.2s forwards; }
+
+        /* Services */
+        .services {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 22px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(16,185,129,0.2);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            position: relative;
+        }
+
+        .service:nth-child(1) { animation: slideFromRight 0.6s ease-out 2.0s forwards; }
+        .service:nth-child(2) { animation: slideFromRight 0.6s ease-out 2.15s forwards; }
+        .service:nth-child(3) { animation: slideFromRight 0.6s ease-out 2.3s forwards; }
+        .service:nth-child(4) { animation: slideFromRight 0.6s ease-out 2.45s forwards; }
+        .service:nth-child(5) { animation: slideFromRight 0.6s ease-out 2.6s forwards; }
+
+        .service-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--green-dim);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .service-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .service-badge {
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.2);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--green);
+            white-space: nowrap;
+        }
+
+        /* === Bottom row === */
+        .bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 3.2s forwards;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 28px;
+            border-radius: 14px;
+            background: rgba(16,185,129,0.05);
+            border: 1px solid rgba(16,185,129,0.15);
+        }
+
+        .benefit-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--green-dim);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .benefit-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .benefit-text strong {
+            color: var(--green);
+            font-weight: 800;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes drawLink {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <i class="ti ti-rocket"></i>
+                    Mikroserwisy
+                </div>
+                <div class="title">Każdy zespół <span class="highlight">deployuje, kiedy chce</span></div>
+            </div>
+
+            <div class="diagram-area">
+                <!-- Teams -->
+                <div class="teams">
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-shopping-cart"></i></div>
+                        <span class="team-name">Zamówienia</span>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-credit-card"></i></div>
+                        <span class="team-name">Płatności</span>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-list-search"></i></div>
+                        <span class="team-name">Katalog</span>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-truck-delivery"></i></div>
+                        <span class="team-name">Dostawy</span>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-bell"></i></div>
+                        <span class="team-name">Powiadomienia</span>
+                    </div>
+                </div>
+
+                <!-- Arrows SVG -->
+                <div class="arrows-area">
+                    <svg viewBox="0 0 140 360">
+                        <line class="arrow-line" x1="0" y1="36" x2="120" y2="36" />
+                        <line class="arrow-line" x1="0" y1="108" x2="120" y2="108" />
+                        <line class="arrow-line" x1="0" y1="180" x2="120" y2="180" />
+                        <line class="arrow-line" x1="0" y1="252" x2="120" y2="252" />
+                        <line class="arrow-line" x1="0" y1="324" x2="120" y2="324" />
+                        <polygon class="arrow-head" points="115,28 130,36 115,44" />
+                        <polygon class="arrow-head" points="115,100 130,108 115,116" />
+                        <polygon class="arrow-head" points="115,172 130,180 115,188" />
+                        <polygon class="arrow-head" points="115,244 130,252 115,260" />
+                        <polygon class="arrow-head" points="115,316 130,324 115,332" />
+                    </svg>
+                </div>
+
+                <!-- Services -->
+                <div class="services">
+                    <div class="service">
+                        <div class="service-icon"><i class="ti ti-box"></i></div>
+                        <span class="service-name">Serwis Zamówień</span>
+                        <div class="service-badge"><i class="ti ti-check"></i> deploy</div>
+                    </div>
+                    <div class="service">
+                        <div class="service-icon"><i class="ti ti-box"></i></div>
+                        <span class="service-name">Serwis Płatności</span>
+                        <div class="service-badge"><i class="ti ti-check"></i> deploy</div>
+                    </div>
+                    <div class="service">
+                        <div class="service-icon"><i class="ti ti-box"></i></div>
+                        <span class="service-name">Serwis Katalogu</span>
+                        <div class="service-badge"><i class="ti ti-check"></i> deploy</div>
+                    </div>
+                    <div class="service">
+                        <div class="service-icon"><i class="ti ti-box"></i></div>
+                        <span class="service-name">Serwis Dostaw</span>
+                        <div class="service-badge"><i class="ti ti-check"></i> deploy</div>
+                    </div>
+                    <div class="service">
+                        <div class="service-icon"><i class="ti ti-box"></i></div>
+                        <span class="service-name">Serwis Powiadomień</span>
+                        <div class="service-badge"><i class="ti ti-check"></i> deploy</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom benefits -->
+            <div class="bottom-row">
+                <div class="benefit">
+                    <div class="benefit-icon"><i class="ti ti-lock-open"></i></div>
+                    <div class="benefit-text">Bez pytania nikogo</div>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon"><i class="ti ti-calendar-off"></i></div>
+                    <div class="benefit-text">Bez okienek serwisowych</div>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon"><i class="ti ti-trending-up"></i></div>
+                    <div class="benefit-text"><strong>50</strong> deployów dziennie? Tym lepiej</div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

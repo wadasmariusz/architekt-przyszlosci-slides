@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07 - Sedno stylu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 18%; left: 14%; animation-delay: 0.5s; }
+        .particle:nth-child(4) { top: 65%; left: 82%; animation-delay: 2.0s; }
+        .particle:nth-child(5) { top: 28%; left: 68%; animation-delay: 3.5s; }
+        .particle:nth-child(6) { top: 75%; left: 22%; animation-delay: 5.0s; }
+        .particle:nth-child(7) { top: 42%; left: 48%; animation-delay: 6.5s; }
+        .particle:nth-child(8) { top: 22%; left: 55%; animation-delay: 1.2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 82px 130px 165px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        .title {
+            color: #ffffff;
+            font-size: 70px;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        .title .thin {
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .subtitle {
+            margin: 26px auto 0;
+            max-width: 1280px;
+            font-size: 31px;
+            font-weight: 600;
+            line-height: 1.32;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
+        }
+
+        .subtitle strong {
+            color: var(--text-main);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Autonomy map === */
+        .autonomy-map {
+            position: relative;
+            width: min(1510px, 100%);
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            align-items: stretch;
+            margin-top: 4px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.95s forwards;
+        }
+
+        .autonomy-map::before {
+            content: '';
+            position: absolute;
+            top: 130px;
+            left: 9%;
+            right: 9%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.3), rgba(16,185,129,0.28), rgba(139,92,246,0.3), transparent);
+            z-index: 0;
+        }
+
+        .autonomy-card {
+            position: relative;
+            z-index: 1;
+            min-height: 348px;
+            padding: 30px 32px 32px;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, rgba(17,24,39,0.82), rgba(3,7,18,0.58)),
+                rgba(17,24,39,0.64);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.22);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .autonomy-card:nth-child(1) { animation: liftIn 0.75s ease-out 1.15s forwards; }
+        .autonomy-card:nth-child(2) { animation: liftIn 0.75s ease-out 1.35s forwards; }
+        .autonomy-card:nth-child(3) { animation: liftIn 0.75s ease-out 1.55s forwards; }
+
+        .autonomy-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-top: 4px solid var(--accent);
+            background: linear-gradient(180deg, var(--accent-soft), transparent 32%);
+            opacity: 0.95;
+            pointer-events: none;
+        }
+
+        .card-icon {
+            position: relative;
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            background: rgba(255,255,255,0.045);
+            border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+            box-shadow: 0 0 38px var(--accent-soft);
+            font-size: 42px;
+        }
+
+        .card-icon::after {
+            content: '';
+            position: absolute;
+            inset: -13px;
+            border-radius: 50%;
+            border: 1px dashed color-mix(in srgb, var(--accent) 42%, transparent);
+            animation: spin 14s linear infinite;
+        }
+
+        .card-kicker {
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            color: #ffffff;
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.08;
+            margin-bottom: 20px;
+        }
+
+        .micro-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .micro-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.055);
+            font-size: 19px;
+            font-weight: 600;
+            line-height: 1.2;
+            text-align: left;
+        }
+
+        .micro-item i {
+            color: var(--accent);
+            font-size: 22px;
+            flex: 0 0 auto;
+        }
+
+        .takeaway {
+            width: min(1180px, 100%);
+            margin-top: 34px;
+            padding: 18px 34px;
+            border-radius: 8px;
+            background: rgba(3,7,18,0.72);
+            border: 1px solid rgba(34,211,238,0.18);
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 1.35;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.9s forwards;
+        }
+
+        .takeaway strong {
+            color: var(--text-main);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes liftIn {
+            0% { opacity: 0; transform: translateY(34px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="statement">
+                <div class="statement-line"><strong>Istotą mikroserwisów<span class="highlight"> jest niezależność</span>.</strong></div>
+            </div>
+
+            <div class="divider"></div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
