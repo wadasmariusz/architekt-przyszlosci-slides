@@ -129,12 +129,12 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 60px 120px 150px;
+            padding: 96px 120px 120px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 44px;
+            margin-bottom: 56px;
         }
 
         .eyebrow {
@@ -155,7 +155,7 @@
 
         h1.title {
             color: #ffffff;
-            font-size: 72px;
+            font-size: 88px;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -1px;
@@ -174,8 +174,8 @@
         .columns {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            max-width: 1500px;
+            gap: 56px;
+            max-width: 1580px;
             margin: 0 auto;
         }
 
@@ -184,7 +184,8 @@
             background: rgba(17,24,39,0.62);
             border: 1px solid rgba(255,255,255,0.08);
             backdrop-filter: blur(8px);
-            padding: 36px 40px;
+            min-height: 494px;
+            padding: 46px 48px;
             opacity: 0;
         }
 
@@ -201,18 +202,18 @@
         .column-header {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 28px;
+            gap: 18px;
+            margin-bottom: 34px;
         }
 
         .column-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 34px;
         }
 
         .column--yes .column-icon {
@@ -228,7 +229,7 @@
         }
 
         .column-title {
-            font-size: 26px;
+            font-size: 34px;
             font-weight: 700;
             color: var(--text-main);
         }
@@ -239,23 +240,23 @@
         .item-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 20px;
         }
 
         .item {
             display: flex;
             align-items: flex-start;
-            gap: 14px;
-            font-size: 22px;
+            gap: 16px;
+            font-size: 26px;
             font-weight: 400;
             color: var(--text-muted);
-            line-height: 1.4;
+            line-height: 1.38;
         }
 
         .item i {
             flex: 0 0 auto;
-            font-size: 22px;
-            margin-top: 3px;
+            font-size: 26px;
+            margin-top: 5px;
         }
 
         .column--yes .item i { color: var(--emerald-400); }
@@ -344,11 +345,7 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-compass"></i>
-                    Decyzja architektoniczna
-                </div>
-                <h1 class="title">Gdzie EDA <span class="highlight">naprawdę błyszczy</span></h1>
+                <h1 class="title">Kiedy <span class="highlight">stosować?</span></h1>
             </div>
 
             <div class="columns">
@@ -390,7 +387,7 @@
                         <div class="column-icon">
                             <i class="ti ti-alert-triangle"></i>
                         </div>
-                        <div class="column-title">Pomyśl dwa razy, gdy…</div>
+                        <div class="column-title">Inny styl, gdy</div>
                     </div>
                     <div class="item-list">
                         <div class="item">
@@ -407,10 +404,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="quote">
-                EDA dla prostego CRUD-a = <strong>przerost formy nad treścią</strong>
             </div>
         </div>
 
