@@ -179,9 +179,9 @@
             max-width: 860px;
             margin-bottom: 36px;
             color: #ffffff;
-            font-size: 78px;
+            font-size: 72px;
             font-weight: 800;
-            line-height: 1.08;
+            line-height: 1.1;
             letter-spacing: -1px;
             opacity: 0;
             animation: fadeUp 0.9s ease-out 0.45s forwards;
@@ -268,7 +268,7 @@
             background: rgba(245,158,11,0.12);
             border: 1px solid rgba(245,158,11,0.35);
             color: #f59e0b;
-            animation: slideFromRight 0.6s ease-out 1.2s forwards;
+            animation: slideFromRightCentered 0.6s ease-out 1.2s forwards;
         }
 
         .target-node:nth-child(6) {
@@ -347,6 +347,11 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
+        @keyframes slideFromRightCentered {
+            from { opacity: 0; transform: translate(60px, -50%); }
+            to { opacity: 1; transform: translate(0, -50%); }
+        }
+
         @keyframes scaleIn {
             from { opacity: 0; transform: translateY(-50%) scale(0.6); }
             to { opacity: 1; transform: translateY(-50%) scale(1); }
@@ -403,10 +408,7 @@
                     <i class="ti ti-bolt"></i>
                     Style architektury
                 </div>
-
                 <h1 class="title"><span class="highlight">Event-Driven</span> Architecture</h1>
-
-                <p class="subtitle">Jak projektować systemy, które reagują, zamiast pytać — od teorii do realnych pułapek wdrożeniowych</p>
             </section>
 
             <section class="fanout-diagram" aria-label="Diagram fan-out zdarzeń">

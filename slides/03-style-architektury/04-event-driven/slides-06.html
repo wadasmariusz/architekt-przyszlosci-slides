@@ -123,11 +123,16 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 76px 110px 150px;
+            padding: 0 110px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .header {
             text-align: center;
+            width: 100%;
             max-width: 1180px;
             margin: 0 auto 40px;
         }
@@ -150,7 +155,7 @@
 
         h1.title {
             color: #ffffff;
-            font-size: 64px;
+            font-size: 72px;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -1px;
@@ -227,20 +232,20 @@
         }
 
         .card:nth-child(1) .card-num {
-            background: rgba(139,92,246,0.15);
-            color: #a78bfa;
+            background: #164e63;
+            color: #22d3ee;
             border: 1px solid rgba(139,92,246,0.3);
         }
 
         .card:nth-child(2) .card-num {
-            background: rgba(245,158,11,0.15);
-            color: #fbbf24;
+            background: #164e63;
+            color: #22d3ee;
             border: 1px solid rgba(245,158,11,0.3);
         }
 
         .card:nth-child(3) .card-num {
-            background: rgba(16,185,129,0.15);
-            color: #34d399;
+            background: #164e63;
+            color: #22d3ee;
             border: 1px solid rgba(16,185,129,0.3);
         }
 
@@ -373,13 +378,8 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-category-2"></i>
-                    wg Martina Fowlera
-                </div>
-
-                <h1 class="title">Trzy <span class="highlight">sposoby</span> na zdarzenie</h1>
-                <div class="subtitle">„Zdarzenie" to nie jeden uniwersalny format — każdy wzorzec ma inne konsekwencje</div>
+                 <h1 class="title">Trzy <span class="highlight">sposoby</span> na zdarzenie</h1>
+                <div class="subtitle">wg Martina Fowlera</div>
             </div>
 
             <div class="cards">
@@ -390,7 +390,7 @@
                         <div class="card-title">Event Notification</div>
                     </div>
                     <div class="card-desc">
-                        Minimalna informacja — np. samo <strong>ID</strong>. Odbiorca sam dociąga szczegóły ze źródła.
+                        Minimalna informacja.</br>Odbiorca sam dociąga szczegóły ze źródła.
                     </div>
                     <div class="card-meta">
                         <div class="meta-row">
@@ -399,7 +399,7 @@
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">Callback</span>
-                            <span class="meta-value">tak — konsument pyta źródło</span>
+                            <span class="meta-value">tak</span>
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">Złożoność</span>
@@ -415,7 +415,7 @@
                         <div class="card-title">Event-Carried State Transfer</div>
                     </div>
                     <div class="card-desc">
-                        <strong>Pełny stan</strong> w samym zdarzeniu. Konsument nie wraca do źródła — ma wszystko, czego potrzebuje.
+                        <strong>Pełny stan</strong> w samym zdarzeniu.</br> Konsument ma wszystko, czego potrzebuje.
                     </div>
                     <div class="card-meta">
                         <div class="meta-row">
@@ -424,7 +424,7 @@
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">Callback</span>
-                            <span class="meta-value">nie — brak powrotów</span>
+                            <span class="meta-value">nie</span>
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">Złożoność</span>
@@ -440,7 +440,7 @@
                         <div class="card-title">Event Sourcing</div>
                     </div>
                     <div class="card-desc">
-                        Zdarzenia są <strong>źródłem prawdy</strong>. Stan odtwarzany z pełnej historii zdarzeń.
+                        Zdarzenia są <strong>źródłem prawdy</strong>.</br>Stan odtwarzany z pełnej historii zdarzeń.
                     </div>
                     <div class="card-meta">
                         <div class="meta-row">
@@ -449,7 +449,7 @@
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">Callback</span>
-                            <span class="meta-value">nie — replay z logu</span>
+                            <span class="meta-value">nie</span>
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">Złożoność</span>

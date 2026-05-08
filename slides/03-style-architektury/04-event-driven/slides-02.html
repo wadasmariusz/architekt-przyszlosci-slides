@@ -248,6 +248,9 @@
         /* === Flow Diagram === */
         .flow-diagram {
             position: relative;
+            grid-column: 1 / -1;
+            justify-self: center;
+            margin-top: 70px;
             width: 580px;
             height: 380px;
             opacity: 0;
@@ -335,7 +338,7 @@
         .node-consumer:nth-child(5) {
             top: 50%;
             transform: translateY(-50%);
-            animation: slideFromRight 0.6s ease-out 1.45s forwards;
+            animation: slideFromRightCentered 0.6s ease-out 1.45s forwards;
         }
 
         .node-consumer:nth-child(6) {
@@ -402,6 +405,11 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
+        @keyframes slideFromRightCentered {
+            from { opacity: 0; transform: translate(60px, -50%); }
+            to { opacity: 1; transform: translate(0, -50%); }
+        }
+
         @keyframes scaleIn {
             from { opacity: 0; transform: translateY(-50%) scale(0.6); }
             to { opacity: 1; transform: translateY(-50%) scale(1); }
@@ -461,33 +469,10 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-message-bolt"></i>
-                    Definicja
-                </div>
-                <h1 class="title">Co to znaczy <span class="highlight">„sterowana zdarzeniami"</span></h1>
-            </div>
-
-            <div class="quote-box">
-                <p>System, w którym najważniejszy jest fakt, że <span class="hl">coś się wydarzyło</span>.</p>
+                <h1 class="title">Zdarzenie jako jednostka  <span class="highlight">komunikacji</span></h1>
             </div>
 
             <div class="main-row">
-                <div class="points">
-                    <div class="point">
-                        <i class="ti ti-arrows-exchange"></i>
-                        <span><strong>Zdarzenie</strong> = informacja o zmianie stanu lub wykonaniu akcji</span>
-                    </div>
-                    <div class="point">
-                        <i class="ti ti-route"></i>
-                        <span>Producent publikuje, broker przenosi, konsument reaguje</span>
-                    </div>
-                    <div class="point">
-                        <i class="ti ti-unlink"></i>
-                        <span>Producent i konsument <strong>nie muszą się znać</strong></span>
-                    </div>
-                </div>
-
                 <div class="flow-diagram" aria-label="Schemat: Producer → Event Broker → Consumers">
                     <!-- Producer -->
                     <div class="flow-node node-producer">
