@@ -37,6 +37,13 @@ function getSlideFiles(dirPath) {
 
 async function run() {
   const allFlag = process.argv.includes('--all');
+  const slideArgIndex = process.argv.indexOf('--slide');
+  const slideFilter = slideArgIndex !== -1 ? process.argv[slideArgIndex + 1] : null;
+
+  if (slideFilter && !/^\d+$/.test(slideFilter)) {
+    console.error('Flaga --slide wymaga numeru slajdu, np. --slide 5');
+    process.exit(1);
+  }
 
   const folders = findSlideFolders(SLIDES_DIR);
   if (folders.length === 0) {
@@ -58,6 +65,22 @@ async function run() {
       })),
     });
     selectedFolders = [chosen];
+  }
+
+  // Filter to single slide if --slide flag is used
+  if (slideFilter) {
+    const slideNum = slideFilter.padStart(2, '0');
+    const slideFile = `slides-${slideNum}.html`;
+    selectedFolders = selectedFolders.map(f => ({
+      ...f,
+      files: f.files.filter(file => file === slideFile),
+    })).filter(f => f.files.length > 0);
+
+    if (selectedFolders.length === 0) {
+      console.error(`Nie znaleziono slajdu ${slideFile}.`);
+      process.exit(1);
+    }
+    console.log(`Tryb --slide: eksportuję tylko ${slideFile}\n`);
   }
 
   const browser = await chromium.launch();
