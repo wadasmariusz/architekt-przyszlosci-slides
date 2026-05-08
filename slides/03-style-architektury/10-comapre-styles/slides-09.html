@@ -123,7 +123,7 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 80px 130px 160px;
+            padding: 72px 130px 330px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -132,7 +132,7 @@
         .header {
             text-align: center;
             max-width: 1180px;
-            margin: 0 auto 44px;
+            margin: 0 auto 32px;
         }
 
         .eyebrow {
@@ -152,9 +152,9 @@
         .eyebrow i { font-size: 32px; }
 
         h1.title {
-            margin-bottom: 14px;
+            margin-bottom: 0;
             color: #ffffff;
-            font-size: 68px;
+            font-size: 64px;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -1px;
@@ -182,7 +182,7 @@
         .cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
+            gap: 20px;
             max-width: 1500px;
             width: 100%;
             flex: 1;
@@ -192,9 +192,9 @@
         .card {
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            padding: 32px 28px;
-            border-radius: 20px;
+            gap: 14px;
+            padding: 24px 24px;
+            border-radius: 18px;
             background: rgba(17,24,39,0.7);
             border: 1px solid rgba(255,255,255,0.08);
             backdrop-filter: blur(8px);
@@ -222,13 +222,13 @@
         .card:nth-child(4):hover { border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.04); }
 
         .card-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
         }
 
         .card:nth-child(1) .card-icon { background: rgba(100,116,139,0.12); color: #94a3b8; }
@@ -250,17 +250,17 @@
         .card:nth-child(4) .card-label { color: #f59e0b; }
 
         .card-name {
-            font-size: 22px;
+            font-size: 21px;
             font-weight: 800;
             color: #ffffff;
             line-height: 1.2;
         }
 
         .card-desc {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 300;
             color: var(--text-muted);
-            line-height: 1.55;
+            line-height: 1.5;
         }
 
         .card-desc strong {
@@ -272,7 +272,7 @@
         .axis-section {
             max-width: 1500px;
             width: 100%;
-            margin-top: 36px;
+            margin-top: 24px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 1.7s forwards;
         }
@@ -406,11 +406,10 @@
         <div class="content">
             <div class="header">
                 <div class="eyebrow">
-                    <i class="ti ti-rocket"></i>
-                    Deployment
+                    <i class="ti ti-test-pipe"></i>
+                    Porównanie stylów
                 </div>
                 <h1 class="title">Wdrażanie <span class="highlight">zmian</span></h1>
-                <p class="subtitle">Wpływ stylu architektury na lead time i częstotliwość dostarczania</p>
             </div>
 
             <div class="cards">
@@ -456,10 +455,6 @@
                         <div class="axis-label axis-label--right">Niezależny deployment</div>
                     </div>
                 </div>
-            </div>
-
-            <div class="footer-accent">
-                <p><i class="ti ti-clock-bolt"></i> Niezależny deployment skraca <span class="hl">lead time</span> i zwiększa częstotliwość dostarczania zmian</p>
             </div>
         </div>
 
