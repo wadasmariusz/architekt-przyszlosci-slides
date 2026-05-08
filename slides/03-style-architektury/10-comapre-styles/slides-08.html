@@ -60,7 +60,7 @@
             width: 800px;
             height: 800px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 65%);
+            background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 65%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -123,10 +123,11 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 80px 130px 160px;
+            padding: 60px 130px 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
         .header {
@@ -140,7 +141,7 @@
             align-items: center;
             gap: 14px;
             margin-bottom: 20px;
-            color: #a78bfa;
+            color: var(--cyan-400);
             font-size: 24px;
             font-weight: 600;
             letter-spacing: 4px;
@@ -163,7 +164,7 @@
         }
 
         h1.title .highlight {
-            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -204,7 +205,7 @@
 
         .block:hover {
             transform: translateY(-6px);
-            box-shadow: 0 8px 32px rgba(139,92,246,0.08);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.08);
         }
 
         .block--micro {
@@ -218,13 +219,13 @@
         }
 
         .block--modular {
-            border-color: rgba(139,92,246,0.15);
+            border-color: rgba(6,182,212,0.15);
             animation: slideFromRight 0.8s ease-out 0.9s forwards;
         }
 
         .block--modular:hover {
-            border-color: rgba(139,92,246,0.3);
-            background: rgba(139,92,246,0.04);
+            border-color: rgba(6,182,212,0.3);
+            background: rgba(6,182,212,0.04);
         }
 
         .block-header {
@@ -249,8 +250,8 @@
         }
 
         .block--modular .block-icon {
-            background: rgba(139,92,246,0.12);
-            color: #a78bfa;
+            background: rgba(6,182,212,0.12);
+            color: var(--cyan-400);
         }
 
         .block-label {
@@ -261,7 +262,7 @@
         }
 
         .block--micro .block-label { color: #34d399; }
-        .block--modular .block-label { color: #a78bfa; }
+        .block--modular .block-label { color: var(--cyan-400); }
 
         .block-name {
             font-size: 26px;
@@ -293,7 +294,7 @@
         }
 
         .block--micro .bp i { color: #10b981; }
-        .block--modular .bp i { color: #a78bfa; }
+        .block--modular .bp i { color: var(--cyan-400); }
 
         /* === VS divider === */
         .vs-divider {
@@ -334,21 +335,21 @@
             gap: 14px;
             padding: 16px 36px;
             border-radius: 14px;
-            background: rgba(139,92,246,0.06);
-            border: 1px solid rgba(139,92,246,0.18);
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(6,182,212,0.18);
             font-size: 1.05rem;
             font-weight: 600;
             color: #ffffff;
         }
 
         .footer-accent .hl {
-            color: #a78bfa;
+            color: var(--cyan-400);
             font-weight: 800;
         }
 
         .footer-accent i {
             font-size: 24px;
-            color: #a78bfa;
+            color: var(--cyan-400);
         }
 
         /* === Animations === */
@@ -417,12 +418,7 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-adjustments-check"></i>
-                    Korekta oceny
-                </div>
-                <h1 class="title">Testowalność <span class="highlight">bez rozproszenia</span></h1>
-                <p class="subtitle">Modularny monolit może osiągać testowalność zbliżoną do mikroserwisów</p>
+                <h1 class="title">Testowalność w <span class="highlight">Modularnym monolicie</span></h1>
             </div>
 
             <div class="comparison">
@@ -436,7 +432,7 @@
                         </div>
                     </div>
                     <div class="block-points">
-                        <div class="bp"><i class="ti ti-check"></i> Izolacja odpowiedzialności — każdy serwis testowany niezależnie</div>
+                        <div class="bp"><i class="ti ti-check"></i> Izolacja odpowiedzialności</div>
                         <div class="bp"><i class="ti ti-check"></i> Jasne granice kontraktu między serwisami</div>
                         <div class="bp"><i class="ti ti-check"></i> Możliwość niezależnego mockowania zależności</div>
                     </div>
@@ -463,10 +459,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="footer-accent">
-                <p><i class="ti ti-key"></i> Kluczowa jest <span class="hl">separacja modułów</span>, nie liczba deployowalnych jednostek</p>
-            </div>
+            
         </div>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">

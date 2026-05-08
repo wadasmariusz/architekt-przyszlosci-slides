@@ -161,12 +161,7 @@
             animation: fadeUp 0.9s ease-out 0.45s forwards;
         }
 
-        h1.title .highlight {
-            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+
 
         .subtitle {
             color: var(--text-muted);
@@ -213,7 +208,7 @@
         .card:nth-child(4) { animation: bounceIn 0.7s ease-out 1.3s forwards; }
 
         .card:nth-child(1):hover { border-color: rgba(34,211,238,0.3); background: rgba(34,211,238,0.05); }
-        .card:nth-child(2):hover { border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.05); }
+        .card:nth-child(2):hover { border-color: rgba(34,211,238,0.3); background: rgba(34,211,238,0.05); }
         .card:nth-child(3):hover { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
         .card:nth-child(4):hover { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.05); }
 
@@ -435,8 +430,8 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-stack-2"></i></div>
                     <div class="card-name">Layered</div>
-                    <div class="card-rating">★ niska</div>
-                    <div class="card-desc">Przewaga ciężkich testów integracyjnych — warstwy trudno testować w izolacji</div>
+                    <div class="card-rating">★★</div>
+                    <div class="card-desc">Przewaga ciężkich testów integracyjnych, warstwy trudno testować w izolacji</div>
                     <div class="card-tests">
                         <span class="test-tag">integracyjne</span>
                         <span class="test-tag">e2e</span>
@@ -447,8 +442,8 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-puzzle"></i></div>
                     <div class="card-name">Monolit modularny</div>
-                    <div class="card-rating">★★ umiarkowana</div>
-                    <div class="card-desc">Lepiej, jeśli moduły są dobrze odseparowane — możliwe testy per moduł</div>
+                    <div class="card-rating">★★</div>
+                    <div class="card-desc">Jeśli moduły są dobrze odseparowane to możliwe testy per moduł</div>
                     <div class="card-tests">
                         <span class="test-tag">modułowe</span>
                         <span class="test-tag">integracyjne</span>
@@ -459,8 +454,8 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-hexagons"></i></div>
                     <div class="card-name">Mikroserwisy</div>
-                    <div class="card-rating">★★★★ wysoka</div>
-                    <div class="card-desc">Testy serwisowe, kontraktowe i integracyjne — ale pełny e2e jest kosztowny</div>
+                    <div class="card-rating">★★★★★</div>
+                    <div class="card-desc">Testy serwisowe, kontraktowe i integracyjne. Pełny e2e jest kosztowny</div>
                     <div class="card-tests">
                         <span class="test-tag">serwisowe</span>
                         <span class="test-tag">kontraktowe</span>
@@ -472,7 +467,7 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-bolt"></i></div>
                     <div class="card-name">Event-driven</div>
-                    <div class="card-rating">★★ trudna</div>
+                    <div class="card-rating">★★</div>
                     <div class="card-desc">Asynchroniczność, kolejność zdarzeń, powtórzenia i eventual consistency utrudniają testy</div>
                     <div class="card-tests">
                         <span class="test-tag">async</span>
@@ -480,10 +475,6 @@
                         <span class="test-tag">retry</span>
                     </div>
                 </div>
-            </div>
-
-            <div class="footer-note">
-                <p><i class="ti ti-bulb"></i> Wysoka testowalność nie wynika z samego podziału, tylko z dyscypliny projektowej i testowej</p>
             </div>
         </div>
 
