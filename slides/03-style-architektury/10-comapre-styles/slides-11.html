@@ -70,26 +70,26 @@
             z-index: 5;
             width: 100%;
             height: 100%;
-            padding: 72px 128px 154px;
-            display: grid;
-            grid-template-columns: 520px 1fr;
-            gap: 72px;
+            padding: 52px 128px 330px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
+            gap: 36px;
         }
 
         .hero {
-            align-self: stretch;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding-bottom: 28px;
+            align-items: center;
+            width: 100%;
+            text-align: center;
         }
 
         .eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 14px;
-            width: fit-content;
             color: var(--cyan);
             font-size: 22px;
             font-weight: 700;
@@ -102,12 +102,11 @@
         .eyebrow i { font-size: 32px; }
 
         h1 {
-            margin-top: 34px;
-            max-width: 490px;
+            margin-top: 18px;
             color: #ffffff;
-            font-size: 86px;
+            font-size: 78px;
             font-weight: 800;
-            line-height: 0.98;
+            line-height: 1.02;
             letter-spacing: 0;
             opacity: 0;
             animation: fadeIn 0.75s ease-out 0.3s forwards;
@@ -160,9 +159,11 @@
 
         .board {
             position: relative;
+            width: min(1450px, 100%);
             display: grid;
-            grid-template-rows: repeat(4, 1fr);
-            gap: 18px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: repeat(2, 238px);
+            gap: 20px;
             opacity: 0;
             animation: slideIn 0.85s ease-out 0.42s forwards;
         }
@@ -170,7 +171,7 @@
         .board::before {
             content: '';
             position: absolute;
-            inset: -28px;
+            inset: -16px;
             border-radius: 16px;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 42%, rgba(34, 211, 238, 0.08));
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -179,12 +180,14 @@
 
         .style-row {
             position: relative;
-            min-height: 184px;
+            min-height: 238px;
             display: grid;
-            grid-template-columns: 112px 290px 1fr 214px;
-            gap: 24px;
-            align-items: center;
-            padding: 22px 26px;
+            grid-template-columns: 86px 1fr;
+            grid-template-rows: auto 1fr auto;
+            column-gap: 20px;
+            row-gap: 16px;
+            align-items: start;
+            padding: 22px 26px 20px;
             border: 1px solid var(--line);
             border-radius: 8px;
             background: linear-gradient(120deg, var(--panel-strong), var(--panel));
@@ -219,8 +222,9 @@
         .icon-plate {
             position: relative;
             z-index: 2;
-            width: 88px;
-            height: 88px;
+            grid-row: 1 / 3;
+            width: 78px;
+            height: 78px;
             display: grid;
             place-items: center;
             border-radius: 8px;
@@ -231,7 +235,7 @@
 
         .icon-plate i {
             color: var(--accent);
-            font-size: 48px;
+            font-size: 42px;
         }
 
         .name {
@@ -241,7 +245,7 @@
 
         .name h2 {
             color: #ffffff;
-            font-size: 32px;
+            font-size: 29px;
             font-weight: 800;
             line-height: 1.08;
             letter-spacing: 0;
@@ -249,9 +253,9 @@
 
         .name span {
             display: block;
-            margin-top: 10px;
+            margin-top: 8px;
             color: var(--muted);
-            font-size: 17px;
+            font-size: 14px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.6px;
@@ -260,10 +264,11 @@
         .insight {
             position: relative;
             z-index: 2;
+            grid-column: 2;
             color: #dbe7f4;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 300;
-            line-height: 1.34;
+            line-height: 1.38;
         }
 
         .insight strong {
@@ -274,17 +279,20 @@
         .rating {
             position: relative;
             z-index: 2;
-            align-self: stretch;
+            grid-column: 1 / -1;
+            align-self: end;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 12px;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .rating-number {
             color: var(--accent);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -292,9 +300,9 @@
 
         .stars {
             display: flex;
-            gap: 7px;
+            gap: 6px;
             color: var(--empty-star);
-            font-size: 31px;
+            font-size: 28px;
             line-height: 1;
         }
 
@@ -304,7 +312,7 @@
         }
 
         .meter {
-            width: 176px;
+            width: 128px;
             height: 6px;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.11);
@@ -322,14 +330,17 @@
         .legend {
             position: absolute;
             z-index: 6;
-            left: 128px;
-            bottom: 52px;
+            left: 560px;
+            right: 560px;
+            bottom: 66px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 14px;
             color: rgba(248, 250, 252, 0.7);
             font-size: 17px;
             font-weight: 600;
+            text-align: center;
         }
 
         .legend i {
@@ -384,19 +395,7 @@
                     <i class="ti ti-chart-radar"></i>
                     Porównanie stylów
                 </div>
-                <h1>Skalowalność bez skrótów</h1>
-                <p class="lead">
-                    Ocena pokazuje, ile architektura kosztuje, gdy trzeba skalować tylko jeden fragment systemu.
-                </p>
-                <div class="scale-note">
-                    <div class="scale-title">
-                        <i class="ti ti-stars"></i>
-                        Skala slajdu
-                    </div>
-                    <p class="scale-copy">
-                        1 gwiazdka = najłatwiej dopasować zasoby. 5 gwiazdek = skalowanie jest najbardziej kosztowne i szerokie.
-                    </p>
-                </div>
+                <h1>Skalowalność</h1>
             </section>
 
             <section class="board" aria-label="Oceny skalowalności stylów architektury">
@@ -450,7 +449,6 @@
                         <div class="stars" aria-label="1 z 5 gwiazdek">
                             <i class="ti ti-star-filled filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
                         </div>
-                        <div class="meter"><span></span></div>
                     </div>
                 </article>
 
@@ -468,13 +466,11 @@
                         <div class="stars" aria-label="2 z 5 gwiazdek">
                             <i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
                         </div>
-                        <div class="meter"><span></span></div>
                     </div>
                 </article>
             </section>
         </main>
-
-        <div class="legend"><i class="ti ti-star-filled"></i> Gwiazdki oznaczają koszt i szerokość skalowania, nie “ładność” architektury.</div>
+        
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
         <div class="camera-box">kamera 480 &times; 270</div>
     </div>
