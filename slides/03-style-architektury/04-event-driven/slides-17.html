@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 17 - Transactional Outbox</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --emerald-400: #34d399;
+            --emerald-500: #10b981;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --violet-400: #a78bfa;
+            --violet-500: #8b5cf6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 14%; animation-delay: 0.5s; }
+        .particle:nth-child(4) { top: 72%; left: 82%; animation-delay: 2.0s; }
+        .particle:nth-child(5) { top: 28%; left: 68%; animation-delay: 3.5s; }
+        .particle:nth-child(6) { top: 82%; left: 25%; animation-delay: 5.0s; }
+        .particle:nth-child(7) { top: 48%; left: 38%; animation-delay: 6.5s; }
+        .particle:nth-child(8) { top: 22%; left: 52%; animation-delay: 1.5s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 56px 100px 150px;
+        }
+
+        .header {
+            max-width: 1580px;
+            margin: 0 auto 24px;
+            text-align: left;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            color: var(--emerald-400);
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow i { font-size: 30px; }
+
+        h1.title {
+            color: #ffffff;
+            font-size: 76px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.35s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            max-width: 930px;
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.35;
+            margin-top: 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        /* === Architecture diagram === */
+        .architecture {
+            display: grid;
+            grid-template-columns: 230px 76px minmax(520px, 1fr) 76px 330px;
+            align-items: center;
+            gap: 0;
+            max-width: 1420px;
+            min-height: 350px;
+            margin: 0 auto;
+        }
+
+        .process-node,
+        .downstream-card,
+        .db-transaction {
+            border-radius: 18px;
+            background: rgba(17,24,39,0.68);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 22px 60px rgba(0,0,0,0.18);
+            opacity: 0;
+        }
+
+        .process-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+            padding: 28px 24px;
+            text-align: center;
+            animation: slideFromLeft 0.7s ease-out 0.6s forwards;
+        }
+
+        .node-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            font-size: 32px;
+            background: rgba(139,92,246,0.12);
+            border: 1px solid rgba(139,92,246,0.3);
+            color: var(--violet-400);
+        }
+
+        .node-title {
+            font-size: 27px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .node-desc {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        .connection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 0.7s ease-out 0.95s forwards;
+        }
+
+        .connection:nth-child(4) {
+            animation-delay: 1.35s;
+        }
+
+        .connection-line {
+            width: 78px;
+            height: 2px;
+            position: relative;
+            background: linear-gradient(90deg, rgba(148,163,184,0.4), rgba(148,163,184,0.9));
+        }
+
+        .connection-line::after {
+            content: '';
+            position: absolute;
+            right: -7px;
+            top: -5px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid rgba(148,163,184,0.9);
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+        }
+
+        .connection-label {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .db-transaction {
+            min-height: 330px;
+            padding: 26px 28px 28px;
+            border-color: rgba(16,185,129,0.26);
+            background:
+                linear-gradient(180deg, rgba(16,185,129,0.08), rgba(17,24,39,0.7) 42%),
+                rgba(17,24,39,0.68);
+            animation: scaleIn 0.75s ease-out 0.85s forwards;
+        }
+
+        .transaction-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 18px;
+        }
+
+        .transaction-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--emerald-400);
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .transaction-title i {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(16,185,129,0.12);
+            border: 1px solid rgba(16,185,129,0.32);
+            font-size: 25px;
+        }
+
+        .commit-pill {
+            padding: 9px 15px;
+            border-radius: 999px;
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.28);
+            color: var(--emerald-400);
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .db-tables {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .db-table-card {
+            min-height: 134px;
+            padding: 18px 18px 16px;
+            border-radius: 14px;
+            background: rgba(3,7,18,0.34);
+            border: 1px solid rgba(16,185,129,0.18);
+        }
+
+        .table-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            background: rgba(16,185,129,0.12);
+            color: var(--emerald-400);
+            font-size: 23px;
+        }
+
+        .table-name {
+            font-size: 23px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .table-desc {
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        .transaction-note {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: 14px;
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.18);
+            color: var(--text-main);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .transaction-note i {
+            color: var(--emerald-400);
+            font-size: 24px;
+        }
+
+        .downstream {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .downstream-card {
+            display: grid;
+            grid-template-columns: 58px 1fr;
+            align-items: center;
+            gap: 18px;
+            padding: 20px 22px;
+            min-height: 112px;
+            animation: slideFromRight 0.7s ease-out 1.55s forwards;
+        }
+
+        .downstream-card:nth-child(3) {
+            animation-delay: 1.8s;
+        }
+
+        .downstream-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 29px;
+        }
+
+        .relay-card .downstream-icon {
+            background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.3);
+            color: var(--amber-400);
+        }
+
+        .broker-card .downstream-icon {
+            background: rgba(6,182,212,0.12);
+            border: 1px solid rgba(6,182,212,0.3);
+            color: var(--cyan-400);
+        }
+
+        .downstream-title {
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .downstream-desc {
+            margin-top: 6px;
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        .downstream-arrow {
+            display: flex;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 24px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.72s forwards;
+        }
+
+        /* === Key points === */
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            position: absolute;
+            left: 170px;
+            bottom: 154px;
+            width: 1160px;
+            margin: 0;
+        }
+
+        .key-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            min-height: 104px;
+            padding: 18px 20px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(6,182,212,0.12);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .key-point:nth-child(1) { animation: fadeUp 0.7s ease-out 1.6s forwards; }
+        .key-point:nth-child(2) { animation: fadeUp 0.7s ease-out 1.8s forwards; }
+        .key-point:nth-child(3) { animation: fadeUp 0.7s ease-out 2.0s forwards; }
+
+        .key-point i {
+            flex: 0 0 auto;
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            background: rgba(6,182,212,0.11);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .key-point-text {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        .key-point-text strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-44px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(44px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <i class="ti ti-lock-check"></i>
+                    Wzorzec integracyjny
+                </div>
+                <h1 class="title">Transactional <span class="highlight">Outbox</span></h1>
+                <div class="subtitle">Atomowy zapis stanu i zdarzenia, publikacja poza transakcją biznesową.</div>
+            </div>
+
+            <div class="architecture">
+                <div class="process-node app-node">
+                    <div class="node-icon">
+                        <i class="ti ti-code"></i>
+                    </div>
+                    <div class="node-title">Aplikacja</div>
+                    <div class="node-desc">Obsługuje komendę i zapisuje zmianę biznesową</div>
+                </div>
+
+                <div class="connection">
+                    <div class="connection-line"></div>
+                    <div class="connection-label">zapisuje</div>
+                </div>
+
+                <div class="db-transaction">
+                    <div class="transaction-header">
+                        <div class="transaction-title">
+                            <i class="ti ti-database"></i>
+                            Jedna transakcja DB
+                        </div>
+                        <div class="commit-pill">COMMIT</div>
+                    </div>
+
+                    <div class="db-tables">
+                        <div class="db-table-card">
+                            <div class="table-icon">
+                                <i class="ti ti-table"></i>
+                            </div>
+                            <div class="table-name">business_state</div>
+                            <div class="table-desc">Stan domenowy zapisany razem z decyzją biznesową</div>
+                        </div>
+
+                        <div class="db-table-card">
+                            <div class="table-icon">
+                                <i class="ti ti-inbox"></i>
+                            </div>
+                            <div class="table-name">outbox_events</div>
+                            <div class="table-desc">Zdarzenie gotowe do późniejszej publikacji</div>
+                        </div>
+                    </div>
+
+                    <div class="transaction-note">
+                        <i class="ti ti-checks"></i>
+                        Oba zapisy albo żaden
+                    </div>
+                </div>
+
+                <div class="connection">
+                    <div class="connection-line"></div>
+                    <div class="connection-label">czyta outbox</div>
+                </div>
+
+                <div class="downstream">
+                    <div class="downstream-card relay-card">
+                        <div class="downstream-icon">
+                            <i class="ti ti-transfer"></i>
+                        </div>
+                        <div>
+                            <div class="downstream-title">Relay / CDC</div>
+                            <div class="downstream-desc">Np. Debezium albo worker publikuje zaległe rekordy</div>
+                        </div>
+                    </div>
+
+                    <div class="downstream-arrow">
+                        <i class="ti ti-arrow-down"></i>
+                    </div>
+
+                    <div class="downstream-card broker-card">
+                        <div class="downstream-icon">
+                            <i class="ti ti-broadcast"></i>
+                        </div>
+                        <div>
+                            <div class="downstream-title">Broker</div>
+                            <div class="downstream-desc">Kafka / RabbitMQ dostarcza zdarzenia konsumentom</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-points">
+                <div class="key-point">
+                    <i class="ti ti-lock"></i>
+                    <div class="key-point-text"><strong>Atomowość</strong></div>
+                </div>
+                <div class="key-point">
+                    <i class="ti ti-shield-check"></i>
+                    <div class="key-point-text"><strong>At-least-once</strong></div>
+                </div>
+                <div class="key-point">
+                    <i class="ti ti-route-off"></i>
+                    <div class="key-point-text"><strong>Brak dual write</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

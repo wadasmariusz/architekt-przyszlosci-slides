@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 04 - Problem ciasnych powiązań</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 18%; left: 8%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 35%; left: 72%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.8s; }
+        .particle:nth-child(7) { top: 45%; left: 52%; animation-delay: 6.2s; }
+        .particle:nth-child(8) { top: 10%; left: 42%; animation-delay: 2.5s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            margin-bottom: 14px;
+            color: #ffffff;
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Comparison columns === */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            gap: 0;
+            max-width: 1500px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .col-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 10px;
+            opacity: 0;
+        }
+
+        .col-header--left { animation: slideFromLeft 0.8s ease-out 0.6s forwards; }
+        .col-header--right { animation: slideFromRight 0.8s ease-out 0.6s forwards; }
+
+        .col-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .col-icon--red {
+            background: rgba(239,68,68,0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        .col-icon--green {
+            background: rgba(16,185,129,0.12);
+            color: #10b981;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .col-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .col-title--red { color: #fca5a5; }
+        .col-title--green { color: #6ee7b7; }
+
+        /* Separator */
+        .separator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 420px;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.8s forwards;
+        }
+
+        .separator-line {
+            width: 2px;
+            flex: 1;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent);
+        }
+
+        .separator-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(17,24,39,0.9);
+            border: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin: 12px 0;
+        }
+
+        /* Row items */
+        .row-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 20px 26px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .col--left .row-item:nth-child(2) { animation: slideFromLeft 0.7s ease-out 0.8s forwards; }
+        .col--left .row-item:nth-child(3) { animation: slideFromLeft 0.7s ease-out 1.0s forwards; }
+        .col--left .row-item:nth-child(4) { animation: slideFromLeft 0.7s ease-out 1.2s forwards; }
+        .col--left .row-item:nth-child(5) { animation: slideFromLeft 0.7s ease-out 1.4s forwards; }
+
+        .col--right .row-item:nth-child(2) { animation: slideFromRight 0.7s ease-out 0.8s forwards; }
+        .col--right .row-item:nth-child(3) { animation: slideFromRight 0.7s ease-out 1.0s forwards; }
+        .col--right .row-item:nth-child(4) { animation: slideFromRight 0.7s ease-out 1.2s forwards; }
+        .col--right .row-item:nth-child(5) { animation: slideFromRight 0.7s ease-out 1.4s forwards; }
+
+        .row-item i {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .col--left .row-item i {
+            background: rgba(239,68,68,0.1);
+            color: #f87171;
+        }
+
+        .col--right .row-item i {
+            background: rgba(16,185,129,0.1);
+            color: #34d399;
+        }
+
+        .row-text {
+            font-size: 24px;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .row-text strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Problem <span class="highlight">ciasnych powiązań</span></h1>
+            </div>
+
+            <div class="comparison">
+                <!-- Left column: Request-Response -->
+                <div class="col col--left">
+                    <div class="col-header col-header--left">
+                        <div class="col-icon col-icon--red">
+                            <i class="ti ti-arrows-exchange"></i>
+                        </div>
+                        <span class="col-title col-title--red">Request-Response</span>
+                    </div>
+
+                    <div class="row-item">
+                        <i class="ti ti-link"></i>
+                        <span class="row-text"><strong>Musi wiedzieć</strong>, kogo wywołać</span>
+                    </div>
+                    <div class="row-item">
+                        <i class="ti ti-rotate-clockwise"></i>
+                        <span class="row-text">Pyta <strong>czy coś się zmieniło</strong></span>
+                    </div>
+                    <div class="row-item">
+                        <i class="ti ti-trending-up"></i>
+                        <span class="row-text"><strong>Trudna</strong> obsługa ruchu skokowego</span>
+                    </div>
+                    <div class="row-item">
+                        <i class="ti ti-code"></i>
+                        <span class="row-text">Zmiana = <strong>przeróbka źródła</strong></span>
+                    </div>
+                </div>
+
+                <!-- Separator -->
+                <div class="separator">
+                    <div class="separator-line"></div>
+                    <div class="separator-badge">vs</div>
+                    <div class="separator-line"></div>
+                </div>
+
+                <!-- Right column: Event-Driven -->
+                <div class="col col--right">
+                    <div class="col-header col-header--right">
+                        <div class="col-icon col-icon--green">
+                            <i class="ti ti-bolt"></i>
+                        </div>
+                        <span class="col-title col-title--green">Event-Driven</span>
+                    </div>
+
+                    <div class="row-item">
+                        <i class="ti ti-send"></i>
+                        <span class="row-text"><strong>Publikuje fakt</strong> do brokera</span>
+                    </div>
+                    <div class="row-item">
+                        <i class="ti ti-bell-ringing"></i>
+                        <span class="row-text">Reaguje, gdy zmiana <strong>faktycznie nastąpi</strong></span>
+                    </div>
+                    <div class="row-item">
+                        <i class="ti ti-arrows-split-2"></i>
+                        <span class="row-text">Naturalny <strong>fan-out</strong> i buforowanie</span>
+                    </div>
+                    <div class="row-item">
+                        <i class="ti ti-plug-connected"></i>
+                        <span class="row-text">Zmiana = <strong>nowy konsument</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

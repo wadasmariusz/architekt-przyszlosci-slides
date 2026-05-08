@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Trzy sposoby na zdarzenie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 18%; left: 8%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 65%; left: 88%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 35%; left: 72%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 78%; left: 18%; animation-delay: 4.8s; }
+        .particle:nth-child(7) { top: 48%; left: 52%; animation-delay: 6.2s; }
+        .particle:nth-child(8) { top: 25%; left: 62%; animation-delay: 1.2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 0 110px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto 40px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            color: #ffffff;
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            font-size: 22px;
+            font-weight: 300;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        /* === Cards === */
+        .cards {
+            display: flex;
+            gap: 36px;
+            width: 100%;
+            max-width: 1700px;
+            margin: 0 auto;
+        }
+
+        .card {
+            flex: 1;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            padding: 36px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            transition: border-color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.06);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.12);
+        }
+
+        .card:nth-child(1) { animation: fadeUp 0.7s ease-out 0.8s forwards; }
+        .card:nth-child(2) { animation: fadeUp 0.7s ease-out 1.0s forwards; }
+        .card:nth-child(3) { animation: fadeUp 0.7s ease-out 1.2s forwards; }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-num {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .card:nth-child(1) .card-num {
+            background: #164e63;
+            color: #22d3ee;
+            border: 1px solid rgba(139,92,246,0.3);
+        }
+
+        .card:nth-child(2) .card-num {
+            background: #164e63;
+            color: #22d3ee;
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+
+        .card:nth-child(3) .card-num {
+            background: #164e63;
+            color: #22d3ee;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .card-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .card-desc {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* === Meta rows === */
+        .card-meta {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .meta-label {
+            color: #64748b;
+            min-width: 110px;
+            flex-shrink: 0;
+        }
+
+        .meta-value {
+            color: var(--text-muted);
+        }
+
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 12px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .chip-low {
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.25);
+            color: #34d399;
+        }
+
+        .chip-mid {
+            background: rgba(245,158,11,0.1);
+            border: 1px solid rgba(245,158,11,0.25);
+            color: #fbbf24;
+        }
+
+        .chip-high {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.25);
+            color: #f87171;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                 <h1 class="title">Trzy <span class="highlight">sposoby</span> na zdarzenie</h1>
+                <div class="subtitle">wg Martina Fowlera</div>
+            </div>
+
+            <div class="cards">
+                <!-- Card 1: Event Notification -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-num">1</div>
+                        <div class="card-title">Event Notification</div>
+                    </div>
+                    <div class="card-desc">
+                        Minimalna informacja.</br>Odbiorca sam dociąga szczegóły ze źródła.
+                    </div>
+                    <div class="card-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">Dane w evencie</span>
+                            <span class="meta-chip chip-low">minimalne</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Callback</span>
+                            <span class="meta-value">tak</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Złożoność</span>
+                            <span class="meta-chip chip-low">niska</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Event-Carried State Transfer -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-num">2</div>
+                        <div class="card-title">Event-Carried State Transfer</div>
+                    </div>
+                    <div class="card-desc">
+                        <strong>Pełny stan</strong> w samym zdarzeniu.</br> Konsument ma wszystko, czego potrzebuje.
+                    </div>
+                    <div class="card-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">Dane w evencie</span>
+                            <span class="meta-chip chip-mid">pełne</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Callback</span>
+                            <span class="meta-value">nie</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Złożoność</span>
+                            <span class="meta-chip chip-mid">średnia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Event Sourcing -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-num">3</div>
+                        <div class="card-title">Event Sourcing</div>
+                    </div>
+                    <div class="card-desc">
+                        Zdarzenia są <strong>źródłem prawdy</strong>.</br>Stan odtwarzany z pełnej historii zdarzeń.
+                    </div>
+                    <div class="card-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">Dane w evencie</span>
+                            <span class="meta-chip chip-high">pełne + historia</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Callback</span>
+                            <span class="meta-value">nie</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Złożoność</span>
+                            <span class="meta-chip chip-high">wysoka</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
