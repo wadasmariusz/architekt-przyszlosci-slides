@@ -131,7 +131,7 @@
         .header {
             text-align: center;
             max-width: 1180px;
-            margin: 0 auto 36px;
+            margin: 0 auto 28px;
         }
 
         .eyebrow {
@@ -183,9 +183,10 @@
             grid-template-columns: 1fr 60px 1fr;
             gap: 0;
             flex: 1;
-            align-items: center;
+            align-items: flex-start;
             max-width: 1500px;
             margin: 0 auto;
+            padding-top: 44px;
             width: 100%;
         }
 
@@ -193,7 +194,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 24px;
+            gap: 18px;
             opacity: 0;
         }
 
@@ -315,19 +316,39 @@
 
         /* === Architecture tags === */
         .arch-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 4px;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+            max-width: 580px;
+            padding: 0 10px 18px;
+        }
+
+        .arch-tags::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            height: 18px;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, rgba(148,163,184,0.35), transparent);
         }
 
         .arch-tag {
-            padding: 8px 18px;
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            min-height: 58px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+            line-height: 1.15;
+            box-shadow: 0 14px 40px rgba(0,0,0,0.18);
         }
 
         .arch-tag.layered {
@@ -458,6 +479,10 @@
                         <i class="ti ti-settings"></i>
                         Podział techniczny
                     </div>
+                    <div class="arch-tags">
+                        <span class="arch-tag layered">Layered</span>
+                        <span class="arch-tag event">Event-driven</span>
+                    </div>
                     <div class="box-diagram">
                         <div class="box-stack">
                             <div class="box-row tech">
@@ -478,10 +503,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="arch-tags">
-                        <span class="arch-tag layered">Layered</span>
-                        <span class="arch-tag event">Event-driven</span>
-                    </div>
                 </div>
 
                 <!-- Separator -->
@@ -496,6 +517,10 @@
                     <div class="panel-label domain">
                         <i class="ti ti-building-community"></i>
                         Podział domenowy
+                    </div>
+                    <div class="arch-tags">
+                        <span class="arch-tag modular">Modular monolith</span>
+                        <span class="arch-tag micro">Microservices</span>
                     </div>
                     <div class="box-diagram">
                         <div class="box-stack">
@@ -516,10 +541,6 @@
                                 <span>Wysyłka</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="arch-tags">
-                        <span class="arch-tag modular">Modular monolith</span>
-                        <span class="arch-tag micro">Microservices</span>
                     </div>
                 </div>
             </div>
