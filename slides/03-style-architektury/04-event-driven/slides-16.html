@@ -315,12 +315,8 @@
 
         <div class="content">
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-alert-octagon"></i>
-                    Antypatterns
-                </div>
-                <h1 class="title">Czego <span class="highlight-rose">unikać</span> przy wdrażaniu EDA</h1>
-                <div class="subtitle">Skondensowane pułapki, które powtarzają się w projektach</div>
+
+                <h1 class="title">Najczęstsze  <span class="highlight-rose">błędy</span></h1>
             </div>
 
             <div class="mistakes-grid">
@@ -329,7 +325,7 @@
                     <div class="mistake-num">1</div>
                     <div class="mistake-text">
                         <div class="mistake-title">Synchroniczne myślenie</div>
-                        <div class="mistake-desc">Projektowanie EDA tak, jakby był <strong>request-response</strong> — czekanie na odpowiedź po publikacji</div>
+                        <div class="mistake-desc">Projektowanie <strong>request-response</strong> i czekanie na odpowiedź po publikacji</div>
                     </div>
                 </div>
 
@@ -338,7 +334,7 @@
                     <div class="mistake-num">2</div>
                     <div class="mistake-text">
                         <div class="mistake-title">Brak idempotencji</div>
-                        <div class="mistake-desc">Dwa e-maile, podwójne obciążenie karty — <strong>ponowne dostarczenie</strong> musi być bezpieczne</div>
+                        <div class="mistake-desc"><strong>Ponowne dostarczenie</strong> musi być bezpieczne</div>
                     </div>
                 </div>
 
@@ -347,7 +343,7 @@
                     <div class="mistake-num">3</div>
                     <div class="mistake-text">
                         <div class="mistake-title">Dual write</div>
-                        <div class="mistake-desc">Zapis do bazy i publikacja zdarzenia <strong>bez atomowości</strong> — dane rozjadą się po awarii</div>
+                        <div class="mistake-desc">Zapis do bazy i publikacja zdarzenia <strong>bez atomowości</strong></div>
                     </div>
                 </div>
 
@@ -365,7 +361,7 @@
                     <div class="mistake-num">5</div>
                     <div class="mistake-text">
                         <div class="mistake-title">Brak dead-letter queue</div>
-                        <div class="mistake-desc">Niedostarczone zdarzenia znikają <strong>bezpowrotnie</strong> — bez DLQ tracisz widoczność</div>
+                        <div class="mistake-desc">Niedostarczone zdarzenia znikają <strong>bezpowrotnie</strong></div>
                     </div>
                 </div>
 
@@ -374,16 +370,7 @@
                     <div class="mistake-num">6</div>
                     <div class="mistake-text">
                         <div class="mistake-title">God consumer</div>
-                        <div class="mistake-desc">Jeden <strong>wielki konsument</strong> sterujący wszystkim — negacja idei luźnego sprzężenia</div>
-                    </div>
-                </div>
-
-                <!-- 7 -->
-                <div class="mistake">
-                    <div class="mistake-num">7</div>
-                    <div class="mistake-text">
-                        <div class="mistake-title">Mylenie EDA z Event Sourcing</div>
-                        <div class="mistake-desc">To <strong>różne wzorce</strong> — EDA to styl komunikacji, ES to sposób przechowywania stanu</div>
+                        <div class="mistake-desc"><strong>Negacja</strong> idei luźnego sprzężenia</div>
                     </div>
                 </div>
             </div>
