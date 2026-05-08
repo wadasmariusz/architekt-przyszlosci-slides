@@ -275,14 +275,14 @@
         .strategies {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .strategy-card {
             display: flex;
             align-items: flex-start;
             gap: 20px;
-            padding: 24px 28px;
+            padding: 20px 28px;
             border-radius: 18px;
             background: rgba(17,24,39,0.6);
             border: 1px solid rgba(255,255,255,0.08);
@@ -291,8 +291,9 @@
         }
 
         .strategy-card:nth-child(1) { animation: fadeUp 0.7s ease-out 1.0s forwards; }
-        .strategy-card:nth-child(2) { animation: fadeUp 0.7s ease-out 1.3s forwards; }
-        .strategy-card:nth-child(3) { animation: fadeUp 0.7s ease-out 1.6s forwards; }
+        .strategy-card:nth-child(2) { animation: fadeUp 0.7s ease-out 1.2s forwards; }
+        .strategy-card:nth-child(3) { animation: fadeUp 0.7s ease-out 1.4s forwards; }
+        .strategy-card:nth-child(4) { animation: fadeUp 0.7s ease-out 1.6s forwards; }
 
         .strategy-icon {
             flex: 0 0 auto;
@@ -305,9 +306,14 @@
             font-size: 26px;
         }
 
-        .strategy-icon--mono {
+        .strategy-icon--layered {
             background: rgba(245,158,11,0.1);
             color: #f59e0b;
+        }
+
+        .strategy-icon--mono {
+            background: rgba(34,211,238,0.1);
+            color: var(--cyan-400);
         }
 
         .strategy-icon--micro {
@@ -320,11 +326,37 @@
             color: #10b981;
         }
 
+        .strategy-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .strategy-heading {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 6px;
+        }
+
         .strategy-name {
             font-size: 18px;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 6px;
+        }
+
+        .strategy-rating {
+            display: flex;
+            gap: 3px;
+            margin-left: auto;
+            color: #f59e0b;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .strategy-rating .star-off {
+            color: rgba(255,255,255,0.16);
         }
 
         .strategy-text {
@@ -427,13 +459,12 @@
         <div class="corner corner--br"></div>
 
         <div class="content">
+            <div class="eyebrow">
+                <i class="ti ti-test-pipe"></i>
+                Porównanie stylów
+            </div>
             <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-activity"></i>
-                    Elasticity
-                </div>
                 <h1 class="title"><span class="highlight">Elasticity</span> pod ruchem</h1>
-                <p class="subtitle">Nie „ile maksymalnie", lecz „jak szybko i efektywnie reagujesz na chwilowy pik obciążenia"</p>
             </div>
 
             <div class="main-area">
@@ -466,13 +497,29 @@
                 <!-- Strategy cards -->
                 <div class="strategies">
                     <div class="strategy-card">
-                        <div class="strategy-icon strategy-icon--mono">
+                        <div class="strategy-icon strategy-icon--layered">
                             <i class="ti ti-stack-2"></i>
                         </div>
-                        <div>
-                            <div class="strategy-name">Monolit</div>
-                            <div class="strategy-text">
-                                <strong>Zwiększamy instancje całej aplikacji</strong> — każda replika zawiera wszystkie moduły, nawet te bez obciążenia
+                        <div class="strategy-body">
+                            <div class="strategy-heading">
+                                <div class="strategy-name">Layered</div>
+                                <div class="strategy-rating" aria-label="Ocena: 1 z 5">
+                                    <span>★</span><span class="star-off">★</span><span class="star-off">★</span><span class="star-off">★</span><span class="star-off">★</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="strategy-card">
+                        <div class="strategy-icon strategy-icon--mono">
+                            <i class="ti ti-puzzle"></i>
+                        </div>
+                        <div class="strategy-body">
+                            <div class="strategy-heading">
+                                <div class="strategy-name">Monolit modularny</div>
+                                <div class="strategy-rating" aria-label="Ocena: 1 z 5">
+                                    <span>★</span><span class="star-off">★</span><span class="star-off">★</span><span class="star-off">★</span><span class="star-off">★</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -481,10 +528,12 @@
                         <div class="strategy-icon strategy-icon--micro">
                             <i class="ti ti-hexagons"></i>
                         </div>
-                        <div>
-                            <div class="strategy-name">Mikroserwisy</div>
-                            <div class="strategy-text">
-                                <strong>Doskalowujemy przeciążony fragment</strong> — tylko serwis pod presją dostaje nowe instancje, reszta bez zmian
+                        <div class="strategy-body">
+                            <div class="strategy-heading">
+                                <div class="strategy-name">Mikroserwisy</div>
+                                <div class="strategy-rating" aria-label="Ocena: 4 z 5">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span class="star-off">★</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -493,21 +542,15 @@
                         <div class="strategy-icon strategy-icon--event">
                             <i class="ti ti-bolt"></i>
                         </div>
-                        <div>
-                            <div class="strategy-name">Event-driven</div>
-                            <div class="strategy-text">
-                                <strong>Kolejka jako bufor + doskalowanie konsumentów</strong> — pik trafia do kolejki, konsumenci przetwarzają we własnym tempie
+                        <div class="strategy-body">
+                            <div class="strategy-heading">
+                                <div class="strategy-name">Event-driven</div>
+                                <div class="strategy-rating" aria-label="Ocena: 3 z 5">
+                                    <span>★</span><span>★</span><span>★</span><span class="star-off">★</span><span class="star-off">★</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Bottom note -->
-            <div class="bottom-note">
-                <div class="note-box">
-                    <i class="ti ti-cpu"></i>
-                    Elasticity to <strong>efektywne wykorzystanie zasobów</strong>, nie tylko maksymalny throughput
                 </div>
             </div>
         </div>

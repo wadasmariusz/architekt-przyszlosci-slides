@@ -250,6 +250,19 @@
         .card:nth-child(3) .card-label { color: #34d399; }
         .card:nth-child(4) .card-label { color: #f59e0b; }
 
+        .card-rating {
+            display: flex;
+            gap: 5px;
+            color: rgba(148,163,184,0.28);
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .card-rating .is-filled {
+            color: var(--cyan-400);
+            text-shadow: 0 0 14px rgba(34,211,238,0.28);
+        }
+
         .card-name {
             font-size: 24px;
             font-weight: 800;
@@ -418,6 +431,13 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-stack-2"></i></div>
                     <div class="card-label">Layered</div>
+                    <div class="card-rating" aria-label="Ocena: 1 z 5">
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                    </div>
                     <div class="card-name">Wdrażamy całość</div>
                     <div class="card-desc">Każda zmiana wymaga <strong>redeployu całej aplikacji</strong>. Długi cykl testów i wdrożeń.</div>
                 </div>
@@ -426,6 +446,13 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-puzzle"></i></div>
                     <div class="card-label">Monolit modularny</div>
+                    <div class="card-rating" aria-label="Ocena: 2 z 5">
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                    </div>
                     <div class="card-name">Wspólny deployment</div>
                     <div class="card-desc">Nadal zwykle <strong>jeden artefakt</strong>, ale lepsza izolacja zmian wewnątrz modułów.</div>
                 </div>
@@ -434,6 +461,13 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-hexagons"></i></div>
                     <div class="card-label">Mikroserwisy</div>
+                    <div class="card-rating" aria-label="Ocena: 5 z 5">
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled is-filled"></i>
+                    </div>
                     <div class="card-name">Niezależny deploy</div>
                     <div class="card-desc">Wdrożenie <strong>tylko zmienionego serwisu</strong>. Krótszy lead time, szybsze dostarczanie.</div>
                 </div>
@@ -442,6 +476,13 @@
                 <div class="card">
                     <div class="card-icon"><i class="ti ti-bolt"></i></div>
                     <div class="card-label">Event-driven</div>
+                    <div class="card-rating" aria-label="Ocena: 3 z 5">
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled is-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                        <i class="ti ti-star-filled"></i>
+                    </div>
                     <div class="card-name">Niezależność + kontrakty</div>
                     <div class="card-desc">Większa niezależność, ale konieczna <strong>zgodność komunikatów i schematów</strong>.</div>
                 </div>

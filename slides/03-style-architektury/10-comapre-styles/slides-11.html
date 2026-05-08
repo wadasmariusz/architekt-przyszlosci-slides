@@ -213,6 +213,16 @@
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
 
+        .star-rating {
+            margin-left: auto;
+            display: flex;
+            gap: 3px;
+            font-size: 18px;
+        }
+
+        .star-rating .ti-star-filled { opacity: 1; }
+        .star-rating .ti-star { opacity: 0.25; }
+
         .system-header i { font-size: 26px; }
 
         .system-header--mono {
@@ -265,6 +275,7 @@
             align-items: center;
             gap: 10px;
             margin-top: auto;
+            margin-bottom: -12px;
         }
 
         .block {
@@ -415,11 +426,10 @@
         <div class="content">
             <div class="header">
                 <div class="eyebrow">
-                    <i class="ti ti-arrows-maximize"></i>
-                    Scalability
+                    <i class="ti ti-test-pipe"></i>
+                    Porównanie stylów
                 </div>
-                <h1 class="title"><span class="highlight">Skalowalność</span></h1>
-                <p class="subtitle">Porównanie sposobu skalowania — cała aplikacja vs konkretny hot spot vs buforowanie wolumenu</p>
+                <h1 class="title"><span class="">Skalowalność</span></h1>
             </div>
 
             <div class="diagram">
@@ -428,11 +438,14 @@
                     <div class="system-header system-header--mono">
                         <i class="ti ti-stack-2"></i>
                         Layered / Monolit modularny
+                        <span class="star-rating">
+                            <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
+                        </span>
                     </div>
                     <div class="system-body">
                         <div class="strategy-label">Strategia</div>
                         <div class="strategy-desc">
-                            <strong>Skalowanie całej aplikacji</strong> — wszystkie moduły rosną razem, niezależnie od tego, który jest wąskim gardłem
+                            <strong>Skalowanie całej aplikacji</strong>: wszystkie moduły rosną razem, niezależnie od tego, który jest wąskim gardłem
                         </div>
                         <div class="hotspot-visual">
                             <div class="block block--normal">Katalog</div>
@@ -440,7 +453,7 @@
                             <div class="block block--hot block--hot-mono">Raporty</div>
                             <div class="block block--normal">Wysyłka</div>
                         </div>
-                        <div class="strategy-desc" style="font-size:15px; margin-top:4px;">
+                        <div class="strategy-desc" style="font-size:15px; margin-top:-4px;">
                             <i class="ti ti-arrow-up scale-arrow" style="color:#f59e0b;"></i>
                             Skalujesz <strong>cały monolit</strong>, nawet jeśli obciążony jest tylko jeden moduł
                         </div>
@@ -452,11 +465,14 @@
                     <div class="system-header system-header--micro">
                         <i class="ti ti-hexagons"></i>
                         Mikroserwisy
+                        <span class="star-rating">
+                            <i class="ti ti-star-filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
+                        </span>
                     </div>
                     <div class="system-body">
                         <div class="strategy-label">Strategia</div>
                         <div class="strategy-desc">
-                            <strong>Skalowanie konkretnego hot spotu</strong> — zwiększasz instancje tylko przeciążonego serwisu
+                            <strong>Skalowanie konkretnego hot spotu</strong>: zwiększasz instancje tylko przeciążonego serwisu
                         </div>
                         <div class="hotspot-visual">
                             <div class="block block--normal">Katalog</div>
@@ -464,9 +480,9 @@
                             <div class="block block--hot block--hot-micro">Raporty ×3</div>
                             <div class="block block--normal">Wysyłka</div>
                         </div>
-                        <div class="strategy-desc" style="font-size:15px; margin-top:4px;">
+                        <div class="strategy-desc" style="font-size:15px; margin-top:-4px;">
                             <i class="ti ti-arrow-up scale-arrow" style="color:#8b5cf6;"></i>
-                            <strong>Precyzyjne skalowanie</strong> — zasoby trafiają tam, gdzie są potrzebne
+                            <strong>Precyzyjne skalowanie</strong>: zasoby trafiają tam, gdzie są potrzebne
                         </div>
                     </div>
                 </div>
@@ -476,20 +492,23 @@
                     <div class="system-header system-header--event">
                         <i class="ti ti-bolt"></i>
                         Event-driven
+                        <span class="star-rating">
+                            <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
+                        </span>
                     </div>
                     <div class="system-body">
                         <div class="strategy-label">Strategia</div>
                         <div class="strategy-desc">
-                            <strong>Obsługa dużego wolumenu i skoków ruchu</strong> — kolejka buforuje pik, konsumenci przetwarzają we własnym tempie
+                            <strong>Obsługa dużego wolumenu i skoków ruchu</strong>: kolejka buforuje pik, konsumenci przetwarzają we własnym tempie
                         </div>
                         <div class="hotspot-visual">
                             <div class="block block--normal">Producent</div>
                             <div class="block block--hot block--hot-event">Kolejka</div>
                             <div class="block block--hot block--hot-event">Kons. ×N</div>
                         </div>
-                        <div class="strategy-desc" style="font-size:15px; margin-top:4px;">
+                        <div class="strategy-desc" style="font-size:15px; margin-top:-4px;">
                             <i class="ti ti-arrow-up scale-arrow" style="color:#10b981;"></i>
-                            <strong>Bufor + elastyczne konsumenty</strong> — naturalnie absorbuje skoki obciążenia
+                            <strong>Bufor + elastyczne konsumenty</strong>: naturalnie absorbuje skoki obciążenia
                         </div>
                     </div>
                 </div>
