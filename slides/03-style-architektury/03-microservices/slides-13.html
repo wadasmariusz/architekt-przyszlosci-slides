@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 13 - Zaleta #2: Blast radius</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --rose: #f43f5e;
+            --red: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 750px;
+            height: 750px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 22%; animation-delay: 0.5s; }
+        .particle:nth-child(4) { top: 72%; left: 82%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 28%; left: 68%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 78%; left: 12%; animation-delay: 5.0s; }
+        .particle:nth-child(7) { top: 55%; left: 48%; animation-delay: 6.5s; }
+        .particle:nth-child(8) { top: 18%; left: 42%; animation-delay: 2.2s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding:150px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 48px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            margin-top: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.45s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            margin-top: 12px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        /* === Scenario === */
+        .scenario {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .scenario-left {
+            flex: 0 0 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
+        }
+
+        .scenario-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 4px;
+        }
+
+        .scenario-card {
+            padding: 22px 28px;
+            border-radius: 16px;
+            background: rgba(239,68,68,0.06);
+            border: 1px solid rgba(239,68,68,0.2);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .scenario-card i {
+            font-size: 36px;
+            color: var(--red);
+            flex-shrink: 0;
+        }
+
+        .scenario-card span {
+            font-size: 1.35rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .scenario-card strong {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* === Services grid === */
+        .services-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.9s forwards;
+        }
+
+        .service {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 28px 16px;
+            border-radius: 18px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .service--ok {
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.25);
+        }
+
+        .service--down {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.35);
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .service--ok .service-icon {
+            background: rgba(16,185,129,0.12);
+            color: var(--green);
+        }
+
+        .service--down .service-icon {
+            background: rgba(239,68,68,0.15);
+            color: var(--red);
+            animation: iconShake 2s ease-in-out infinite;
+        }
+
+        @keyframes iconShake {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-3px) rotate(-2deg); }
+            20% { transform: translateX(3px) rotate(2deg); }
+            30% { transform: translateX(-2px); }
+            40% { transform: translateX(0); }
+        }
+
+        .service-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .service-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
+
+        .service--ok .service-status {
+            color: var(--green);
+            background: rgba(16,185,129,0.1);
+        }
+
+        .service--down .service-status {
+            color: var(--red);
+            background: rgba(239,68,68,0.1);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .service--ok .status-dot {
+            background: var(--green);
+            animation: statusPulseGreen 2s ease-in-out infinite;
+        }
+
+        .service--down .status-dot {
+            background: var(--red);
+            animation: statusPulseRed 1.2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulseGreen {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+            50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+        }
+
+        @keyframes statusPulseRed {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+            50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+        }
+
+        /* Fire particles on down service */
+        .service--down::before,
+        .service--down::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--red);
+            opacity: 0;
+        }
+
+        .service--down::before {
+            top: 10px;
+            left: 30%;
+            animation: fireParticle 1.8s ease-out infinite;
+        }
+
+        .service--down::after {
+            top: 15px;
+            right: 30%;
+            animation: fireParticle 1.8s ease-out 0.6s infinite;
+        }
+
+        @keyframes fireParticle {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-30px) scale(0.3); }
+        }
+
+        /* === Result row === */
+        .result-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 38px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.3s forwards;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .result-item--down {
+            background: rgba(239,68,68,0.06);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: var(--red);
+        }
+
+        .result-item--ok {
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.2);
+            color: var(--green);
+        }
+
+        .result-item i {
+            font-size: 22px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="title"><span class="highlight">Izolacja</span> błędów </div>
+            </div>
+
+            <div class="scenario">
+                <div class="scenario-left">
+                    <div class="scenario-card">
+                        <i class="ti ti-bug"></i>
+                        <span>Moduł raportów ma <strong>wyciek pamięci</strong>. Stary kod, nikt go nie tykał od lat.</span>
+                    </div>
+                </div>
+
+                <div class="services-grid">
+                    <div class="service service--down">
+                        <div class="service-icon"><i class="ti ti-chart-bar"></i></div>
+                        <div class="service-name">Raporty</div>
+                        <div class="service-status">
+                            <span class="status-dot"></span>
+                            DOWN
+                        </div>
+                    </div>
+                    <div class="service service--ok">
+                        <div class="service-icon"><i class="ti ti-shopping-cart"></i></div>
+                        <div class="service-name">Zamówienia</div>
+                        <div class="service-status">
+                            <span class="status-dot"></span>
+                            OK
+                        </div>
+                    </div>
+                    <div class="service service--ok">
+                        <div class="service-icon"><i class="ti ti-credit-card"></i></div>
+                        <div class="service-name">Płatności</div>
+                        <div class="service-status">
+                            <span class="status-dot"></span>
+                            OK
+                        </div>
+                    </div>
+                    <div class="service service--ok">
+                        <div class="service-icon"><i class="ti ti-bell"></i></div>
+                        <div class="service-name">Powiadomi&shy;enia</div>
+                        <div class="service-status">
+                            <span class="status-dot"></span>
+                            OK
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-row">
+                <div class="result-item result-item--down">
+                    <i class="ti ti-x"></i>
+                    Sypie się serwis raportów
+                </div>
+                <div class="result-item result-item--ok">
+                    <i class="ti ti-check"></i>
+                    Zamówienia obsługują użytkowników normalnie
+                </div>
+                <div class="result-item result-item--ok">
+                    <i class="ti ti-check"></i>
+                    Płatności obsługują użytkowników normalnie
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

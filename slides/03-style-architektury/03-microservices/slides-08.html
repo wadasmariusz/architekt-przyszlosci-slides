@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Problem: 5 zespołów, 1 monolit</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 8%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 72%; left: 88%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 25%; left: 72%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 78%; left: 15%; animation-delay: 4.8s; }
+        .particle:nth-child(7) { top: 45%; left: 52%; animation-delay: 6.2s; }
+        .particle:nth-child(8) { top: 18%; left: 62%; animation-delay: 1.5s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.45s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram section === */
+        .diagram-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 44px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.8s forwards;
+        }
+
+        /* Teams column */
+        .teams {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 22px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .team:nth-child(1) { animation: slideFromLeft 0.6s ease-out 1.0s forwards; }
+        .team:nth-child(2) { animation: slideFromLeft 0.6s ease-out 1.15s forwards; }
+        .team:nth-child(3) { animation: slideFromLeft 0.6s ease-out 1.3s forwards; }
+        .team:nth-child(4) { animation: slideFromLeft 0.6s ease-out 1.45s forwards; }
+        .team:nth-child(5) { animation: slideFromLeft 0.6s ease-out 1.6s forwards; }
+
+        .team-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+        }
+
+        .team:nth-child(1) .team-icon { background: rgba(34,211,238,0.15); color: #22d3ee; }
+        .team:nth-child(2) .team-icon { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        .team:nth-child(3) .team-icon { background: rgba(16,185,129,0.15); color: #10b981; }
+        .team:nth-child(4) .team-icon { background: rgba(245,158,11,0.15); color: #f59e0b; }
+        .team:nth-child(5) .team-icon { background: rgba(244,63,94,0.15); color: #f43f5e; }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .team-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .team-size {
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        /* Arrows */
+        .arrows-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            position: relative;
+        }
+
+        .arrows-area svg {
+            width: 180px;
+            height: 360px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.8s forwards;
+        }
+
+        .arrow-line {
+            stroke: rgba(148,163,184,0.3);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: drawLink 1s ease-out 2.0s forwards;
+        }
+
+        .arrow-head {
+            fill: rgba(148,163,184,0.4);
+            opacity: 0;
+            animation: fadeIn 0.4s ease-out 2.8s forwards;
+        }
+
+        /* Monolith */
+        .monolith {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+            animation: scaleIn 0.8s ease-out 1.7s forwards;
+        }
+
+        .monolith-block {
+            width: 260px;
+            height: 340px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.8);
+            border: 2px solid rgba(239,68,68,0.25);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(239,68,68,0.08);
+        }
+
+        .monolith-block::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 24px;
+            border: 1px solid rgba(239,68,68,0.08);
+        }
+
+        .monolith-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(239,68,68,0.1);
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        .monolith-label {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .monolith-modules {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 80%;
+        }
+
+        .monolith-module {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            font-size: 16px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* Question */
+        .question {
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 2.8s forwards;
+        }
+
+        .question-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            padding: 22px 44px;
+            border-radius: 16px;
+            background: rgba(245,158,11,0.06);
+            border: 1px solid rgba(245,158,11,0.2);
+        }
+
+        .question-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(245,158,11,0.12);
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+        }
+
+        .question-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: #f59e0b;
+            text-align: left;
+            font-style: italic;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes drawLink {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="title">5 zespołów i  <span class="highlight">1 monolit</span></div>
+            </div>
+
+            <div class="diagram-area">
+                <!-- Teams -->
+                <div class="teams">
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-shopping-cart"></i></div>
+                        <div class="team-info">
+                            <span class="team-name">Zamówienia</span>
+                            <span class="team-size">5 osób</span>
+                        </div>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-credit-card"></i></div>
+                        <div class="team-info">
+                            <span class="team-name">Płatności</span>
+                            <span class="team-size">5 osób</span>
+                        </div>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-list-search"></i></div>
+                        <div class="team-info">
+                            <span class="team-name">Katalog</span>
+                            <span class="team-size">5 osób</span>
+                        </div>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-truck-delivery"></i></div>
+                        <div class="team-info">
+                            <span class="team-name">Dostawy</span>
+                            <span class="team-size">5 osób</span>
+                        </div>
+                    </div>
+                    <div class="team">
+                        <div class="team-icon"><i class="ti ti-bell"></i></div>
+                        <div class="team-info">
+                            <span class="team-name">Powiadomienia</span>
+                            <span class="team-size">5 osób</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrows SVG -->
+                <div class="arrows-area">
+                    <svg viewBox="0 0 180 360">
+                        <line class="arrow-line" x1="0" y1="36" x2="160" y2="180" />
+                        <line class="arrow-line" x1="0" y1="108" x2="160" y2="180" />
+                        <line class="arrow-line" x1="0" y1="180" x2="160" y2="180" />
+                        <line class="arrow-line" x1="0" y1="252" x2="160" y2="180" />
+                        <line class="arrow-line" x1="0" y1="324" x2="160" y2="180" />
+                        <polygon class="arrow-head" points="155,172 170,180 155,188" />
+                    </svg>
+                </div>
+
+                <!-- Monolith -->
+                <div class="monolith">
+                    <div class="monolith-block">
+                        <div class="monolith-icon"><i class="ti ti-box"></i></div>
+                        <div class="monolith-label">MONOLIT</div>
+                        <div class="monolith-modules">
+                            <div class="monolith-module">Wspólny deploy</div>
+                            <div class="monolith-module">Wspólny pipeline</div>
+                            <div class="monolith-module">Jeden artefakt</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
