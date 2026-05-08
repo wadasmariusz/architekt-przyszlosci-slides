@@ -186,6 +186,7 @@
             max-width: 1500px;
             width: 100%;
             flex: 1;
+            margin-top: -56px;
             align-items: center;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.85s forwards;
@@ -280,7 +281,7 @@
 
         .strategy-card {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 20px;
             padding: 20px 28px;
             border-radius: 18px;
@@ -327,27 +328,34 @@
         }
 
         .strategy-body {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas:
+                "name rating"
+                "text rating";
+            align-items: center;
+            column-gap: 18px;
             flex: 1;
             min-width: 0;
         }
 
         .strategy-heading {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 6px;
+            display: contents;
         }
 
         .strategy-name {
+            grid-area: name;
             font-size: 18px;
             font-weight: 700;
             color: #ffffff;
+            margin-bottom: 6px;
         }
 
         .strategy-rating {
+            grid-area: rating;
+            align-self: center;
             display: flex;
             gap: 3px;
-            margin-left: auto;
             color: #f59e0b;
             font-size: 19px;
             font-weight: 700;
@@ -360,6 +368,7 @@
         }
 
         .strategy-text {
+            grid-area: text;
             font-size: 17px;
             font-weight: 300;
             color: var(--text-muted);

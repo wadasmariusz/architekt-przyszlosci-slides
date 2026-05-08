@@ -5,25 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slide 11 - Skalowalność</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
-            --cyan-600: #0891b2;
-            --cyan-700: #0e7490;
-            --cyan-900: #164e63;
-            --dark-bg: #030712;
-            --dark-surface: #111827;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg: #05070f;
+            --panel: rgba(14, 20, 34, 0.78);
+            --panel-strong: rgba(20, 29, 48, 0.92);
+            --line: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --muted: #9aa7bb;
+            --cyan: #22d3ee;
+            --amber: #f59e0b;
+            --emerald: #10b981;
+            --violet: #8b5cf6;
+            --rose: #fb7185;
+            --star: #ffd166;
+            --empty-star: rgba(255, 255, 255, 0.18);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: var(--dark-bg);
-            color: var(--text-main);
+            background: var(--bg);
+            color: var(--text);
             font-family: 'Inter', sans-serif;
             overflow: hidden;
         }
@@ -33,351 +37,304 @@
             height: 1080px;
             position: relative;
             overflow: hidden;
-            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background:
+                radial-gradient(circle at 20% 12%, rgba(34, 211, 238, 0.16), transparent 32%),
+                radial-gradient(circle at 79% 23%, rgba(251, 113, 133, 0.1), transparent 28%),
+                linear-gradient(135deg, #060816 0%, #0b1020 54%, #05070f 100%);
         }
 
-        .bg-grid {
+        .stage::before {
+            content: '';
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridMove 20s linear infinite;
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 88%);
         }
 
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
-        }
-
-        .bg-glow {
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: bgPulse 6s ease-in-out infinite;
-        }
-
-        @keyframes bgPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--cyan-400);
-            opacity: 0;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .particle:nth-child(3) { top: 18%; left: 8%; animation-delay: 0.3s; }
-        .particle:nth-child(4) { top: 72%; left: 78%; animation-delay: 1.8s; }
-        .particle:nth-child(5) { top: 28%; left: 65%; animation-delay: 3.2s; }
-        .particle:nth-child(6) { top: 82%; left: 18%; animation-delay: 5.0s; }
-        .particle:nth-child(7) { top: 45%; left: 48%; animation-delay: 6.5s; }
-        .particle:nth-child(8) { top: 14%; left: 52%; animation-delay: 2.4s; }
-
-        @keyframes float {
-            0% { opacity: 0; transform: translateY(0) scale(1); }
-            20%, 80% { opacity: 0.8; }
-            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
-        }
-
-        .corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            z-index: 1;
-        }
-
-        .corner::before,
-        .corner::after {
+        .stage::after {
             content: '';
             position: absolute;
-            background: var(--cyan-700);
+            left: -12%;
+            right: -12%;
+            bottom: -23%;
+            height: 420px;
+            background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.16), transparent 66%);
+            border-top: 1px solid rgba(34, 211, 238, 0.16);
         }
 
-        .corner--tl { top: 30px; left: 30px; }
-        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
-        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
-
-        .corner--br { bottom: 30px; right: 30px; }
-        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
-        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
-
-        /* === Content === */
         .content {
             position: relative;
-            z-index: 10;
+            z-index: 5;
             width: 100%;
             height: 100%;
-            padding: 80px 130px 160px;
-            display: flex;
-            flex-direction: column;
+            padding: 72px 128px 154px;
+            display: grid;
+            grid-template-columns: 520px 1fr;
+            gap: 72px;
             align-items: center;
         }
 
-        .header {
-            text-align: center;
-            max-width: 1180px;
-            margin: 0 auto 44px;
+        .hero {
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 28px;
         }
 
         .eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 20px;
-            color: var(--cyan-400);
-            font-size: 24px;
-            font-weight: 600;
+            width: fit-content;
+            color: var(--cyan);
+            font-size: 22px;
+            font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.25s forwards;
+            animation: fadeIn 0.7s ease-out 0.15s forwards;
         }
 
         .eyebrow i { font-size: 32px; }
 
-        h1.title {
-            margin-bottom: 14px;
+        h1 {
+            margin-top: 34px;
+            max-width: 490px;
             color: #ffffff;
-            font-size: 68px;
+            font-size: 86px;
             font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -1px;
+            line-height: 0.98;
+            letter-spacing: 0;
             opacity: 0;
-            animation: fadeUp 0.9s ease-out 0.45s forwards;
+            animation: fadeIn 0.75s ease-out 0.3s forwards;
         }
 
-        h1.title .highlight {
-            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: clamp(1rem, 1.8vw, 1.2rem);
+        .lead {
+            margin-top: 28px;
+            max-width: 470px;
+            color: var(--muted);
+            font-size: 25px;
             font-weight: 300;
-            line-height: 1.6;
+            line-height: 1.48;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.65s forwards;
+            animation: fadeIn 0.75s ease-out 0.45s forwards;
         }
 
-        /* === Diagram section === */
-        .diagram {
-            display: flex;
-            gap: 36px;
-            max-width: 1500px;
-            width: 100%;
-            flex: 1;
-            align-items: stretch;
+        .scale-note {
+            margin-top: 54px;
+            width: 456px;
+            padding: 24px 26px;
+            border: 1px solid rgba(34, 211, 238, 0.18);
+            border-radius: 8px;
+            background: rgba(6, 182, 212, 0.07);
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.85s forwards;
+            animation: fadeIn 0.75s ease-out 0.6s forwards;
         }
 
-        /* System box */
-        .system-box {
-            flex: 1;
+        .scale-title {
             display: flex;
-            flex-direction: column;
-            border-radius: 20px;
-            background: rgba(17,24,39,0.6);
-            border: 1px solid rgba(255,255,255,0.08);
+            align-items: center;
+            gap: 12px;
+            color: #dffaff;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scale-title i {
+            color: var(--cyan);
+            font-size: 26px;
+        }
+
+        .scale-copy {
+            margin-top: 12px;
+            color: #bed2e6;
+            font-size: 20px;
+            line-height: 1.45;
+        }
+
+        .board {
+            position: relative;
+            display: grid;
+            grid-template-rows: repeat(4, 1fr);
+            gap: 18px;
+            opacity: 0;
+            animation: slideIn 0.85s ease-out 0.42s forwards;
+        }
+
+        .board::before {
+            content: '';
+            position: absolute;
+            inset: -28px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 42%, rgba(34, 211, 238, 0.08));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: -1;
+        }
+
+        .style-row {
+            position: relative;
+            min-height: 184px;
+            display: grid;
+            grid-template-columns: 112px 290px 1fr 214px;
+            gap: 24px;
+            align-items: center;
+            padding: 22px 26px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: linear-gradient(120deg, var(--panel-strong), var(--panel));
             overflow: hidden;
         }
 
-        .system-header {
-            padding: 20px 28px;
+        .style-row::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 8px;
+            background: var(--accent);
+        }
+
+        .style-row::after {
+            content: '';
+            position: absolute;
+            top: -42px;
+            right: -74px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, color-mix(in srgb, var(--accent) 23%, transparent), transparent 68%);
+            opacity: 0.7;
+        }
+
+        .style-row--layered { --accent: var(--amber); }
+        .style-row--modular { --accent: var(--rose); }
+        .style-row--micro { --accent: var(--violet); }
+        .style-row--event { --accent: var(--emerald); }
+
+        .icon-plate {
+            position: relative;
+            z-index: 2;
+            width: 88px;
+            height: 88px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--accent) 14%, rgba(255, 255, 255, 0.04));
+            border: 1px solid color-mix(in srgb, var(--accent) 34%, rgba(255, 255, 255, 0.1));
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+        }
+
+        .icon-plate i {
+            color: var(--accent);
+            font-size: 48px;
+        }
+
+        .name {
+            position: relative;
+            z-index: 2;
+        }
+
+        .name h2 {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: 0;
+        }
+
+        .name span {
+            display: block;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 17px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+        }
+
+        .insight {
+            position: relative;
+            z-index: 2;
+            color: #dbe7f4;
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 1.34;
+        }
+
+        .insight strong {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .rating {
+            position: relative;
+            z-index: 2;
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .rating-number {
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .stars {
+            display: flex;
+            gap: 7px;
+            color: var(--empty-star);
+            font-size: 31px;
+            line-height: 1;
+        }
+
+        .stars .filled {
+            color: var(--star);
+            text-shadow: 0 0 18px rgba(255, 209, 102, 0.34);
+        }
+
+        .meter {
+            width: 176px;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.11);
+            overflow: hidden;
+        }
+
+        .meter span {
+            display: block;
+            height: 100%;
+            width: calc(var(--score) * 20%);
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--star));
+        }
+
+        .legend {
+            position: absolute;
+            z-index: 6;
+            left: 128px;
+            bottom: 52px;
             display: flex;
             align-items: center;
             gap: 14px;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .star-rating {
-            margin-left: auto;
-            display: flex;
-            gap: 3px;
-            font-size: 18px;
-        }
-
-        .star-rating .ti-star-filled { opacity: 1; }
-        .star-rating .ti-star { opacity: 0.25; }
-
-        .system-header i { font-size: 26px; }
-
-        .system-header--mono {
-            color: #f59e0b;
-            background: rgba(245,158,11,0.06);
-        }
-
-        .system-header--micro {
-            color: #8b5cf6;
-            background: rgba(139,92,246,0.06);
-        }
-
-        .system-header--event {
-            color: #10b981;
-            background: rgba(16,185,129,0.06);
-        }
-
-        .system-body {
-            padding: 24px 28px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .strategy-label {
-            font-size: 14px;
+            color: rgba(248, 250, 252, 0.7);
+            font-size: 17px;
             font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
         }
 
-        .strategy-desc {
-            font-size: 19px;
-            font-weight: 300;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .strategy-desc strong {
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        /* Hotspot visual */
-        .hotspot-visual {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: auto;
-            margin-bottom: -12px;
-        }
-
-        .block {
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.7);
-            letter-spacing: 0.5px;
-        }
-
-        .block--normal {
-            flex: 1;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .block--hot {
-            flex: 1;
-            border: 2px solid;
-            position: relative;
-        }
-
-        .block--hot-mono {
-            background: rgba(245,158,11,0.12);
-            border-color: rgba(245,158,11,0.35);
-            color: #f59e0b;
-        }
-
-        .block--hot-micro {
-            background: rgba(139,92,246,0.12);
-            border-color: rgba(139,92,246,0.35);
-            color: #8b5cf6;
-        }
-
-        .block--hot-event {
-            background: rgba(16,185,129,0.12);
-            border-color: rgba(16,185,129,0.35);
-            color: #10b981;
-        }
-
-        .scale-arrow {
-            font-size: 18px;
-            color: var(--text-muted);
-        }
-
-        /* Examples */
-        .examples {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .example-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 600;
-            background: rgba(6,182,212,0.06);
-            border: 1px solid rgba(6,182,212,0.15);
-            color: var(--cyan-400);
-        }
-
-        .example-tag i { font-size: 15px; }
-
-        /* === Examples row === */
-        .examples-row {
-            max-width: 1500px;
-            width: 100%;
-            margin-top: 28px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.3s forwards;
-        }
-
-        .examples-row-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .examples-row-items {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        /* === Animations === */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
+        .legend i {
+            color: var(--star);
+            font-size: 23px;
         }
 
         .camera-box {
@@ -387,10 +344,10 @@
             width: 480px;
             height: 270px;
             z-index: 100;
-            border: 2px dashed rgba(255,255,255,0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
             border-radius: 12px;
-            background: rgba(0,0,0,0.4);
-            color: rgba(255,255,255,0.3);
+            background: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -407,127 +364,117 @@
             opacity: 0.85;
             pointer-events: none;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(34px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
     </style>
 </head>
 <body>
     <div class="stage" id="stage">
-        <div class="bg-grid"></div>
-        <div class="bg-glow"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-
-        <div class="corner corner--tl"></div>
-        <div class="corner corner--br"></div>
-
-        <div class="content">
-            <div class="header">
+        <main class="content">
+            <section class="hero">
                 <div class="eyebrow">
-                    <i class="ti ti-test-pipe"></i>
+                    <i class="ti ti-chart-radar"></i>
                     Porównanie stylów
                 </div>
-                <h1 class="title"><span class="">Skalowalność</span></h1>
-            </div>
-
-            <div class="diagram">
-                <!-- Layered / Modular Monolith -->
-                <div class="system-box">
-                    <div class="system-header system-header--mono">
-                        <i class="ti ti-stack-2"></i>
-                        Layered / Monolit modularny
-                        <span class="star-rating">
-                            <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
-                        </span>
+                <h1>Skalowalność bez skrótów</h1>
+                <p class="lead">
+                    Ocena pokazuje, ile architektura kosztuje, gdy trzeba skalować tylko jeden fragment systemu.
+                </p>
+                <div class="scale-note">
+                    <div class="scale-title">
+                        <i class="ti ti-stars"></i>
+                        Skala slajdu
                     </div>
-                    <div class="system-body">
-                        <div class="strategy-label">Strategia</div>
-                        <div class="strategy-desc">
-                            <strong>Skalowanie całej aplikacji</strong>: wszystkie moduły rosną razem, niezależnie od tego, który jest wąskim gardłem
-                        </div>
-                        <div class="hotspot-visual">
-                            <div class="block block--normal">Katalog</div>
-                            <div class="block block--normal">Koszyk</div>
-                            <div class="block block--hot block--hot-mono">Raporty</div>
-                            <div class="block block--normal">Wysyłka</div>
-                        </div>
-                        <div class="strategy-desc" style="font-size:15px; margin-top:-4px;">
-                            <i class="ti ti-arrow-up scale-arrow" style="color:#f59e0b;"></i>
-                            Skalujesz <strong>cały monolit</strong>, nawet jeśli obciążony jest tylko jeden moduł
-                        </div>
-                    </div>
+                    <p class="scale-copy">
+                        1 gwiazdka = najłatwiej dopasować zasoby. 5 gwiazdek = skalowanie jest najbardziej kosztowne i szerokie.
+                    </p>
                 </div>
+            </section>
 
-                <!-- Microservices -->
-                <div class="system-box">
-                    <div class="system-header system-header--micro">
-                        <i class="ti ti-hexagons"></i>
-                        Mikroserwisy
-                        <span class="star-rating">
-                            <i class="ti ti-star-filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
-                        </span>
+            <section class="board" aria-label="Oceny skalowalności stylów architektury">
+                <article class="style-row style-row--layered" style="--score: 5;">
+                    <div class="icon-plate"><i class="ti ti-layers-intersect"></i></div>
+                    <div class="name">
+                        <h2>Layered</h2>
+                        <span>warstwy aplikacji</span>
                     </div>
-                    <div class="system-body">
-                        <div class="strategy-label">Strategia</div>
-                        <div class="strategy-desc">
-                            <strong>Skalowanie konkretnego hot spotu</strong>: zwiększasz instancje tylko przeciążonego serwisu
+                    <p class="insight">
+                        Gdy jedna warstwa puchnie, zwykle rośnie <strong>cały deployment</strong>.
+                    </p>
+                    <div class="rating">
+                        <div class="rating-number">5 / 5</div>
+                        <div class="stars" aria-label="5 z 5 gwiazdek">
+                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i>
                         </div>
-                        <div class="hotspot-visual">
-                            <div class="block block--normal">Katalog</div>
-                            <div class="block block--normal">Koszyk</div>
-                            <div class="block block--hot block--hot-micro">Raporty ×3</div>
-                            <div class="block block--normal">Wysyłka</div>
-                        </div>
-                        <div class="strategy-desc" style="font-size:15px; margin-top:-4px;">
-                            <i class="ti ti-arrow-up scale-arrow" style="color:#8b5cf6;"></i>
-                            <strong>Precyzyjne skalowanie</strong>: zasoby trafiają tam, gdzie są potrzebne
-                        </div>
+                        <div class="meter"><span></span></div>
                     </div>
-                </div>
+                </article>
 
-                <!-- Event-driven -->
-                <div class="system-box">
-                    <div class="system-header system-header--event">
-                        <i class="ti ti-bolt"></i>
-                        Event-driven
-                        <span class="star-rating">
-                            <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
-                        </span>
+                <article class="style-row style-row--modular" style="--score: 5;">
+                    <div class="icon-plate"><i class="ti ti-box-multiple"></i></div>
+                    <div class="name">
+                        <h2>Monolit modularny</h2>
+                        <span>moduły w jednym runtime</span>
                     </div>
-                    <div class="system-body">
-                        <div class="strategy-label">Strategia</div>
-                        <div class="strategy-desc">
-                            <strong>Obsługa dużego wolumenu i skoków ruchu</strong>: kolejka buforuje pik, konsumenci przetwarzają we własnym tempie
+                    <p class="insight">
+                        Moduły porządkują kod, ale zasoby nadal skalują się <strong>wspólnym procesem</strong>.
+                    </p>
+                    <div class="rating">
+                        <div class="rating-number">5 / 5</div>
+                        <div class="stars" aria-label="5 z 5 gwiazdek">
+                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i>
                         </div>
-                        <div class="hotspot-visual">
-                            <div class="block block--normal">Producent</div>
-                            <div class="block block--hot block--hot-event">Kolejka</div>
-                            <div class="block block--hot block--hot-event">Kons. ×N</div>
-                        </div>
-                        <div class="strategy-desc" style="font-size:15px; margin-top:-4px;">
-                            <i class="ti ti-arrow-up scale-arrow" style="color:#10b981;"></i>
-                            <strong>Bufor + elastyczne konsumenty</strong>: naturalnie absorbuje skoki obciążenia
-                        </div>
+                        <div class="meter"><span></span></div>
                     </div>
-                </div>
-            </div>
+                </article>
 
-            <!-- Example scenarios -->
-            <div class="examples-row">
-                <div class="examples-row-label">Przykłady wąskich gardeł</div>
-                <div class="examples-row-items">
-                    <div class="example-tag"><i class="ti ti-search"></i> Wyszukiwanie</div>
-                    <div class="example-tag"><i class="ti ti-report-analytics"></i> Raporty</div>
-                    <div class="example-tag"><i class="ti ti-credit-card"></i> Płatności</div>
-                    <div class="example-tag"><i class="ti ti-shopping-cart"></i> E-commerce promo</div>
-                    <div class="example-tag"><i class="ti ti-truck-delivery"></i> Logistyka</div>
-                    <div class="example-tag"><i class="ti ti-cpu"></i> IoT</div>
-                </div>
-            </div>
-        </div>
+                <article class="style-row style-row--micro" style="--score: 1;">
+                    <div class="icon-plate"><i class="ti ti-hexagons"></i></div>
+                    <div class="name">
+                        <h2>Mikroserwisy</h2>
+                        <span>niezależne komponenty</span>
+                    </div>
+                    <p class="insight">
+                        Najłatwiej podbić tylko przeciążony serwis i zostawić resztę <strong>bez zmian</strong>.
+                    </p>
+                    <div class="rating">
+                        <div class="rating-number">1 / 5</div>
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
+                        </div>
+                        <div class="meter"><span></span></div>
+                    </div>
+                </article>
 
+                <article class="style-row style-row--event" style="--score: 2;">
+                    <div class="icon-plate"><i class="ti ti-bolt"></i></div>
+                    <div class="name">
+                        <h2>Event-driven</h2>
+                        <span>kolejki i konsumenci</span>
+                    </div>
+                    <p class="insight">
+                        Bufor pomaga przeżyć piki, a konsumenci mogą rosnąć <strong>w rytmie obciążenia</strong>.
+                    </p>
+                    <div class="rating">
+                        <div class="rating-number">2 / 5</div>
+                        <div class="stars" aria-label="2 z 5 gwiazdek">
+                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
+                        </div>
+                        <div class="meter"><span></span></div>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <div class="legend"><i class="ti ti-star-filled"></i> Gwiazdki oznaczają koszt i szerokość skalowania, nie “ładność” architektury.</div>
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
         <div class="camera-box">kamera 480 &times; 270</div>
     </div>
