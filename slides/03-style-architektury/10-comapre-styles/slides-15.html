@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 15 - Odporność na awarie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 18%; left: 8%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 72%; left: 88%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 28%; left: 78%; animation-delay: 3.5s; }
+        .particle:nth-child(6) { top: 82%; left: 15%; animation-delay: 4.8s; }
+        .particle:nth-child(7) { top: 45%; left: 52%; animation-delay: 6.2s; }
+        .particle:nth-child(8) { top: 12%; left: 62%; animation-delay: 2.4s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 36px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            margin-bottom: 14px;
+            color: #ffffff;
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.65s forwards;
+        }
+
+        /* === Main layout === */
+        .main-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            max-width: 1500px;
+            width: 100%;
+            flex: 1;
+            align-items: start;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.85s forwards;
+        }
+
+        /* === Left: comparison cards === */
+        .compare-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .compare-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 20px 24px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .compare-card:nth-child(1) { animation: fadeUp 0.7s ease-out 1.0s forwards; }
+        .compare-card:nth-child(2) { animation: fadeUp 0.7s ease-out 1.25s forwards; }
+        .compare-card:nth-child(3) { animation: fadeUp 0.7s ease-out 1.5s forwards; }
+
+        .card-icon {
+            flex: 0 0 auto;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .card-icon--mono {
+            background: rgba(100,116,139,0.12);
+            color: #94a3b8;
+        }
+
+        .card-icon--micro {
+            background: rgba(139,92,246,0.12);
+            color: #8b5cf6;
+        }
+
+        .card-icon--event {
+            background: rgba(16,185,129,0.12);
+            color: #10b981;
+        }
+
+        .card-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .card-stars {
+            display: inline-flex;
+            gap: 3px;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .star-on { color: #f59e0b; }
+        .star-off { color: rgba(255,255,255,0.15); }
+
+        .card-desc {
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .card-desc strong {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* === Right: diagram + warning + patterns === */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* SVG diagram */
+        .diagram-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-svg {
+            width: 620px;
+            height: 160px;
+        }
+
+        .node-rect {
+            rx: 10;
+            ry: 10;
+            stroke-width: 1.5;
+        }
+
+        .node-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+        .svc-node { fill: rgba(139,92,246,0.12); stroke: rgba(139,92,246,0.4); }
+        .svc-text { fill: #c4b5fd; }
+
+        .fail-node { fill: rgba(239,68,68,0.15); stroke: rgba(239,68,68,0.5); }
+        .fail-text { fill: #fca5a5; }
+
+        .cascade-node { fill: rgba(239,68,68,0.08); stroke: rgba(239,68,68,0.25); }
+        .cascade-text { fill: rgba(252,165,165,0.6); }
+
+        .arrow-line {
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: drawLine 1.2s ease-out forwards;
+        }
+
+        .arrow-line--d1 { animation-delay: 1.2s; }
+        .arrow-line--d2 { animation-delay: 1.4s; }
+        .arrow-line--d3 { animation-delay: 1.6s; }
+
+        .arrow-head { stroke-width: 1.5; }
+
+        .sync-arrow { stroke: rgba(139,92,246,0.5); }
+        .sync-head { fill: rgba(139,92,246,0.5); stroke: rgba(139,92,246,0.5); }
+
+        .fail-arrow { stroke: rgba(239,68,68,0.5); }
+        .fail-head { fill: rgba(239,68,68,0.5); stroke: rgba(239,68,68,0.5); }
+
+        .label-small {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .fail-marker {
+            opacity: 0;
+            animation: popIn 0.5s ease-out 2.0s forwards;
+        }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            60% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Warning box */
+        .warning-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 24px;
+            border-radius: 14px;
+            background: rgba(239,68,68,0.06);
+            border: 1px solid rgba(239,68,68,0.2);
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.8s forwards;
+        }
+
+        .warning-box i {
+            font-size: 26px;
+            color: #ef4444;
+            flex: 0 0 auto;
+        }
+
+        .warning-box .warning-text {
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .warning-box .warning-text strong {
+            color: #fca5a5;
+            font-weight: 700;
+        }
+
+        /* Patterns grid */
+        .patterns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 2.2s forwards;
+        }
+
+        .pattern-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+
+        .pattern-chip i {
+            font-size: 22px;
+            color: #10b981;
+            flex: 0 0 auto;
+        }
+
+        .pattern-chip span {
+            font-size: 15px;
+            font-weight: 600;
+            color: #6ee7b7;
+        }
+
+        /* === Bottom note === */
+        .bottom-note {
+            max-width: 1500px;
+            width: 100%;
+            margin-top: 24px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.6s forwards;
+        }
+
+        .note-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            border-radius: 14px;
+            background: rgba(6,182,212,0.05);
+            border: 1px solid rgba(6,182,212,0.15);
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .note-box i {
+            font-size: 22px;
+            color: var(--cyan-400);
+        }
+
+        .note-box strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <i class="ti ti-shield-check"></i>
+                    Fault Tolerance
+                </div>
+                <h1 class="title">Odporność na <span class="highlight">awarie</span></h1>
+                <p class="subtitle">5 gwiazdek dla mikroserwisów oznacza potencjał, nie gwarancję — odporność wymaga świadomego projektowania</p>
+            </div>
+
+            <div class="main-area">
+                <!-- Left: comparison cards -->
+                <div class="compare-cards">
+                    <div class="compare-card">
+                        <div class="card-icon card-icon--mono">
+                            <i class="ti ti-box"></i>
+                        </div>
+                        <div>
+                            <div class="card-name">Monolit (layered / modularny)
+                                <span class="card-stars">
+                                    <span class="star-on">★</span>
+                                    <span class="star-off">★</span>
+                                    <span class="star-off">★</span>
+                                    <span class="star-off">★</span>
+                                    <span class="star-off">★</span>
+                                </span>
+                            </div>
+                            <div class="card-desc">
+                                <strong>Awaria = cały system pada.</strong> Brak izolacji — jeden błąd zatrzymuje wszystko. Prosta diagnostyka, ale brak partial availability.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="compare-card">
+                        <div class="card-icon card-icon--micro">
+                            <i class="ti ti-components"></i>
+                        </div>
+                        <div>
+                            <div class="card-name">Mikroserwisy
+                                <span class="card-stars">
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                </span>
+                            </div>
+                            <div class="card-desc">
+                                <strong>Izolacja procesowa — awaria jednego serwisu nie musi blokować reszty.</strong> Ale synchroniczne łańcuchy wywołań tworzą ryzyko kaskady.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="compare-card">
+                        <div class="card-icon card-icon--event">
+                            <i class="ti ti-bolt"></i>
+                        </div>
+                        <div>
+                            <div class="card-name">Event-driven
+                                <span class="card-stars">
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                    <span class="star-on">★</span>
+                                </span>
+                            </div>
+                            <div class="card-desc">
+                                <strong>Kolejka jako bufor — producent nie czeka na konsumenta.</strong> Naturalnie odporna na chwilowe awarie odbiorców — zdarzenia czekają w brokerze.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: diagram + warning + patterns -->
+                <div class="right-col">
+                    <!-- Chain diagram A → B → C → D with failure at C -->
+                    <div class="diagram-area">
+                        <svg class="diagram-svg" viewBox="0 0 620 160">
+                            <!-- Node A -->
+                            <rect class="node-rect svc-node" x="10" y="55" width="100" height="50" />
+                            <text class="node-text svc-text" x="60" y="80">Serwis A</text>
+
+                            <!-- Arrow A → B -->
+                            <line class="arrow-line sync-arrow arrow-line--d1" x1="110" y1="80" x2="160" y2="80" />
+                            <polygon class="arrow-head sync-head" points="158,76 166,80 158,84" />
+
+                            <!-- Node B -->
+                            <rect class="node-rect svc-node" x="170" y="55" width="100" height="50" />
+                            <text class="node-text svc-text" x="220" y="80">Serwis B</text>
+
+                            <!-- Arrow B → C -->
+                            <line class="arrow-line sync-arrow arrow-line--d2" x1="270" y1="80" x2="320" y2="80" />
+                            <polygon class="arrow-head sync-head" points="318,76 326,80 318,84" />
+
+                            <!-- Node C — failure point -->
+                            <rect class="node-rect fail-node" x="330" y="55" width="100" height="50" />
+                            <text class="node-text fail-text" x="380" y="80">Serwis C</text>
+
+                            <!-- Failure marker -->
+                            <g class="fail-marker" style="transform-origin: 405px 45px;">
+                                <circle cx="405" cy="42" r="14" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1.5" />
+                                <text x="405" y="47" text-anchor="middle" fill="#ef4444" font-family="Inter" font-size="16" font-weight="800">✕</text>
+                            </g>
+
+                            <!-- Arrow C → D (dashed, failed) -->
+                            <line class="arrow-line fail-arrow arrow-line--d3" x1="430" y1="80" x2="480" y2="80" stroke-dasharray="6 4" />
+                            <polygon class="arrow-head fail-head" points="478,76 486,80 478,84" />
+
+                            <!-- Node D — cascade -->
+                            <rect class="node-rect cascade-node" x="490" y="55" width="100" height="50" />
+                            <text class="node-text cascade-text" x="540" y="80">Serwis D</text>
+
+                            <!-- Cascade label -->
+                            <text class="label-small" x="310" y="135" fill="#fca5a5" font-size="11" text-anchor="middle" letter-spacing="1">KASKADA AWARII</text>
+                            <line x1="60" y1="128" x2="540" y2="128" stroke="rgba(239,68,68,0.2)" stroke-width="1" stroke-dasharray="4 4" />
+                            <!-- Arrow showing cascade direction -->
+                            <polygon points="546,125 554,128 546,131" fill="rgba(239,68,68,0.3)" />
+                        </svg>
+                    </div>
+
+                    <!-- Warning box -->
+                    <div class="warning-box">
+                        <i class="ti ti-alert-triangle"></i>
+                        <div class="warning-text">
+                            <strong>Rozproszony monolit = najgorsze z obu światów.</strong>
+                            Synchroniczne łańcuchy A→B→C→D bez wzorców odporności prowadzą do kaskadowych awarii.
+                        </div>
+                    </div>
+
+                    <!-- Resilience patterns -->
+                    <div class="patterns">
+                        <div class="pattern-chip">
+                            <i class="ti ti-clock"></i>
+                            <span>Timeout</span>
+                        </div>
+                        <div class="pattern-chip">
+                            <i class="ti ti-shield-off"></i>
+                            <span>Circuit Breaker</span>
+                        </div>
+                        <div class="pattern-chip">
+                            <i class="ti ti-layout-board-split"></i>
+                            <span>Bulkhead</span>
+                        </div>
+                        <div class="pattern-chip">
+                            <i class="ti ti-arrows-down-up"></i>
+                            <span>Fallback</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom note -->
+            <div class="bottom-note">
+                <div class="note-box">
+                    <i class="ti ti-bulb"></i>
+                    5 gwiazdek to <strong>potencjał, nie gwarancja</strong> — odporność wymaga świadomego użycia wzorców
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
