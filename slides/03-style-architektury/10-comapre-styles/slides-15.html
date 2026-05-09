@@ -504,11 +504,10 @@
         <div class="content">
             <div class="header">
                 <div class="eyebrow">
-                    <i class="ti ti-shield-check"></i>
-                    Fault Tolerance
+                    <i class="ti ti-test-pipe"></i>
+                    Porównanie stylów
                 </div>
                 <h1 class="title">Odporność na <span class="highlight">awarie</span></h1>
-                <p class="subtitle">5 gwiazdek dla mikroserwisów oznacza potencjał, nie gwarancję — odporność wymaga świadomego projektowania</p>
             </div>
 
             <div class="main-area">
@@ -529,7 +528,7 @@
                                 </span>
                             </div>
                             <div class="card-desc">
-                                <strong>Awaria = cały system pada.</strong> Brak izolacji — jeden błąd zatrzymuje wszystko. Prosta diagnostyka, ale brak partial availability.
+                                <strong>Awaria = cały system pada.</strong> Brak izolacji, jeden błąd zatrzymuje wszystko. Prosta diagnostyka, ale brak częściowej dostępności.
                             </div>
                         </div>
                     </div>
@@ -549,7 +548,7 @@
                                 </span>
                             </div>
                             <div class="card-desc">
-                                <strong>Izolacja procesowa — awaria jednego serwisu nie musi blokować reszty.</strong> Ale synchroniczne łańcuchy wywołań tworzą ryzyko kaskady.
+                                <strong>Izolacja procesowa: awaria jednego serwisu nie musi blokować reszty.</strong> Ale synchroniczne łańcuchy wywołań tworzą ryzyko kaskady.
                             </div>
                         </div>
                     </div>
@@ -569,7 +568,7 @@
                                 </span>
                             </div>
                             <div class="card-desc">
-                                <strong>Kolejka jako bufor — producent nie czeka na konsumenta.</strong> Naturalnie odporna na chwilowe awarie odbiorców — zdarzenia czekają w brokerze.
+                                <strong>Kolejka jako bufor, producent nie czeka na konsumenta.</strong> Naturalnie odporna na chwilowe awarie odbiorców, bo zdarzenia czekają w brokerze.
                             </div>
                         </div>
                     </div>
@@ -626,7 +625,6 @@
                     <div class="warning-box">
                         <i class="ti ti-alert-triangle"></i>
                         <div class="warning-text">
-                            <strong>Rozproszony monolit = najgorsze z obu światów.</strong>
                             Synchroniczne łańcuchy A→B→C→D bez wzorców odporności prowadzą do kaskadowych awarii.
                         </div>
                     </div>
