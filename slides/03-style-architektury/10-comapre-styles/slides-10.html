@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 10 - Prostota i złożoność operacyjna</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Slide 10 - Prostota stylów architektury</title>
     <style>
         :root {
-            --cyan-400: #22d3ee;
-            --cyan-500: #06b6d4;
-            --cyan-600: #0891b2;
-            --cyan-700: #0e7490;
-            --cyan-900: #164e63;
-            --dark-bg: #030712;
-            --dark-surface: #111827;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg: #08090d;
+            --surface: rgba(18, 20, 27, 0.9);
+            --surface-soft: rgba(255, 255, 255, 0.045);
+            --line: rgba(255, 255, 255, 0.12);
+            --text: #f8fafc;
+            --muted: #a9b2c2;
+            --soft: #d9e1ee;
+            --star: #ffd166;
+            --star-off: rgba(255, 255, 255, 0.2);
+            --cyan: #22d3ee;
+            --green: #34d399;
+            --amber: #f59e0b;
+            --rose: #fb7185;
+            --violet: #a78bfa;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: var(--dark-bg);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             overflow: hidden;
         }
 
@@ -33,308 +36,332 @@
             height: 1080px;
             position: relative;
             overflow: hidden;
-            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background:
+                linear-gradient(120deg, rgba(8, 9, 13, 0.96), rgba(21, 24, 33, 0.94)),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 72px),
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 72px);
         }
 
-        .bg-grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
-        }
-
-        .bg-glow {
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: bgPulse 6s ease-in-out infinite;
-        }
-
-        @keyframes bgPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--cyan-400);
-            opacity: 0;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .particle:nth-child(3) { top: 10%; left: 22%; animation-delay: 0.5s; }
-        .particle:nth-child(4) { top: 68%; left: 82%; animation-delay: 2.0s; }
-        .particle:nth-child(5) { top: 32%; left: 70%; animation-delay: 3.5s; }
-        .particle:nth-child(6) { top: 78%; left: 12%; animation-delay: 4.2s; }
-        .particle:nth-child(7) { top: 48%; left: 55%; animation-delay: 6.2s; }
-        .particle:nth-child(8) { top: 22%; left: 42%; animation-delay: 1.8s; }
-
-        @keyframes float {
-            0% { opacity: 0; transform: translateY(0) scale(1); }
-            20%, 80% { opacity: 0.8; }
-            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
-        }
-
-        .corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            z-index: 1;
-        }
-
-        .corner::before,
-        .corner::after {
+        .stage::before {
             content: '';
             position: absolute;
-            background: var(--cyan-700);
+            inset: 0;
+            background:
+                linear-gradient(155deg, transparent 0 12%, rgba(34, 211, 238, 0.12) 12% 12.5%, transparent 12.5% 100%),
+                linear-gradient(25deg, transparent 0 72%, rgba(251, 113, 133, 0.12) 72% 72.5%, transparent 72.5% 100%);
+            opacity: 0.9;
         }
 
-        .corner--tl { top: 30px; left: 30px; }
-        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
-        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+        .stage::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 314px;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.62));
+            pointer-events: none;
+        }
 
-        .corner--br { bottom: 30px; right: 30px; }
-        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
-        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
-
-        /* === Content === */
         .content {
             position: relative;
-            z-index: 10;
+            z-index: 5;
             width: 100%;
             height: 100%;
-            padding: 80px 130px 160px;
+            padding: 58px 118px 322px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .header {
-            text-align: center;
-            max-width: 1180px;
-            margin: 0 auto 40px;
+        .hero {
+            width: min(1580px, 100%);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            gap: 42px;
+            margin-bottom: 36px;
         }
 
         .eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 20px;
-            color: var(--cyan-400);
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.25s forwards;
-        }
-
-        .eyebrow i { font-size: 32px; }
-
-        h1.title {
             margin-bottom: 14px;
-            color: #ffffff;
-            font-size: 68px;
+            color: var(--cyan);
+            font-size: 22px;
             font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -1px;
+            text-transform: uppercase;
+            letter-spacing: 0;
             opacity: 0;
-            animation: fadeUp 0.9s ease-out 0.45s forwards;
+            animation: fadeUp 0.65s ease-out 0.1s forwards;
         }
 
-        h1.title .highlight {
-            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .eyebrow-mark {
+            color: var(--star);
+            font-size: 31px;
+            line-height: 1;
         }
 
-        .subtitle {
-            color: var(--text-muted);
-            font-size: clamp(1rem, 1.8vw, 1.2rem);
-            font-weight: 300;
-            line-height: 1.6;
+        h1 {
+            color: #ffffff;
+            font-size: 74px;
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: 0;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.65s forwards;
+            animation: fadeUp 0.7s ease-out 0.22s forwards;
         }
 
-        /* === Diagram section === */
-        .diagram {
-            display: flex;
-            gap: 48px;
-            max-width: 1500px;
-            width: 100%;
-            flex: 1;
-            align-items: stretch;
+        .hero-note {
+            width: 410px;
+            padding: 22px 26px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.055);
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.34s forwards;
         }
 
-        /* Levels */
-        .level {
-            flex: 1;
+        .hero-note strong {
+            display: block;
+            color: var(--star);
+            font-size: 42px;
+            line-height: 1;
+            font-weight: 900;
+        }
+
+        .hero-note span {
+            display: block;
+            margin-top: 10px;
+            color: var(--soft);
+            font-size: 21px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .scoreboard {
+            width: min(1580px, 100%);
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .style-card {
+            --accent: var(--cyan);
+            min-height: 452px;
+            position: relative;
             display: flex;
             flex-direction: column;
-            border-radius: 20px;
+            justify-content: space-between;
+            padding: 26px 24px 24px;
+            border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255, 255, 255, 0.08));
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, color-mix(in srgb, var(--accent) 13%, transparent), transparent 42%),
+                var(--surface);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
             overflow: hidden;
+            opacity: 0;
+            animation: cardIn 0.7s ease-out forwards;
         }
 
-        .level-header {
-            padding: 22px 28px;
+        .style-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 8px;
+            background: var(--accent);
+        }
+
+        .style-card::after {
+            content: attr(data-rank);
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.07);
+            font-size: 112px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .style-card:nth-child(1) { animation-delay: 0.46s; }
+        .style-card:nth-child(2) { animation-delay: 0.58s; }
+        .style-card:nth-child(3) { animation-delay: 0.7s; }
+        .style-card:nth-child(4) { animation-delay: 0.82s; }
+
+        .style-card--layered { --accent: var(--green); }
+        .style-card--modular { --accent: var(--amber); }
+        .style-card--micro { --accent: var(--violet); }
+        .style-card--event { --accent: var(--rose); }
+
+        .card-top {
+            position: relative;
+            z-index: 2;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 16px;
+        }
+
+        .icon-plate {
+            width: 66px;
+            height: 66px;
+            flex: 0 0 66px;
+            display: grid;
+            place-items: center;
+            border: 1px solid color-mix(in srgb, var(--accent) 48%, rgba(255, 255, 255, 0.14));
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--accent) 15%, rgba(255, 255, 255, 0.04));
+        }
+
+        .icon-mark {
+            color: var(--accent);
+            font-size: 36px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .name {
+            min-width: 0;
+            padding-top: 2px;
+        }
+
+        .name h2 {
+            color: #ffffff;
+            font-size: 31px;
+            font-weight: 900;
+            line-height: 1.04;
+            letter-spacing: 0;
+        }
+
+        .name span {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
             font-size: 16px;
             font-weight: 700;
-            letter-spacing: 1px;
+            line-height: 1.25;
             text-transform: uppercase;
+            letter-spacing: 0;
         }
 
-        .level-header i { font-size: 28px; }
-
-        .level--local .level-header {
-            background: rgba(16,185,129,0.1);
-            color: #34d399;
-            border-bottom: 1px solid rgba(16,185,129,0.15);
+        .tagline {
+            position: relative;
+            z-index: 2;
+            margin-top: 28px;
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.12;
+            letter-spacing: 0;
         }
 
-        .level--global .level-header {
-            background: rgba(244,63,94,0.08);
-            color: #fb7185;
-            border-bottom: 1px solid rgba(244,63,94,0.12);
+        .chips {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            gap: 10px;
+            margin-top: 22px;
         }
 
-        .level--local {
-            background: rgba(17,24,39,0.6);
-            border: 1px solid rgba(16,185,129,0.15);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.8s forwards;
-        }
-
-        .level--global {
-            background: rgba(17,24,39,0.6);
-            border: 1px solid rgba(244,63,94,0.12);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.0s forwards;
-        }
-
-        .level-items {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            padding: 24px 28px;
-            flex: 1;
-        }
-
-        .level-item {
+        .chip {
+            min-height: 42px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 18px 22px;
-            border-radius: 14px;
-            background: rgba(17,24,39,0.5);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .level-item-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            flex-shrink: 0;
-        }
-
-        .level--local .level-item-icon { background: rgba(16,185,129,0.1); color: #34d399; }
-        .level--global .level-item-icon { background: rgba(244,63,94,0.08); color: #fb7185; }
-
-        .level-item-text {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .level-item-name {
+            padding: 9px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: var(--surface-soft);
+            color: #dbe7f4;
             font-size: 20px;
             font-weight: 700;
-            color: #ffffff;
+            line-height: 1.15;
         }
 
-        .level-item-desc {
-            font-size: 17px;
-            font-weight: 300;
-            color: var(--text-muted);
-            line-height: 1.45;
+        .rating {
+            position: relative;
+            z-index: 2;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .level-item-desc strong {
-            font-weight: 600;
-            color: #cbd5e1;
+        .score-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 16px;
         }
 
-        /* === Central statement === */
-        .statement {
-            max-width: 1500px;
-            width: 100%;
-            margin-top: 36px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.5s forwards;
+        .score-label {
+            color: var(--muted);
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0;
         }
 
-        .statement-box {
+        .score-value {
+            color: var(--accent);
+            font-size: 34px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .stars {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px;
+            color: var(--star-off);
+            font-size: 43px;
+            line-height: 1;
+        }
+
+        .stars span {
+            display: grid;
+            place-items: center;
+            height: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.035);
+        }
+
+        .stars .filled {
+            color: var(--star);
+            border-color: rgba(255, 209, 102, 0.28);
+            background: rgba(255, 209, 102, 0.09);
+            text-shadow: 0 0 22px rgba(255, 209, 102, 0.38);
+        }
+
+        .stars .empty { color: var(--star-off); }
+
+        .takeaway {
+            width: 900px;
+            margin-top: 28px;
+            margin-left: 282px;
+            align-self: flex-start;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 18px;
-            padding: 22px 48px;
-            border-radius: 16px;
-            background: rgba(6,182,212,0.06);
-            border: 1px solid rgba(6,182,212,0.18);
+            gap: 14px;
+            padding: 18px 26px;
+            border: 1px solid rgba(255, 209, 102, 0.24);
+            border-radius: 8px;
+            background: rgba(255, 209, 102, 0.08);
+            color: #fff5d7;
+            font-size: 27px;
+            font-weight: 900;
             text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.96s forwards;
         }
 
-        .statement-box i {
-            font-size: 28px;
-            color: var(--cyan-400);
-            flex-shrink: 0;
-        }
-
-        .statement-box p {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #ffffff;
-            line-height: 1.5;
-        }
-
-        .statement-box .hl {
-            color: var(--cyan-400);
-            font-weight: 800;
-        }
-
-        /* === Animations === */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
+        .takeaway-mark {
+            color: var(--star);
+            font-size: 31px;
+            line-height: 1;
+            flex: 0 0 auto;
         }
 
         .camera-box {
@@ -344,10 +371,10 @@
             width: 480px;
             height: 270px;
             z-index: 100;
-            border: 2px dashed rgba(255,255,255,0.2);
-            border-radius: 12px;
-            background: rgba(0,0,0,0.4);
-            color: rgba(255,255,255,0.3);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -364,103 +391,151 @@
             opacity: 0.85;
             pointer-events: none;
         }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(26px) scale(0.985); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
     </style>
 </head>
 <body>
     <div class="stage" id="stage">
-        <div class="bg-grid"></div>
-        <div class="bg-glow"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-
-        <div class="corner corner--tl"></div>
-        <div class="corner corner--br"></div>
-
-        <div class="content">
-            <div class="header">
-                <div class="eyebrow">
-                    <i class="ti ti-test-pipe"></i>
-                    Porównanie stylów
+        <main class="content">
+            <section class="hero">
+                <div>
+                    <div class="eyebrow">
+                        <span class="eyebrow-mark">★</span>
+                        Architecture Styles Worksheet
+                    </div>
+                    <h1>Prostota stylu</h1>
                 </div>
-                <h1 class="title">Prostota i <span class="highlight">złożoność operacyjna</span></h1>
+
+                <div class="hero-note">
+                    <strong>5 gwiazdek</strong>
+                    <span>najmniej złożoności na starcie</span>
+                </div>
+            </section>
+
+            <section class="scoreboard" aria-label="Ocena prostoty stylów architektury">
+                <article class="style-card style-card--layered" data-rank="5">
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><span class="icon-mark">▤</span></div>
+                            <div class="name">
+                                <h2>Layered</h2>
+                                <span>architektura warstwowa</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Najprostszy start</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">jeden proces</div>
+                            <div class="chip">jedna baza</div>
+                            <div class="chip">niski koszt</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="score-line">
+                            <span class="score-label">prostota</span>
+                            <span class="score-value">5/5</span>
+                        </div>
+                        <div class="stars" aria-label="5 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-card style-card--modular" data-rank="4">
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><span class="icon-mark">▦</span></div>
+                            <div class="name">
+                                <h2>Modular Monolith</h2>
+                                <span>moduły w jednym runtime</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Prosty operacyjnie</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">granice domen</div>
+                            <div class="chip">dyscyplina kodu</div>
+                            <div class="chip">kontrola zależności</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="score-line">
+                            <span class="score-label">prostota</span>
+                            <span class="score-value">4/5</span>
+                        </div>
+                        <div class="stars" aria-label="4 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-card style-card--micro" data-rank="1">
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><span class="icon-mark">⬡</span></div>
+                            <div class="name">
+                                <h2>Microservices</h2>
+                                <span>system rozproszony</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Małe usługi, duży system</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">sieć</div>
+                            <div class="chip">kontrakty</div>
+                            <div class="chip">transakcje rozproszone</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="score-line">
+                            <span class="score-label">prostota</span>
+                            <span class="score-value">1/5</span>
+                        </div>
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-card style-card--event" data-rank="1">
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><span class="icon-mark">↯</span></div>
+                            <div class="name">
+                                <h2>Event-driven</h2>
+                                <span>asynchroniczne zdarzenia</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Trudny przepływ</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">niedeterminizm</div>
+                            <div class="chip">śledzenie zdarzeń</div>
+                            <div class="chip">obsługa błędów</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="score-line">
+                            <span class="score-label">prostota</span>
+                            <span class="score-value">1/5</span>
+                        </div>
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <div class="takeaway">
+                <span class="takeaway-mark">★</span>
+                Mniej rozproszenia = więcej prostoty
             </div>
-
-            <div class="diagram">
-                <!-- Level: local simplicity -->
-                <div class="level level--local">
-                    <div class="level-header">
-                        <i class="ti ti-cube"></i>
-                        Prostota pojedynczego elementu
-                    </div>
-                    <div class="level-items">
-                        <div class="level-item">
-                            <div class="level-item-icon"><i class="ti ti-stack-2"></i></div>
-                            <div class="level-item-text">
-                                <div class="level-item-name">Layered / Monolit modularny</div>
-                                <div class="level-item-desc"><strong>Prostszy model mentalny</strong>: jeden proces, jedna baza, znane narzędzia</div>
-                            </div>
-                        </div>
-                        <div class="level-item">
-                            <div class="level-item-icon"><i class="ti ti-hexagons"></i></div>
-                            <div class="level-item-text">
-                                <div class="level-item-name">Mikroserwisy</div>
-                                <div class="level-item-desc"><strong>Prostsze lokalnie</strong>: mały serwis, ograniczona odpowiedzialność</div>
-                            </div>
-                        </div>
-                        <div class="level-item">
-                            <div class="level-item-icon"><i class="ti ti-bolt"></i></div>
-                            <div class="level-item-text">
-                                <div class="level-item-name">Event-driven</div>
-                                <div class="level-item-desc"><strong>Silna moc architektoniczna</strong>: luźne powiązanie komponentów</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Level: global complexity -->
-                <div class="level level--global">
-                    <div class="level-header">
-                        <i class="ti ti-topology-star-3"></i>
-                        Złożoność ekosystemu
-                    </div>
-                    <div class="level-items">
-                        <div class="level-item">
-                            <div class="level-item-icon"><i class="ti ti-stack-2"></i></div>
-                            <div class="level-item-text">
-                                <div class="level-item-name">Layered / Monolit modularny</div>
-                                <div class="level-item-desc">Niska złożoność operacyjna: <strong>jeden artefakt</strong>, proste wdrażanie</div>
-                            </div>
-                        </div>
-                        <div class="level-item">
-                            <div class="level-item-icon"><i class="ti ti-hexagons"></i></div>
-                            <div class="level-item-text">
-                                <div class="level-item-name">Mikroserwisy</div>
-                                <div class="level-item-desc"><strong>Trudniejsze globalnie</strong>: observability, networking, deployment wielu usług</div>
-                            </div>
-                        </div>
-                        <div class="level-item">
-                            <div class="level-item-icon"><i class="ti ti-bolt"></i></div>
-                            <div class="level-item-text">
-                                <div class="level-item-name">Event-driven</div>
-                                <div class="level-item-desc"><strong>Mniej intuicyjny przepływ</strong>: śledzenie procesu przez zdarzenia</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Central statement -->
-            <div class="statement">
-                <div class="statement-box">
-                    <i class="ti ti-alert-circle"></i>
-                    <p>Lokalna <span class="hl">prostota komponentu</span> nie oznacza prostoty <span class="hl">całego systemu</span></p>
-                </div>
-            </div>
-        </div>
+        </main>
 
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
         <div class="camera-box">kamera 480 &times; 270</div>

@@ -282,28 +282,24 @@
             grid-column: 1 / -1;
             align-self: end;
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            gap: 18px;
             padding-top: 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .rating-number {
-            color: var(--accent);
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
         .stars {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             color: var(--empty-star);
-            font-size: 28px;
+            font-size: 32px;
             line-height: 1;
+        }
+
+        .stars span {
+            display: inline-block;
+            width: 32px;
+            text-align: center;
         }
 
         .stars .filled {
@@ -311,20 +307,8 @@
             text-shadow: 0 0 18px rgba(255, 209, 102, 0.34);
         }
 
-        .meter {
-            width: 128px;
-            height: 6px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.11);
-            overflow: hidden;
-        }
-
-        .meter span {
-            display: block;
-            height: 100%;
-            width: calc(var(--score) * 20%);
-            border-radius: inherit;
-            background: linear-gradient(90deg, var(--accent), var(--star));
+        .stars .empty {
+            color: rgba(255, 255, 255, 0.24);
         }
 
         .legend {
@@ -389,11 +373,12 @@
 </head>
 <body>
     <div class="stage" id="stage">
+        ```html
         <main class="content">
             <section class="hero">
                 <div class="eyebrow">
                     <i class="ti ti-chart-radar"></i>
-                    Porównanie stylów
+                    Architecture Styles Worksheet
                 </div>
                 <h1>Skalowalność</h1>
             </section>
@@ -403,17 +388,15 @@
                     <div class="icon-plate"><i class="ti ti-layers-intersect"></i></div>
                     <div class="name">
                         <h2>Layered</h2>
-                        <span>warstwy aplikacji</span>
+                        <span>horyzontalna partycja techniczna</span>
                     </div>
                     <p class="insight">
-                        Gdy jedna warstwa puchnie, zwykle rośnie <strong>cały deployment</strong>.
+                        Każda funkcja aplikacji musi być skalowana w tym samym stopniu.
                     </p>
                     <div class="rating">
-                        <div class="rating-number">5 / 5</div>
-                        <div class="stars" aria-label="5 z 5 gwiazdek">
-                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i>
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
                         </div>
-                        <div class="meter"><span></span></div>
                     </div>
                 </article>
 
@@ -421,17 +404,15 @@
                     <div class="icon-plate"><i class="ti ti-box-multiple"></i></div>
                     <div class="name">
                         <h2>Monolit modularny</h2>
-                        <span>moduły w jednym runtime</span>
+                        <span>moduły domenowe, wspólny runtime</span>
                     </div>
                     <p class="insight">
-                        Moduły porządkują kod, ale zasoby nadal skalują się <strong>wspólnym procesem</strong>.
+                        Fizycznie niepodzielna jednostka wdrożeniowa o wspólnym kwancie architektonicznym i bazie danych
                     </p>
                     <div class="rating">
-                        <div class="rating-number">5 / 5</div>
-                        <div class="stars" aria-label="5 z 5 gwiazdek">
-                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i>
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
                         </div>
-                        <div class="meter"><span></span></div>
                     </div>
                 </article>
 
@@ -439,15 +420,14 @@
                     <div class="icon-plate"><i class="ti ti-hexagons"></i></div>
                     <div class="name">
                         <h2>Mikroserwisy</h2>
-                        <span>niezależne komponenty</span>
+                        <span>niezależnie wdrażane usługi</span>
                     </div>
                     <p class="insight">
-                        Najłatwiej podbić tylko przeciążony serwis i zostawić resztę <strong>bez zmian</strong>.
+                        Poszczególne usługi mogą być skalowane <strong>niezależnie</strong>, w zależności od ich specyficznych potrzeb i obciążenia.
                     </p>
                     <div class="rating">
-                        <div class="rating-number">1 / 5</div>
-                        <div class="stars" aria-label="1 z 5 gwiazdek">
-                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
+                        <div class="stars" aria-label="5 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span>
                         </div>
                     </div>
                 </article>
@@ -456,20 +436,20 @@
                     <div class="icon-plate"><i class="ti ti-bolt"></i></div>
                     <div class="name">
                         <h2>Event-driven</h2>
-                        <span>kolejki i konsumenci</span>
+                        <span>Niezależne skalowanie na poziomie procesorów zdarzeń</span>
                     </div>
                     <p class="insight">
-                        Bufor pomaga przeżyć piki, a konsumenci mogą rosnąć <strong>w rytmie obciążenia</strong>.
+                        Wysoka skalowalność dzięki wysoce zrównoleglonemu przetwarzaniu oraz asynchronicznej komunikacji.
                     </p>
                     <div class="rating">
-                        <div class="rating-number">2 / 5</div>
-                        <div class="stars" aria-label="2 z 5 gwiazdek">
-                            <i class="ti ti-star-filled filled"></i><i class="ti ti-star-filled filled"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i>
+                        <div class="stars" aria-label="4 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="empty">☆</span>
                         </div>
                     </div>
                 </article>
             </section>
         </main>
+        ```
         
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
         <div class="camera-box">kamera 480 &times; 270</div>
