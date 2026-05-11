@@ -2,7 +2,7 @@
 
 # =============================================================
 # Generator slajdów prezentacji
-# Używa Claude Code CLI do tworzenia slajdów HTML
+# Używa Codex CLI do tworzenia slajdów HTML
 # =============================================================
 
 SLIDES_DIR="$(cd "$(dirname "$0")" && pwd)/slides"
@@ -52,7 +52,7 @@ count_slides_in_md() {
 # ---------- Menu: wybór modułu ----------
 
 echo ""
-echo -e "${BOLD}=== Generator slajdów prezentacji ===${NC}"
+echo -e "${BOLD}=== Generator slajdów prezentacji (Codex) ===${NC}"
 echo ""
 echo -e "Dostępne moduły (z plikiem ${YELLOW}slides.md${NC}):"
 echo ""
@@ -151,21 +151,9 @@ for i in $(seq "$START" "$END"); do
         fi
     fi
 
-    PROMPT="Na podstawie pliku ${INSTRUKCJE} przygotuj slajd w pliku slides/${MODULE_REL}/slides-${SLIDE_NUM}.html na podstawie informacji z pliku ${SLIDES_MD_REL} — wyłącznie slajd numer $i.
-            
-            Zapisz wynik w docelowym pliku i nie modyfikuj żadnych innych slajdów ani plików.
-            
-            Ważne wymagania:
-            - Nie zmieniaj, nie parafrazuj i nie redaguj przygotowanych tekstów.
-            - Bazuj wyłącznie na treści, która jest już przygotowana w pliku ${SLIDES_MD_REL}.
-            - Zachowaj sens, kolejność i brzmienie tekstów źródłowych.
-            - Dostosuj jedynie strukturę HTML, układ slajdu i rozmieszczenie elementów zgodnie z instrukcjami z pliku ${INSTRUKCJE}.
-            - Jeśli w danym miejscu powinna znaleźć się grafika, ilustracja, wykres, ikona lub zdjęcie, ale nie ma dostępnego konkretnego pliku graficznego, pozostaw wyraźne miejsce na grafikę.
-            - Placeholder grafiki powinien jasno wskazywać, jakiego typu grafika ma zostać później wstawiona.
-            - Nie dodawaj własnych treści merytorycznych poza technicznymi placeholderami potrzebnymi do układu slajdu.
-            - Przygotuj tylko slajd numer $i."
+    PROMPT="Na podstawie pliku ${INSTRUKCJE} przygotuj slajd w pliku slides/${MODULE_REL}/slides-${SLIDE_NUM}.html na podstawie informacji z pliku ${SLIDES_MD_REL} — tylko slajd numer $i. Zapisz wynik w docelowym pliku i nie modyfikuj innych slajdów."
 
-    (cd "$(dirname "$0")" && echo "$PROMPT" | claude -p --allowedTools 'Write,Edit,Read,Glob,Grep,Bash(readonly)')
+    (cd "$(dirname "$0")" && printf "%s\n" "$PROMPT" | codex exec --full-auto -)
 
     if [ $? -eq 0 ]; then
         echo "$i" > "$PROGRESS_FILE"
