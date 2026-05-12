@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 18 - Kiedy który styl ma przewagę</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 18%; left: 8%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 72%; left: 88%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 28%; left: 72%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 78%; left: 14%; animation-delay: 4.8s; }
+        .particle:nth-child(7) { top: 44%; left: 52%; animation-delay: 6.2s; }
+        .particle:nth-child(8) { top: 12%; left: 62%; animation-delay: 2.5s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            margin-bottom: 14px;
+            color: #ffffff;
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.65s forwards;
+        }
+
+        /* === Tiles grid === */
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            max-width: 1520px;
+            width: 100%;
+            flex: 1;
+            align-items: center;
+        }
+
+        .tile {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 28px 26px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.65);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+        }
+
+        .tile:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.06);
+            transform: translateY(-4px);
+        }
+
+        .tile:nth-child(1) { animation: bounceIn 0.8s ease-out 0.85s forwards; }
+        .tile:nth-child(2) { animation: bounceIn 0.8s ease-out 1.05s forwards; }
+        .tile:nth-child(3) { animation: bounceIn 0.8s ease-out 1.25s forwards; }
+        .tile:nth-child(4) { animation: bounceIn 0.8s ease-out 1.45s forwards; }
+
+        .tile-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .tile-icon--layered {
+            background: rgba(100,116,139,0.15);
+            color: #94a3b8;
+        }
+
+        .tile-icon--modular {
+            background: rgba(16,185,129,0.12);
+            color: #10b981;
+        }
+
+        .tile-icon--micro {
+            background: rgba(139,92,246,0.12);
+            color: #8b5cf6;
+        }
+
+        .tile-icon--event {
+            background: rgba(245,158,11,0.12);
+            color: #f59e0b;
+        }
+
+        .tile-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .tile-name--layered { color: #cbd5e1; }
+        .tile-name--modular { color: #6ee7b7; }
+        .tile-name--micro { color: #c4b5fd; }
+        .tile-name--event { color: #fcd34d; }
+
+        .tile-desc {
+            font-size: 17px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .tile-desc strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .tile-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            align-self: flex-start;
+        }
+
+        .tile-chip--layered {
+            background: rgba(100,116,139,0.1);
+            border: 1px solid rgba(100,116,139,0.25);
+            color: #94a3b8;
+        }
+
+        .tile-chip--modular {
+            background: rgba(16,185,129,0.08);
+            border: 1px solid rgba(16,185,129,0.25);
+            color: #10b981;
+        }
+
+        .tile-chip--micro {
+            background: rgba(139,92,246,0.08);
+            border: 1px solid rgba(139,92,246,0.25);
+            color: #8b5cf6;
+        }
+
+        .tile-chip--event {
+            background: rgba(245,158,11,0.08);
+            border: 1px solid rgba(245,158,11,0.25);
+            color: #f59e0b;
+        }
+
+        /* === Bottom statement === */
+        .bottom-statement {
+            max-width: 1520px;
+            width: 100%;
+            text-align: center;
+            margin-top: 32px;
+            padding: 20px 32px;
+            border-radius: 14px;
+            background: rgba(6,182,212,0.05);
+            border: 1px solid rgba(6,182,212,0.15);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.8s forwards;
+        }
+
+        .bottom-statement p {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .bottom-statement strong {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Każdy styl architektoniczny pasuje do <span class="highlight">innego kontekstu</span></h1>
+                <p class="subtitle">Nie ma jednej dobrej odpowiedzi</p>
+            </div>
+
+            <div class="tiles">
+                <!-- Layered -->
+                <div class="tile">
+                    <div class="tile-icon tile-icon--layered">
+                        <i class="ti ti-stack-2"></i>
+                    </div>
+                    <div class="tile-name tile-name--layered">Layered</div>
+                    <div class="tile-desc">
+                        <strong>Dobry start</strong> i niski koszt wejścia. Sprawdza się w małych projektach i zespołach zaczynających budowanie systemu.
+                    </div>
+                    <div class="tile-chip tile-chip--layered">
+                        <i class="ti ti-rocket"></i>
+                        Szybki start
+                    </div>
+                </div>
+
+                <!-- Modular monolith -->
+                <div class="tile">
+                    <div class="tile-icon tile-icon--modular">
+                        <i class="ti ti-building-community"></i>
+                    </div>
+                    <div class="tile-name tile-name--modular">Modularny monolit</div>
+                    <div class="tile-desc">
+                        <strong>Rozsądny kompromis</strong>: dobra organizacja domeny bez kosztu rozproszenia. Silne granice modułów przy prostym deploymencie.
+                    </div>
+                    <div class="tile-chip tile-chip--modular">
+                        <i class="ti ti-balance"></i>
+                        Kompromis
+                    </div>
+                </div>
+
+                <!-- Microservices -->
+                <div class="tile">
+                    <div class="tile-icon tile-icon--micro">
+                        <i class="ti ti-topology-star-ring-3"></i>
+                    </div>
+                    <div class="tile-name tile-name--micro">Mikroserwisy</div>
+                    <div class="tile-desc">
+                        <strong>Niezależność i skala</strong>: idealny przy organizacji wielozespołowej, gdy każdy zespół potrzebuje autonomii wdrożeniowej.
+                    </div>
+                    <div class="tile-chip tile-chip--micro">
+                        <i class="ti ti-users-group"></i>
+                        Wiele zespołów
+                    </div>
+                </div>
+
+                <!-- Event-driven -->
+                <div class="tile">
+                    <div class="tile-icon tile-icon--event">
+                        <i class="ti ti-bolt"></i>
+                    </div>
+                    <div class="tile-name tile-name--event">Event-driven</div>
+                    <div class="tile-desc">
+                        <strong>Responsywność</strong> i luźne powiązanie: reagowanie na zdarzenia biznesowe bez synchronicznych łańcuchów wywołań.
+                    </div>
+                    <div class="tile-chip tile-chip--event">
+                        <i class="ti ti-broadcast"></i>
+                        Reaktywność
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-statement">
+                <p><strong>Wybór architektury</strong> = dopasowanie do produktu, zespołu, skali i tempa zmian</p>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

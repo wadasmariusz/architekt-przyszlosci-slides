@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 18 - Porównanie Interoperability</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --layered: #94a3b8;
+            --modular: #f59e0b;
+            --micro: #8b5cf6;
+            --event: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(2) { top: 18%; left: 8%; animation-delay: 0.3s; }
+        .particle:nth-child(3) { top: 68%; left: 86%; animation-delay: 1.8s; }
+        .particle:nth-child(4) { top: 30%; left: 76%; animation-delay: 3.2s; }
+        .particle:nth-child(5) { top: 72%; left: 18%; animation-delay: 4.6s; }
+        .particle:nth-child(6) { top: 42%; left: 52%; animation-delay: 6.0s; }
+        .particle:nth-child(7) { top: 14%; left: 60%; animation-delay: 2.4s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 74px 130px 315px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1240px;
+            margin: 0 auto 32px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            margin-bottom: 14px;
+            color: #ffffff;
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: 0;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 21px;
+            font-weight: 300;
+            line-height: 1.55;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.65s forwards;
+        }
+
+        .integration-board {
+            position: relative;
+            width: 100%;
+            max-width: 1500px;
+            min-height: 498px;
+            padding: 28px 30px 30px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.64);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.85s forwards;
+        }
+
+        .external-band {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            background: rgba(6,182,212,0.07);
+            border: 1px solid rgba(6,182,212,0.18);
+        }
+
+        .band-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cffafe;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .band-title i {
+            color: var(--cyan-400);
+            font-size: 26px;
+        }
+
+        .band-systems {
+            display: flex;
+            gap: 12px;
+        }
+
+        .system-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 34px;
+            padding: 0 14px;
+            border-radius: 999px;
+            background: rgba(3,7,18,0.32);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .topology-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .lane {
+            --accent: var(--cyan-400);
+            --accent-soft: rgba(6,182,212,0.12);
+            position: relative;
+            min-height: 378px;
+            padding: 20px 18px 18px;
+            border-radius: 16px;
+            background:
+                linear-gradient(180deg, var(--accent-soft), rgba(3,7,18,0.14) 32%),
+                rgba(3,7,18,0.28);
+            border: 1px solid rgba(255,255,255,0.07);
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .lane:nth-child(1) { animation: riseIn 0.7s ease-out 1.05s forwards; }
+        .lane:nth-child(2) { animation: riseIn 0.7s ease-out 1.2s forwards; }
+        .lane:nth-child(3) { animation: riseIn 0.7s ease-out 1.35s forwards; }
+        .lane:nth-child(4) { animation: riseIn 0.7s ease-out 1.5s forwards; }
+
+        .lane--layered {
+            --accent: var(--layered);
+            --accent-soft: rgba(148,163,184,0.12);
+        }
+
+        .lane--modular {
+            --accent: var(--modular);
+            --accent-soft: rgba(245,158,11,0.12);
+        }
+
+        .lane--micro {
+            --accent: var(--micro);
+            --accent-soft: rgba(139,92,246,0.12);
+        }
+
+        .lane--event {
+            --accent: var(--event);
+            --accent-soft: rgba(16,185,129,0.12);
+        }
+
+        .lane::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .lane-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .lane-icon {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 auto;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 25px;
+        }
+
+        .style-name {
+            color: #ffffff;
+            font-size: 21px;
+            font-weight: 800;
+            line-height: 1.15;
+        }
+
+        .approach {
+            margin-top: 5px;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .topology {
+            height: 132px;
+            margin: 14px 0 16px;
+            border-radius: 14px;
+            background: rgba(3,7,18,0.34);
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .mono-stack {
+            position: relative;
+            width: 210px;
+            height: 96px;
+            display: grid;
+            grid-template-rows: 30px 1fr;
+            gap: 8px;
+        }
+
+        .api-cap,
+        .entry-point {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            background: rgba(148,163,184,0.12);
+            border: 1px solid rgba(148,163,184,0.28);
+        }
+
+        .mono-body {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            padding: 7px;
+            border-radius: 12px;
+            border: 1px solid rgba(148,163,184,0.22);
+            background: rgba(148,163,184,0.08);
+        }
+
+        .mono-body span,
+        .domain-module span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            color: #cbd5e1;
+            background: rgba(255,255,255,0.05);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .domain-shell {
+            width: 220px;
+            display: grid;
+            grid-template-rows: 30px 1fr;
+            gap: 8px;
+        }
+
+        .entry-point {
+            color: #fed7aa;
+            background: rgba(245,158,11,0.12);
+            border-color: rgba(245,158,11,0.3);
+        }
+
+        .domain-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 7px;
+        }
+
+        .domain-module {
+            height: 48px;
+            padding: 7px;
+            border-radius: 12px;
+            background: rgba(245,158,11,0.08);
+            border: 1px solid rgba(245,158,11,0.24);
+        }
+
+        .service-map {
+            width: 236px;
+            display: grid;
+            grid-template-columns: 64px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .gateway {
+            height: 100px;
+            border-radius: 14px;
+            background: rgba(139,92,246,0.12);
+            border: 1px solid rgba(139,92,246,0.3);
+            color: #ddd6fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .service {
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(139,92,246,0.08);
+            border: 1px solid rgba(139,92,246,0.24);
+            color: #c4b5fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .event-map {
+            width: 240px;
+            display: grid;
+            grid-template-columns: 76px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .publisher {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.32);
+            color: #6ee7b7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .event-bus {
+            display: grid;
+            gap: 8px;
+        }
+
+        .event-topic {
+            height: 34px;
+            border-radius: 999px;
+            background: rgba(16,185,129,0.14);
+            border: 1px solid rgba(16,185,129,0.28);
+            color: #a7f3d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+        }
+
+        .subscriber-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .subscriber {
+            height: 28px;
+            border-radius: 999px;
+            background: rgba(16,185,129,0.07);
+            border: 1px solid rgba(16,185,129,0.2);
+            color: #bbf7d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .lane-copy {
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.42;
+        }
+
+        .lane-copy strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            height: 26px;
+            padding: 0 10px;
+            border-radius: 999px;
+            color: var(--accent);
+            background: var(--accent-soft);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes riseIn {
+            from { opacity: 0; transform: translateY(18px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <i class="ti ti-plug-connected"></i>
+                    Porównanie stylów
+                </div>
+                <h1 class="title">Interoperability <span class="highlight"></span></h1>
+                <p class="subtitle">Interoperacyjność zależy od tego, czy system wystawia centralny punkt, jasne kontrakty usług,</br> czy zdarzenia gotowe dla nowych odbiorców.</p>
+            </div>
+
+            <div class="integration-board">
+                <div class="topology-grid">
+                    <div class="lane lane--layered">
+                        <div class="lane-head">
+                            <div class="lane-icon"><i class="ti ti-stack-2"></i></div>
+                            <div>
+                                <div class="style-name">Layered</div>
+                                <div class="approach">centralna integracja</div>
+                            </div>
+                        </div>
+                        <div class="topology">
+                            <div class="mono-stack" aria-hidden="true">
+                                <div class="api-cap">API CAP</div>
+                                <div class="mono-body">
+                                    <span>UI</span>
+                                    <span>Biz</span>
+                                    <span>DB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="lane-copy"><strong>Monolit potrzebuje warstwy API na górze.</strong> Czysty kontrakt biznesowy bywa trudny, bo domena jest rozproszona po warstwach.</p>
+                        <div class="tag-row">
+                            <span class="tag">jeden punkt</span>
+                            <span class="tag">API jako dodatek</span>
+                        </div>
+                    </div>
+
+                    <div class="lane lane--modular">
+                        <div class="lane-head">
+                            <div class="lane-icon"><i class="ti ti-packages"></i></div>
+                            <div>
+                                <div class="style-name">Modularny monolit</div>
+                                <div class="approach">kontrakty domenowe</div>
+                            </div>
+                        </div>
+                        <div class="topology">
+                            <div class="domain-shell" aria-hidden="true">
+                                <div class="entry-point">APP ENTRY</div>
+                                <div class="domain-grid">
+                                    <div class="domain-module"><span>Kasa</span></div>
+                                    <div class="domain-module"><span>Magazyn</span></div>
+                                    <div class="domain-module"><span>Dostawy</span></div>
+                                    <div class="domain-module"><span>Cennik</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="lane-copy"><strong>Granice modułów pomagają opisać styki.</strong> Nadal jednak wszystko wychodzi przez centralny punkt pojedynczego wdrożenia.</p>
+                        <div class="tag-row">
+                            <span class="tag">domena</span>
+                            <span class="tag">jeden deployment</span>
+                        </div>
+                    </div>
+
+                    <div class="lane lane--micro">
+                        <div class="lane-head">
+                            <div class="lane-icon"><i class="ti ti-api"></i></div>
+                            <div>
+                                <div class="style-name">Mikroserwisy</div>
+                                <div class="approach">API i protokoły</div>
+                            </div>
+                        </div>
+                        <div class="topology">
+                            <div class="service-map" aria-hidden="true">
+                                <div class="gateway">API<br>Gateway</div>
+                                <div class="services">
+                                    <div class="service">REST</div>
+                                    <div class="service">gRPC</div>
+                                    <div class="service">JSON</div>
+                                    <div class="service">BC</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="lane-copy"><strong>Najmocniejszy styl dla integracji kontraktowej.</strong> Serwisy ukrywają implementację i wystawiają sieciowe API zamiast wnętrza domeny.</p>
+                        <div class="tag-row">
+                            <span class="tag">bounded context</span>
+                            <span class="tag">gateway</span>
+                        </div>
+                    </div>
+
+                    <div class="lane lane--event">
+                        <div class="lane-head">
+                            <div class="lane-icon"><i class="ti ti-broadcast"></i></div>
+                            <div>
+                                <div class="style-name">Event-driven</div>
+                                <div class="approach">broadcast zdarzeń</div>
+                            </div>
+                        </div>
+                        <div class="topology">
+                            <div class="event-map" aria-hidden="true">
+                                <div class="publisher"><i class="ti ti-speakerphone"></i></div>
+                                <div class="event-bus">
+                                    <div class="event-topic">ORDER PAID</div>
+                                    <div class="subscriber-row">
+                                        <div class="subscriber">ERP</div>
+                                        <div class="subscriber">CRM</div>
+                                        <div class="subscriber">BI</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="lane-copy"><strong>Najłatwiej dołączać nowych odbiorców.</strong> Producent publikuje fakt, a kolejne systemy subskrybują zdarzenie bez zmian w istniejącym kodzie.</p>
+                        <div class="tag-row">
+                            <span class="tag">async</span>
+                            <span class="tag">bez ingerencji</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

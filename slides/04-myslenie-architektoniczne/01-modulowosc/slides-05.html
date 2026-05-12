@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 05 - Konsekwencje źle postawionych granic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 66px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1540px;
+            margin: 0 auto 28px;
+        }
+
+        .eyebrow {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Two columns === */
+        .columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            max-width: 1240px;
+            width: 100%;
+            align-items: start;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 22px 28px 24px;
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+        }
+
+        .column--bad {
+            background: rgba(239,68,68,0.055);
+            border: 1px solid rgba(239,68,68,0.2);
+            animation: slideFromLeft 0.8s ease-out 0.8s forwards;
+        }
+
+        .column--good {
+            background: rgba(16,185,129,0.055);
+            border: 1px solid rgba(16,185,129,0.2);
+            animation: slideFromRight 0.8s ease-out 0.8s forwards;
+        }
+
+        .column-label {
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .column--bad .column-label {
+            color: #ef4444;
+        }
+
+        .column--good .column-label {
+            color: #10b981;
+        }
+
+        /* === Diagrams === */
+        .boundary-diagram {
+            width: 100%;
+            height: 230px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(10,14,23,0.42);
+        }
+
+        .column--bad .boundary-diagram {
+            border-color: rgba(239,68,68,0.16);
+            background:
+                radial-gradient(circle at 50% 50%, rgba(239,68,68,0.09), transparent 62%),
+                rgba(10,14,23,0.42);
+        }
+
+        .column--good .boundary-diagram {
+            border-color: rgba(16,185,129,0.16);
+            background:
+                radial-gradient(circle at 50% 50%, rgba(16,185,129,0.08), transparent 64%),
+                rgba(10,14,23,0.42);
+        }
+
+        .boundary-diagram svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .module-box {
+            fill: rgba(17,24,39,0.92);
+            stroke: rgba(148,163,184,0.28);
+            stroke-width: 1.4;
+            rx: 10;
+        }
+
+        .bad-module {
+            stroke: rgba(239,68,68,0.34);
+        }
+
+        .good-module {
+            stroke: rgba(16,185,129,0.34);
+        }
+
+        .module-text {
+            fill: #e2e8f0;
+            font-size: 15px;
+            font-weight: 700;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .bad-arrow {
+            fill: none;
+            stroke: rgba(239,68,68,0.58);
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .good-arrow {
+            fill: none;
+            stroke: rgba(16,185,129,0.72);
+            stroke-width: 2.4;
+            stroke-linecap: round;
+        }
+
+        .interface-box {
+            fill: rgba(34,211,238,0.13);
+            stroke: rgba(34,211,238,0.48);
+            stroke-width: 1.5;
+            rx: 9;
+        }
+
+        .interface-text {
+            fill: var(--cyan-400);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            text-transform: uppercase;
+        }
+
+        /* === Consequences === */
+        .consequence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .consequence-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #cbd5e1;
+            font-size: 20px;
+            line-height: 1.32;
+            font-weight: 400;
+        }
+
+        .consequence-item i {
+            margin-top: 2px;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .column--bad .consequence-item i {
+            color: rgba(239,68,68,0.72);
+        }
+
+        .column--good .consequence-item i {
+            color: rgba(16,185,129,0.72);
+        }
+
+        .micro-example {
+            padding: 13px 16px;
+            border-radius: 12px;
+            color: #cbd5e1;
+            font-size: 19px;
+            line-height: 1.32;
+            font-weight: 400;
+        }
+
+        .column--bad .micro-example {
+            background: rgba(239,68,68,0.045);
+            border: 1px solid rgba(239,68,68,0.16);
+        }
+
+        .column--good .micro-example {
+            background: rgba(16,185,129,0.045);
+            border: 1px solid rgba(16,185,129,0.16);
+        }
+
+        .example-label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .column--bad .example-label {
+            color: #ef4444;
+        }
+
+        .column--good .example-label {
+            color: #10b981;
+        }
+
+        /* === Divider === */
+        .divider {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 520px;
+            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.12), transparent);
+            z-index: 11;
+        }
+
+        .divider-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--dark-bg);
+            border: 1px solid rgba(6,182,212,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 12;
+            opacity: 0;
+            animation: scaleIn 0.6s ease-out 1.2s forwards;
+        }
+
+        .divider-icon i {
+            font-size: 22px;
+            color: var(--cyan-400);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+            to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- divider -->
+        <div class="divider"></div>
+        <div class="divider-icon"><i class="ti ti-arrows-exchange"></i></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h2 class="title">Konsekwencje <span class="highlight">źle postawionych granic</span></h2>
+            </div>
+
+            <div class="columns">
+                <!-- Left: bad boundaries -->
+                <div class="column column--bad">
+                    <div class="column-label"><i class="ti ti-x"></i> Źle postawione granice</div>
+                    <div class="boundary-diagram" aria-label="Gęsta sieć zależności między modułami">
+                        <svg viewBox="0 0 540 230" role="img">
+                            <defs>
+                                <marker id="bad-arrow-head" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto-start-reverse">
+                                    <path d="M1,1 L7,4 L1,7 Z" fill="rgba(239,68,68,0.78)" />
+                                </marker>
+                            </defs>
+                            <g>
+                                <path class="bad-arrow" d="M270 60 C260 76 260 82 270 92" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M220 58 C160 62 120 75 103 92" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M320 58 C380 62 420 75 437 92" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M164 113 C181 100 195 100 209 113" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M331 113 C350 98 365 98 376 113" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M112 134 C145 170 185 190 210 187" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M428 134 C395 170 355 190 330 187" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M270 60 C310 90 310 150 270 166" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M164 104 C240 64 330 64 376 104" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M376 122 C330 162 240 162 164 122" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                                <path class="bad-arrow" d="M270 134 L270 166" marker-start="url(#bad-arrow-head)" marker-end="url(#bad-arrow-head)" />
+                            </g>
+                            <g>
+                                <rect class="module-box bad-module" x="210" y="18" width="120" height="42" />
+                                <text class="module-text" x="270" y="39">Faktury</text>
+                                <rect class="module-box bad-module" x="42" y="92" width="122" height="42" />
+                                <text class="module-text" x="103" y="113">Płatności</text>
+                                <rect class="module-box bad-module" x="209" y="92" width="122" height="42" />
+                                <text class="module-text" x="270" y="113">Zamówienia</text>
+                                <rect class="module-box bad-module" x="376" y="92" width="122" height="42" />
+                                <text class="module-text" x="437" y="113">Raporty</text>
+                                <rect class="module-box bad-module" x="210" y="166" width="120" height="42" />
+                                <text class="module-text" x="270" y="187">Powiadom.</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="consequence-list">
+                        <div class="consequence-item"><i class="ti ti-link"></i> Zmiana w jednym wymusza zmiany w kilku innych</div>
+                        <div class="consequence-item"><i class="ti ti-alert-triangle"></i> Nieprzewidywalny zasięg modyfikacji</div>
+                    </div>
+                    <div class="micro-example">
+                        <span class="example-label">Przykład</span>
+                        Zmiana formatu faktury wymaga edycji w module płatności, raportów i powiadomień.
+                    </div>
+                </div>
+
+                <!-- Right: good boundaries -->
+                <div class="column column--good">
+                    <div class="column-label"><i class="ti ti-check"></i> Dobrze postawione granice</div>
+                    <div class="boundary-diagram" aria-label="Uporządkowane zależności przez interfejs fakturowania">
+                        <svg viewBox="0 0 540 230" role="img">
+                            <defs>
+                                <marker id="good-arrow-head" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto">
+                                    <path d="M1,1 L7,4 L1,7 Z" fill="rgba(16,185,129,0.9)" />
+                                </marker>
+                            </defs>
+                            <g>
+                                <path class="good-arrow" d="M103 70 L103 104" marker-end="url(#good-arrow-head)" />
+                                <path class="good-arrow" d="M166 125 L220 125" marker-end="url(#good-arrow-head)" />
+                                <path class="good-arrow" d="M320 105 C350 78 370 56 378 49" marker-end="url(#good-arrow-head)" />
+                                <path class="good-arrow" d="M320 125 L378 125" marker-end="url(#good-arrow-head)" />
+                                <path class="good-arrow" d="M320 145 C350 172 370 193 378 195" marker-end="url(#good-arrow-head)" />
+                            </g>
+                            <g>
+                                <rect class="module-box good-module" x="40" y="28" width="126" height="42" />
+                                <text class="module-text" x="103" y="49">Zamówienia</text>
+                                <rect class="module-box good-module" x="40" y="104" width="126" height="42" />
+                                <text class="module-text" x="103" y="125">Faktury</text>
+                                <rect class="interface-box" x="220" y="86" width="100" height="78" />
+                                <text class="interface-text" x="270" y="117">Interfejs</text>
+                                <text class="interface-text" x="270" y="137">faktur</text>
+                                <rect class="module-box good-module" x="378" y="28" width="122" height="42" />
+                                <text class="module-text" x="439" y="49">Płatności</text>
+                                <rect class="module-box good-module" x="378" y="104" width="122" height="42" />
+                                <text class="module-text" x="439" y="125">Raporty</text>
+                                <rect class="module-box good-module" x="378" y="174" width="122" height="42" />
+                                <text class="module-text" x="439" y="195">Powiadom.</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="consequence-list">
+                        <div class="consequence-item"><i class="ti ti-box-seam"></i> Każda zmiana zamyka się w jednym module</div>
+                        <div class="consequence-item"><i class="ti ti-route"></i> Przewidywalny zasięg modyfikacji</div>
+                    </div>
+                    <div class="micro-example">
+                        <span class="example-label">Przykład</span>
+                        Zmiana formatu faktury zamyka się w module fakturowania, reszta systemu korzysta z jego interfejsu.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

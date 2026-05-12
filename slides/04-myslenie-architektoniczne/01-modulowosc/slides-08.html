@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Trzy filary oceny modułowości</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 50px;
+        }
+
+        .eyebrow {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Three pillars === */
+        .pillars {
+            display: flex;
+            gap: 40px;
+            max-width: 1300px;
+            width: 100%;
+            flex: 1;
+            align-items: stretch;
+        }
+
+        .pillar {
+            flex: 1;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.15);
+            backdrop-filter: blur(8px);
+            padding: 40px 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
+            opacity: 0;
+            transition: border-color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .pillar:hover {
+            border-color: var(--cyan-500);
+            background: rgba(6,182,212,0.08);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(6,182,212,0.15);
+        }
+
+        .pillar:nth-child(1) {
+            animation: bounceIn 0.8s ease-out 0.7s forwards;
+        }
+
+        .pillar:nth-child(2) {
+            animation: bounceIn 0.8s ease-out 1.0s forwards;
+        }
+
+        .pillar:nth-child(3) {
+            animation: bounceIn 0.8s ease-out 1.3s forwards;
+        }
+
+        .pillar-num {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark-bg);
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            box-shadow: 0 0 20px rgba(34,211,238,0.3);
+            flex-shrink: 0;
+        }
+
+        .pillar-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(6,182,212,0.11);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            flex-shrink: 0;
+        }
+
+        .pillar-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #f0f4f8;
+        }
+
+        .pillar-subtitle {
+            font-size: 22px;
+            font-weight: 300;
+            color: #94a3b8;
+        }
+
+        .pillar-desc {
+            font-size: 20px;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        /* === Annotation === */
+        .annotation {
+            margin-top: 36px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.7s forwards;
+        }
+
+        .annotation-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.25);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--cyan-400);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceIn {
+            0%   { opacity: 0; transform: translateY(30px) scale(0.95); }
+            60%  { opacity: 1; transform: translateY(-6px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Ocena granic</div>
+                <h2 class="title">Trzy filary oceny <span class="highlight">modułowości</span></h2>
+            </div>
+
+            <div class="pillars">
+                <!-- Pillar 1: Cohesion -->
+                <div class="pillar">
+                    <div class="pillar-num">1</div>
+                    <div class="pillar-icon"><i class="ti ti-puzzle"></i></div>
+                    <div class="pillar-title">Cohesion</div>
+                    <div class="pillar-subtitle">(spójność)</div>
+                    <div class="pillar-desc">Na ile elementy wewnątrz jednego modułu są ze sobą powiązane</div>
+                </div>
+
+                <!-- Pillar 2: Coupling -->
+                <div class="pillar">
+                    <div class="pillar-num">2</div>
+                    <div class="pillar-icon"><i class="ti ti-link"></i></div>
+                    <div class="pillar-title">Coupling</div>
+                    <div class="pillar-subtitle">(sprzężenie)</div>
+                    <div class="pillar-desc">Jak silnie moduły zależą od siebie nawzajem</div>
+                </div>
+
+                <!-- Pillar 3: Connascence -->
+                <div class="pillar">
+                    <div class="pillar-num">3</div>
+                    <div class="pillar-icon"><i class="ti ti-arrows-exchange"></i></div>
+                    <div class="pillar-title">Connascence</div>
+                    <div class="pillar-subtitle">(współzależność/konascencja)</div>
+                    <div class="pillar-desc">Opisuje rodzaj powiązania między modułami: nie tylko czy są powiązane, ale w jaki sposób</div>
+                </div>
+            </div>
+
+            <div class="annotation">
+                <div class="annotation-chip">
+                    <i class="ti ti-arrow-right"></i>
+                    Szczegóły w kolejnych lekcjach
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

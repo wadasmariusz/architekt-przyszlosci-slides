@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 14 - Mikroserwisy + event-driven w praktyce</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 20%; left: 12%; animation-delay: 0.7s; }
+        .particle:nth-child(4) { top: 65%; left: 90%; animation-delay: 2.2s; }
+        .particle:nth-child(5) { top: 32%; left: 80%; animation-delay: 3.8s; }
+        .particle:nth-child(6) { top: 76%; left: 18%; animation-delay: 5.2s; }
+        .particle:nth-child(7) { top: 48%; left: 46%; animation-delay: 6.8s; }
+        .particle:nth-child(8) { top: 14%; left: 68%; animation-delay: 1.4s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 40px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            margin-bottom: 14px;
+            color: #ffffff;
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.65s forwards;
+        }
+
+        /* === Main layout — diagram + technique cards === */
+        .main-area {
+            display: grid;
+            grid-template-columns: 580px 1fr;
+            gap: 50px;
+            max-width: 1500px;
+            width: 100%;
+            flex: 1;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.85s forwards;
+        }
+
+        /* === SVG Diagram === */
+        .diagram-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-svg {
+            width: 580px;
+            height: 420px;
+        }
+
+        .node-rect {
+            rx: 10;
+            ry: 10;
+            stroke-width: 1.5;
+        }
+
+        .node-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+        .node-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+        /* Service colors */
+        .svc-node { fill: rgba(139,92,246,0.12); stroke: rgba(139,92,246,0.4); }
+        .svc-text { fill: #c4b5fd; }
+
+        /* Broker / Event Bus */
+        .broker-node { fill: rgba(16,185,129,0.12); stroke: rgba(16,185,129,0.4); }
+        .broker-text { fill: #6ee7b7; }
+
+        /* API Gateway */
+        .gw-node { fill: rgba(6,182,212,0.12); stroke: rgba(6,182,212,0.4); }
+        .gw-text { fill: var(--cyan-400); }
+
+        /* CQRS read side */
+        .read-node { fill: rgba(245,158,11,0.12); stroke: rgba(245,158,11,0.4); }
+        .read-text { fill: #fcd34d; }
+
+        .arrow-line {
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: drawLine 1.4s ease-out 1.1s forwards;
+        }
+
+        .arrow-line--d1 { animation-delay: 1.3s; }
+        .arrow-line--d2 { animation-delay: 1.5s; }
+        .arrow-line--d3 { animation-delay: 1.7s; }
+        .arrow-line--d4 { animation-delay: 1.9s; }
+        .arrow-line--d5 { animation-delay: 2.1s; }
+        .arrow-line--d6 { animation-delay: 2.3s; }
+
+        .arrow-head { stroke-width: 1.5; }
+
+        .label-small {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+        }
+
+        .sync-arrow { stroke: rgba(139,92,246,0.5); }
+        .sync-head { fill: rgba(139,92,246,0.5); stroke: rgba(139,92,246,0.5); }
+        .sync-label { fill: #a78bfa; }
+
+        .async-arrow { stroke: rgba(16,185,129,0.5); }
+        .async-head { fill: rgba(16,185,129,0.5); stroke: rgba(16,185,129,0.5); }
+        .async-label { fill: #34d399; }
+
+        .gw-arrow { stroke: rgba(6,182,212,0.5); }
+        .gw-head { fill: rgba(6,182,212,0.5); stroke: rgba(6,182,212,0.5); }
+
+        .read-arrow { stroke: rgba(245,158,11,0.5); }
+        .read-head { fill: rgba(245,158,11,0.5); stroke: rgba(245,158,11,0.5); }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* === Technique cards === */
+        .techniques {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .tech-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 22px 26px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .tech-card:nth-child(1) { animation: fadeUp 0.7s ease-out 1.0s forwards; }
+        .tech-card:nth-child(2) { animation: fadeUp 0.7s ease-out 1.3s forwards; }
+        .tech-card:nth-child(3) { animation: fadeUp 0.7s ease-out 1.6s forwards; }
+        .tech-card:nth-child(4) { animation: fadeUp 0.7s ease-out 1.9s forwards; }
+
+        .tech-icon {
+            flex: 0 0 auto;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .tech-icon--cqrs {
+            background: rgba(245,158,11,0.1);
+            color: #f59e0b;
+        }
+
+        .tech-icon--cache {
+            background: rgba(16,185,129,0.1);
+            color: #10b981;
+        }
+
+        .tech-icon--gateway {
+            background: rgba(6,182,212,0.1);
+            color: var(--cyan-400);
+        }
+
+        .tech-icon--combo {
+            background: rgba(139,92,246,0.1);
+            color: #8b5cf6;
+        }
+
+        .tech-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .tech-desc {
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .tech-desc strong {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* === Bottom thesis === */
+        .bottom-note {
+            max-width: 1500px;
+            width: 100%;
+            margin-top: 28px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 2.4s forwards;
+        }
+
+        .note-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            border-radius: 14px;
+            background: rgba(6,182,212,0.05);
+            border: 1px solid rgba(6,182,212,0.15);
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .note-box i {
+            font-size: 22px;
+            color: var(--cyan-400);
+        }
+
+        .note-box strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Style architektoniczne <span class="highlight">można łączyć</span></h1>
+            </div>
+
+            <div class="main-area">
+                <!-- SVG diagram: microservices with event bus in the middle -->
+                <div class="diagram-area">
+                    <svg class="diagram-svg" viewBox="0 0 580 420">
+                        <!-- API Gateway -->
+                        <rect class="node-rect gw-node" x="200" y="10" width="180" height="44" />
+                        <text class="node-text gw-text" x="290" y="32">API Gateway</text>
+
+                        <!-- Service A (Command) -->
+                        <rect class="node-rect svc-node" x="30" y="110" width="140" height="44" />
+                        <text class="node-text svc-text" x="100" y="126">Serwis A</text>
+                        <text class="node-sub svc-text" x="100" y="142" opacity="0.7">Command</text>
+
+                        <!-- Service B (Command) -->
+                        <rect class="node-rect svc-node" x="220" y="110" width="140" height="44" />
+                        <text class="node-text svc-text" x="290" y="126">Serwis B</text>
+                        <text class="node-sub svc-text" x="290" y="142" opacity="0.7">Command</text>
+
+                        <!-- Read Model / Cache -->
+                        <rect class="node-rect read-node" x="410" y="110" width="140" height="44" />
+                        <text class="node-text read-text" x="480" y="126">Read Model</text>
+                        <text class="node-sub read-text" x="480" y="142" opacity="0.7">Cache / CQRS</text>
+
+                        <!-- Event Bus / Broker — central horizontal bar -->
+                        <rect class="node-rect broker-node" x="30" y="220" width="520" height="48" rx="12" ry="12" />
+                        <text class="node-text broker-text" x="290" y="244">Event Bus / Broker</text>
+
+                        <!-- Consumer 1 -->
+                        <rect class="node-rect svc-node" x="50" y="330" width="130" height="44" />
+                        <text class="node-text svc-text" x="115" y="346">Konsument 1</text>
+                        <text class="node-sub svc-text" x="115" y="362" opacity="0.7">Notifications</text>
+
+                        <!-- Consumer 2 -->
+                        <rect class="node-rect svc-node" x="225" y="330" width="130" height="44" />
+                        <text class="node-text svc-text" x="290" y="346">Konsument 2</text>
+                        <text class="node-sub svc-text" x="290" y="362" opacity="0.7">Analytics</text>
+
+                        <!-- Consumer 3 -->
+                        <rect class="node-rect svc-node" x="400" y="330" width="130" height="44" />
+                        <text class="node-text svc-text" x="465" y="346">Konsument 3</text>
+                        <text class="node-sub svc-text" x="465" y="362" opacity="0.7">Projections</text>
+
+                        <!-- Arrows: Gateway -> Services (sync) -->
+                        <line class="arrow-line gw-arrow" x1="240" y1="54" x2="120" y2="106" />
+                        <polygon class="arrow-head gw-head" points="116,102 124,100 120,108" />
+
+                        <line class="arrow-line gw-arrow arrow-line--d1" x1="290" y1="54" x2="290" y2="106" />
+                        <polygon class="arrow-head gw-head" points="286,106 290,114 294,106" />
+
+                        <!-- Gateway -> Read Model (sync read) -->
+                        <line class="arrow-line read-arrow arrow-line--d2" x1="340" y1="54" x2="460" y2="106" />
+                        <polygon class="arrow-head read-head" points="456,102 464,108 460,100" />
+                        <text class="label-small" x="420" y="72" fill="#fcd34d">query</text>
+
+                        <!-- Services -> Event Bus (async publish) -->
+                        <line class="arrow-line async-arrow arrow-line--d3" x1="100" y1="154" x2="100" y2="216" />
+                        <polygon class="arrow-head async-head" points="96,216 100,224 104,216" />
+                        <text class="label-small async-label" x="60" y="190">event</text>
+
+                        <line class="arrow-line async-arrow arrow-line--d3" x1="290" y1="154" x2="290" y2="216" />
+                        <polygon class="arrow-head async-head" points="286,216 290,224 294,216" />
+                        <text class="label-small async-label" x="250" y="190">event</text>
+
+                        <!-- Event Bus -> Read Model (projection update) -->
+                        <line class="arrow-line read-arrow arrow-line--d4" x1="480" y1="220" x2="480" y2="158" />
+                        <polygon class="arrow-head read-head" points="476,158 480,150 484,158" />
+                        <text class="label-small" x="495" y="192" fill="#fcd34d">update</text>
+
+                        <!-- Event Bus -> Consumers -->
+                        <line class="arrow-line async-arrow arrow-line--d5" x1="115" y1="268" x2="115" y2="326" />
+                        <polygon class="arrow-head async-head" points="111,326 115,334 119,326" />
+
+                        <line class="arrow-line async-arrow arrow-line--d5" x1="290" y1="268" x2="290" y2="326" />
+                        <polygon class="arrow-head async-head" points="286,326 290,334 294,326" />
+
+                        <line class="arrow-line async-arrow arrow-line--d6" x1="465" y1="268" x2="465" y2="326" />
+                        <polygon class="arrow-head async-head" points="461,326 465,334 469,326" />
+
+                        <!-- Labels for sync/async zones -->
+                        <text class="label-small sync-label" x="16" y="80" font-size="9" letter-spacing="1" text-transform="uppercase">SYNC</text>
+                        <text class="label-small async-label" x="16" y="290" font-size="9" letter-spacing="1" text-transform="uppercase">ASYNC</text>
+
+                        <!-- Dashed separator -->
+                        <line x1="10" y1="200" x2="570" y2="200" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="6 4" />
+                    </svg>
+                </div>
+
+                <!-- Technique cards -->
+                <div class="techniques">
+                    <div class="tech-card">
+                        <div class="tech-icon tech-icon--cqrs">
+                            <i class="ti ti-arrows-split-2"></i>
+                        </div>
+                        <div>
+                            <div class="tech-name">CQRS</div>
+                            <div class="tech-desc">
+                                <strong>Rozdzielenie odczytu i zapisu</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-card">
+                        <div class="tech-icon tech-icon--cache">
+                            <i class="ti ti-database"></i>
+                        </div>
+                        <div>
+                            <div class="tech-name">Cache na poziomie serwisów</div>
+                            <div class="tech-desc">
+                                <strong>Read model aktualizowany eventami</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-card">
+                        <div class="tech-icon tech-icon--gateway">
+                            <i class="ti ti-api"></i>
+                        </div>
+                        <div>
+                            <div class="tech-name">API Gateway z agregacją</div>
+                            <div class="tech-desc">
+                                <strong>Jedno wejście, wiele serwisów</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-card">
+                        <div class="tech-icon tech-icon--combo">
+                            <i class="ti ti-topology-ring-3"></i>
+                        </div>
+                        <div>
+                            <div class="tech-name">Microservices + Event-driven</div>
+                            <div class="tech-desc">
+                                <strong>Synchroniczne komendy, asynchroniczne reakcje</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom thesis -->
+            <div class="bottom-note">
+                <div class="note-box">
+                    <i class="ti ti-bulb"></i>
+                    Tabela ocenia style osobno, ale <strong>architekt może projektować także ich kombinacje</strong>
+                </div>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

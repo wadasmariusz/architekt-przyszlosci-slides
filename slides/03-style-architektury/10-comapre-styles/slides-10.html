@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - Prostota stylów architektury</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #030712;
+            --dark-surface: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --star: #ffd166;
+            --empty-star: rgba(148, 163, 184, 0.28);
+            --emerald: #34d399;
+            --amber: #f59e0b;
+            --violet: #8b5cf6;
+            --rose: #fb7185;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #030712 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(3) { top: 12%; left: 18%; animation-delay: 0.3s; }
+        .particle:nth-child(4) { top: 72%; left: 78%; animation-delay: 1.8s; }
+        .particle:nth-child(5) { top: 25%; left: 65%; animation-delay: 3.2s; }
+        .particle:nth-child(6) { top: 82%; left: 15%; animation-delay: 4.8s; }
+        .particle:nth-child(7) { top: 45%; left: 48%; animation-delay: 6.5s; }
+        .particle:nth-child(8) { top: 18%; left: 52%; animation-delay: 2.3s; }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            20%, 80% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 72px 130px 330px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 32px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            color: var(--cyan-400);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1.title {
+            margin-bottom: 0;
+            color: #ffffff;
+            font-size: 68px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.45s forwards;
+        }
+
+        h1.title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .scoreboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1500px;
+            width: 100%;
+            flex: 0 0 auto;
+            align-items: stretch;
+        }
+
+        .style-card {
+            --accent: var(--cyan-400);
+            position: relative;
+            min-height: 440px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 22px;
+            padding: 24px 22px 22px;
+            border-radius: 18px;
+            background:
+                linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 48%),
+                rgba(17,24,39,0.72);
+            border: 1px solid color-mix(in srgb, var(--accent) 24%, rgba(255,255,255,0.08));
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+            opacity: 0;
+            transition: border-color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
+            animation: cardIn 0.8s ease-out forwards;
+        }
+
+        .style-card:hover {
+            transform: translateY(-6px);
+            border-color: color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,0.12));
+            box-shadow: 0 8px 32px color-mix(in srgb, var(--accent) 12%, transparent);
+        }
+
+        .style-card::after {
+            content: attr(data-rank);
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            color: rgba(255, 255, 255, 0.06);
+            font-size: 112px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .style-card:nth-child(1) { animation-delay: 0.75s; }
+        .style-card:nth-child(2) { animation-delay: 0.95s; }
+        .style-card:nth-child(3) { animation-delay: 1.15s; }
+        .style-card:nth-child(4) { animation-delay: 1.35s; }
+
+        .style-card--layered { --accent: var(--emerald); }
+        .style-card--modular { --accent: var(--cyan-400); }
+        .style-card--micro { --accent: var(--violet); }
+        .style-card--event { --accent: var(--amber); }
+
+        .card-top {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .icon-plate {
+            width: 50px;
+            height: 50px;
+            flex: 0 0 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            color: var(--accent);
+            font-size: 28px;
+        }
+
+        .name {
+            min-width: 0;
+            padding-top: 2px;
+        }
+
+        .name h2 {
+            color: #ffffff;
+            font-size: 25px;
+            font-weight: 800;
+            line-height: 1.18;
+            letter-spacing: 0;
+        }
+
+        .name span {
+            display: block;
+            margin-top: 8px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.28;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            position: relative;
+            z-index: 2;
+            margin-top: 26px;
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.18;
+            letter-spacing: 0;
+        }
+
+        .chips {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            gap: 9px;
+            margin-top: 20px;
+        }
+
+        .chip {
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            padding: 8px 13px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.045);
+            color: #dbe7f4;
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+        }
+
+        .rating {
+            position: relative;
+            z-index: 2;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stars {
+            display: flex;
+            gap: 7px;
+            color: var(--empty-star);
+            font-size: 30px;
+            line-height: 1;
+        }
+
+        .stars span {
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+        }
+
+        .stars .filled {
+            color: var(--star);
+            text-shadow: 0 0 18px rgba(255, 209, 102, 0.34);
+        }
+
+        .stars .empty {
+            color: rgba(255, 255, 255, 0.24);
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <main class="content">
+            <div class="header">
+                    <div class="eyebrow">
+                        <i class="ti ti-test-pipe"></i>
+                        Porównanie stylów
+                    </div>
+                <h1 class="title">Simplicity <span class="highlight"></span></h1>
+            </div>
+
+            <section class="scoreboard" aria-label="Ocena prostoty stylów architektury">
+                <article class="style-card style-card--layered">
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><i class="ti ti-stack-2"></i></div>
+                            <div class="name">
+                                <h2>Layered</h2>
+                                <span>architektura warstwowa</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Najprostszy start</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">jeden proces</div>
+                            <div class="chip">jedna baza</div>
+                            <div class="chip">niski koszt</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="stars" aria-label="5 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-card style-card--modular" >
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><i class="ti ti-puzzle"></i></div>
+                            <div class="name">
+                                <h2>Modular Monolith</h2>
+                                <span>moduły w jednym runtime</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Prosty operacyjnie</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">granice domen</div>
+                            <div class="chip">jedna baza</div>
+                            <div class="chip">kontrola zależności</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="stars" aria-label="4 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-card style-card--micro">
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><i class="ti ti-hexagons"></i></div>
+                            <div class="name">
+                                <h2>Microservices</h2>
+                                <span>system rozproszony</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Dużo małych usługi</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">sieć</div>
+                            <div class="chip">kontrakty</div>
+                            <div class="chip">transakcje rozproszone</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-card style-card--event">
+                    <div>
+                        <div class="card-top">
+                            <div class="icon-plate"><i class="ti ti-bolt"></i></div>
+                            <div class="name">
+                                <h2>Event-driven</h2>
+                                <span>asynchroniczne zdarzenia</span>
+                            </div>
+                        </div>
+                        <p class="tagline">Trudny przepływ</p>
+                        <div class="chips" aria-label="Najważniejsze hasła">
+                            <div class="chip">niedeterminizm</div>
+                            <div class="chip">śledzenie zdarzeń</div>
+                            <div class="chip">obsługa błędów</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

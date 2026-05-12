@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Skalowalność</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05070f;
+            --panel: rgba(14, 20, 34, 0.78);
+            --panel-strong: rgba(20, 29, 48, 0.92);
+            --line: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --muted: #9aa7bb;
+            --cyan: #22d3ee;
+            --amber: #f59e0b;
+            --emerald: #10b981;
+            --violet: #8b5cf6;
+            --rose: #fb7185;
+            --star: #ffd166;
+            --empty-star: rgba(255, 255, 255, 0.18);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 20% 12%, rgba(34, 211, 238, 0.16), transparent 32%),
+                radial-gradient(circle at 79% 23%, rgba(251, 113, 133, 0.1), transparent 28%),
+                linear-gradient(135deg, #060816 0%, #0b1020 54%, #05070f 100%);
+        }
+
+        .stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 88%);
+        }
+
+        .stage::after {
+            content: '';
+            position: absolute;
+            left: -12%;
+            right: -12%;
+            bottom: -23%;
+            height: 420px;
+            background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.16), transparent 66%);
+            border-top: 1px solid rgba(34, 211, 238, 0.16);
+        }
+
+        .content {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            height: 100%;
+            padding: 52px 128px 330px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 36px;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--cyan);
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 0.7s ease-out 0.15s forwards;
+        }
+
+        .eyebrow i { font-size: 32px; }
+
+        h1 {
+            margin-top: 18px;
+            color: #ffffff;
+            font-size: 78px;
+            font-weight: 800;
+            line-height: 1.02;
+            letter-spacing: 0;
+            opacity: 0;
+            animation: fadeIn 0.75s ease-out 0.3s forwards;
+        }
+
+        .lead {
+            margin-top: 28px;
+            max-width: 470px;
+            color: var(--muted);
+            font-size: 25px;
+            font-weight: 300;
+            line-height: 1.48;
+            opacity: 0;
+            animation: fadeIn 0.75s ease-out 0.45s forwards;
+        }
+
+        .scale-note {
+            margin-top: 54px;
+            width: 456px;
+            padding: 24px 26px;
+            border: 1px solid rgba(34, 211, 238, 0.18);
+            border-radius: 8px;
+            background: rgba(6, 182, 212, 0.07);
+            opacity: 0;
+            animation: fadeIn 0.75s ease-out 0.6s forwards;
+        }
+
+        .scale-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #dffaff;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scale-title i {
+            color: var(--cyan);
+            font-size: 26px;
+        }
+
+        .scale-copy {
+            margin-top: 12px;
+            color: #bed2e6;
+            font-size: 20px;
+            line-height: 1.45;
+        }
+
+        .board {
+            position: relative;
+            width: min(1450px, 100%);
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: repeat(2, 238px);
+            gap: 20px;
+            opacity: 0;
+            animation: slideIn 0.85s ease-out 0.42s forwards;
+        }
+
+        .board::before {
+            content: '';
+            position: absolute;
+            inset: -16px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 42%, rgba(34, 211, 238, 0.08));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: -1;
+        }
+
+        .style-row {
+            position: relative;
+            min-height: 238px;
+            display: grid;
+            grid-template-columns: 86px 1fr;
+            grid-template-rows: auto 1fr auto;
+            column-gap: 20px;
+            row-gap: 16px;
+            align-items: start;
+            padding: 22px 26px 20px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: linear-gradient(120deg, var(--panel-strong), var(--panel));
+            overflow: hidden;
+        }
+
+        .style-row::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 8px;
+            background: var(--accent);
+        }
+
+        .style-row::after {
+            content: '';
+            position: absolute;
+            top: -42px;
+            right: -74px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, color-mix(in srgb, var(--accent) 23%, transparent), transparent 68%);
+            opacity: 0.7;
+        }
+
+        .style-row--layered { --accent: var(--amber); }
+        .style-row--modular { --accent: var(--rose); }
+        .style-row--micro { --accent: var(--violet); }
+        .style-row--event { --accent: var(--emerald); }
+
+        .icon-plate {
+            position: relative;
+            z-index: 2;
+            grid-row: 1 / 3;
+            width: 78px;
+            height: 78px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: color-mix(in srgb, var(--accent) 14%, rgba(255, 255, 255, 0.04));
+            border: 1px solid color-mix(in srgb, var(--accent) 34%, rgba(255, 255, 255, 0.1));
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+        }
+
+        .icon-plate i {
+            color: var(--accent);
+            font-size: 42px;
+        }
+
+        .name {
+            position: relative;
+            z-index: 2;
+        }
+
+        .name h2 {
+            color: #ffffff;
+            font-size: 29px;
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: 0;
+        }
+
+        .name span {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+        }
+
+        .insight {
+            position: relative;
+            z-index: 2;
+            grid-column: 2;
+            color: #dbe7f4;
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.38;
+        }
+
+        .insight strong {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .rating {
+            position: relative;
+            z-index: 2;
+            grid-column: 1 / -1;
+            align-self: end;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stars {
+            display: flex;
+            gap: 8px;
+            color: var(--empty-star);
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .stars span {
+            display: inline-block;
+            width: 32px;
+            text-align: center;
+        }
+
+        .stars .filled {
+            color: var(--star);
+            text-shadow: 0 0 18px rgba(255, 209, 102, 0.34);
+        }
+
+        .stars .empty {
+            color: rgba(255, 255, 255, 0.24);
+        }
+
+        .legend {
+            position: absolute;
+            z-index: 6;
+            left: 560px;
+            right: 560px;
+            bottom: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            color: rgba(248, 250, 252, 0.7);
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .legend i {
+            color: var(--star);
+            font-size: 23px;
+        }
+
+        .camera-box {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            width: 480px;
+            height: 270px;
+            z-index: 100;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(34px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        ```html
+        <main class="content">
+            <section class="hero">
+                <div class="eyebrow">
+                    <i class="ti ti-chart-radar"></i>
+                    Architecture Styles Worksheet
+                </div>
+                <h1>Skalowalność</h1>
+            </section>
+
+            <section class="board" aria-label="Oceny skalowalności stylów architektury">
+                <article class="style-row style-row--layered" style="--score: 5;">
+                    <div class="icon-plate"><i class="ti ti-layers-intersect"></i></div>
+                    <div class="name">
+                        <h2>Layered</h2>
+                        <span>horyzontalna partycja techniczna</span>
+                    </div>
+                    <p class="insight">
+                        Każda funkcja aplikacji musi być skalowana w tym samym stopniu.
+                    </p>
+                    <div class="rating">
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-row style-row--modular" style="--score: 5;">
+                    <div class="icon-plate"><i class="ti ti-box-multiple"></i></div>
+                    <div class="name">
+                        <h2>Monolit modularny</h2>
+                        <span>moduły domenowe, wspólny runtime</span>
+                    </div>
+                    <p class="insight">
+                        Fizycznie niepodzielna jednostka wdrożeniowa o wspólnym kwancie architektonicznym i bazie danych
+                    </p>
+                    <div class="rating">
+                        <div class="stars" aria-label="1 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-row style-row--micro" style="--score: 1;">
+                    <div class="icon-plate"><i class="ti ti-hexagons"></i></div>
+                    <div class="name">
+                        <h2>Mikroserwisy</h2>
+                        <span>niezależnie wdrażane usługi</span>
+                    </div>
+                    <p class="insight">
+                        Poszczególne usługi mogą być skalowane <strong>niezależnie</strong>, w zależności od ich specyficznych potrzeb i obciążenia.
+                    </p>
+                    <div class="rating">
+                        <div class="stars" aria-label="5 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="style-row style-row--event" style="--score: 2;">
+                    <div class="icon-plate"><i class="ti ti-bolt"></i></div>
+                    <div class="name">
+                        <h2>Event-driven</h2>
+                        <span>Niezależne skalowanie na poziomie procesorów zdarzeń</span>
+                    </div>
+                    <p class="insight">
+                        Wysoka skalowalność dzięki wysoce zrównoleglonemu przetwarzaniu oraz asynchronicznej komunikacji.
+                    </p>
+                    <div class="rating">
+                        <div class="stars" aria-label="4 z 5 gwiazdek">
+                            <span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="filled">★</span><span class="empty">☆</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+        ```
+        
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png" alt="Architekt Przyszłości" class="slide-logo">
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
