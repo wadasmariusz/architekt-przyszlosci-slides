@@ -123,7 +123,7 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 86px 130px 150px;
+            padding: 70px 130px 150px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -132,7 +132,7 @@
         .header {
             text-align: center;
             max-width: 1180px;
-            margin: 0 auto 44px;
+            margin: 0 auto 28px;
         }
 
         .eyebrow {
@@ -162,96 +162,138 @@
             background-clip: text;
         }
 
-        /* === Two columns === */
-        .columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            max-width: 1200px;
+        /* === Diagnostic question === */
+        .diagnostic {
+            max-width: 1180px;
             width: 100%;
-        }
-
-        .column-card {
-            border-radius: 16px;
-            background: rgba(17,24,39,0.7);
-            border: 1px solid rgba(6,182,212,0.15);
+            padding: 30px 56px;
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(34,211,238,0.14), transparent 66%),
+                rgba(17,24,39,0.72);
+            border: 1px solid rgba(6,182,212,0.26);
             backdrop-filter: blur(8px);
-            padding: 32px 36px;
+            text-align: center;
             opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
         }
 
-        .column-good {
-            border-color: rgba(16,185,129,0.25);
-            animation: slideFromLeft 0.8s ease-out 0.7s forwards;
-        }
-
-        .column-bad {
-            border-color: rgba(239,68,68,0.2);
-            animation: slideFromRight 0.8s ease-out 0.9s forwards;
-        }
-
-        .column-label {
+        .diagnostic-label {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-size: 22px;
+            margin-bottom: 18px;
+            color: var(--cyan-400);
+            font-size: 18px;
             font-weight: 800;
-            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
         }
 
-        .column-good .column-label {
-            color: #10b981;
+        .diagnostic-label i {
+            font-size: 24px;
         }
 
-        .column-bad .column-label {
-            color: #ef4444;
+        .diagnostic-question {
+            font-size: 46px;
+            font-weight: 300;
+            line-height: 1.25;
+            color: #f0f4f8;
+            font-style: italic;
         }
 
-        .column-label i {
-            font-size: 26px;
+        /* === Scenarios === */
+        .scenarios {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 1180px;
+            width: 100%;
+            margin-top: 20px;
         }
 
-        .column-item {
+        .scenario-card {
+            min-height: 136px;
+            padding: 24px 30px;
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 14px 0;
-            font-size: 24px;
-            font-weight: 400;
-            color: #94a3b8;
-            line-height: 1.4;
+            gap: 18px;
+            opacity: 0;
         }
 
-        .column-item + .column-item {
-            border-top: 1px solid rgba(255,255,255,0.06);
+        .scenario-good {
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.24);
+            animation: slideFromLeft 0.8s ease-out 1.0s forwards;
         }
 
-        .column-good .column-item .arrow {
+        .scenario-bad {
+            background: rgba(239,68,68,0.06);
+            border: 1px solid rgba(239,68,68,0.22);
+            animation: slideFromRight 0.8s ease-out 1.0s forwards;
+        }
+
+        .scenario-arrow {
+            flex: 0 0 auto;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .scenario-good .scenario-arrow {
             color: #10b981;
-            font-size: 22px;
-            flex-shrink: 0;
         }
 
-        .column-bad .column-item .arrow {
+        .scenario-bad .scenario-arrow {
             color: #ef4444;
+        }
+
+        .scenario-text {
+            font-size: 27px;
+            font-weight: 400;
+            line-height: 1.28;
+            color: #cbd5e1;
+        }
+
+        .scenario-text strong {
+            color: #f0f4f8;
+            font-weight: 800;
+        }
+
+        .scenario-good .scenario-text em {
+            color: #10b981;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .scenario-bad .scenario-text em {
+            color: #ef4444;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .scenario-note {
+            display: block;
+            margin-top: 6px;
             font-size: 22px;
-            flex-shrink: 0;
         }
 
         /* === Closing sentence === */
         .closing {
-            margin-top: 36px;
-            padding: 22px 40px;
+            margin-top: 18px;
+            padding: 16px 38px;
             border-radius: 16px;
             background: rgba(17,24,39,0.7);
             border: 1px solid rgba(6,182,212,0.15);
             backdrop-filter: blur(8px);
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 300;
             font-style: italic;
-            color: #94a3b8;
+            line-height: 1.38;
+            color: #cbd5e1;
             text-align: center;
-            max-width: 1200px;
+            max-width: 1180px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 1.4s forwards;
         }
@@ -330,25 +372,25 @@
                 <h2 class="title">Cel <span class="highlight">modułowości</span></h2>
             </div>
 
-            <div class="columns">
-                <!-- Good division -->
-                <div class="column-card column-good">
-                    <div class="column-label"><i class="ti ti-circle-check"></i> Podział ma sens, gdy:</div>
-                    <div class="column-item"><span class="arrow">→</span> szybciej rozumiesz, jak coś działa</div>
-                    <div class="column-item"><span class="arrow">→</span> łatwiej wprowadzasz zmiany</div>
-                    <div class="column-item"><span class="arrow">→</span> łatwiej testujesz</div>
-                    <div class="column-item"><span class="arrow">→</span> łatwiej przewidujesz skutki uboczne</div>
+            <div class="diagnostic">
+                <div class="diagnostic-label"><i class="ti ti-search"></i></div>
+                <div class="diagnostic-question">Ile modułów musisz otworzyć, żeby wprowadzić następną zmianę?</div>
+            </div>
+
+            <div class="scenarios">
+                <div class="scenario-card scenario-good">
+                    <div class="scenario-arrow">→</div>
+                    <div class="scenario-text"><strong>Jeden, może dwa</strong><span class="scenario-note"> granice pracują <em>na Twoją korzyść</em></span></div>
                 </div>
 
-                <!-- Bad division -->
-                <div class="column-card column-bad">
-                    <div class="column-label"><i class="ti ti-alert-triangle"></i> Podział jest zły, gdy:</div>
-                    <div class="column-item"><span class="arrow">→</span> każda zmiana wymaga skakania po wielu miejscach i pociąga za sobą kolejne</div>
+                <div class="scenario-card scenario-bad">
+                    <div class="scenario-arrow">→</div>
+                    <div class="scenario-text"><strong>Pięć, i więcej ...</strong><span class="scenario-note"> granice pracują <em>przeciwko Tobie</em></span></div>
                 </div>
             </div>
 
             <div class="closing">
-                „Modułowość to fundament architektury — wyznaczaj granice tak, żeby kolejna zmiana nie była walką z całym systemem."
+                Modułowość to fundament architektury.
             </div>
         </div>
 

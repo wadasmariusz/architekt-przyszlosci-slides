@@ -132,7 +132,7 @@
         .header {
             text-align: center;
             max-width: 1180px;
-            margin: 0 auto 48px;
+            margin: 0 auto 38px;
         }
 
         .eyebrow {
@@ -140,7 +140,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 4px;
-            color: var(--cyan-400);
+            color: #ffffff;
             margin-bottom: 16px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.3s forwards;
@@ -165,13 +165,13 @@
         /* === Definition quote block === */
         .definition-block {
             max-width: 960px;
-            padding: 36px 48px;
+            padding: 30px 44px;
             border-radius: 18px;
             background: rgba(17,24,39,0.7);
             border: 1px solid rgba(6,182,212,0.2);
             backdrop-filter: blur(8px);
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 38px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.8s forwards;
         }
@@ -183,9 +183,9 @@
         }
 
         .definition-text {
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 300;
-            line-height: 1.5;
+            line-height: 1.42;
             color: #f0f4f8;
             font-style: italic;
         }
@@ -200,7 +200,7 @@
         }
 
         .contrast-card {
-            padding: 32px 36px;
+            padding: 28px 32px;
             border-radius: 16px;
             backdrop-filter: blur(6px);
             opacity: 0;
@@ -219,11 +219,11 @@
         }
 
         .contrast-label {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -242,9 +242,9 @@
         }
 
         .contrast-desc {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 400;
-            line-height: 1.5;
+            line-height: 1.42;
             color: #94a3b8;
         }
 
@@ -319,7 +319,7 @@
         <div class="content">
             <div class="header">
                 <div class="eyebrow">Definicja</div>
-                <h2 class="title"><span class="highlight">Modułowość</span> — definicja robocza</h2>
+                <h2 class="title"><span class="highlight">Modułowość</span></h2>
             </div>
 
             <div class="definition-block">
@@ -329,12 +329,12 @@
 
             <div class="contrast">
                 <div class="contrast-card contrast-card--no">
-                    <div class="contrast-label"><i class="ti ti-x"></i> Nie</div>
-                    <div class="contrast-desc">Jedna wielka masa kodu, gdzie wszystko zależy od wszystkiego</div>
+                    <div class="contrast-label"><i class="ti ti-x"></i> Bez modułowości</div>
+                    <div class="contrast-desc">Struktura bez wewnętrznych granic, każdy element może zależeć od dowolnego innego, a zmiana w jednym miejscu ma nieprzewidywalne konsekwencje.</div>
                 </div>
                 <div class="contrast-card contrast-card--yes">
-                    <div class="contrast-label"><i class="ti ti-check"></i> Tak</div>
-                    <div class="contrast-desc">Zbiór elementów, które można rozumieć, rozwijać i utrzymywać lokalnie</div>
+                    <div class="contrast-label"><i class="ti ti-check"></i> Z modułowością</div>
+                    <div class="contrast-desc">Zbiór elementów o jasnych odpowiedzialnościach, które można zrozumieć, rozwijać i utrzymywać lokalnie, bez znajomości całego systemu.</div>
                 </div>
             </div>
         </div>

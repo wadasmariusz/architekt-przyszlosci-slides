@@ -204,12 +204,19 @@
 
         .source-ref {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            flex-direction: row;
+            align-items: center;
+            gap: 22px;
             padding: 22px 28px;
             border-radius: 14px;
             background: rgba(17,24,39,0.5);
             border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .source-ref-text {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .source-ref-label {
@@ -367,6 +374,30 @@
             margin-top: 4px;
         }
 
+        .parnas-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(6,182,212,0.4);
+            box-shadow: 0 0 30px rgba(6,182,212,0.15);
+        }
+
+        .parnas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .parnas-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--cyan-400);
+            letter-spacing: 1px;
+        }
+
         /* === Animations === */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -437,8 +468,7 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Information Hiding</div>
-                <h2 class="title">Ukrywanie informacji <span class="highlight"></span></h2>
+                <h2 class="title"><span class="highlight">Ukrywanie</span> informacji</h2>
             </div>
 
             <div class="main-area">
@@ -449,8 +479,12 @@
                     </div>
 
                     <div class="source-ref">
-                        <span class="source-ref-author"><strong>David Parnas</strong>, 1972</span>
-                        <span class="source-ref-title">„On the Criteria To Be Used in Decomposing Systems into Modules"</span>
+                        <img src="images/david-parnas-tarnsaprent.png"
+                             alt="David Parnas" class="parnas-photo">
+                        <div class="source-ref-text">
+                            <span class="source-ref-author"><strong>David Parnas</strong>, 1972</span>
+                            <span class="source-ref-title">„On the Criteria To Be Used in Decomposing Systems into Modules"</span>
+                        </div>
                     </div>
 
                     <div class="criterion">
