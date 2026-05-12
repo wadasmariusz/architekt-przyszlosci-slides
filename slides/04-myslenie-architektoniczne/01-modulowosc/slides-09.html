@@ -38,60 +38,22 @@
         }
 
         /* === Background layers === */
-        .bg-grid {
+        .bg-image {
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(rgba(6,182,212,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6,182,212,0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
         }
 
-        @keyframes gridMove {
-            0%   { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
-        }
-
-        .bg-glow {
+        .bg-image::after {
+            content: '';
             position: absolute;
-            width: 700px;
-            height: 700px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 6s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50%      { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: var(--cyan-400);
-            opacity: 0;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .particle:nth-child(3) { top: 12%; left: 14%; animation-delay: 0s; }
-        .particle:nth-child(4) { top: 65%; left: 82%; animation-delay: 1.5s; }
-        .particle:nth-child(5) { top: 35%; left: 72%; animation-delay: 3s; }
-        .particle:nth-child(6) { top: 82%; left: 22%; animation-delay: 4.5s; }
-        .particle:nth-child(7) { top: 45%; left: 48%; animation-delay: 6s; }
-        .particle:nth-child(8) { top: 18%; left: 65%; animation-delay: 2s; }
-
-        @keyframes float {
-            0%   { opacity: 0; transform: translateY(0) scale(1); }
-            20%  { opacity: 0.8; }
-            80%  { opacity: 0.8; }
-            100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
         }
 
         /* === Corners === */
@@ -285,14 +247,7 @@
 <body>
     <div class="stage" id="stage">
         <!-- background layers -->
-        <div class="bg-grid"></div>
-        <div class="bg-glow"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+        <div class="bg-image"></div>
 
         <!-- corner accents -->
         <div class="corner corner--tl"></div>
