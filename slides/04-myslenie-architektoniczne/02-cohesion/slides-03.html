@@ -185,141 +185,115 @@
         /* === Diagram visuals (inside each card) === */
         .viz {
             position: relative;
-            height: 230px;
+            height: 244px;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding-top: 4px;
         }
 
-        .viz-module {
-            position: relative;
-            width: 280px;
-            height: 180px;
-            border-radius: 18px;
-            background: rgba(6,182,212,0.06);
-            border: 1.5px solid rgba(34,211,238,0.40);
-            box-shadow: 0 0 40px rgba(34,211,238,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .viz-svg {
+            width: 100%;
+            max-width: 560px;
+            height: 232px;
+            display: block;
+            overflow: visible;
+            filter: drop-shadow(0 24px 42px rgba(0,0,0,0.22));
         }
 
-        .persp-card--coupling .viz-module {
-            background: rgba(245,158,11,0.05);
-            border-color: rgba(245,158,11,0.40);
-            box-shadow: 0 0 40px rgba(245,158,11,0.06);
+        .viz-frame {
+            fill: rgba(2,132,199,0.08);
+            stroke: rgba(34,211,238,0.52);
+            stroke-width: 2;
         }
 
-        .viz-module-label {
-            position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--dark-surface);
-            padding: 2px 14px;
+        .persp-card--coupling .viz-frame {
+            fill: rgba(245,158,11,0.07);
+            stroke: rgba(245,158,11,0.56);
+        }
+
+        .viz-label-pill {
+            fill: #111827;
+            stroke: rgba(34,211,238,0.48);
+            stroke-width: 1.5;
+        }
+
+        .persp-card--coupling .viz-label-pill {
+            stroke: rgba(245,158,11,0.52);
+        }
+
+        .viz-label {
             font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 2px;
+            font-weight: 800;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            color: rgba(34,211,238,0.85);
-            border: 1px solid rgba(34,211,238,0.35);
-            border-radius: 999px;
+            fill: rgba(103,232,249,0.94);
         }
 
-        .persp-card--coupling .viz-module-label {
-            color: rgba(245,158,11,0.85);
-            border-color: rgba(245,158,11,0.35);
+        .persp-card--coupling .viz-label {
+            fill: rgba(251,191,36,0.95);
         }
 
-        /* Cohesion inner dots */
-        .dot {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--cyan-400);
-            box-shadow: 0 0 16px rgba(34,211,238,0.55);
+        .module-glow {
+            fill: none;
+            stroke-width: 22;
+            opacity: 0.08;
         }
 
-        .dot--a { top: 38px; left: 60px; }
-        .dot--b { top: 52px; right: 56px; }
-        .dot--c { bottom: 38px; left: 50%; transform: translateX(-50%); }
+        .module-glow--cyan { stroke: var(--cyan-400); }
+        .module-glow--amber { stroke: #f59e0b; }
 
-        .link {
-            position: absolute;
-            height: 2px;
-            background: rgba(34,211,238,0.55);
-            transform-origin: 0 0;
+        .cohesion-link {
+            fill: none;
+            stroke: rgba(34,211,238,0.62);
+            stroke-width: 4;
+            stroke-linecap: round;
         }
 
-        .link--ab {
-            top: 51px;
-            left: 84px;
-            width: 152px;
+        .cohesion-link--soft {
+            stroke: rgba(34,211,238,0.22);
+            stroke-width: 10;
         }
 
-        .link--ac {
-            top: 50px;
-            left: 72px;
-            width: 100px;
-            transform: rotate(56deg);
+        .cohesion-node {
+            fill: var(--cyan-400);
+            stroke: rgba(236,254,255,0.85);
+            stroke-width: 2;
         }
 
-        .link--bc {
-            top: 64px;
-            right: 68px;
-            width: 100px;
-            transform: rotate(124deg);
+        .cohesion-node-core {
+            fill: #f8fafc;
+            opacity: 0.9;
         }
 
-        /* Coupling external modules */
-        .ext-module {
-            position: absolute;
-            width: 68px;
-            height: 46px;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.18);
+        .outer-module {
+            fill: rgba(255,255,255,0.045);
+            stroke: rgba(255,255,255,0.22);
+            stroke-width: 1.5;
         }
 
-        .ext-module--tl { top: 18px; left: 8px; }
-        .ext-module--tr { top: 18px; right: 8px; }
-        .ext-module--bl { bottom: 18px; left: 8px; }
-        .ext-module--br { bottom: 18px; right: 8px; }
-
-        .ext-link {
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(245,158,11,0.7), rgba(245,158,11,0.25));
-            transform-origin: 0 0;
+        .outer-module--active {
+            fill: rgba(245,158,11,0.08);
+            stroke: rgba(245,158,11,0.50);
         }
 
-        .ext-link--tl {
-            top: 78px;
-            left: 76px;
-            width: 80px;
-            transform: rotate(-32deg);
+        .coupling-link {
+            fill: none;
+            stroke: rgba(245,158,11,0.78);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .ext-link--tr {
-            top: 78px;
-            right: 76px;
-            width: 80px;
-            transform: rotate(-148deg);
+        .coupling-link--soft {
+            stroke: rgba(245,158,11,0.22);
+            stroke-width: 10;
         }
 
-        .ext-link--bl {
-            bottom: 78px;
-            left: 76px;
-            width: 80px;
-            transform: rotate(32deg);
-        }
-
-        .ext-link--br {
-            bottom: 78px;
-            right: 76px;
-            width: 80px;
-            transform: rotate(148deg);
+        .coupling-link--muted {
+            stroke: rgba(148,163,184,0.36);
+            stroke-width: 2.5;
+            stroke-dasharray: 8 12;
         }
 
         /* === Goal banner === */
@@ -430,15 +404,39 @@
                     <div class="persp-name">Spójność <span style="font-weight:300;color:#94a3b8;">(cohesion)</span></div>
                     <p class="persp-question">Co dzieje się <strong>w środku</strong> modułu?</p>
                     <div class="viz">
-                        <div class="viz-module">
-                            <span class="viz-module-label">Moduł</span>
-                            <div class="link link--ab"></div>
-                            <div class="link link--ac"></div>
-                            <div class="link link--bc"></div>
-                            <div class="dot dot--a"></div>
-                            <div class="dot dot--b"></div>
-                            <div class="dot dot--c"></div>
-                        </div>
+                        <svg class="viz-svg" viewBox="0 0 560 232" role="img" aria-label="Moduł z silnie połączonymi elementami wewnętrznymi">
+                            <defs>
+                                <filter id="cyanNodeGlow" x="-80%" y="-80%" width="260%" height="260%">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                                    <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.13 0 0 0 0 0.83 0 0 0 0 0.93 0 0 0 0.72 0" />
+                                    <feMerge>
+                                        <feMergeNode />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <rect class="module-glow module-glow--cyan" x="128" y="38" width="304" height="176" rx="22" />
+                            <rect class="viz-frame" x="128" y="38" width="304" height="176" rx="22" />
+                            <rect class="viz-label-pill" x="234" y="24" width="92" height="26" rx="13" />
+                            <text class="viz-label" x="280" y="43" text-anchor="middle">MODUŁ</text>
+
+                            <path class="cohesion-link cohesion-link--soft" d="M214 82 L330 90 L356 154 L238 166 Z" />
+                            <path class="cohesion-link" d="M214 82 L330 90 L356 154 L238 166 Z" />
+                            <path class="cohesion-link cohesion-link--soft" d="M214 82 L356 154 M330 90 L238 166" />
+                            <path class="cohesion-link" d="M214 82 L356 154 M330 90 L238 166" />
+
+                            <g filter="url(#cyanNodeGlow)">
+                                <circle class="cohesion-node" cx="214" cy="82" r="14" />
+                                <circle class="cohesion-node-core" cx="214" cy="82" r="4" />
+                                <circle class="cohesion-node" cx="330" cy="90" r="14" />
+                                <circle class="cohesion-node-core" cx="330" cy="90" r="4" />
+                                <circle class="cohesion-node" cx="356" cy="154" r="14" />
+                                <circle class="cohesion-node-core" cx="356" cy="154" r="4" />
+                                <circle class="cohesion-node" cx="238" cy="166" r="14" />
+                                <circle class="cohesion-node-core" cx="238" cy="166" r="4" />
+                            </g>
+                        </svg>
                     </div>
                 </article>
 
@@ -447,17 +445,30 @@
                     <div class="persp-name">Sprzężenie <span style="font-weight:300;color:#94a3b8;">(coupling)</span></div>
                     <p class="persp-question">Jakie są <strong>relacje z innymi</strong> modułami?</p>
                     <div class="viz">
-                        <div class="ext-module ext-module--tl"></div>
-                        <div class="ext-module ext-module--tr"></div>
-                        <div class="ext-module ext-module--bl"></div>
-                        <div class="ext-module ext-module--br"></div>
-                        <div class="ext-link ext-link--tl"></div>
-                        <div class="ext-link ext-link--tr"></div>
-                        <div class="ext-link ext-link--bl"></div>
-                        <div class="ext-link ext-link--br"></div>
-                        <div class="viz-module">
-                            <span class="viz-module-label">Moduł</span>
-                        </div>
+                        <svg class="viz-svg" viewBox="0 0 560 232" role="img" aria-label="Moduł z relacjami do modułów zewnętrznych">
+                            <defs>
+                                <marker id="amberArrow" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto" markerUnits="userSpaceOnUse">
+                                    <path d="M3 3 L16 9 L3 15 Z" fill="#f59e0b" />
+                                </marker>
+                            </defs>
+
+                            <rect class="outer-module outer-module--active" x="38" y="34" width="78" height="54" rx="9" />
+                            <rect class="outer-module" x="444" y="34" width="78" height="54" rx="9" />
+                            <rect class="outer-module" x="38" y="144" width="78" height="54" rx="9" />
+                            <rect class="outer-module outer-module--active" x="444" y="144" width="78" height="54" rx="9" />
+
+                            <path class="coupling-link coupling-link--soft" d="M198 77 C164 68 145 62 118 62" />
+                            <path class="coupling-link coupling-link--soft" d="M362 155 C396 166 417 172 442 172" />
+                            <path class="coupling-link" d="M198 77 C164 68 145 62 118 62" marker-end="url(#amberArrow)" />
+                            <path class="coupling-link" d="M362 155 C396 166 417 172 442 172" marker-end="url(#amberArrow)" />
+                            <path class="coupling-link coupling-link--muted" d="M362 77 C394 66 416 62 442 62" />
+                            <path class="coupling-link coupling-link--muted" d="M198 155 C164 166 144 172 118 172" />
+
+                            <rect class="module-glow module-glow--amber" x="196" y="50" width="168" height="132" rx="20" />
+                            <rect class="viz-frame" x="196" y="50" width="168" height="132" rx="20" />
+                            <rect class="viz-label-pill" x="234" y="36" width="92" height="26" rx="13" />
+                            <text class="viz-label" x="280" y="55" text-anchor="middle">MODUŁ</text>
+                        </svg>
                     </div>
                 </article>
             </section>
