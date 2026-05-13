@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - Message coupling</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --good: #22c55e;
+            --violet: #a78bfa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 76px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 32px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--good);
+            padding: 8px 18px;
+            border: 1px solid rgba(34,197,94,0.35);
+            border-radius: 999px;
+            background: rgba(34,197,94,0.08);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 62px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #4ade80, var(--good));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lede {
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: #cbd5e1;
+            max-width: 1300px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .lede strong { color: var(--cyan-400); font-weight: 600; }
+
+        /* === Body: diagram + panels === */
+        .body {
+            display: grid;
+            grid-template-columns: 1fr 520px;
+            gap: 48px;
+            max-width: 1640px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        .diagram {
+            position: relative;
+            height: 480px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            background: rgba(17,24,39,0.55);
+            backdrop-filter: blur(6px);
+            padding: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.75s forwards;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .label-bold {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            fill: #f0f4f8;
+        }
+
+        .label-sub {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            fill: #94a3b8;
+            font-size: 12px;
+        }
+
+        .bus-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            fill: var(--cyan-400);
+            letter-spacing: 1px;
+        }
+
+        .event-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            fill: var(--violet);
+        }
+
+        /* Panel */
+        .panel {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.95s forwards;
+        }
+
+        .panel-card {
+            padding: 22px 26px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+        }
+
+        .panel-card--good {
+            border: 1px solid rgba(34,197,94,0.3);
+            background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(17,24,39,0.55));
+        }
+
+        .panel-card--tradeoff {
+            border: 1px solid rgba(245,158,11,0.3);
+            background: linear-gradient(135deg, rgba(245,158,11,0.10), rgba(17,24,39,0.55));
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .panel-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(34,211,238,0.13);
+            color: var(--cyan-400);
+            flex: 0 0 auto;
+        }
+
+        .panel-icon--good {
+            background: rgba(34,197,94,0.15);
+            color: var(--good);
+        }
+
+        .panel-icon--warn {
+            background: rgba(245,158,11,0.15);
+            color: var(--warn);
+        }
+
+        .panel-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+        }
+
+        .panel-text {
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1.45;
+            color: #cbd5e1;
+        }
+
+        .panel-text em {
+            font-style: italic;
+            color: #f0f4f8;
+        }
+
+        .panel-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            margin: 4px 0 0;
+            position: relative;
+        }
+
+        .panel-divider-text {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(17,24,39,0.95);
+            padding: 0 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--warn);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes dashFlow {
+            from { stroke-dashoffset: 24; }
+            to   { stroke-dashoffset: 0; }
+        }
+
+        @keyframes pulseHalo {
+            0%, 100% { opacity: 0.4; r: 30; }
+            50%      { opacity: 0.1; r: 56; }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow"><i class="ti ti-broadcast"></i>Najluźniejsza forma sprzężenia</div>
+                <h2 class="title">Message coupling — <span class="highlight">komunikacja przez zdarzenia</span></h2>
+                <p class="lede">
+                    Moduł <strong>publikuje zdarzenie</strong>, a zainteresowane komponenty reagują samodzielnie. Nadawca <strong>nie wie</strong>, kto obsłuży wiadomość ani co z nią zrobi.
+                </p>
+            </div>
+
+            <div class="body">
+                <div class="diagram">
+                    <svg class="diagram-svg" viewBox="0 0 900 460" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <marker id="arrowViolet" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a78bfa" />
+                            </marker>
+                            <marker id="arrowCyan" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee" />
+                            </marker>
+                            <linearGradient id="busGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="rgba(34,211,238,0.05)"/>
+                                <stop offset="50%" stop-color="rgba(34,211,238,0.30)"/>
+                                <stop offset="100%" stop-color="rgba(34,211,238,0.05)"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Publisher (left) -->
+                        <rect x="30" y="180" width="180" height="100" rx="16"
+                              fill="rgba(167,139,250,0.10)" stroke="#a78bfa" stroke-width="2"/>
+                        <text x="120" y="220" text-anchor="middle" font-size="22" class="label-bold">Publisher</text>
+                        <text x="120" y="245" text-anchor="middle" font-size="15" fill="#c4b5fd">Order Service</text>
+                        <text x="120" y="265" text-anchor="middle" class="label-sub">emit event</text>
+
+                        <!-- Event bus (central horizontal lane) -->
+                        <rect x="260" y="200" width="380" height="60" rx="30"
+                              fill="url(#busGrad)" stroke="#22d3ee" stroke-width="2.5"
+                              stroke-dasharray="8 6"/>
+                        <text x="450" y="226" text-anchor="middle" font-size="20" class="bus-label">EVENT BUS</text>
+                        <text x="450" y="248" text-anchor="middle" font-size="13" fill="#67e8f9">publish / subscribe</text>
+
+                        <!-- Pulsing halo on bus -->
+                        <circle cx="330" cy="230" r="30" fill="none" stroke="#22d3ee" stroke-width="1.5" opacity="0.4"
+                                style="animation: pulseHalo 2.4s ease-in-out infinite;"/>
+                        <circle cx="450" cy="230" r="30" fill="none" stroke="#22d3ee" stroke-width="1.5" opacity="0.4"
+                                style="animation: pulseHalo 2.4s ease-in-out 0.6s infinite;"/>
+                        <circle cx="570" cy="230" r="30" fill="none" stroke="#22d3ee" stroke-width="1.5" opacity="0.4"
+                                style="animation: pulseHalo 2.4s ease-in-out 1.2s infinite;"/>
+
+                        <!-- Event chip from publisher to bus -->
+                        <path d="M 210 230 L 250 230"
+                              stroke="#a78bfa" stroke-width="3"
+                              marker-end="url(#arrowViolet)"/>
+                        <rect x="215" y="158" width="180" height="32" rx="8"
+                              fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.55)" stroke-width="1.5"/>
+                        <text x="305" y="180" text-anchor="middle" font-size="14" class="event-label">OrderPlaced</text>
+
+                        <!-- Subscribers (right side) -->
+                        <!-- Sub 1: Email -->
+                        <rect x="690" y="40" width="180" height="80" rx="14"
+                              fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="780" y="74" text-anchor="middle" font-size="18" class="label-bold">Email Service</text>
+                        <text x="780" y="98" text-anchor="middle" class="label-sub">wyśle potwierdzenie</text>
+
+                        <!-- Sub 2: Inventory -->
+                        <rect x="690" y="190" width="180" height="80" rx="14"
+                              fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="780" y="224" text-anchor="middle" font-size="18" class="label-bold">Inventory</text>
+                        <text x="780" y="248" text-anchor="middle" class="label-sub">zarezerwuje towar</text>
+
+                        <!-- Sub 3: Analytics -->
+                        <rect x="690" y="340" width="180" height="80" rx="14"
+                              fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2"/>
+                        <text x="780" y="374" text-anchor="middle" font-size="18" class="label-bold">Analytics</text>
+                        <text x="780" y="398" text-anchor="middle" class="label-sub">zarejestruje event</text>
+
+                        <!-- Arrows from bus to subscribers (subscribers pull) -->
+                        <path d="M 640 220 Q 670 130 690 80"
+                              fill="none" stroke="#22d3ee" stroke-width="2"
+                              stroke-dasharray="6 5"
+                              marker-end="url(#arrowCyan)"
+                              style="animation: dashFlow 1.3s linear infinite;"/>
+                        <path d="M 640 230 L 690 230"
+                              fill="none" stroke="#22d3ee" stroke-width="2"
+                              stroke-dasharray="6 5"
+                              marker-end="url(#arrowCyan)"
+                              style="animation: dashFlow 1.3s linear infinite;"/>
+                        <path d="M 640 240 Q 670 330 690 380"
+                              fill="none" stroke="#22d3ee" stroke-width="2"
+                              stroke-dasharray="6 5"
+                              marker-end="url(#arrowCyan)"
+                              style="animation: dashFlow 1.3s linear infinite;"/>
+
+                        <!-- Caption -->
+                        <text x="120" y="305" text-anchor="middle" font-size="13" fill="#94a3b8" font-style="italic">nadawca nie wie o subskrybentach</text>
+                        <text x="780" y="445" text-anchor="middle" font-size="13" fill="#94a3b8" font-style="italic">subskrybenci reagują niezależnie</text>
+                    </svg>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-card panel-card--good">
+                        <div class="panel-head">
+                            <div class="panel-icon panel-icon--good"><i class="ti ti-unlink"></i></div>
+                            <div class="panel-title">Brak bezpośrednich zależności</div>
+                        </div>
+                        <p class="panel-text">
+                            Nadawca i odbiorca <em>nie znają się nawzajem</em> — komunikują się tylko przez kontrakt zdarzenia.
+                        </p>
+                    </div>
+
+                    <div class="panel-card panel-card--good">
+                        <div class="panel-head">
+                            <div class="panel-icon panel-icon--good"><i class="ti ti-circles-relation"></i></div>
+                            <div class="panel-title">Architektury zdarzeniowe</div>
+                        </div>
+                        <p class="panel-text">
+                            Naturalny wybór dla <em>systemów rozproszonych</em>, mikrousług i procesów reaktywnych.
+                        </p>
+                    </div>
+
+                    <div class="panel-divider">
+                        <span class="panel-divider-text">trade-off</span>
+                    </div>
+
+                    <div class="panel-card panel-card--tradeoff">
+                        <div class="panel-head">
+                            <div class="panel-icon panel-icon--warn"><i class="ti ti-route"></i></div>
+                            <div class="panel-title">Rozproszona logika</div>
+                        </div>
+                        <p class="panel-text">
+                            Luźniejsze coupling kosztem <em>trudniejszego śledzenia przepływu</em> i debugowania całego scenariusza.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

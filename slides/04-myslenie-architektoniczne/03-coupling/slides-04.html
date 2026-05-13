@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 04 - Modułowość, cohesion, coupling</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1300px;
+            margin: 0 auto 50px;
+        }
+
+        .eyebrow {
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 68px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Triangle of concepts === */
+        .triangle {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 480px;
+        }
+
+        .concept-card {
+            position: absolute;
+            width: 400px;
+            padding: 32px 32px 30px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            background: rgba(17,24,39,0.84);
+            backdrop-filter: blur(6px);
+            text-align: center;
+            opacity: 0;
+            overflow: hidden;
+            z-index: 3;
+            box-shadow: 0 24px 55px rgba(0,0,0,0.26);
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 26px;
+            right: 26px;
+            height: 3px;
+            border-radius: 0 0 999px 999px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.78), transparent);
+        }
+
+        .concept-card--top {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: fadeUpCentered 0.8s ease-out 0.6s forwards;
+        }
+
+        .concept-card--bl {
+            bottom: 0;
+            left: 30px;
+            animation: fadeUp 0.8s ease-out 0.85s forwards;
+        }
+
+        .concept-card--br {
+            bottom: 0;
+            right: 30px;
+            animation: fadeUp 0.8s ease-out 1.1s forwards;
+        }
+
+        .concept-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: rgba(34,211,238,0.13);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .concept-name {
+            font-size: 30px;
+            font-weight: 700;
+            color: #f0f4f8;
+            margin-bottom: 10px;
+        }
+
+        .concept-desc {
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1.45;
+            color: #cbd5e1;
+        }
+
+        /* === Connecting lines === */
+        .triangle-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .triangle-svg line {
+            stroke: rgba(34,211,238,0.35);
+            stroke-width: 2;
+            stroke-dasharray: 6 8;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.3s forwards;
+        }
+
+        .triangle-svg .connection {
+            fill: none;
+            stroke: rgba(34,211,238,0.58);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 10 12;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.2s forwards;
+        }
+
+        .triangle-svg .connection-shadow {
+            stroke: rgba(34,211,238,0.08);
+            stroke-width: 14;
+            stroke-dasharray: none;
+            filter: url(#softGlow);
+        }
+
+        .triangle-svg .relation-node {
+            fill: var(--cyan-400);
+            opacity: 0;
+            filter: url(#softGlow);
+            animation: fadeIn 0.8s ease-out 1.55s forwards;
+        }
+
+        .edge-label {
+            position: absolute;
+            z-index: 2;
+            padding: 9px 16px;
+            border: 1px solid rgba(34,211,238,0.22);
+            border-radius: 999px;
+            background: rgba(10,14,23,0.78);
+            color: #bae6fd;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeIn 0.9s ease-out 1.45s forwards;
+        }
+
+        .edge-label--left {
+            top: 138px;
+            left: 235px;
+        }
+
+        .edge-label--right {
+            top: 138px;
+            right: 225px;
+        }
+
+        .edge-label--bottom {
+            bottom: 42px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .relation-core {
+            position: absolute;
+            z-index: 2;
+            left: 50%;
+            top: 68%;
+            width: 250px;
+            padding: 16px 20px;
+            border: 1px solid rgba(34,211,238,0.26);
+            border-radius: 18px;
+            background: rgba(8,13,23,0.78);
+            box-shadow: 0 18px 42px rgba(0,0,0,0.25);
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.55s forwards;
+        }
+
+        .relation-core__label {
+            font-size: 20px;
+            font-weight: 800;
+            color: #f0f4f8;
+            margin-bottom: 5px;
+        }
+
+        .relation-core__sub {
+            font-size: 14px;
+            font-weight: 600;
+            color: #94a3b8;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+        }
+
+        /* === Principle at bottom === */
+        .principle {
+            width: 1040px;
+            max-width: 1040px;
+            margin: 50px 0 0 180px;
+            padding: 28px 50px;
+            border: 1px solid rgba(34,211,238,0.22);
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.18), rgba(17,24,39,0.55));
+            backdrop-filter: blur(6px);
+            text-align: center;
+            font-size: 26px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.5s forwards;
+        }
+
+        .principle strong {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUpCentered {
+            from { opacity: 0; transform: translate(-50%, 24px); }
+            to   { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Trzy filary projektowania modułów</div>
+                <h2 class="title">Modułowość · cohesion · <span class="highlight">coupling</span></h2>
+            </div>
+
+            <div class="triangle">
+                <svg class="triangle-svg" viewBox="0 0 1400 480" preserveAspectRatio="none">
+                    <defs>
+                        <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="5" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <path class="connection connection-shadow" d="M700 118 C542 176 390 262 230 380" />
+                    <path class="connection connection-shadow" d="M700 118 C858 176 1010 262 1170 380" />
+                    <path class="connection connection-shadow" d="M250 386 C515 432 885 432 1150 386" />
+                    <path class="connection" d="M700 118 C542 176 390 262 230 380" />
+                    <path class="connection" d="M700 118 C858 176 1010 262 1170 380" />
+                    <path class="connection" d="M250 386 C515 432 885 432 1150 386" />
+                    <circle class="relation-node" cx="700" cy="292" r="8" />
+                </svg>
+
+                <div class="edge-label edge-label--left">granice modułu</div>
+                <div class="edge-label edge-label--right">świadome zależności</div>
+                <div class="edge-label edge-label--bottom">spójność wewnątrz</div>
+
+                <div class="relation-core">
+                    <div class="relation-core__label">Relacje modułów</div>
+                    <div class="relation-core__sub">granice · spójność · zależności</div>
+                </div>
+
+                <div class="concept-card concept-card--top">
+                    <div class="concept-icon"><i class="ti ti-grid-dots"></i></div>
+                    <div class="concept-name">Modułowość</div>
+                    <p class="concept-desc">Dzielenie systemu na zarządzalne, wyraźnie oddzielone części.</p>
+                </div>
+
+                <div class="concept-card concept-card--bl">
+                    <div class="concept-icon"><i class="ti ti-focus-2"></i></div>
+                    <div class="concept-name">Cohesion</div>
+                    <p class="concept-desc">Czy zawartość modułu realizuje wspólną, jednoznaczną odpowiedzialność.</p>
+                </div>
+
+                <div class="concept-card concept-card--br">
+                    <div class="concept-icon"><i class="ti ti-link"></i></div>
+                    <div class="concept-name">Coupling</div>
+                    <p class="concept-desc">Jak bardzo moduł zależy od innych — siła i zasięg powiązań.</p>
+                </div>
+            </div>
+
+            <div class="principle">
+                <strong>Wysoka spójność</strong> wewnątrz modułów <span style="color:var(--cyan-400);">+</span> <strong>niskie sprzężenie</strong> między nimi
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
