@@ -229,16 +229,18 @@
 
         .compare-col--bad .col-icon {
             background: rgba(245,158,11,0.15);
-            color: var(--warn);
+            color: #fff;
         }
 
         .compare-col--good .col-icon {
             background: rgba(34,197,94,0.15);
-            color: var(--good);
+            color: #fff;
         }
 
         .col-label {
-            display: block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             font-size: 12px;
             font-weight: 700;
             letter-spacing: 3px;
@@ -365,7 +367,7 @@
             <div class="compare">
                 <div class="compare-col compare-col--bad">
                     <div class="col-head">
-                        <div class="col-icon"><i class="ti ti-alert-triangle-filled"></i></div>
+                        <div class="col-icon"><i class="ti ti-link"></i></div>
                         <div>
                             <span class="col-label">Bezpośrednia zależność</span>
                             <div class="col-title">Domena wie o dostawcy</div>
@@ -405,7 +407,7 @@
 
                 <div class="compare-col compare-col--good">
                     <div class="col-head">
-                        <div class="col-icon"><i class="ti ti-shield-check-filled"></i></div>
+                        <div class="col-icon"><i class="ti ti-plug-connected"></i></div>
                         <div>
                             <span class="col-label">Adapter / warstwa pośrednia</span>
                             <div class="col-title">Świat zewnętrzny za kontraktem</div>

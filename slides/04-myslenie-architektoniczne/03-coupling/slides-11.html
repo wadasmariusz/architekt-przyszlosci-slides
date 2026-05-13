@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Spektrum couplingu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+
+            --c1: #ef4444;  /* content - red */
+            --c2: #f97316;  /* common - orange */
+            --c3: #f59e0b;  /* external - amber */
+            --c4: #eab308;  /* control - yellow */
+            --c5: #84cc16;  /* stamp - lime */
+            --c6: #22c55e;  /* data - green */
+            --c7: #14b8a6;  /* message - teal */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 72px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 36px;
+        }
+
+        .eyebrow {
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 62px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Axis labels === */
+        .axis {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1640px;
+            margin: 0 auto 16px;
+            padding: 0 12px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+        }
+
+        .axis-end {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border-radius: 999px;
+        }
+
+        .axis-end--red {
+            color: var(--c1);
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.35);
+        }
+
+        .axis-end--green {
+            color: var(--c7);
+            background: rgba(20,184,166,0.08);
+            border: 1px solid rgba(20,184,166,0.35);
+        }
+
+        .axis-bar {
+            flex: 1;
+            height: 6px;
+            margin: 0 22px;
+            border-radius: 3px;
+            background: linear-gradient(to right,
+                var(--c1) 0%, var(--c2) 16%, var(--c3) 33%,
+                var(--c4) 50%, var(--c5) 66%, var(--c6) 83%, var(--c7) 100%);
+            box-shadow: 0 0 22px rgba(34,211,238,0.18);
+        }
+
+        /* === Spectrum grid === */
+        .spectrum {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 16px;
+            max-width: 1640px;
+            margin: 0 auto;
+        }
+
+        .type-card {
+            position: relative;
+            padding: 26px 16px 24px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            text-align: center;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 22px;
+            right: 22px;
+            height: 4px;
+            border-radius: 0 0 999px 999px;
+        }
+
+        .type-card:nth-child(1)::before { background: var(--c1); }
+        .type-card:nth-child(2)::before { background: var(--c2); }
+        .type-card:nth-child(3)::before { background: var(--c3); }
+        .type-card:nth-child(4)::before { background: var(--c4); }
+        .type-card:nth-child(5)::before { background: var(--c5); }
+        .type-card:nth-child(6)::before { background: var(--c6); }
+        .type-card:nth-child(7)::before { background: var(--c7); }
+
+        .type-card:nth-child(1) { animation: fadeUp 0.6s ease-out 0.75s forwards; }
+        .type-card:nth-child(2) { animation: fadeUp 0.6s ease-out 0.85s forwards; }
+        .type-card:nth-child(3) { animation: fadeUp 0.6s ease-out 0.95s forwards; }
+        .type-card:nth-child(4) { animation: fadeUp 0.6s ease-out 1.05s forwards; }
+        .type-card:nth-child(5) { animation: fadeUp 0.6s ease-out 1.15s forwards; }
+        .type-card:nth-child(6) { animation: fadeUp 0.6s ease-out 1.25s forwards; }
+        .type-card:nth-child(7) { animation: fadeUp 0.6s ease-out 1.35s forwards; }
+
+        .type-num {
+            display: inline-flex;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #0a0e17;
+        }
+
+        .type-card:nth-child(1) .type-num { background: var(--c1); }
+        .type-card:nth-child(2) .type-num { background: var(--c2); }
+        .type-card:nth-child(3) .type-num { background: var(--c3); }
+        .type-card:nth-child(4) .type-num { background: var(--c4); }
+        .type-card:nth-child(5) .type-num { background: var(--c5); }
+        .type-card:nth-child(6) .type-num { background: var(--c6); }
+        .type-card:nth-child(7) .type-num { background: var(--c7); color: #f0f4f8; }
+
+        .type-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .type-card:nth-child(1) .type-icon { color: var(--c1); }
+        .type-card:nth-child(2) .type-icon { color: var(--c2); }
+        .type-card:nth-child(3) .type-icon { color: var(--c3); }
+        .type-card:nth-child(4) .type-icon { color: var(--c4); }
+        .type-card:nth-child(5) .type-icon { color: var(--c5); }
+        .type-card:nth-child(6) .type-icon { color: var(--c6); }
+        .type-card:nth-child(7) .type-icon { color: var(--c7); }
+
+        .type-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.1;
+            margin-bottom: 4px;
+        }
+
+        .type-sub {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .type-card:nth-child(1) .type-sub { color: var(--c1); }
+        .type-card:nth-child(2) .type-sub { color: var(--c2); }
+        .type-card:nth-child(3) .type-sub { color: var(--c3); }
+        .type-card:nth-child(4) .type-sub { color: var(--c4); }
+        .type-card:nth-child(5) .type-sub { color: var(--c5); }
+        .type-card:nth-child(6) .type-sub { color: var(--c6); }
+        .type-card:nth-child(7) .type-sub { color: var(--c7); }
+
+        .type-desc {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #cbd5e1;
+        }
+
+        /* === Footer note === */
+        .footnote {
+            max-width: 1640px;
+            margin: 30px auto 0;
+            padding: 18px 26px;
+            border: 1px solid rgba(34,211,238,0.18);
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.18), rgba(17,24,39,0.55));
+            backdrop-filter: blur(6px);
+            text-align: center;
+            font-size: 19px;
+            font-weight: 500;
+            color: #e2e8f0;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.5s forwards;
+        }
+
+        .footnote i {
+            color: var(--cyan-400);
+            margin-right: 10px;
+            font-size: 22px;
+            vertical-align: -3px;
+        }
+
+        .footnote strong {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Slajd referencyjny</div>
+                <h2 class="title">Spektrum <span class="highlight">couplingu</span> — od najsilniejszego do najluźniejszego</h2>
+            </div>
+
+            <div class="axis">
+                <div class="axis-end axis-end--red">
+                    <i class="ti ti-flame"></i>Najsilniejsze
+                </div>
+                <div class="axis-bar"></div>
+                <div class="axis-end axis-end--green">
+                    Najluźniejsze<i class="ti ti-feather"></i>
+                </div>
+            </div>
+
+            <div class="spectrum">
+                <div class="type-card">
+                    <div class="type-num">1</div>
+                    <i class="ti ti-shield-off type-icon"></i>
+                    <div class="type-name">Content</div>
+                    <div class="type-sub">ingerencja</div>
+                    <p class="type-desc">Sięganie do wnętrza modułu z pominięciem API.</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-num">2</div>
+                    <i class="ti ti-share type-icon"></i>
+                    <div class="type-name">Common</div>
+                    <div class="type-sub">wspólny stan</div>
+                    <p class="type-desc">Wiele modułów mutuje ten sam globalny obiekt.</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-num">3</div>
+                    <i class="ti ti-world type-icon"></i>
+                    <div class="type-name">External</div>
+                    <div class="type-sub">format / dostawca</div>
+                    <p class="type-desc">Logika przylepiona do konkretnego formatu lub API.</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-num">4</div>
+                    <i class="ti ti-flag type-icon"></i>
+                    <div class="type-name">Control</div>
+                    <div class="type-sub">flagi sterujące</div>
+                    <p class="type-desc">Wywołujący steruje wnętrzem przez parametry.</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-num">5</div>
+                    <i class="ti ti-package type-icon"></i>
+                    <div class="type-name">Stamp</div>
+                    <div class="type-sub">cały obiekt</div>
+                    <p class="type-desc">Przekazujemy szerszą strukturę niż jest potrzebna.</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-num">6</div>
+                    <i class="ti ti-arrows-exchange type-icon"></i>
+                    <div class="type-name">Data</div>
+                    <div class="type-sub">tylko potrzebne</div>
+                    <p class="type-desc">Moduł wprost deklaruje, jakich danych potrzebuje.</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-num">7</div>
+                    <i class="ti ti-broadcast type-icon"></i>
+                    <div class="type-name">Message</div>
+                    <div class="type-sub">zdarzenia</div>
+                    <p class="type-desc">Nadawca nie wie, kto i jak obsłuży wiadomość.</p>
+                </div>
+            </div>
+
+            <div class="footnote">
+                <i class="ti ti-target-arrow"></i>
+                W praktyce dążymy do <strong>prawej strony skali</strong> — bez utraty czytelności i kontroli nad przepływem.
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -368,9 +368,9 @@
         <div class="content">
             <div class="header">
                 <div class="eyebrow"><i class="ti ti-flag-filled"></i>Sterowanie flagami</div>
-                <h2 class="title">Control coupling — <span class="highlight">wywołujący steruje wnętrzem</span></h2>
+                <h2 class="title">Control <span class="highlight">coupling</span></h2>
                 <p class="lede">
-                    Moduł wywołujący <strong>steruje zachowaniem</strong> wywoływanego przez flagi i parametry sterujące. Sygnał architektoniczny: wywołujący <strong>zna zbyt wiele</strong> szczegółów wewnętrznej logiki.
+                    Moduł wywołujący <strong>steruje zachowaniem</strong> wywoływanego przez flagi i parametry sterujące.
                 </p>
             </div>
 
@@ -410,10 +410,10 @@
                     <div class="panel-card panel-card--accent">
                         <div class="panel-head">
                             <div class="panel-icon panel-icon--warn"><i class="ti ti-tools"></i></div>
-                            <div class="panel-title">Metoda-kombajn</div>
+                            <div class="panel-title">Metoda wieloscenariuszowa</div>
                         </div>
                         <p class="panel-text">
-                            Jedna funkcja obsługuje <em>wiele scenariuszy</em> — rośnie z każdym nowym parametrem, aż przestaje być zrozumiała.
+                            Jedna funkcja obsługuje <em>wiele scenariuszy</em>.
                         </p>
                     </div>
 
@@ -423,7 +423,7 @@
                             <div class="panel-title">Wyciekająca implementacja</div>
                         </div>
                         <p class="panel-text">
-                            Wywołujący musi <em>wiedzieć, co robią flagi</em> w środku — kontrakt przestaje być neutralny.
+                            Wywołujący musi <em>wiedzieć, co robią flagi</em> w środku
                         </p>
                     </div>
 
@@ -433,7 +433,7 @@
                             <div class="panel-title">Eksplozja testów</div>
                         </div>
                         <p class="panel-text">
-                            Liczba kombinacji flag rośnie wykładniczo — pokrycie scenariuszy staje się <em>praktycznie niemożliwe</em>.
+                            Liczba kombinacji flag rośnie wykładniczo.
                         </p>
                     </div>
                 </div>
