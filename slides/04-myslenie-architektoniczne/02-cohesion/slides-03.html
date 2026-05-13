@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Spójność vs. sprzężenie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 56px;
+        }
+
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .highlight--amber {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram === */
+        .diagram {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            margin-bottom: 36px;
+        }
+
+        .persp-card {
+            position: relative;
+            padding: 36px 40px 32px;
+            border-radius: 22px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .persp-card--cohesion {
+            animation: slideFromLeft 0.8s ease-out 0.55s forwards;
+        }
+
+        .persp-card--coupling {
+            animation: slideFromRight 0.8s ease-out 0.75s forwards;
+        }
+
+        .persp-label {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+            margin-bottom: 6px;
+        }
+
+        .persp-card--coupling .persp-label {
+            color: #f59e0b;
+        }
+
+        .persp-name {
+            font-size: 36px;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 22px;
+        }
+
+        .persp-question {
+            font-size: 22px;
+            font-weight: 300;
+            color: #cbd5e1;
+            margin-bottom: 28px;
+            line-height: 1.4;
+        }
+
+        .persp-question strong {
+            color: #f8fafc;
+            font-weight: 600;
+        }
+
+        /* === Diagram visuals (inside each card) === */
+        .viz {
+            position: relative;
+            height: 244px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 4px;
+        }
+
+        .viz-svg {
+            width: 100%;
+            max-width: 560px;
+            height: 232px;
+            display: block;
+            overflow: visible;
+            filter: drop-shadow(0 24px 42px rgba(0,0,0,0.22));
+        }
+
+        .viz-frame {
+            fill: rgba(2,132,199,0.08);
+            stroke: rgba(34,211,238,0.52);
+            stroke-width: 2;
+        }
+
+        .persp-card--coupling .viz-frame {
+            fill: rgba(245,158,11,0.07);
+            stroke: rgba(245,158,11,0.56);
+        }
+
+        .viz-label-pill {
+            fill: #111827;
+            stroke: rgba(34,211,238,0.48);
+            stroke-width: 1.5;
+        }
+
+        .persp-card--coupling .viz-label-pill {
+            stroke: rgba(245,158,11,0.52);
+        }
+
+        .viz-label {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            fill: rgba(103,232,249,0.94);
+        }
+
+        .persp-card--coupling .viz-label {
+            fill: rgba(251,191,36,0.95);
+        }
+
+        .module-glow {
+            fill: none;
+            stroke-width: 22;
+            opacity: 0.08;
+        }
+
+        .module-glow--cyan { stroke: var(--cyan-400); }
+        .module-glow--amber { stroke: #f59e0b; }
+
+        .cohesion-link {
+            fill: none;
+            stroke: rgba(34,211,238,0.62);
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .cohesion-link--soft {
+            stroke: rgba(34,211,238,0.22);
+            stroke-width: 10;
+        }
+
+        .cohesion-node {
+            fill: var(--cyan-400);
+            stroke: rgba(236,254,255,0.85);
+            stroke-width: 2;
+        }
+
+        .cohesion-node-core {
+            fill: #f8fafc;
+            opacity: 0.9;
+        }
+
+        .outer-module {
+            fill: rgba(255,255,255,0.045);
+            stroke: rgba(255,255,255,0.22);
+            stroke-width: 1.5;
+        }
+
+        .outer-module--active {
+            fill: rgba(245,158,11,0.08);
+            stroke: rgba(245,158,11,0.50);
+        }
+
+        .coupling-link {
+            fill: none;
+            stroke: rgba(245,158,11,0.78);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .coupling-link--soft {
+            stroke: rgba(245,158,11,0.22);
+            stroke-width: 10;
+        }
+
+        .coupling-link--muted {
+            stroke: rgba(148,163,184,0.36);
+            stroke-width: 2.5;
+            stroke-dasharray: 8 12;
+        }
+
+        /* === Goal banner === */
+        .goal {
+            width: 1320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            padding: 32px 56px;
+            border-radius: 22px;
+            background: rgba(17,24,39,0.70);
+            border: 1px solid rgba(6,182,212,0.28);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.22);
+            backdrop-filter: blur(6px);
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.05s forwards;
+        }
+
+        .goal-icon {
+            flex: 0 0 auto;
+            font-size: 40px;
+            color: var(--cyan-400);
+            line-height: 1;
+        }
+
+        .goal-text {
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 1.32;
+            color: #f8fafc;
+        }
+
+        .goal-text strong {
+            font-weight: 800;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <h2 class="title"><span class="highlight">Spójność</span> vs. <span class="highlight--amber">sprzężenie</span></h2>
+            </header>
+
+            <section class="diagram">
+                <article class="persp-card persp-card--cohesion">
+                    <div class="persp-label">Perspektywa wewnętrzna</div>
+                    <div class="persp-name">Spójność <span style="font-weight:300;color:#94a3b8;">(cohesion)</span></div>
+                    <p class="persp-question">Co dzieje się <strong>w środku</strong> modułu?</p>
+                    <div class="viz">
+                        <svg class="viz-svg" viewBox="0 0 560 232" role="img" aria-label="Moduł z silnie połączonymi elementami wewnętrznymi">
+                            <defs>
+                                <filter id="cyanNodeGlow" x="-80%" y="-80%" width="260%" height="260%">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                                    <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.13 0 0 0 0 0.83 0 0 0 0 0.93 0 0 0 0.72 0" />
+                                    <feMerge>
+                                        <feMergeNode />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <rect class="module-glow module-glow--cyan" x="128" y="38" width="304" height="176" rx="22" />
+                            <rect class="viz-frame" x="128" y="38" width="304" height="176" rx="22" />
+                            <rect class="viz-label-pill" x="234" y="24" width="92" height="26" rx="13" />
+                            <text class="viz-label" x="280" y="43" text-anchor="middle">MODUŁ</text>
+
+                            <path class="cohesion-link cohesion-link--soft" d="M214 82 L330 90 L356 154 L238 166 Z" />
+                            <path class="cohesion-link" d="M214 82 L330 90 L356 154 L238 166 Z" />
+                            <path class="cohesion-link cohesion-link--soft" d="M214 82 L356 154 M330 90 L238 166" />
+                            <path class="cohesion-link" d="M214 82 L356 154 M330 90 L238 166" />
+
+                            <g filter="url(#cyanNodeGlow)">
+                                <circle class="cohesion-node" cx="214" cy="82" r="14" />
+                                <circle class="cohesion-node-core" cx="214" cy="82" r="4" />
+                                <circle class="cohesion-node" cx="330" cy="90" r="14" />
+                                <circle class="cohesion-node-core" cx="330" cy="90" r="4" />
+                                <circle class="cohesion-node" cx="356" cy="154" r="14" />
+                                <circle class="cohesion-node-core" cx="356" cy="154" r="4" />
+                                <circle class="cohesion-node" cx="238" cy="166" r="14" />
+                                <circle class="cohesion-node-core" cx="238" cy="166" r="4" />
+                            </g>
+                        </svg>
+                    </div>
+                </article>
+
+                <article class="persp-card persp-card--coupling">
+                    <div class="persp-label">Perspektywa zewnętrzna</div>
+                    <div class="persp-name">Sprzężenie <span style="font-weight:300;color:#94a3b8;">(coupling)</span></div>
+                    <p class="persp-question">Jakie są <strong>relacje z innymi</strong> modułami?</p>
+                    <div class="viz">
+                        <svg class="viz-svg" viewBox="0 0 560 232" role="img" aria-label="Moduł z relacjami do modułów zewnętrznych">
+                            <defs>
+                                <marker id="amberArrow" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto" markerUnits="userSpaceOnUse">
+                                    <path d="M3 3 L16 9 L3 15 Z" fill="#f59e0b" />
+                                </marker>
+                            </defs>
+
+                            <rect class="outer-module outer-module--active" x="38" y="34" width="78" height="54" rx="9" />
+                            <rect class="outer-module" x="444" y="34" width="78" height="54" rx="9" />
+                            <rect class="outer-module" x="38" y="144" width="78" height="54" rx="9" />
+                            <rect class="outer-module outer-module--active" x="444" y="144" width="78" height="54" rx="9" />
+
+                            <path class="coupling-link coupling-link--soft" d="M198 77 C164 68 145 62 118 62" />
+                            <path class="coupling-link coupling-link--soft" d="M362 155 C396 166 417 172 442 172" />
+                            <path class="coupling-link" d="M198 77 C164 68 145 62 118 62" marker-end="url(#amberArrow)" />
+                            <path class="coupling-link" d="M362 155 C396 166 417 172 442 172" marker-end="url(#amberArrow)" />
+                            <path class="coupling-link coupling-link--muted" d="M362 77 C394 66 416 62 442 62" />
+                            <path class="coupling-link coupling-link--muted" d="M198 155 C164 166 144 172 118 172" />
+
+                            <rect class="module-glow module-glow--amber" x="196" y="50" width="168" height="132" rx="20" />
+                            <rect class="viz-frame" x="196" y="50" width="168" height="132" rx="20" />
+                            <rect class="viz-label-pill" x="234" y="36" width="92" height="26" rx="13" />
+                            <text class="viz-label" x="280" y="55" text-anchor="middle">MODUŁ</text>
+                        </svg>
+                    </div>
+                </article>
+            </section>
+
+            <section class="goal">
+                <i class="ti ti-target-arrow goal-icon"></i>
+                <p class="goal-text"><strong>Wysoka spójność</strong> wewnątrz <span style="color:var(--cyan-400);font-weight:600;">+</span> <strong>luźne powiązanie</strong> na zewnątrz</p>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

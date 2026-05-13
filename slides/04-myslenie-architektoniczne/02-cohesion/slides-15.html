@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 15 - Podsumowanie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --emerald: #10b981;
+            --emerald-soft: #34d399;
+            --rose: #f43f5e;
+            --rose-soft: #fb7185;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, rgba(34,211,238,0.04) 0%, transparent 38%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 32px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 22px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.12);
+            border: 1px solid rgba(34,211,238,0.45);
+            color: var(--cyan-400);
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow i { font-size: 18px; line-height: 1; }
+
+        .title {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Takeaway cards row === */
+        .takeaways {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 32px;
+        }
+
+        .ta {
+            position: relative;
+            padding: 26px 28px 28px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 280px;
+            opacity: 0;
+            transform: translateY(28px);
+            animation: cardIn 0.7s ease-out forwards;
+        }
+
+        .ta--what { animation-delay: 0.55s; --acc: var(--cyan-400); --acc-deep: var(--cyan-500); --acc-bg: rgba(34,211,238,0.14); --acc-soft: rgba(34,211,238,0.45); }
+        .ta--high { animation-delay: 0.75s; --acc: var(--emerald-soft); --acc-deep: var(--emerald); --acc-bg: rgba(52,211,153,0.14); --acc-soft: rgba(52,211,153,0.45); }
+        .ta--low  { animation-delay: 0.95s; --acc: var(--rose-soft); --acc-deep: var(--rose); --acc-bg: rgba(244,63,94,0.14); --acc-soft: rgba(244,63,94,0.45); }
+
+        .ta-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .ta-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--acc-bg);
+            border: 1px solid var(--acc-soft);
+            color: var(--acc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 22px var(--acc-bg);
+            flex: 0 0 auto;
+        }
+
+        .ta-icon i { font-size: 28px; line-height: 1; }
+
+        .ta-key {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--acc);
+            margin-bottom: 2px;
+        }
+
+        .ta-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #f8fafc;
+            line-height: 1.15;
+        }
+
+        .ta-text {
+            font-size: 19px;
+            font-weight: 300;
+            line-height: 1.45;
+            color: #f0f4f8;
+        }
+
+        .ta-text strong {
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        .ta--what .ta-text strong.acc { color: var(--cyan-400); }
+        .ta--high .ta-text strong.acc { color: var(--emerald-soft); }
+        .ta--low  .ta-text strong.acc { color: var(--rose-soft); }
+
+        .ta-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: auto;
+            padding-top: 8px;
+        }
+
+        .ta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--acc-bg);
+            border: 1px solid var(--acc-soft);
+            color: var(--acc);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .ta-pill i { font-size: 13px; line-height: 1; }
+
+        /* === Final question (hero) === */
+        .final {
+            width: 1320px;
+            position: relative;
+            border-radius: 24px;
+            padding: 30px 40px 32px;
+            background:
+                linear-gradient(135deg, rgba(34,211,238,0.20), rgba(6,182,212,0.10) 50%, rgba(17,24,39,0.85)),
+                radial-gradient(circle at 18% 50%, rgba(34,211,238,0.15), transparent 40%);
+            border: 2px solid rgba(34,211,238,0.55);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.30), 0 0 70px rgba(34,211,238,0.20);
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 1.15s forwards;
+            overflow: hidden;
+        }
+
+        .final-icon {
+            flex: 0 0 auto;
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34,211,238,0.18);
+            border: 2px solid rgba(34,211,238,0.55);
+            color: var(--cyan-400);
+            box-shadow: 0 0 30px rgba(34,211,238,0.30);
+        }
+
+        .final-icon i { font-size: 44px; line-height: 1; }
+
+        .final-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .final-key {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--cyan-400);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .final-text {
+            font-size: 26px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #f8fafc;
+        }
+
+        .final-text .quote {
+            font-style: italic;
+            color: #f0f4f8;
+        }
+
+        .final-text strong {
+            font-weight: 800;
+            color: #f8fafc;
+        }
+
+        .final-text .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <div class="eyebrow"><i class="ti ti-flag-3"></i>Podsumowanie</div>
+                <h2 class="title">Co warto <span class="highlight">zapamiętać</span></h2>
+            </header>
+
+            <section class="takeaways">
+                <article class="ta ta--what">
+                    <div class="ta-head">
+                        <div class="ta-icon"><i class="ti ti-bookmark"></i></div>
+                        <div>
+                            <div class="ta-key">co to jest</div>
+                            <div class="ta-name">Spójność</div>
+                        </div>
+                    </div>
+                    <p class="ta-text">
+                        Spójność mówi, czy <strong>wnętrze modułu</strong> ma sens
+                        <strong class="acc">jako całość</strong>.
+                    </p>
+                </article>
+
+                <article class="ta ta--high">
+                    <div class="ta-head">
+                        <div class="ta-icon"><i class="ti ti-circle-check"></i></div>
+                        <div>
+                            <div class="ta-key">wysoka spójność</div>
+                            <div class="ta-name">Jeden cel</div>
+                        </div>
+                    </div>
+                    <p class="ta-text">
+                        Elementy <strong>należą do siebie</strong> i realizują
+                        <strong class="acc">jeden cel</strong>.
+                    </p>
+                    <div class="ta-pills">
+                        <span class="ta-pill"><i class="ti ti-eye"></i> czytelność</span>
+                        <span class="ta-pill"><i class="ti ti-test-pipe"></i> testowalność</span>
+                        <span class="ta-pill"><i class="ti ti-shield-check"></i> bezpieczne zmiany</span>
+                    </div>
+                </article>
+
+                <article class="ta ta--low">
+                    <div class="ta-head">
+                        <div class="ta-icon"><i class="ti ti-alert-triangle"></i></div>
+                        <div>
+                            <div class="ta-key">niska spójność</div>
+                            <div class="ta-name">Worek na śmieci</div>
+                        </div>
+                    </div>
+                    <p class="ta-text">
+                        Moduły <strong class="acc">przypadkowe, przeładowane</strong>,
+                        trudne w utrzymaniu.
+                    </p>
+                    <div class="ta-pills">
+                        <span class="ta-pill"><i class="ti ti-trash"></i> chaos</span>
+                        <span class="ta-pill"><i class="ti ti-bug"></i> efekty uboczne</span>
+                        <span class="ta-pill"><i class="ti ti-tools"></i> dług techniczny</span>
+                    </div>
+                </article>
+            </section>
+
+            <section class="final">
+                <div class="final-icon"><i class="ti ti-help-octagon"></i></div>
+                <div class="final-body">
+                    <p class="final-text">
+                        <span class="quote">Nie wystarczy tylko podzielilić system.<br>
+                        Trzeba zapytać, czy <span class="accent">każda z nich jest wewnętrznie sensowna</span>.</span>
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
