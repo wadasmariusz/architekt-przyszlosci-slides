@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Spójność logiczna (Logical)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --rose: #f43f5e;
+            --rose-soft: #fb7185;
+            --analogy-blue: #60a5fa;
+            --analogy-blue-soft: #93c5fd;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* Top warning stripe */
+        .warn-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, transparent, var(--rose), var(--rose-soft), var(--rose), transparent);
+            z-index: 5;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.1s forwards;
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 32px;
+        }
+
+        .level-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 20px;
+            border-radius: 999px;
+            background: rgba(244,63,94,0.14);
+            border: 1px solid rgba(244,63,94,0.45);
+            color: var(--rose-soft);
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .level-tag i { font-size: 20px; line-height: 1; }
+
+        .level-tag .level-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--rose);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .title {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .title-en {
+            font-size: 28px;
+            font-weight: 300;
+            color: #94a3b8;
+            font-style: italic;
+            margin-left: 14px;
+            letter-spacing: 0;
+        }
+
+        .highlight-rose {
+            background: linear-gradient(135deg, var(--rose-soft), var(--rose));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Body grid === */
+        .body {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        /* === Cards === */
+        .card {
+            position: relative;
+            padding: 24px 30px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .card-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+
+        .card-label i { font-size: 18px; line-height: 1; }
+
+        .card-text {
+            font-size: 22px;
+            line-height: 1.4;
+            font-weight: 300;
+            color: #f0f4f8;
+        }
+
+        .card-text strong { font-weight: 700; color: #f8fafc; }
+
+        .card--definition {
+            border-left: 3px solid var(--rose);
+            animation: slideFromLeft 0.7s ease-out 0.55s forwards;
+        }
+
+        .card--definition .card-label i { color: var(--rose-soft); }
+
+        /* === Code-style example === */
+        .example {
+            position: relative;
+            background: rgba(3,7,18,0.78);
+            border-radius: 18px;
+            border: 1px solid rgba(244,63,94,0.30);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.30);
+            backdrop-filter: blur(6px);
+            overflow: hidden;
+            opacity: 0;
+            animation: slideFromLeft 0.8s ease-out 0.85s forwards;
+        }
+
+        .example-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .example-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+        }
+
+        .example-dot--r { background: #ef4444; }
+        .example-dot--y { background: #f59e0b; }
+        .example-dot--g { background: #94a3b8; }
+
+        .example-file {
+            margin-left: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .example-body {
+            padding: 18px 24px 22px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            line-height: 1.55;
+        }
+
+        .kw   { color: #c084fc; }
+        .cls  { color: #fbbf24; }
+        .fn   { color: #93c5fd; }
+        .com  { color: #64748b; font-style: italic; }
+        .br   { color: #cbd5e1; }
+
+        .method-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 3px 0;
+        }
+
+        .method-row .tag {
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .tag--addr  { background: rgba(34,211,238,0.12); color: var(--cyan-400); border: 1px solid rgba(34,211,238,0.35); }
+        .tag--phone { background: rgba(132,204,22,0.12); color: #84cc16; border: 1px solid rgba(132,204,22,0.35); }
+        .tag--zip   { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35); }
+        .tag--pesel { background: rgba(244,63,94,0.12); color: var(--rose-soft); border: 1px solid rgba(244,63,94,0.35); }
+
+        .glue {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(255,255,255,0.10);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .glue strong {
+            color: var(--rose-soft);
+            font-style: normal;
+            font-weight: 700;
+            background: rgba(244,63,94,0.10);
+            padding: 1px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(244,63,94,0.25);
+        }
+
+        /* === Analogy panel (the memorable visual) === */
+        .analogy {
+            position: relative;
+            border-radius: 22px;
+            background: linear-gradient(140deg, rgba(96,165,250,0.16), rgba(59,130,246,0.06) 60%, rgba(17,24,39,0.65));
+            border: 1px solid rgba(96,165,250,0.40);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 0 60px rgba(96,165,250,0.10);
+            backdrop-filter: blur(6px);
+            padding: 26px 32px 30px;
+            overflow: hidden;
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.65s forwards;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .analogy::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--analogy-blue), var(--analogy-blue-soft), var(--analogy-blue));
+        }
+
+        .analogy-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--analogy-blue-soft);
+            margin-bottom: 6px;
+        }
+
+        .analogy-label i { font-size: 20px; line-height: 1; color: var(--analogy-blue); }
+
+        .analogy-headline {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #f8fafc;
+            margin-bottom: 18px;
+        }
+
+        .analogy-headline em {
+            color: var(--analogy-blue-soft);
+            font-style: normal;
+            font-weight: 800;
+        }
+
+        .box-scene {
+            position: relative;
+            flex: 1;
+            min-height: 230px;
+            border-radius: 14px;
+            background:
+                repeating-linear-gradient(45deg, rgba(96,165,250,0.04) 0 12px, transparent 12px 24px),
+                rgba(0,0,0,0.18);
+            border: 2px dashed rgba(96,165,250,0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 36px;
+            padding: 24px;
+            margin-bottom: 14px;
+        }
+
+        .box-tag {
+            position: absolute;
+            top: -12px;
+            left: 18px;
+            background: var(--dark-surface);
+            padding: 2px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--analogy-blue-soft);
+            border: 1px solid rgba(96,165,250,0.45);
+            border-radius: 999px;
+        }
+
+        .blue-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .blue-item-icon {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(96,165,250,0.18);
+            border: 1.5px solid rgba(96,165,250,0.55);
+            color: var(--analogy-blue-soft);
+            box-shadow: 0 0 24px rgba(96,165,250,0.25);
+        }
+
+        .blue-item-icon i { font-size: 38px; line-height: 1; }
+
+        .blue-item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #cbd5e1;
+            text-align: center;
+        }
+
+        .analogy-punch {
+            font-size: 18px;
+            line-height: 1.4;
+            color: #cbd5e1;
+            font-style: italic;
+        }
+
+        .analogy-punch strong {
+            color: var(--analogy-blue-soft);
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+        <div class="warn-stripe"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <div class="level-tag">
+                    <span class="level-num">2</span>
+                    <span>poziom 2 / 7 &middot;</span>
+                    <i class="ti ti-alert-triangle"></i>
+                    <span>słaba</span>
+                </div>
+                <h2 class="title">
+                    Spójność <span class="highlight-rose">logiczna</span>
+                    <span class="title-en">Logical</span>
+                </h2>
+            </header>
+
+            <section class="body">
+                <div class="col">
+                    <article class="card card--definition">
+                        <div class="card-label"><i class="ti ti-bookmark"></i> Definicja</div>
+                        <p class="card-text">
+                            Elementy robią rzeczy <strong>„logicznie podobne"</strong>,
+                            ale <strong>nie współpracują</strong> ze sobą.
+                        </p>
+                    </article>
+
+                    <article class="example">
+                        <div class="example-bar">
+                            <span class="example-dot example-dot--r"></span>
+                            <span class="example-dot example-dot--y"></span>
+                            <span class="example-dot example-dot--g"></span>
+                            <span class="example-file">Validators.cs</span>
+                        </div>
+                        <div class="example-body">
+                            <div><span class="kw">public class</span> <span class="cls">Validators</span> <span class="br">{</span></div>
+
+                            <div class="method-row">
+                                <span>&nbsp;&nbsp;<span class="kw">bool</span> <span class="fn">ValidateAddress</span>(<span class="cls">Address</span> a)</span>
+                                <span class="tag tag--addr">adres</span>
+                            </div>
+                            <div class="method-row">
+                                <span>&nbsp;&nbsp;<span class="kw">bool</span> <span class="fn">ValidatePhone</span>(<span class="kw">string</span> phone)</span>
+                                <span class="tag tag--phone">telefon</span>
+                            </div>
+                            <div class="method-row">
+                                <span>&nbsp;&nbsp;<span class="kw">bool</span> <span class="fn">ValidateZipCode</span>(<span class="kw">string</span> zip)</span>
+                                <span class="tag tag--zip">kod poczt.</span>
+                            </div>
+                            <div class="method-row">
+                                <span>&nbsp;&nbsp;<span class="kw">bool</span> <span class="fn">ValidatePesel</span>(<span class="kw">string</span> pesel)</span>
+                                <span class="tag tag--pesel">PESEL</span>
+                            </div>
+
+                            <div><span class="br">}</span></div>
+
+                            <p class="glue">
+                                Łączy je tylko słowo <strong>validate</strong> &mdash;
+                                inne dane, inne reguły, inne konteksty.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col">
+                    <article class="analogy">
+                        <div class="analogy-label"><i class="ti ti-bulb"></i> Analogia do zapamiętania</div>
+                        <p class="analogy-headline">
+                            Jak wrzucenie do jednego pudełka <em>wszystkich niebieskich rzeczy</em> w domu.
+                        </p>
+
+                        <div class="box-scene">
+                            <span class="box-tag">pudełko: „niebieskie"</span>
+                            <div class="blue-item">
+                                <div class="blue-item-icon"><i class="ti ti-shirt"></i></div>
+                                <div class="blue-item-name">skarpetki</div>
+                            </div>
+                            <div class="blue-item">
+                                <div class="blue-item-icon"><i class="ti ti-pencil"></i></div>
+                                <div class="blue-item-name">długopis</div>
+                            </div>
+                            <div class="blue-item">
+                                <div class="blue-item-icon"><i class="ti ti-book-2"></i></div>
+                                <div class="blue-item-name">książka</div>
+                            </div>
+                        </div>
+
+                        <p class="analogy-punch">
+                            Kryterium <strong>jest</strong>, ale <strong>bezużyteczne</strong> &mdash;
+                            nikt nie szuka rzeczy „po kolorze".
+                        </p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

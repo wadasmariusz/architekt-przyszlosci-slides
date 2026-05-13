@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - Korzyści z wysokiej spójności</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 48px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Benefits row === */
+        .benefits {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+        }
+
+        .benefit {
+            position: relative;
+            padding: 30px 22px 26px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+            min-height: 380px;
+            opacity: 0;
+            transform: translateY(28px);
+            animation: cardIn 0.7s ease-out forwards;
+        }
+
+        .benefit:nth-child(1) { animation-delay: 0.55s; --acc: #22d3ee; --acc-soft: rgba(34,211,238,0.45); --acc-bg: rgba(34,211,238,0.14); }
+        .benefit:nth-child(2) { animation-delay: 0.70s; --acc: #38bdf8; --acc-soft: rgba(56,189,248,0.45); --acc-bg: rgba(56,189,248,0.14); }
+        .benefit:nth-child(3) { animation-delay: 0.85s; --acc: #2dd4bf; --acc-soft: rgba(45,212,191,0.45); --acc-bg: rgba(45,212,191,0.14); }
+        .benefit:nth-child(4) { animation-delay: 1.00s; --acc: #34d399; --acc-soft: rgba(52,211,153,0.45); --acc-bg: rgba(52,211,153,0.14); }
+        .benefit:nth-child(5) { animation-delay: 1.15s; --acc: #4ade80; --acc-soft: rgba(74,222,128,0.45); --acc-bg: rgba(74,222,128,0.14); }
+
+        .benefit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 22px;
+            right: 22px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--acc), transparent);
+            opacity: 0.85;
+        }
+
+        .benefit-num {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark-surface);
+            border: 2px solid var(--acc);
+            color: var(--acc);
+            font-size: 16px;
+            font-weight: 800;
+            box-shadow: 0 0 18px var(--acc-bg);
+        }
+
+        .benefit-icon {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--acc-bg);
+            border: 1px solid var(--acc-soft);
+            color: var(--acc);
+            box-shadow: 0 0 30px var(--acc-bg);
+            margin-top: 6px;
+        }
+
+        .benefit-icon i { font-size: 42px; line-height: 1; }
+
+        .benefit-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #f8fafc;
+            line-height: 1.15;
+            letter-spacing: -0.3px;
+        }
+
+        .benefit-desc {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.45;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        .benefit-desc strong {
+            color: #f0f4f8;
+            font-weight: 600;
+        }
+
+        .benefit-arrow {
+            margin-top: auto;
+            padding-top: 6px;
+            font-size: 22px;
+            line-height: 1;
+            color: var(--acc);
+            opacity: 0.8;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <div class="eyebrow">Po co nam wysoka spójność?</div>
+                <h2 class="title">Pięć <span class="highlight">korzyści</span>, które z niej płyną</h2>
+            </header>
+
+            <section class="benefits">
+                <article class="benefit">
+                    <div class="benefit-num">1</div>
+                    <div class="benefit-icon"><i class="ti ti-bulb"></i></div>
+                    <div class="benefit-title">Czytelność</div>
+                    <p class="benefit-desc">
+                        Moduł z <strong>jasnym celem</strong> szybciej się rozumie &mdash;
+                        łatwiejsze wdrożenie nowych osób.
+                    </p>
+                    <div class="benefit-arrow"><i class="ti ti-arrow-down"></i></div>
+                </article>
+
+                <article class="benefit">
+                    <div class="benefit-num">2</div>
+                    <div class="benefit-icon"><i class="ti ti-edit"></i></div>
+                    <div class="benefit-title">Łatwiejsze zmiany</div>
+                    <p class="benefit-desc">
+                        Zmiany w jednym obszarze <strong>zamykają się w jednym miejscu</strong> &mdash;
+                        bez polowania po kodzie.
+                    </p>
+                    <div class="benefit-arrow"><i class="ti ti-arrow-down"></i></div>
+                </article>
+
+                <article class="benefit">
+                    <div class="benefit-num">3</div>
+                    <div class="benefit-icon"><i class="ti ti-test-pipe"></i></div>
+                    <div class="benefit-title">Testowalność</div>
+                    <p class="benefit-desc">
+                        Mniej zależności i efektów ubocznych &rarr;
+                        <strong>łatwiejsze testy jednostkowe</strong>.
+                    </p>
+                    <div class="benefit-arrow"><i class="ti ti-arrow-down"></i></div>
+                </article>
+
+                <article class="benefit">
+                    <div class="benefit-num">4</div>
+                    <div class="benefit-icon"><i class="ti ti-recycle"></i></div>
+                    <div class="benefit-title">Reużywalność</div>
+                    <p class="benefit-desc">
+                        Wyspecjalizowany moduł <strong>łatwiej zastosować</strong>
+                        w innym kontekście.
+                    </p>
+                    <div class="benefit-arrow"><i class="ti ti-arrow-down"></i></div>
+                </article>
+
+                <article class="benefit">
+                    <div class="benefit-num">5</div>
+                    <div class="benefit-icon"><i class="ti ti-shield-check"></i></div>
+                    <div class="benefit-title">Mniejsze ryzyko</div>
+                    <p class="benefit-desc">
+                        Poprawka w jednej części <strong>nie psuje innej</strong> &mdash;
+                        bez efektu motyla w kodzie.
+                    </p>
+                    <div class="benefit-arrow"><i class="ti ti-arrow-down"></i></div>
+                </article>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

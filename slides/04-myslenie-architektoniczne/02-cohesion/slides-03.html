@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Spójność vs. sprzężenie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 56px;
+        }
+
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .highlight--amber {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram === */
+        .diagram {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            margin-bottom: 36px;
+        }
+
+        .persp-card {
+            position: relative;
+            padding: 36px 40px 32px;
+            border-radius: 22px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .persp-card--cohesion {
+            border-left: 3px solid var(--cyan-400);
+            animation: slideFromLeft 0.8s ease-out 0.55s forwards;
+        }
+
+        .persp-card--coupling {
+            border-left: 3px solid #f59e0b;
+            animation: slideFromRight 0.8s ease-out 0.75s forwards;
+        }
+
+        .persp-label {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+            margin-bottom: 6px;
+        }
+
+        .persp-card--coupling .persp-label {
+            color: #f59e0b;
+        }
+
+        .persp-name {
+            font-size: 36px;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 22px;
+        }
+
+        .persp-question {
+            font-size: 22px;
+            font-weight: 300;
+            color: #cbd5e1;
+            margin-bottom: 28px;
+            line-height: 1.4;
+        }
+
+        .persp-question strong {
+            color: #f8fafc;
+            font-weight: 600;
+        }
+
+        /* === Diagram visuals (inside each card) === */
+        .viz {
+            position: relative;
+            height: 230px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .viz-module {
+            position: relative;
+            width: 280px;
+            height: 180px;
+            border-radius: 18px;
+            background: rgba(6,182,212,0.06);
+            border: 1.5px solid rgba(34,211,238,0.40);
+            box-shadow: 0 0 40px rgba(34,211,238,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .persp-card--coupling .viz-module {
+            background: rgba(245,158,11,0.05);
+            border-color: rgba(245,158,11,0.40);
+            box-shadow: 0 0 40px rgba(245,158,11,0.06);
+        }
+
+        .viz-module-label {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-surface);
+            padding: 2px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(34,211,238,0.85);
+            border: 1px solid rgba(34,211,238,0.35);
+            border-radius: 999px;
+        }
+
+        .persp-card--coupling .viz-module-label {
+            color: rgba(245,158,11,0.85);
+            border-color: rgba(245,158,11,0.35);
+        }
+
+        /* Cohesion inner dots */
+        .dot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+            box-shadow: 0 0 16px rgba(34,211,238,0.55);
+        }
+
+        .dot--a { top: 38px; left: 60px; }
+        .dot--b { top: 52px; right: 56px; }
+        .dot--c { bottom: 38px; left: 50%; transform: translateX(-50%); }
+
+        .link {
+            position: absolute;
+            height: 2px;
+            background: rgba(34,211,238,0.55);
+            transform-origin: 0 0;
+        }
+
+        .link--ab {
+            top: 51px;
+            left: 84px;
+            width: 152px;
+        }
+
+        .link--ac {
+            top: 50px;
+            left: 72px;
+            width: 100px;
+            transform: rotate(56deg);
+        }
+
+        .link--bc {
+            top: 64px;
+            right: 68px;
+            width: 100px;
+            transform: rotate(124deg);
+        }
+
+        /* Coupling external modules */
+        .ext-module {
+            position: absolute;
+            width: 68px;
+            height: 46px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        .ext-module--tl { top: 18px; left: 8px; }
+        .ext-module--tr { top: 18px; right: 8px; }
+        .ext-module--bl { bottom: 18px; left: 8px; }
+        .ext-module--br { bottom: 18px; right: 8px; }
+
+        .ext-link {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(245,158,11,0.7), rgba(245,158,11,0.25));
+            transform-origin: 0 0;
+        }
+
+        .ext-link--tl {
+            top: 78px;
+            left: 76px;
+            width: 80px;
+            transform: rotate(-32deg);
+        }
+
+        .ext-link--tr {
+            top: 78px;
+            right: 76px;
+            width: 80px;
+            transform: rotate(-148deg);
+        }
+
+        .ext-link--bl {
+            bottom: 78px;
+            left: 76px;
+            width: 80px;
+            transform: rotate(32deg);
+        }
+
+        .ext-link--br {
+            bottom: 78px;
+            right: 76px;
+            width: 80px;
+            transform: rotate(148deg);
+        }
+
+        /* === Goal banner === */
+        .goal {
+            width: 1320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            padding: 32px 56px;
+            border-radius: 22px;
+            background: rgba(17,24,39,0.70);
+            border: 1px solid rgba(6,182,212,0.28);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.22);
+            backdrop-filter: blur(6px);
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.05s forwards;
+        }
+
+        .goal-icon {
+            flex: 0 0 auto;
+            font-size: 40px;
+            color: var(--cyan-400);
+            line-height: 1;
+        }
+
+        .goal-text {
+            font-size: 30px;
+            font-weight: 300;
+            line-height: 1.32;
+            color: #f8fafc;
+        }
+
+        .goal-text strong {
+            font-weight: 800;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <h2 class="title"><span class="highlight">Spójność</span> vs. <span class="highlight--amber">sprzężenie</span></h2>
+            </header>
+
+            <section class="diagram">
+                <article class="persp-card persp-card--cohesion">
+                    <div class="persp-label">Perspektywa wewnętrzna</div>
+                    <div class="persp-name">Spójność <span style="font-weight:300;color:#94a3b8;">(cohesion)</span></div>
+                    <p class="persp-question">Co dzieje się <strong>w środku</strong> modułu?</p>
+                    <div class="viz">
+                        <div class="viz-module">
+                            <span class="viz-module-label">Moduł</span>
+                            <div class="link link--ab"></div>
+                            <div class="link link--ac"></div>
+                            <div class="link link--bc"></div>
+                            <div class="dot dot--a"></div>
+                            <div class="dot dot--b"></div>
+                            <div class="dot dot--c"></div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="persp-card persp-card--coupling">
+                    <div class="persp-label">Perspektywa zewnętrzna</div>
+                    <div class="persp-name">Sprzężenie <span style="font-weight:300;color:#94a3b8;">(coupling)</span></div>
+                    <p class="persp-question">Jakie są <strong>relacje z innymi</strong> modułami?</p>
+                    <div class="viz">
+                        <div class="ext-module ext-module--tl"></div>
+                        <div class="ext-module ext-module--tr"></div>
+                        <div class="ext-module ext-module--bl"></div>
+                        <div class="ext-module ext-module--br"></div>
+                        <div class="ext-link ext-link--tl"></div>
+                        <div class="ext-link ext-link--tr"></div>
+                        <div class="ext-link ext-link--bl"></div>
+                        <div class="ext-link ext-link--br"></div>
+                        <div class="viz-module">
+                            <span class="viz-module-label">Moduł</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="goal">
+                <i class="ti ti-target-arrow goal-icon"></i>
+                <p class="goal-text"><strong>Wysoka spójność</strong> wewnątrz <span style="color:var(--cyan-400);font-weight:600;">+</span> <strong>luźne powiązanie</strong> na zewnątrz</p>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

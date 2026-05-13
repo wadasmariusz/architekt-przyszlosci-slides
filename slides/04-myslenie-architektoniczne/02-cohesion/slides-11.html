@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Spójność funkcyjna (Functional)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --emerald: #10b981;
+            --emerald-soft: #34d399;
+            --emerald-bright: #4ade80;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, rgba(16,185,129,0.06) 0%, transparent 38%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* Top stripe (golden/ideal) */
+        .ideal-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, transparent, var(--emerald), var(--emerald-bright), var(--emerald-soft), var(--emerald), transparent);
+            box-shadow: 0 0 20px rgba(52,211,153,0.50);
+            z-index: 5;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.1s forwards;
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 22px;
+        }
+
+        .level-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 24px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(16,185,129,0.20), rgba(52,211,153,0.10));
+            border: 1px solid rgba(52,211,153,0.55);
+            color: var(--emerald-soft);
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+            box-shadow: 0 0 24px rgba(52,211,153,0.18);
+        }
+
+        .level-tag i { font-size: 22px; line-height: 1; color: var(--emerald-bright); }
+
+        .level-tag .level-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--emerald-bright), var(--emerald));
+            color: #042f1e;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .level-tag .ideal {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 12px;
+            border-radius: 999px;
+            background: rgba(74,222,128,0.20);
+            color: var(--emerald-bright);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .title {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .title-en {
+            font-size: 28px;
+            font-weight: 300;
+            color: #94a3b8;
+            font-style: italic;
+            margin-left: 14px;
+            letter-spacing: 0;
+        }
+
+        .highlight-emerald {
+            background: linear-gradient(135deg, var(--emerald-bright), var(--emerald));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Definition banner === */
+        .def-banner {
+            width: 1320px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 28px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-left: 3px solid var(--emerald);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.5s forwards;
+            margin-bottom: 22px;
+        }
+
+        .def-banner i.def-icon {
+            font-size: 28px;
+            color: var(--emerald-soft);
+            flex: 0 0 auto;
+            line-height: 1;
+        }
+
+        .def-banner-text {
+            font-size: 22px;
+            font-weight: 300;
+            line-height: 1.4;
+            color: #f0f4f8;
+        }
+
+        .def-banner-text strong { font-weight: 700; color: #f8fafc; }
+        .def-banner-text strong.acc { color: var(--emerald-soft); }
+
+        /* === Body grid === */
+        .body {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 22px;
+        }
+
+        /* === Code-style example === */
+        .example {
+            position: relative;
+            background: rgba(3,7,18,0.78);
+            border-radius: 18px;
+            border: 1px solid rgba(52,211,153,0.30);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.30);
+            backdrop-filter: blur(6px);
+            overflow: hidden;
+            opacity: 0;
+            animation: slideFromLeft 0.8s ease-out 0.7s forwards;
+        }
+
+        .example-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .example-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+        }
+
+        .example-dot--r { background: #ef4444; }
+        .example-dot--y { background: #f59e0b; }
+        .example-dot--g { background: #94a3b8; }
+
+        .example-file {
+            margin-left: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .example-body {
+            padding: 18px 24px 22px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            line-height: 1.55;
+        }
+
+        .kw   { color: #c084fc; }
+        .cls  { color: #fbbf24; }
+        .fn   { color: #93c5fd; }
+        .com  { color: #64748b; font-style: italic; }
+        .br   { color: #cbd5e1; }
+
+        .method-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 3px 0;
+        }
+
+        .method-row .tag {
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: rgba(52,211,153,0.12);
+            color: var(--emerald-soft);
+            border: 1px solid rgba(52,211,153,0.40);
+        }
+
+        .glue {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(255,255,255,0.10);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .glue strong {
+            color: var(--emerald-soft);
+            font-style: normal;
+            font-weight: 700;
+            background: rgba(52,211,153,0.10);
+            padding: 1px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(52,211,153,0.30);
+        }
+
+        /* === Goal visualization === */
+        .goalviz {
+            position: relative;
+            border-radius: 22px;
+            background: linear-gradient(140deg, rgba(16,185,129,0.18), rgba(52,211,153,0.06) 60%, rgba(17,24,39,0.65));
+            border: 1px solid rgba(52,211,153,0.45);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 0 60px rgba(52,211,153,0.12);
+            backdrop-filter: blur(6px);
+            padding: 22px 28px 26px;
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.55s forwards;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .goalviz::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--emerald), var(--emerald-bright), var(--emerald));
+        }
+
+        .goalviz-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--emerald-soft);
+        }
+
+        .goalviz-label i { font-size: 20px; line-height: 1; color: var(--emerald-bright); }
+
+        .goalviz-headline {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #f8fafc;
+        }
+
+        .goalviz-headline em {
+            color: var(--emerald-soft);
+            font-style: normal;
+            font-weight: 800;
+        }
+
+        .converge {
+            position: relative;
+            min-height: 260px;
+            display: grid;
+            grid-template-columns: 1fr 130px 1fr;
+            align-items: center;
+            gap: 0;
+        }
+
+        .elements {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .elem {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(17,24,39,0.85);
+            border: 1px solid rgba(52,211,153,0.40);
+            font-size: 14px;
+            font-weight: 600;
+            color: #f0f4f8;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.30);
+        }
+
+        .elem i {
+            font-size: 18px;
+            line-height: 1;
+            color: var(--emerald-soft);
+            flex: 0 0 auto;
+        }
+
+        .arrows {
+            position: relative;
+            height: 100%;
+            min-height: 220px;
+        }
+
+        .arrow-line {
+            position: absolute;
+            left: 0;
+            right: 14px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(52,211,153,0.10), rgba(52,211,153,0.85));
+        }
+
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid var(--emerald-bright);
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+        }
+
+        .arrow-line--1 { top: 20px;  transform: rotate(12deg); transform-origin: right center; }
+        .arrow-line--2 { top: 80px;  transform: rotate(4deg);  transform-origin: right center; }
+        .arrow-line--3 { top: 140px; transform: rotate(-4deg); transform-origin: right center; }
+        .arrow-line--4 { top: 200px; transform: rotate(-12deg); transform-origin: right center; }
+
+        .goal-target {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px 14px;
+            border-radius: 16px;
+            background: radial-gradient(circle, rgba(74,222,128,0.30) 0%, rgba(16,185,129,0.10) 60%, rgba(17,24,39,0.85) 100%);
+            border: 2px solid rgba(74,222,128,0.65);
+            box-shadow: 0 0 50px rgba(74,222,128,0.40), inset 0 0 24px rgba(74,222,128,0.12);
+        }
+
+        .goal-target i {
+            font-size: 44px;
+            line-height: 1;
+            color: var(--emerald-bright);
+        }
+
+        .goal-target-tag {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--emerald-bright);
+            text-transform: uppercase;
+        }
+
+        .goal-target-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #f8fafc;
+            text-align: center;
+            line-height: 1.15;
+        }
+
+        .insight {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 18px;
+            border-radius: 14px;
+            background: rgba(0,0,0,0.30);
+            border: 1px solid rgba(52,211,153,0.40);
+        }
+
+        .insight i {
+            font-size: 24px;
+            color: var(--emerald-bright);
+            line-height: 1;
+        }
+
+        .insight-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #cbd5e1;
+            line-height: 1.35;
+        }
+
+        .insight-text strong {
+            color: var(--emerald-soft);
+            font-weight: 800;
+        }
+
+        /* === Litmus test (hero element) === */
+        .litmus {
+            width: 1320px;
+            position: relative;
+            border-radius: 22px;
+            padding: 22px 32px;
+            background: linear-gradient(135deg, rgba(74,222,128,0.18), rgba(16,185,129,0.10) 50%, rgba(17,24,39,0.85));
+            border: 2px solid rgba(74,222,128,0.55);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.30), 0 0 60px rgba(74,222,128,0.20);
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.1s forwards;
+            overflow: hidden;
+        }
+
+        .litmus::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 6px;
+            background: linear-gradient(180deg, var(--emerald-bright), var(--emerald), var(--emerald-bright));
+            box-shadow: 0 0 16px rgba(74,222,128,0.55);
+        }
+
+        .litmus-icon {
+            flex: 0 0 auto;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(74,222,128,0.20);
+            border: 2px solid rgba(74,222,128,0.55);
+            color: var(--emerald-bright);
+            box-shadow: 0 0 28px rgba(74,222,128,0.30);
+        }
+
+        .litmus-icon i { font-size: 36px; line-height: 1; }
+
+        .litmus-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .litmus-key {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--emerald-bright);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .litmus-text {
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #f8fafc;
+        }
+
+        .litmus-text strong { font-weight: 800; }
+
+        .litmus-text .quote {
+            color: var(--emerald-soft);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .litmus-text .no-and {
+            display: inline-block;
+            padding: 1px 10px;
+            border-radius: 8px;
+            background: rgba(74,222,128,0.18);
+            border: 1px solid rgba(74,222,128,0.45);
+            color: var(--emerald-bright);
+            font-weight: 800;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+        <div class="ideal-stripe"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <div class="level-tag">
+                    <span class="level-num">7</span>
+                    <span>poziom 7 / 7 &middot;</span>
+                    <i class="ti ti-target-arrow"></i>
+                    <span class="ideal">ideał</span>
+                </div>
+                <h2 class="title">
+                    Spójność <span class="highlight-emerald">funkcyjna</span>
+                    <span class="title-en">Functional</span>
+                </h2>
+            </header>
+
+            <section class="def-banner">
+                <i class="ti ti-bookmark def-icon"></i>
+                <p class="def-banner-text">
+                    Wszystkie elementy współpracują, by zrealizować <strong class="acc">jedną, dobrze zdefiniowaną funkcję</strong>.
+                    Żadnego nie można usunąć bez <strong>zniszczenia tej funkcji</strong>.
+                </p>
+            </section>
+
+            <section class="body">
+                <article class="example">
+                    <div class="example-bar">
+                        <span class="example-dot example-dot--r"></span>
+                        <span class="example-dot example-dot--y"></span>
+                        <span class="example-dot example-dot--g"></span>
+                        <span class="example-file">PaymentAuthorization.cs</span>
+                    </div>
+                    <div class="example-body">
+                        <div><span class="kw">public class</span> <span class="cls">PaymentAuthorization</span> <span class="br">{</span></div>
+
+                        <div class="method-row">
+                            <span>&nbsp;&nbsp;<span class="kw">bool</span> <span class="fn">ValidateCard</span>(<span class="cls">Card</span> card)</span>
+                            <span class="tag">walidacja karty</span>
+                        </div>
+                        <div class="method-row">
+                            <span>&nbsp;&nbsp;<span class="cls">GatewayResponse</span> <span class="fn">CallGateway</span>(<span class="cls">Payment</span> p)</span>
+                            <span class="tag">bramka</span>
+                        </div>
+                        <div class="method-row">
+                            <span>&nbsp;&nbsp;<span class="cls">AuthResult</span> <span class="fn">HandleResponse</span>(<span class="cls">GatewayResponse</span> r)</span>
+                            <span class="tag">odpowiedź</span>
+                        </div>
+                        <div class="method-row">
+                            <span>&nbsp;&nbsp;<span class="kw">void</span> <span class="fn">LogTransaction</span>(<span class="cls">AuthResult</span> r)</span>
+                            <span class="tag">logowanie</span>
+                        </div>
+
+                        <div><span class="br">}</span></div>
+
+                        <p class="glue">
+                            Wszystko podporządkowane <strong>jednemu celowi</strong> &mdash;
+                            usuń jedną metodę i autoryzacja przestaje działać.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="goalviz">
+                    <div class="goalviz-label"><i class="ti ti-target-arrow"></i> Wszystko prowadzi do jednego celu</div>
+                    <p class="goalviz-headline">
+                        Cztery elementy &mdash; <em>jedna funkcja</em>, której nie da się rozbić.
+                    </p>
+
+                    <div class="converge">
+                        <div class="elements">
+                            <div class="elem"><i class="ti ti-credit-card"></i> walidacja karty</div>
+                            <div class="elem"><i class="ti ti-plug"></i> bramka płatnicza</div>
+                            <div class="elem"><i class="ti ti-message-2"></i> obsługa odpowiedzi</div>
+                            <div class="elem"><i class="ti ti-clipboard-text"></i> logowanie transakcji</div>
+                        </div>
+
+                        <div class="arrows">
+                            <div class="arrow-line arrow-line--1"></div>
+                            <div class="arrow-line arrow-line--2"></div>
+                            <div class="arrow-line arrow-line--3"></div>
+                            <div class="arrow-line arrow-line--4"></div>
+                        </div>
+
+                        <div class="goal-target">
+                            <i class="ti ti-target-arrow"></i>
+                            <div class="goal-target-tag">jeden cel</div>
+                            <div class="goal-target-name">Autoryzacja<br>płatności</div>
+                        </div>
+                    </div>
+
+                    <div class="insight">
+                        <i class="ti ti-bulb"></i>
+                        <div class="insight-text">
+                            Nie da się <strong>nic usunąć</strong> bez zerwania funkcji &mdash;
+                            wszystkie elementy są <strong>konieczne</strong>.
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="litmus">
+                <div class="litmus-icon"><i class="ti ti-test-pipe"></i></div>
+                <div class="litmus-body">
+                    <div class="litmus-key"><i class="ti ti-flask"></i> test lakmusowy</div>
+                    <p class="litmus-text">
+                        <span class="quote">„Jeśli potrafisz opisać swoją klasę <strong>jednym zdaniem</strong> bez użycia słowa <span class="no-and">»i«</span> &mdash; prawdopodobnie masz spójność funkcyjną."</span>
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

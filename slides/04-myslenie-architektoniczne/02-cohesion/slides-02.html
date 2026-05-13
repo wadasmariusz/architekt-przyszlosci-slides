@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - Czym jest spójność?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-1.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 86px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1180px;
+            margin: 0 auto 42px;
+        }
+
+        .title {
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Definition === */
+        .definition {
+            width: 1320px;
+            min-height: 214px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 38px 64px;
+            border-radius: 24px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(6,182,212,0.22);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.22);
+            backdrop-filter: blur(6px);
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .definition p {
+            max-width: 1120px;
+            font-size: 38px;
+            line-height: 1.32;
+            font-weight: 300;
+            color: #f8fafc;
+        }
+
+        .definition strong {
+            font-weight: 800;
+        }
+
+        /* === Contrast cards === */
+        .contrast-row {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 34px;
+        }
+
+        .contrast-card {
+            position: relative;
+            min-height: 218px;
+            padding: 32px 34px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            overflow: hidden;
+            opacity: 0;
+            animation: slideFromLeft 0.8s ease-out forwards;
+        }
+
+        .contrast-card--high {
+            border-left: 3px solid var(--cyan-400);
+            animation-delay: 0.85s;
+        }
+
+        .contrast-card--low {
+            border-left: 3px solid #f59e0b;
+            animation-delay: 1.05s;
+        }
+
+        .contrast-card p {
+            font-size: 30px;
+            line-height: 1.36;
+            font-weight: 300;
+            color: #cbd5e1;
+        }
+
+        .contrast-card strong {
+            color: #f8fafc;
+            font-weight: 800;
+        }
+
+        .arrow {
+            color: var(--cyan-400);
+            font-weight: 800;
+            padding: 0 8px;
+        }
+
+        .contrast-card--low .arrow {
+            color: #f59e0b;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <h2 class="title">Czym jest <span class="highlight">spójność?</span></h2>
+            </header>
+
+            <section class="definition">
+                <p>Spójność opisuje, jak bardzo odpowiedzialności wewnątrz modułu są ze sobą <strong>logicznie związane</strong>.</p>
+            </section>
+
+            <section class="contrast-row">
+                <article class="contrast-card contrast-card--high">
+                    <p><strong>Wysoka spójność</strong> <span class="arrow">&rarr;</span> moduł ma jasny cel, można go nazwać i opisać jednym zdaniem.</p>
+                </article>
+                <article class="contrast-card contrast-card--low">
+                    <p><strong>Niska spójność</strong> <span class="arrow">&rarr;</span> moduł realizuje wiele niepowiązanych odpowiedzialności</p>
+                </article>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

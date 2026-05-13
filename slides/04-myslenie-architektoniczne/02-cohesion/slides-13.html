@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 13 - Spójność na poziomie architektury</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-1.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 28px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Body grid === */
+        .body {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 690px 1fr;
+            gap: 32px;
+            align-items: stretch;
+        }
+
+        /* === Nested layers diagram === */
+        .nest {
+            position: relative;
+            width: 690px;
+            height: 540px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.55s forwards;
+        }
+
+        .layer {
+            position: absolute;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .layer-tab {
+            position: absolute;
+            top: -14px;
+            left: 22px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 14px;
+            border-radius: 999px;
+            background: var(--dark-surface);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        .layer-tab i { font-size: 14px; line-height: 1; }
+
+        .layer-tab .scope-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        /* Outer → inner: 5 levels with progressively bolder cyan */
+        .layer--micro {
+            inset: 0;
+            background: rgba(34,211,238,0.04);
+            border: 1.5px solid rgba(34,211,238,0.30);
+            box-shadow: 0 0 60px rgba(34,211,238,0.06);
+            animation: nestIn 0.7s ease-out 0.7s backwards;
+        }
+        .layer--micro .layer-tab {
+            color: rgba(34,211,238,0.70);
+            border: 1px solid rgba(34,211,238,0.45);
+        }
+        .layer--micro .layer-tab .scope-num {
+            background: rgba(34,211,238,0.22);
+            color: rgba(34,211,238,0.95);
+            border: 1px solid rgba(34,211,238,0.45);
+        }
+
+        .layer--ctx {
+            inset: 56px 56px 56px 56px;
+            background: rgba(34,211,238,0.06);
+            border: 1.5px solid rgba(34,211,238,0.40);
+            animation: nestIn 0.7s ease-out 0.85s backwards;
+        }
+        .layer--ctx .layer-tab {
+            color: rgba(34,211,238,0.80);
+            border: 1px solid rgba(34,211,238,0.55);
+        }
+        .layer--ctx .layer-tab .scope-num {
+            background: rgba(34,211,238,0.28);
+            color: rgba(34,211,238,1);
+            border: 1px solid rgba(34,211,238,0.55);
+        }
+
+        .layer--mod {
+            inset: 110px 110px 110px 110px;
+            background: rgba(34,211,238,0.08);
+            border: 1.5px solid rgba(34,211,238,0.50);
+            animation: nestIn 0.7s ease-out 1.0s backwards;
+        }
+        .layer--mod .layer-tab {
+            color: rgba(34,211,238,0.90);
+            border: 1px solid rgba(34,211,238,0.60);
+        }
+        .layer--mod .layer-tab .scope-num {
+            background: rgba(34,211,238,0.34);
+            color: #f8fafc;
+            border: 1px solid rgba(34,211,238,0.65);
+        }
+
+        .layer--pkg {
+            inset: 162px 162px 162px 162px;
+            background: rgba(34,211,238,0.10);
+            border: 1.5px solid rgba(34,211,238,0.60);
+            animation: nestIn 0.7s ease-out 1.15s backwards;
+        }
+        .layer--pkg .layer-tab {
+            color: var(--cyan-400);
+            border: 1px solid rgba(34,211,238,0.70);
+        }
+        .layer--pkg .layer-tab .scope-num {
+            background: rgba(34,211,238,0.40);
+            color: #f8fafc;
+            border: 1px solid rgba(34,211,238,0.70);
+        }
+
+        .layer--cls {
+            inset: 214px 214px 214px 214px;
+            background: rgba(34,211,238,0.18);
+            border: 2px solid var(--cyan-400);
+            box-shadow: 0 0 40px rgba(34,211,238,0.30), inset 0 0 24px rgba(34,211,238,0.10);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: nestIn 0.7s ease-out 1.3s backwards;
+        }
+        .layer--cls .layer-tab {
+            color: #f8fafc;
+            background: var(--cyan-500);
+            border: 1px solid var(--cyan-400);
+            box-shadow: 0 0 14px rgba(34,211,238,0.60);
+        }
+        .layer--cls .layer-tab .scope-num {
+            background: var(--dark-surface);
+            color: var(--cyan-400);
+            border: 1px solid rgba(0,0,0,0.35);
+        }
+
+        .cls-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(34,211,238,0.20);
+            border: 1.5px solid var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyan-400);
+            margin-bottom: 6px;
+        }
+        .cls-icon i { font-size: 26px; line-height: 1; }
+        .cls-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f8fafc;
+            text-align: center;
+        }
+        .cls-sub {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--cyan-400);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* Scope arrows on the right side */
+        .scale-axis {
+            position: absolute;
+            top: 8px;
+            bottom: 8px;
+            right: -28px;
+            width: 4px;
+            background: linear-gradient(to bottom,
+                rgba(34,211,238,0.95) 0%,
+                rgba(34,211,238,0.50) 50%,
+                rgba(34,211,238,0.18) 100%);
+            border-radius: 999px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 1.5s forwards;
+        }
+
+        .scale-axis::before {
+            content: '+ skala';
+            position: absolute;
+            top: -22px;
+            right: -14px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: rgba(34,211,238,0.80);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .scale-axis::after {
+            content: '\2014\00a0 skala';
+            position: absolute;
+            bottom: -22px;
+            right: -16px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: rgba(34,211,238,0.55);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* === Right column === */
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .question {
+            position: relative;
+            border-radius: 22px;
+            background: linear-gradient(140deg, rgba(34,211,238,0.18), rgba(34,211,238,0.04) 60%, rgba(17,24,39,0.65));
+            border: 1px solid rgba(34,211,238,0.45);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 0 50px rgba(34,211,238,0.12);
+            backdrop-filter: blur(6px);
+            padding: 26px 30px 28px;
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.6s forwards;
+        }
+
+        .question::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--cyan-400), var(--cyan-600), var(--cyan-400));
+        }
+
+        .question-key {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+        }
+
+        .question-key i { font-size: 22px; line-height: 1; color: var(--cyan-500); }
+
+        .question-text {
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.35;
+            color: #f8fafc;
+        }
+
+        .question-text em {
+            color: var(--cyan-400);
+            font-style: normal;
+            font-weight: 800;
+        }
+
+        .question-foot {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(34,211,238,0.30);
+            font-size: 15px;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        /* Antiexample */
+        .anti {
+            position: relative;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-left: 3px solid #f43f5e;
+            backdrop-filter: blur(6px);
+            padding: 22px 26px 24px;
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.95s forwards;
+        }
+
+        .anti-key {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fb7185;
+            margin-bottom: 10px;
+        }
+
+        .anti-key i { font-size: 18px; line-height: 1; }
+
+        .anti-headline {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.35;
+            color: #f8fafc;
+            margin-bottom: 12px;
+        }
+
+        .anti-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .anti-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: rgba(244,63,94,0.10);
+            border: 1px solid rgba(244,63,94,0.40);
+            color: #fb7185;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .anti-pill i { font-size: 14px; line-height: 1; }
+
+        .anti-text {
+            font-size: 15px;
+            font-weight: 300;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .anti-text strong {
+            color: #fb7185;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes nestIn {
+            from { opacity: 0; transform: scale(0.94); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <div class="eyebrow">To samo pytanie &mdash; pięć różnych skal</div>
+                <h2 class="title">Spójność na poziomie <span class="highlight">architektury</span></h2>
+            </header>
+
+            <section class="body">
+                <div class="nest" aria-label="Zagnieżdżone warstwy: klasa wewnątrz pakietu, modułu, kontekstu, mikroserwisu">
+                    <div class="scale-axis"></div>
+
+                    <div class="layer layer--micro">
+                        <span class="layer-tab"><span class="scope-num">5</span><i class="ti ti-cloud"></i> Mikroserwis</span>
+                    </div>
+
+                    <div class="layer layer--ctx">
+                        <span class="layer-tab"><span class="scope-num">4</span><i class="ti ti-square-rotated"></i> Bounded context</span>
+                    </div>
+
+                    <div class="layer layer--mod">
+                        <span class="layer-tab"><span class="scope-num">3</span><i class="ti ti-box"></i> Moduł aplikacyjny</span>
+                    </div>
+
+                    <div class="layer layer--pkg">
+                        <span class="layer-tab"><span class="scope-num">2</span><i class="ti ti-package"></i> Pakiet</span>
+                    </div>
+
+                    <div class="layer layer--cls">
+                        <span class="layer-tab"><span class="scope-num">1</span><i class="ti ti-square-letter-c"></i> Klasa</span>
+                        <div class="cls-icon"><i class="ti ti-target"></i></div>
+                        <div class="cls-name">jeden cel</div>
+                        <div class="cls-sub">spójność</div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <article class="question">
+                        <div class="question-key"><i class="ti ti-help-circle"></i> Pytanie wspólne dla każdego poziomu</div>
+                        <p class="question-text">
+                            Co naprawdę <em>należy do siebie</em> i co wspiera
+                            <em>jeden obszar odpowiedzialności?</em>
+                        </p>
+                        <p class="question-foot">
+                            Niezależnie od skali &mdash; klasa, pakiet, moduł, kontekst czy serwis &mdash;
+                            zasada jest ta sama.
+                        </p>
+                    </article>
+
+                    <article class="anti">
+                        <div class="anti-key"><i class="ti ti-alert-triangle-filled"></i> Antyprzykład &mdash; zbyt szeroka granica</div>
+                        <p class="anti-headline">
+                            Mikroserwis, który robi wszystko naraz:
+                        </p>
+                        <div class="anti-pills">
+                            <span class="anti-pill"><i class="ti ti-credit-card"></i> płatności</span>
+                            <span class="anti-pill"><i class="ti ti-shopping-bag"></i> katalog produktów</span>
+                            <span class="anti-pill"><i class="ti ti-target"></i> rekomendacje</span>
+                        </div>
+                        <p class="anti-text">
+                            Trzy różne odpowiedzialności pod jednym dachem &mdash;
+                            <strong>granica jest zbyt szeroka</strong>, spójność spada do zera.
+                        </p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
