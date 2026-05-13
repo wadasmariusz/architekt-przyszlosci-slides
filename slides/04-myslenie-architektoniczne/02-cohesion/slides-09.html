@@ -220,7 +220,6 @@
         .card-text strong { font-weight: 700; color: #f8fafc; }
 
         .card--definition {
-            border-left: 3px solid var(--teal);
             animation: slideFromLeft 0.7s ease-out 0.55s forwards;
         }
 
@@ -350,16 +349,6 @@
             flex-direction: column;
             gap: 14px;
             flex: 1;
-        }
-
-        .hubviz::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--teal), var(--teal-soft), var(--teal));
         }
 
         .hubviz-label {
@@ -611,10 +600,7 @@
         <main class="content">
             <header class="header">
                 <div class="level-tag">
-                    <span class="level-num">5</span>
-                    <span>poziom 5 / 7 &middot;</span>
-                    <i class="ti ti-circle-check"></i>
-                    <span>dobra</span>
+                    <span>poziom 5</span>
                 </div>
                 <h2 class="title">
                     Spójność <span class="highlight-teal">komunikacyjna</span>
@@ -627,8 +613,7 @@
                     <article class="card card--definition">
                         <div class="card-label"><i class="ti ti-bookmark"></i> Definicja</div>
                         <p class="card-text">
-                            Elementy operują na <strong>tych samych danych</strong>
-                            &mdash; mają wspólny kontekst.
+                            Elementy operują na <strong>tych samych danych</strong>, mają wspólny kontekst.
                         </p>
                     </article>
 
@@ -663,18 +648,9 @@
 
                             <p class="glue">
                                 Wszystkie metody pracują na tym samym obiekcie
-                                <strong>Order</strong> &mdash; wspólny kontekst danych.
+                                <strong>Order</strong>.
                             </p>
                         </div>
-                    </article>
-
-                    <article class="card card--feature">
-                        <div class="card-label"><i class="ti ti-key"></i> Wyróżnik</div>
-                        <p class="card-text">
-                            To <strong class="good">pierwszy poziom</strong>, w którym grupowanie ma
-                            silne <strong class="good">uzasadnienie merytoryczne</strong> &mdash;
-                            wspólne dane.
-                        </p>
                     </article>
                 </div>
 
@@ -682,7 +658,7 @@
                     <article class="hubviz">
                         <div class="hubviz-label"><i class="ti ti-affiliate"></i> Wspólny obiekt w centrum</div>
                         <p class="hubviz-headline">
-                            Wszystkie operacje <em>celują</em> w jeden i ten sam obiekt danych.
+                            Wszystkie operacje <em>celują</em> w jeden i ten sam obiekt.
                         </p>
 
                         <div class="hub">
@@ -701,14 +677,6 @@
                             <div class="op op--tr"><i class="ti ti-calculator"></i> Wartość</div>
                             <div class="op op--bl"><i class="ti ti-discount"></i> Rabat</div>
                             <div class="op op--br"><i class="ti ti-file-check"></i> Potwierdzenie</div>
-                        </div>
-
-                        <div class="insight">
-                            <i class="ti ti-target"></i>
-                            <div class="insight-text">
-                                Cztery operacje, <strong>jedna wspólna dana</strong> &mdash;
-                                grupowanie ma sens, bo wszyscy mówią o tym samym.
-                            </div>
                         </div>
                     </article>
                 </div>

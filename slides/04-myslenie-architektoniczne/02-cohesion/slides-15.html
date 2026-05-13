@@ -166,17 +166,6 @@
         .ta--high { animation-delay: 0.75s; --acc: var(--emerald-soft); --acc-deep: var(--emerald); --acc-bg: rgba(52,211,153,0.14); --acc-soft: rgba(52,211,153,0.45); }
         .ta--low  { animation-delay: 0.95s; --acc: var(--rose-soft); --acc-deep: var(--rose); --acc-bg: rgba(244,63,94,0.14); --acc-soft: rgba(244,63,94,0.45); }
 
-        .ta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--acc-deep), var(--acc), var(--acc-deep), transparent);
-            border-radius: 20px 20px 0 0;
-        }
-
         .ta-head {
             display: flex;
             align-items: center;
@@ -271,17 +260,6 @@
             opacity: 0;
             animation: fadeUp 0.9s ease-out 1.15s forwards;
             overflow: hidden;
-        }
-
-        .final::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 6px;
-            background: linear-gradient(180deg, var(--cyan-400), var(--cyan-600), var(--cyan-400));
-            box-shadow: 0 0 18px rgba(34,211,238,0.55);
         }
 
         .final-icon {
@@ -401,8 +379,8 @@
         <!-- slide content -->
         <main class="content">
             <header class="header">
-                <div class="eyebrow"><i class="ti ti-flag-3"></i> podsumowanie lekcji</div>
-                <h2 class="title">Spójność &mdash; co warto <span class="highlight">zabrać ze sobą</span></h2>
+                <div class="eyebrow"><i class="ti ti-flag-3"></i>Podsumowanie</div>
+                <h2 class="title">Co warto <span class="highlight">zapamiętać</span></h2>
             </header>
 
             <section class="takeaways">
@@ -462,9 +440,8 @@
             <section class="final">
                 <div class="final-icon"><i class="ti ti-help-octagon"></i></div>
                 <div class="final-body">
-                    <div class="final-key"><i class="ti ti-quote"></i> pytanie, z którym zostajesz</div>
                     <p class="final-text">
-                        <span class="quote">Nie wystarczy zapytać, <strong>na ile części</strong> podzieliliśmy system.<br>
+                        <span class="quote">Nie wystarczy tylko podzielilić system.<br>
                         Trzeba zapytać, czy <span class="accent">każda z nich jest wewnętrznie sensowna</span>.</span>
                     </p>
                 </div>

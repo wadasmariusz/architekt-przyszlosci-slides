@@ -48,7 +48,7 @@
             pointer-events: none;
             background:
                 linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
-                url('../../../images/background-3.jpg') center / cover no-repeat;
+                url('../../../images/background-5.jpg') center / cover no-repeat;
         }
 
         .bg-image::after {
@@ -156,33 +156,11 @@
             animation: slideFromLeft 0.8s ease-out 0.55s forwards;
         }
 
-        .col--good::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--emerald), var(--emerald-soft), var(--emerald));
-            border-radius: 22px 22px 0 0;
-        }
-
         .col--risk {
             background: linear-gradient(140deg, rgba(245,158,11,0.16), rgba(245,158,11,0.04) 60%, rgba(17,24,39,0.65));
             border: 1px solid rgba(251,191,36,0.40);
             box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 0 50px rgba(251,191,36,0.08);
             animation: slideFromRight 0.8s ease-out 0.55s forwards;
-        }
-
-        .col--risk::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--amber), var(--amber-soft), var(--amber));
-            border-radius: 22px 22px 0 0;
         }
 
         .col-key {
@@ -246,10 +224,8 @@
             flex: 0 0 auto;
         }
 
-        .col--good .folder { border-left: 3px solid var(--emerald); }
         .col--good .folder i { color: var(--emerald-soft); }
 
-        .col--risk .folder { border-left: 3px solid var(--amber); }
         .col--risk .folder i { color: var(--amber-soft); }
 
         .folder--full {
@@ -327,7 +303,6 @@
             border-radius: 18px;
             background: rgba(17,24,39,0.62);
             border: 1px solid rgba(255,255,255,0.08);
-            border-left: 3px solid var(--cyan-400);
             backdrop-filter: blur(6px);
             opacity: 0;
             animation: fadeUp 0.8s ease-out 1.15s forwards;
@@ -421,7 +396,6 @@
         <!-- slide content -->
         <main class="content">
             <header class="header">
-                <div class="eyebrow">Jak grupować kod?</div>
                 <h2 class="title">Spójność a <span class="highlight">domena biznesowa</span></h2>
             </header>
 
@@ -441,8 +415,8 @@
                     <div class="outcome">
                         <i class="ti ti-circle-check-filled"></i>
                         <p class="outcome-text">
-                            <strong>Wyższa szansa</strong> na spójność &mdash;
-                            grupowanie odzwierciedla rzeczywistość biznesu.
+                            <strong>Wyższa szansa</strong> na spójność</br>
+                            Grupowanie odzwierciedla rzeczywistość biznesu.
                         </p>
                     </div>
                 </article>
@@ -465,8 +439,8 @@
                     <div class="outcome">
                         <i class="ti ti-alert-triangle-filled"></i>
                         <p class="outcome-text">
-                            <strong>Ryzyko utraty sensu</strong> odpowiedzialności &mdash;
-                            jedna sprawa rozsypana po wielu folderach.
+                            <strong>Ryzyko utraty sensu</strong> odpowiedzialności.</br>
+                            Jedna sprawa rozsypana po wielu folderach.
                         </p>
                     </div>
                 </article>

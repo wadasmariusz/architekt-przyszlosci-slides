@@ -222,7 +222,6 @@
         .card-text strong { font-weight: 700; color: #f8fafc; }
 
         .card--definition {
-            border-left: 3px solid var(--rose);
             animation: slideFromLeft 0.7s ease-out 0.55s forwards;
         }
 
@@ -342,16 +341,6 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-        }
-
-        .analogy::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--analogy-blue), var(--analogy-blue-soft), var(--analogy-blue));
         }
 
         .analogy-label {
@@ -521,10 +510,7 @@
         <main class="content">
             <header class="header">
                 <div class="level-tag">
-                    <span class="level-num">2</span>
-                    <span>poziom 2 / 7 &middot;</span>
-                    <i class="ti ti-alert-triangle"></i>
-                    <span>słaba</span>
+                    <span>poziom 2</span>
                 </div>
                 <h2 class="title">
                     Spójność <span class="highlight-rose">logiczna</span>
@@ -537,7 +523,7 @@
                     <article class="card card--definition">
                         <div class="card-label"><i class="ti ti-bookmark"></i> Definicja</div>
                         <p class="card-text">
-                            Elementy robią rzeczy <strong>„logicznie podobne"</strong>,
+                            Elementy robią rzeczy <strong>logicznie podobne</strong>,
                             ale <strong>nie współpracują</strong> ze sobą.
                         </p>
                     </article>
@@ -572,8 +558,7 @@
                             <div><span class="br">}</span></div>
 
                             <p class="glue">
-                                Łączy je tylko słowo <strong>validate</strong> &mdash;
-                                inne dane, inne reguły, inne konteksty.
+                                Łączy je tylko słowo <strong>validate</strong>
                             </p>
                         </div>
                     </article>
@@ -581,7 +566,7 @@
 
                 <div class="col">
                     <article class="analogy">
-                        <div class="analogy-label"><i class="ti ti-bulb"></i> Analogia do zapamiętania</div>
+                        <div class="analogy-label"><i class="ti ti-bulb"></i> Analogia</div>
                         <p class="analogy-headline">
                             Jak wrzucenie do jednego pudełka <em>wszystkich niebieskich rzeczy</em> w domu.
                         </p>
@@ -601,11 +586,6 @@
                                 <div class="blue-item-name">książka</div>
                             </div>
                         </div>
-
-                        <p class="analogy-punch">
-                            Kryterium <strong>jest</strong>, ale <strong>bezużyteczne</strong> &mdash;
-                            nikt nie szuka rzeczy „po kolorze".
-                        </p>
                     </article>
                 </div>
             </section>

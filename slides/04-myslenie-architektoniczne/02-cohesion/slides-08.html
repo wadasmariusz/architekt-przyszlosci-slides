@@ -220,7 +220,6 @@
         .card-text strong { font-weight: 700; color: #f8fafc; }
 
         .card--definition {
-            border-left: 3px solid var(--yellow);
             animation: slideFromLeft 0.7s ease-out 0.55s forwards;
         }
 
@@ -355,16 +354,6 @@
             display: flex;
             flex-direction: column;
             gap: 18px;
-        }
-
-        .seqviz::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--yellow), var(--yellow-soft), var(--yellow));
         }
 
         .seqviz-label {
@@ -643,10 +632,7 @@
         <main class="content">
             <header class="header">
                 <div class="level-tag">
-                    <span class="level-num">4</span>
-                    <span>poziom 4 / 7 &middot;</span>
-                    <i class="ti ti-list-numbers"></i>
-                    <span>średnia</span>
+                    <span>poziom 4</span>
                 </div>
                 <h2 class="title">
                     Spójność <span class="highlight-yellow">proceduralna</span>
@@ -675,17 +661,14 @@
                             <div><span class="kw">void</span> <span class="fn">processRequest</span>(<span class="cls">Request</span> req) <span class="br">{</span></div>
 
                             <div class="step-row">
-                                <span class="step-num">1</span>
                                 <span><span class="fn">CheckPermissions</span>(req.user);</span>
                                 <span class="tag tag--auth">uprawnienia</span>
                             </div>
                             <div class="step-row">
-                                <span class="step-num">2</span>
                                 <span><span class="fn">FetchFromDatabase</span>(req.id);</span>
                                 <span class="tag tag--db">baza</span>
                             </div>
                             <div class="step-row">
-                                <span class="step-num">3</span>
                                 <span><span class="fn">LogOperation</span>(<span class="cls">"REQ"</span>);</span>
                                 <span class="tag tag--log">log</span>
                             </div>
@@ -693,8 +676,8 @@
                             <div><span class="br">}</span></div>
 
                             <p class="glue">
-                                Łączy je tylko <strong>kolejność</strong> &mdash;
-                                kroki nie przekazują sobie żadnych danych.
+                                Łączy je tylko <strong>kolejność</strong>.
+                                Kroki nie przekazują sobie żadnych danych.
                             </p>
                         </div>
                     </article>
@@ -703,10 +686,7 @@
                 <div class="col">
                     <article class="seqviz">
                         <div class="seqviz-label"><i class="ti ti-arrow-narrow-right"></i> Spoiwo: kolejność kroków</div>
-                        <p class="seqviz-headline">
-                            Krok po kroku &mdash; ale każdy żyje <em>własnym życiem danych</em>.
-                        </p>
-
+        
                         <div class="pipeline">
                             <div class="station station--auth">
                                 <span class="station-num">1</span>
@@ -754,11 +734,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <p class="seqviz-feature">
-                            Różnica względem czasowej: tu jest <strong>logiczna kolejność</strong>,
-                            ale wciąż <strong>brak wspólnego kontekstu danych</strong>.
-                        </p>
                     </article>
                 </div>
             </section>

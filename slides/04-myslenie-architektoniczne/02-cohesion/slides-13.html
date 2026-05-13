@@ -358,16 +358,6 @@
             animation: slideFromRight 0.8s ease-out 0.6s forwards;
         }
 
-        .question::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--cyan-400), var(--cyan-600), var(--cyan-400));
-        }
-
         .question-key {
             display: flex;
             align-items: center;
@@ -410,7 +400,6 @@
             border-radius: 18px;
             background: rgba(17,24,39,0.62);
             border: 1px solid rgba(255,255,255,0.08);
-            border-left: 3px solid #f43f5e;
             backdrop-filter: blur(6px);
             padding: 22px 26px 24px;
             opacity: 0;
@@ -536,7 +525,7 @@
         <!-- slide content -->
         <main class="content">
             <header class="header">
-                <div class="eyebrow">To samo pytanie &mdash; pięć różnych skal</div>
+                <div class="eyebrow">Różne skale</div>
                 <h2 class="title">Spójność na poziomie <span class="highlight">architektury</span></h2>
             </header>
 
@@ -563,7 +552,6 @@
                     <div class="layer layer--cls">
                         <span class="layer-tab"><span class="scope-num">1</span><i class="ti ti-square-letter-c"></i> Klasa</span>
                         <div class="cls-icon"><i class="ti ti-target"></i></div>
-                        <div class="cls-name">jeden cel</div>
                         <div class="cls-sub">spójność</div>
                     </div>
                 </div>
@@ -576,24 +564,13 @@
                             <em>jeden obszar odpowiedzialności?</em>
                         </p>
                         <p class="question-foot">
-                            Niezależnie od skali &mdash; klasa, pakiet, moduł, kontekst czy serwis &mdash;
+                            Niezależnie od skali</br>
+                            - klasa</br>
+                            - pakiet</br>
+                            - moduł</br>
+                            - kontekst</br>
+                            - serwis</br>
                             zasada jest ta sama.
-                        </p>
-                    </article>
-
-                    <article class="anti">
-                        <div class="anti-key"><i class="ti ti-alert-triangle-filled"></i> Antyprzykład &mdash; zbyt szeroka granica</div>
-                        <p class="anti-headline">
-                            Mikroserwis, który robi wszystko naraz:
-                        </p>
-                        <div class="anti-pills">
-                            <span class="anti-pill"><i class="ti ti-credit-card"></i> płatności</span>
-                            <span class="anti-pill"><i class="ti ti-shopping-bag"></i> katalog produktów</span>
-                            <span class="anti-pill"><i class="ti ti-target"></i> rekomendacje</span>
-                        </div>
-                        <p class="anti-text">
-                            Trzy różne odpowiedzialności pod jednym dachem &mdash;
-                            <strong>granica jest zbyt szeroka</strong>, spójność spada do zera.
                         </p>
                     </article>
                 </div>

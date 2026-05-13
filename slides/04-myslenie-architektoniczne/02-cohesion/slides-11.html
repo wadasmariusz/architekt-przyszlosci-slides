@@ -197,7 +197,6 @@
             border-radius: 16px;
             background: rgba(17,24,39,0.62);
             border: 1px solid rgba(255,255,255,0.08);
-            border-left: 3px solid var(--emerald);
             backdrop-filter: blur(6px);
             opacity: 0;
             animation: fadeUp 0.7s ease-out 0.5s forwards;
@@ -343,16 +342,6 @@
             gap: 16px;
         }
 
-        .goalviz::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--emerald), var(--emerald-bright), var(--emerald));
-        }
-
         .goalviz-label {
             display: flex;
             align-items: center;
@@ -442,10 +431,10 @@
             border-bottom: 7px solid transparent;
         }
 
-        .arrow-line--1 { top: 20px;  transform: rotate(12deg); transform-origin: right center; }
-        .arrow-line--2 { top: 80px;  transform: rotate(4deg);  transform-origin: right center; }
-        .arrow-line--3 { top: 140px; transform: rotate(-4deg); transform-origin: right center; }
-        .arrow-line--4 { top: 200px; transform: rotate(-12deg); transform-origin: right center; }
+        .arrow-line--1 { top: 88px;  transform: rotate(17deg); transform-origin: right center; }
+        .arrow-line--2 { top: 114px; transform: rotate(5deg);  transform-origin: right center; }
+        .arrow-line--3 { top: 144px; transform: rotate(-5deg); transform-origin: right center; }
+        .arrow-line--4 { top: 170px; transform: rotate(-17deg); transform-origin: right center; }
 
         .goal-target {
             display: flex;
@@ -663,9 +652,7 @@
         <main class="content">
             <header class="header">
                 <div class="level-tag">
-                    <span class="level-num">7</span>
-                    <span>poziom 7 / 7 &middot;</span>
-                    <i class="ti ti-target-arrow"></i>
+                    <span>poziom 7 </span>
                     <span class="ideal">ideał</span>
                 </div>
                 <h2 class="title">
@@ -678,7 +665,7 @@
                 <i class="ti ti-bookmark def-icon"></i>
                 <p class="def-banner-text">
                     Wszystkie elementy współpracują, by zrealizować <strong class="acc">jedną, dobrze zdefiniowaną funkcję</strong>.
-                    Żadnego nie można usunąć bez <strong>zniszczenia tej funkcji</strong>.
+                    </br>Żadnego nie można usunąć bez <strong>zniszczenia tej funkcji</strong>.
                 </p>
             </section>
 
@@ -713,16 +700,15 @@
                         <div><span class="br">}</span></div>
 
                         <p class="glue">
-                            Wszystko podporządkowane <strong>jednemu celowi</strong> &mdash;
-                            usuń jedną metodę i autoryzacja przestaje działać.
+                            Wszystko podporządkowane <strong>jednemu celowi</strong>
                         </p>
                     </div>
                 </article>
 
                 <article class="goalviz">
-                    <div class="goalviz-label"><i class="ti ti-target-arrow"></i> Wszystko prowadzi do jednego celu</div>
+                    <div class="goalviz-label"><i class="ti ti-target-arrow"></i>Jeden cel</div>
                     <p class="goalviz-headline">
-                        Cztery elementy &mdash; <em>jedna funkcja</em>, której nie da się rozbić.
+                        4 elementy ale <em>jedna funkcja</em>, której nie da się rozbić.
                     </p>
 
                     <div class="converge">
@@ -750,21 +736,10 @@
                     <div class="insight">
                         <i class="ti ti-bulb"></i>
                         <div class="insight-text">
-                            Nie da się <strong>nic usunąć</strong> bez zerwania funkcji &mdash;
-                            wszystkie elementy są <strong>konieczne</strong>.
+                            Wszystkie elementy są <strong>konieczne</strong>.
                         </div>
                     </div>
                 </article>
-            </section>
-
-            <section class="litmus">
-                <div class="litmus-icon"><i class="ti ti-test-pipe"></i></div>
-                <div class="litmus-body">
-                    <div class="litmus-key"><i class="ti ti-flask"></i> test lakmusowy</div>
-                    <p class="litmus-text">
-                        <span class="quote">„Jeśli potrafisz opisać swoją klasę <strong>jednym zdaniem</strong> bez użycia słowa <span class="no-and">»i«</span> &mdash; prawdopodobnie masz spójność funkcyjną."</span>
-                    </p>
-                </div>
             </section>
         </main>
 

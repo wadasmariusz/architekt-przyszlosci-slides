@@ -179,7 +179,6 @@
             border-radius: 16px;
             background: rgba(17,24,39,0.62);
             border: 1px solid rgba(255,255,255,0.08);
-            border-left: 3px solid var(--cyan-400);
             backdrop-filter: blur(6px);
             opacity: 0;
             animation: fadeUp 0.7s ease-out 0.5s forwards;
@@ -215,16 +214,6 @@
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.7s forwards;
             margin-bottom: 22px;
-        }
-
-        .pipeline-wrap::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--cyan-400), var(--cyan-600), var(--cyan-400));
         }
 
         .pipeline-label {
@@ -373,7 +362,7 @@
         .bottom-row {
             width: 1320px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 24px;
         }
 
@@ -391,7 +380,6 @@
         }
 
         .bcard--feature {
-            border-left: 3px solid var(--cyan-400);
             animation: slideFromLeft 0.7s ease-out 1.7s forwards;
         }
 
@@ -520,10 +508,7 @@
         <main class="content">
             <header class="header">
                 <div class="level-tag">
-                    <span class="level-num">6</span>
-                    <span>poziom 6 / 7 &middot;</span>
-                    <i class="ti ti-circle-check-filled"></i>
-                    <span>bardzo dobra</span>
+                    <span>poziom 6</span>
                 </div>
                 <h2 class="title">
                     Spójność <span class="highlight">sekwencyjna</span>
@@ -535,12 +520,11 @@
                 <i class="ti ti-bookmark def-icon"></i>
                 <p class="def-banner-text">
                     <strong>Wyjście jednego elementu jest wejściem kolejnego</strong>
-                    &mdash; jak <strong>linia produkcyjna</strong>.
                 </p>
             </section>
 
             <section class="pipeline-wrap">
-                <div class="pipeline-label"><i class="ti ti-route"></i> Pipeline &mdash; przepływ danych przez kroki</div>
+                <div class="pipeline-label"><i class="ti ti-route"></i> Przepływ danych przez kroki</div>
 
                 <div class="pipeline">
                     <div class="station">
@@ -588,21 +572,9 @@
                 <article class="bcard bcard--feature">
                     <div class="bcard-icon"><i class="ti ti-key"></i></div>
                     <div class="bcard-body">
-                        <div class="bcard-key">wyróżnik</div>
                         <p class="bcard-text">
                             Usunięcie jednego kroku <strong class="acc">rozbija cały pipeline</strong>.
                             Powiązanie jest nie tylko logiczne, ale i <strong>strukturalne</strong>.
-                        </p>
-                    </div>
-                </article>
-
-                <article class="bcard bcard--vs">
-                    <div class="bcard-icon"><i class="ti ti-arrows-diff"></i></div>
-                    <div class="bcard-body">
-                        <div class="bcard-key">vs proceduralna</div>
-                        <p class="bcard-text">
-                            Tam strzałki znaczyły tylko <strong>kolejność</strong>.
-                            Tu strzałki <strong class="acc">przenoszą dane</strong>.
                         </p>
                     </div>
                 </article>
