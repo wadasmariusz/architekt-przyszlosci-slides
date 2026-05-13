@@ -219,6 +219,11 @@
         }
 
         .code .ln { color: #475569; user-select: none; display: inline-block; width: 30px; }
+        .code .code-line {
+            display: block;
+            min-height: 1.7em;
+            white-space: pre-wrap;
+        }
         .code .kw { color: #c084fc; font-weight: 600; }
         .code .fn { color: #fcd34d; font-weight: 600; }
         .code .ty { color: #67e8f9; }
@@ -385,19 +390,19 @@
                     </div>
 
                     <div class="code">
-<span class="cm"><span class="ln">1</span>// jedna metoda — wiele scenariuszy</span>
-<span class="ln">2</span><span class="kw">function</span> <span class="fn">processOrder</span>(
-<span class="ln">3</span>  <span class="pm">order</span>: <span class="ty">Order</span>,
-<span class="flag-line"><span class="ln">4</span>  <span class="flag-name">mode</span>: <span class="ty">string</span>,             <span class="cm">// "draft" | "final" | "preview"</span></span>
-<span class="flag-line"><span class="ln">5</span>  <span class="flag-name">isAdmin</span>: <span class="ty">boolean</span>,</span>
-<span class="flag-line"><span class="ln">6</span>  <span class="flag-name">isTest</span>: <span class="ty">boolean</span>,</span>
-<span class="flag-line"><span class="ln">7</span>  <span class="flag-name">skipEmail</span>: <span class="ty">boolean</span>,</span>
-<span class="flag-line"><span class="ln">8</span>  <span class="flag-name">includeDetails</span>: <span class="ty">boolean</span>,</span>
-<span class="flag-line"><span class="ln">9</span>  <span class="flag-name">validateStock</span>: <span class="ty">boolean</span>,</span>
-<span class="ln">10</span>) { <span class="cm">/* ... 200 linii ifów ... */</span> }
-<span class="ln">11</span>
-<span class="cm"><span class="ln">12</span>// wywołanie:</span>
-<span class="ln">13</span><span class="fn">processOrder</span>(o, <span class="str">"final"</span>, <span class="flag-val">true</span>, <span class="flag-val">false</span>, <span class="flag-val">false</span>, <span class="flag-val">true</span>, <span class="flag-val">true</span>);
+<span class="code-line cm"><span class="ln">1</span>// jedna metoda, ale wiele scenariuszy</span>
+<span class="code-line"><span class="ln">2</span><span class="kw">function</span> <span class="fn">processOrder</span>(</span>
+<span class="code-line"><span class="ln">3</span>  <span class="pm">order</span>: <span class="ty">Order</span>,</span>
+<span class="code-line flag-line"><span class="ln">4</span>  <span class="flag-name">mode</span>: <span class="ty">string</span>,             <span class="cm">// "draft" | "final" | "preview"</span></span>
+<span class="code-line flag-line"><span class="ln">5</span>  <span class="flag-name">isAdmin</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">6</span>  <span class="flag-name">isTest</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">7</span>  <span class="flag-name">skipEmail</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">8</span>  <span class="flag-name">includeDetails</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">9</span>  <span class="flag-name">validateStock</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line"><span class="ln">10</span>) { <span class="cm">/* ... 200 linii ifów ... */</span> }</span>
+<span class="code-line"><span class="ln">11</span></span>
+<span class="code-line cm"><span class="ln">12</span>// wywołanie:</span>
+<span class="code-line"><span class="ln">13</span><span class="fn">processOrder</span>(o, <span class="str">"final"</span>, <span class="flag-val">true</span>, <span class="flag-val">false</span>, <span class="flag-val">false</span>, <span class="flag-val">true</span>, <span class="flag-val">true</span>);</span>
                     </div>
 
                     <div class="code-foot">
@@ -413,7 +418,7 @@
                             <div class="panel-title">Metoda wieloscenariuszowa</div>
                         </div>
                         <p class="panel-text">
-                            Jedna funkcja obsługuje <em>wiele scenariuszy</em>.
+                            Jedna funkcja obsługuje wiele scenariuszy.
                         </p>
                     </div>
 

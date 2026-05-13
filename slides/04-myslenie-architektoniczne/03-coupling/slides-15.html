@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 15 - Zamówienie vs. wysyłka maili</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+            --good: #22c55e;
+            --violet: #a78bfa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 28px;
+        }
+
+        .eyebrow {
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 58px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .h-bad { color: var(--danger); }
+        .h-good { color: var(--good); }
+        .sep { color: #475569; margin: 0 14px; font-weight: 400; }
+
+        /* === Compare === */
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            max-width: 1640px;
+            margin: 0 auto;
+        }
+
+        .col {
+            padding: 24px 28px 26px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            background: rgba(17,24,39,0.65);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+        }
+
+        .col--bad  { animation: slideFromLeft 0.8s ease-out 0.65s forwards; }
+        .col--good { animation: slideFromRight 0.8s ease-out 0.65s forwards; }
+
+        .col-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .col-head-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .col-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex: 0 0 auto;
+        }
+
+        .col--bad  .col-icon { background: rgba(239,68,68,0.15); color: var(--danger); }
+        .col--good .col-icon { background: rgba(34,197,94,0.15);  color: var(--good); }
+
+        .col-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .col--bad  .col-label { color: var(--danger); }
+        .col--good .col-label { color: var(--good); }
+
+        .col-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .col-badge {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 999px;
+        }
+
+        .col--bad .col-badge {
+            color: var(--danger);
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.35);
+        }
+
+        .col--good .col-badge {
+            color: var(--good);
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.35);
+        }
+
+        /* Diagram */
+        .diagram {
+            padding: 12px;
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-radius: 14px;
+            background: rgba(10,14,23,0.55);
+            margin-bottom: 16px;
+        }
+
+        .diagram svg {
+            display: block;
+            width: 100%;
+            height: 360px;
+        }
+
+        /* Bullets */
+        .bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bullets li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #e2e8f0;
+        }
+
+        .bullets li i {
+            margin-top: 3px;
+            font-size: 18px;
+            flex: 0 0 auto;
+        }
+
+        .col--bad  .bullets li i { color: var(--danger); }
+        .col--good .bullets li i { color: var(--good); }
+
+        .bullets strong {
+            color: #f0f4f8;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes dashFlow {
+            from { stroke-dashoffset: 24; }
+            to   { stroke-dashoffset: 0; }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Przykład praktyczny</div>
+                <h2 class="title">Zamówienie <span class="sep">vs.</span> wysyłka maili</h2>
+            </div>
+
+            <div class="compare">
+                <div class="col col--bad">
+                    <div class="col-head">
+                        <div class="col-head-left">
+                            <div class="col-icon"><i class="ti ti-bug"></i></div>
+                            <div>
+                                <span class="col-label">Słaby projekt</span>
+                                <div class="col-title">Zamówienia wiedzą o mailach</div>
+                            </div>
+                        </div>
+                        <span class="col-badge"><i class="ti ti-link" style="vertical-align:-2px;"></i> Wysokie coupling</span>
+                    </div>
+
+                    <div class="diagram">
+                        <svg viewBox="0 0 700 360" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5"
+                                        markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+                                </marker>
+                            </defs>
+
+                            <!-- Order module -->
+                            <rect x="40" y="130" width="220" height="120" rx="16"
+                                  fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2.5"/>
+                            <text x="150" y="172" text-anchor="middle" font-size="22" font-weight="700" fill="#f0f4f8">Order Service</text>
+                            <text x="150" y="200" text-anchor="middle" font-size="13" fill="#fca5a5">zna SMTP</text>
+                            <text x="150" y="220" text-anchor="middle" font-size="13" fill="#fca5a5">buduje treść</text>
+                            <text x="150" y="240" text-anchor="middle" font-size="13" fill="#fca5a5">wybiera szablon</text>
+
+                            <!-- SMTP -->
+                            <rect x="430" y="30" width="220" height="68" rx="14"
+                                  fill="rgba(239,68,68,0.10)" stroke="#ef4444" stroke-width="2"/>
+                            <text x="540" y="62" text-anchor="middle" font-size="18" font-weight="700" fill="#fca5a5">SMTP server</text>
+                            <text x="540" y="84" text-anchor="middle" font-size="12" fill="#fda4af">host, port, auth</text>
+
+                            <!-- Template -->
+                            <rect x="430" y="146" width="220" height="68" rx="14"
+                                  fill="rgba(239,68,68,0.10)" stroke="#ef4444" stroke-width="2"/>
+                            <text x="540" y="178" text-anchor="middle" font-size="18" font-weight="700" fill="#fca5a5">Email templates</text>
+                            <text x="540" y="200" text-anchor="middle" font-size="12" fill="#fda4af">welcome.html, order.html</text>
+
+                            <!-- Library -->
+                            <rect x="430" y="262" width="220" height="68" rx="14"
+                                  fill="rgba(239,68,68,0.10)" stroke="#ef4444" stroke-width="2"/>
+                            <text x="540" y="294" text-anchor="middle" font-size="18" font-weight="700" fill="#fca5a5">Mailer library</text>
+                            <text x="540" y="316" text-anchor="middle" font-size="12" fill="#fda4af">nodemailer.send(...)</text>
+
+                            <!-- Arrows -->
+                            <path d="M 260 160 Q 340 100 425 64"
+                                  fill="none" stroke="#ef4444" stroke-width="3"
+                                  stroke-dasharray="8 5"
+                                  marker-end="url(#arrowR)"
+                                  style="animation: dashFlow 1.4s linear infinite;"/>
+                            <path d="M 260 190 L 425 180"
+                                  fill="none" stroke="#ef4444" stroke-width="3"
+                                  stroke-dasharray="8 5"
+                                  marker-end="url(#arrowR)"
+                                  style="animation: dashFlow 1.4s linear infinite;"/>
+                            <path d="M 260 220 Q 340 280 425 296"
+                                  fill="none" stroke="#ef4444" stroke-width="3"
+                                  stroke-dasharray="8 5"
+                                  marker-end="url(#arrowR)"
+                                  style="animation: dashFlow 1.4s linear infinite;"/>
+                        </svg>
+                    </div>
+
+                    <ul class="bullets">
+                        <li><i class="ti ti-point-filled"></i>Zmiana dostawcy poczty = <strong>poprawki w logice zamówień</strong></li>
+                        <li><i class="ti ti-point-filled"></i>Nowy szablon lub kolejka wymaga ruszenia <strong>core'u domenowego</strong></li>
+                        <li><i class="ti ti-point-filled"></i>Test zamówień ciągnie SMTP, szablony i bibliotekę</li>
+                    </ul>
+                </div>
+
+                <div class="col col--good">
+                    <div class="col-head">
+                        <div class="col-head-left">
+                            <div class="col-icon"><i class="ti ti-shield-check"></i></div>
+                            <div>
+                                <span class="col-label">Lepszy projekt</span>
+                                <div class="col-title">Zamówienia tylko sygnalizują</div>
+                            </div>
+                        </div>
+                        <span class="col-badge"><i class="ti ti-unlink" style="vertical-align:-2px;"></i> Niskie coupling</span>
+                    </div>
+
+                    <div class="diagram">
+                        <svg viewBox="0 0 700 360" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5"
+                                        markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e" />
+                                </marker>
+                                <marker id="arrowV" viewBox="0 0 10 10" refX="9" refY="5"
+                                        markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#a78bfa" />
+                                </marker>
+                            </defs>
+
+                            <!-- Order module -->
+                            <rect x="20" y="140" width="200" height="100" rx="16"
+                                  fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2.5"/>
+                            <text x="120" y="180" text-anchor="middle" font-size="22" font-weight="700" fill="#f0f4f8">Order Service</text>
+                            <text x="120" y="208" text-anchor="middle" font-size="13" fill="#86efac">emit event</text>
+
+                            <!-- Event -->
+                            <rect x="245" y="160" width="180" height="60" rx="14"
+                                  fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="2"/>
+                            <text x="335" y="188" text-anchor="middle" font-size="16" font-weight="700" fill="#c4b5fd">OrderPlaced</text>
+                            <text x="335" y="208" text-anchor="middle" font-size="11" fill="#c4b5fd">event / interfejs</text>
+
+                            <!-- Email handler -->
+                            <rect x="460" y="30" width="220" height="76" rx="14"
+                                  fill="rgba(34,197,94,0.10)" stroke="#22c55e" stroke-width="2"/>
+                            <text x="570" y="62" text-anchor="middle" font-size="18" font-weight="700" fill="#86efac">Email Handler</text>
+                            <text x="570" y="86" text-anchor="middle" font-size="12" fill="#86efac">SMTP · szablony · biblioteka</text>
+
+                            <!-- Queue handler -->
+                            <rect x="460" y="142" width="220" height="76" rx="14"
+                                  fill="rgba(34,197,94,0.10)" stroke="#22c55e" stroke-width="2"/>
+                            <text x="570" y="174" text-anchor="middle" font-size="18" font-weight="700" fill="#86efac">Queue Handler</text>
+                            <text x="570" y="198" text-anchor="middle" font-size="12" fill="#86efac">dodany później, bez zmian</text>
+
+                            <!-- Analytics -->
+                            <rect x="460" y="254" width="220" height="76" rx="14"
+                                  fill="rgba(34,197,94,0.10)" stroke="#22c55e" stroke-width="2"/>
+                            <text x="570" y="286" text-anchor="middle" font-size="18" font-weight="700" fill="#86efac">Analytics</text>
+                            <text x="570" y="310" text-anchor="middle" font-size="12" fill="#86efac">subskrybuje to samo</text>
+
+                            <!-- Arrows -->
+                            <path d="M 220 190 L 240 190"
+                                  fill="none" stroke="#a78bfa" stroke-width="3"
+                                  marker-end="url(#arrowV)"/>
+
+                            <path d="M 425 180 Q 445 130 455 68"
+                                  fill="none" stroke="#22c55e" stroke-width="2.5"
+                                  stroke-dasharray="6 5"
+                                  marker-end="url(#arrowG)"
+                                  style="animation: dashFlow 1.4s linear infinite;"/>
+                            <path d="M 425 190 L 455 180"
+                                  fill="none" stroke="#22c55e" stroke-width="2.5"
+                                  stroke-dasharray="6 5"
+                                  marker-end="url(#arrowG)"
+                                  style="animation: dashFlow 1.4s linear infinite;"/>
+                            <path d="M 425 200 Q 445 250 455 290"
+                                  fill="none" stroke="#22c55e" stroke-width="2.5"
+                                  stroke-dasharray="6 5"
+                                  marker-end="url(#arrowG)"
+                                  style="animation: dashFlow 1.4s linear infinite;"/>
+                        </svg>
+                    </div>
+
+                    <ul class="bullets">
+                        <li><i class="ti ti-point-filled"></i>Wymiana dostawcy poczty = <strong>tylko Email Handler</strong></li>
+                        <li><i class="ti ti-point-filled"></i>Dodanie kolejki lub analityki <strong>bez zmiany core'u</strong></li>
+                        <li><i class="ti ti-point-filled"></i>Order Service testowalny <strong>w pełnej izolacji</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

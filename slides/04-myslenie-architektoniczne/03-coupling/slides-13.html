@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 13 - Konsekwencje wysokiego couplingu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+            --violet: #a78bfa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 36px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--danger);
+            padding: 8px 18px;
+            border: 1px solid rgba(239,68,68,0.35);
+            border-radius: 999px;
+            background: rgba(239,68,68,0.08);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f87171, var(--danger));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lede {
+            font-size: 22px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: #cbd5e1;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .lede strong { color: var(--cyan-400); font-weight: 600; }
+
+        /* === Section labels === */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            max-width: 1640px;
+            margin: 0 auto 18px;
+            opacity: 0;
+        }
+
+        .section-label--tech { animation: fadeIn 0.8s ease-out 0.7s forwards; }
+        .section-label--org  { animation: fadeIn 0.8s ease-out 1.45s forwards; margin-top: 26px; }
+
+        .section-label .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .section-label--tech .badge {
+            color: #fca5a5;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        .section-label--org .badge {
+            color: #c4b5fd;
+            background: rgba(167,139,250,0.12);
+            border: 1px solid rgba(167,139,250,0.35);
+        }
+
+        .section-label .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255,255,255,0.18), transparent);
+        }
+
+        .section-label--org .line {
+            background: linear-gradient(to right, rgba(167,139,250,0.4), transparent);
+        }
+
+        /* === Tech consequences (1-4) === */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1640px;
+            margin: 0 auto;
+        }
+
+        .csq-card {
+            position: relative;
+            padding: 28px 22px 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            background: rgba(17,24,39,0.65);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+        }
+
+        .csq-card:nth-child(1) { animation: fadeUp 0.7s ease-out 0.8s forwards; }
+        .csq-card:nth-child(2) { animation: fadeUp 0.7s ease-out 0.95s forwards; }
+        .csq-card:nth-child(3) { animation: fadeUp 0.7s ease-out 1.10s forwards; }
+        .csq-card:nth-child(4) { animation: fadeUp 0.7s ease-out 1.25s forwards; }
+
+        .csq-num {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 56px;
+            font-weight: 800;
+            color: rgba(239,68,68,0.14);
+            line-height: 0.9;
+        }
+
+        .csq-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            background: rgba(239,68,68,0.12);
+            color: var(--danger);
+            margin-bottom: 14px;
+        }
+
+        .csq-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        .csq-desc {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.45;
+            color: #cbd5e1;
+        }
+
+        .csq-desc strong {
+            color: #f0f4f8;
+            font-weight: 600;
+        }
+
+        /* === Org consequence (5) === */
+        .org-card {
+            max-width: 1640px;
+            margin: 0 auto;
+            padding: 26px 36px;
+            border: 1px solid rgba(167,139,250,0.3);
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(167,139,250,0.13), rgba(17,24,39,0.65));
+            backdrop-filter: blur(6px);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 28px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.55s forwards;
+        }
+
+        .org-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: rgba(167,139,250,0.18);
+            color: var(--violet);
+            flex: 0 0 auto;
+        }
+
+        .org-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .org-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--violet);
+        }
+
+        .org-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .org-desc {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .org-desc strong {
+            color: #c4b5fd;
+            font-weight: 600;
+        }
+
+        .org-num {
+            font-size: 80px;
+            font-weight: 800;
+            color: rgba(167,139,250,0.22);
+            line-height: 0.9;
+            padding-right: 8px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h2 class="title">Konsekwencje <span class="highlight">wysokiego couplingu</span></h2>
+                <p class="lede">
+                    Coupling pokazuje swoje koszty <strong>nie dzisiaj</strong>, lecz przy każdej kolejnej zmianie, teście i rozmowie zespołowej.
+                </p>
+            </div>
+
+            <div class="section-label section-label--tech">
+                <span class="badge"><i class="ti ti-cpu"></i>Konsekwencje techniczne</span>
+                <span class="line"></span>
+            </div>
+
+            <div class="tech-grid">
+                <div class="csq-card">
+                    <div class="csq-icon"><i class="ti ti-coin"></i></div>
+                    <div class="csq-title">Wyższy koszt zmiany</div>
+                    <p class="csq-desc">Każda modyfikacja <strong>droższa i bardziej ryzykowna</strong>.</p>
+                </div>
+
+                <div class="csq-card">
+                    <div class="csq-icon"><i class="ti ti-test-pipe-off"></i></div>
+                    <div class="csq-title">Spadek testowalności</div>
+                    <p class="csq-desc">Trudna izolacja, trudne <strong>podstawianie zależności</strong>.</p>
+                </div>
+
+                <div class="csq-card">
+                    <div class="csq-icon"><i class="ti ti-brain"></i></div>
+                    <div class="csq-title">Mniejsza zrozumiałość</div>
+                    <p class="csq-desc">Nie da się zrozumieć modułu <strong>bez znajomości kilku innych</strong>.</p>
+                </div>
+
+                <div class="csq-card">
+                    <div class="csq-icon"><i class="ti ti-bug"></i></div>
+                    <div class="csq-title">Ryzyko regresji</div>
+                    <p class="csq-desc">Nieprzewidziane <strong>skutki uboczne</strong>.</p>
+                </div>
+            </div>
+
+            <div class="section-label section-label--org">
+                <span class="badge"><i class="ti ti-users-group"></i>Konsekwencja organizacyjna</span>
+                <span class="line"></span>
+            </div>
+
+            <div class="org-card">
+                <div class="org-icon"><i class="ti ti-affiliate"></i></div>
+                <div class="org-body">
+                    <span class="org-eyebrow">Wpływ na zespół</span>
+                    <div class="org-title">Rozmyte granice odpowiedzialności</div>
+                    <p class="org-desc">
+                        Trudna <strong>praca równoległa w zespole</strong>, bo każda zmiana wymaga koordynacji.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
