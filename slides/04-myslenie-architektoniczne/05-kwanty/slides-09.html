@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 09 - Kwanty w różnych stylach architektonicznych</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 64px 80px 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1320px;
+            margin: 0 auto 28px;
+        }
+
+        .title {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Styles grid === */
+        .styles {
+            width: 1640px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .arch {
+            position: relative;
+            border-radius: 22px;
+            background: rgba(17,24,39,0.65);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            padding: 24px 22px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            opacity: 0;
+            border-top: 3px solid var(--cyan-500);
+        }
+
+        .arch:nth-child(1) { animation: archIn 0.7s ease-out 0.55s forwards; }
+        .arch:nth-child(2) { animation: archIn 0.7s ease-out 0.75s forwards; }
+        .arch:nth-child(3) { animation: archIn 0.7s ease-out 0.95s forwards; }
+
+        .arch-key {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+        }
+
+        .arch-key i { font-size: 18px; line-height: 1; }
+
+        .arch-name {
+            font-size: 28px;
+            font-weight: 800;
+            color: #f8fafc;
+            line-height: 1.2;
+        }
+
+        .arch-quantum {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(6,182,212,0.18);
+            border: 1px solid rgba(6,182,212,0.55);
+            color: var(--cyan-400);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            align-self: flex-start;
+        }
+
+        .arch-quantum i { font-size: 16px; line-height: 1; }
+
+        /* === Diagram common === */
+        .diagram {
+            position: relative;
+            min-height: 220px;
+            padding: 28px 16px 16px;
+            border-radius: 14px;
+            background: rgba(0,0,0,0.30);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantum-label {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            background: rgba(34,211,238,0.20);
+            color: var(--cyan-400);
+            border: 1px solid rgba(34,211,238,0.55);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.40);
+        }
+
+        /* Monolith — one big box with single DB */
+        .diagram--monolith {
+            border: 2px solid rgba(34,211,238,0.55);
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .mono-box {
+            width: 100%;
+            padding: 22px 14px;
+            border-radius: 12px;
+            background: rgba(17,24,39,0.92);
+            border: 1.5px solid rgba(34,211,238,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.40);
+        }
+
+        .mono-box i {
+            font-size: 32px;
+            color: var(--cyan-400);
+        }
+
+        .mono-box-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #f8fafc;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .db-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .db-block i {
+            font-size: 30px;
+            color: var(--cyan-400);
+        }
+
+        .db-block-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Microservices — multiple boxes */
+        .diagram--micro {
+            border: 1px dashed rgba(255,255,255,0.10);
+            align-items: stretch;
+        }
+
+        .micro-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .micro-card {
+            position: relative;
+            padding: 12px 10px 10px;
+            border-radius: 10px;
+            background: rgba(17,24,39,0.92);
+            border: 1.5px dashed rgba(34,211,238,0.55);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.40);
+        }
+
+        .micro-card i.svc-i { font-size: 22px; color: var(--cyan-400); }
+        .micro-card i.db-i { font-size: 18px; color: var(--cyan-400); opacity: 0.85; }
+
+        .micro-name {
+            font-size: 12px;
+            font-weight: 800;
+            color: #f8fafc;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .micro-tag {
+            position: absolute;
+            top: -8px;
+            right: -6px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 800;
+            background: rgba(34,211,238,0.20);
+            color: var(--cyan-400);
+            border: 1px solid rgba(34,211,238,0.55);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Modular monolith — one box with internal modules */
+        .diagram--modular {
+            border: 2px solid rgba(34,211,238,0.55);
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mod-modules {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            padding: 14px 12px;
+            border-radius: 12px;
+            background: rgba(17,24,39,0.92);
+            border: 1.5px solid rgba(34,211,238,0.55);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.40);
+        }
+
+        .mod {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 6px;
+            border-radius: 8px;
+            background: rgba(6,182,212,0.10);
+            border: 1px dashed rgba(34,211,238,0.55);
+        }
+
+        .mod i {
+            font-size: 18px;
+            color: var(--cyan-400);
+        }
+
+        .mod-name {
+            font-size: 11px;
+            font-weight: 800;
+            color: #f8fafc;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+        }
+
+        /* === Note === */
+        .note {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.30);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .note i {
+            font-size: 18px;
+            line-height: 1;
+            color: var(--cyan-400);
+            flex: 0 0 auto;
+            margin-top: 2px;
+        }
+
+        .note-text {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #cbd5e1;
+        }
+
+        .note-text strong { color: #f0f4f8; font-weight: 800; }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes archIn {
+            from { opacity: 0; transform: translateY(28px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <h2 class="title">Kwanty w różnych <span class="highlight">stylach architektonicznych</span></h2>
+            </header>
+
+            <section class="styles">
+                <!-- Monolith -->
+                <article class="arch">
+                    <div class="arch-key"><i class="ti ti-cube"></i> Monolit klasyczny</div>
+                    <h3 class="arch-name">Jedna aplikacja, jedna baza</h3>
+                    <div class="arch-quantum"><i class="ti ti-atom"></i> 1 kwant</div>
+
+                    <div class="diagram diagram--monolith">
+                        <div class="quantum-label">Kwant</div>
+                        <div class="mono-box">
+                            <i class="ti ti-building"></i>
+                            <span class="mono-box-name">Aplikacja</span>
+                        </div>
+                        <div class="db-block">
+                            <i class="ti ti-database"></i>
+                            <span class="db-block-label">wspólna DB</span>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <i class="ti ti-info-circle"></i>
+                        <p class="note-text">
+                            Wszystkie charakterystyki <strong>wspólne</strong>.
+                            Skalujemy <strong>wszystko albo nic</strong>.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Microservices -->
+                <article class="arch">
+                    <div class="arch-key"><i class="ti ti-grid-dots"></i> Mikroserwisy</div>
+                    <h3 class="arch-name">Wiele serwisów, własne bazy</h3>
+                    <div class="arch-quantum"><i class="ti ti-atom-2"></i> wiele kwantów (potencjalnie)</div>
+
+                    <div class="diagram diagram--micro">
+                        <div class="micro-grid">
+                            <div class="micro-card">
+                                <span class="micro-tag">Kwant</span>
+                                <i class="ti ti-server svc-i"></i>
+                                <span class="micro-name">Serwis A</span>
+                                <i class="ti ti-database db-i"></i>
+                            </div>
+                            <div class="micro-card">
+                                <span class="micro-tag">Kwant</span>
+                                <i class="ti ti-server svc-i"></i>
+                                <span class="micro-name">Serwis B</span>
+                                <i class="ti ti-database db-i"></i>
+                            </div>
+                            <div class="micro-card">
+                                <span class="micro-tag">Kwant</span>
+                                <i class="ti ti-server svc-i"></i>
+                                <span class="micro-name">Serwis C</span>
+                                <i class="ti ti-database db-i"></i>
+                            </div>
+                            <div class="micro-card">
+                                <span class="micro-tag">Kwant</span>
+                                <i class="ti ti-server svc-i"></i>
+                                <span class="micro-name">Serwis D</span>
+                                <i class="ti ti-database db-i"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <i class="ti ti-info-circle"></i>
+                        <p class="note-text">
+                            Każdy serwis ze swoimi zależnościami to <strong>osobny kwant</strong> —
+                            o ile nie jest połączony <strong>synchronicznie</strong> z innymi.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Modular monolith -->
+                <article class="arch">
+                    <div class="arch-key"><i class="ti ti-layout-grid"></i> Modularny monolit</div>
+                    <h3 class="arch-name">Jedna aplikacja, wydzielone moduły</h3>
+                    <div class="arch-quantum"><i class="ti ti-atom"></i> 1 kwant (z opcją rozbicia)</div>
+
+                    <div class="diagram diagram--modular">
+                        <div class="quantum-label">Kwant</div>
+                        <div class="mod-modules">
+                            <div class="mod">
+                                <i class="ti ti-package"></i>
+                                <span class="mod-name">Moduł A</span>
+                            </div>
+                            <div class="mod">
+                                <i class="ti ti-package"></i>
+                                <span class="mod-name">Moduł B</span>
+                            </div>
+                            <div class="mod">
+                                <i class="ti ti-package"></i>
+                                <span class="mod-name">Moduł C</span>
+                            </div>
+                        </div>
+                        <div class="db-block">
+                            <i class="ti ti-database"></i>
+                            <span class="db-block-label">wspólna DB</span>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <i class="ti ti-info-circle"></i>
+                        <p class="note-text">
+                            <strong>Kontrolowane interfejsy</strong> między modułami.
+                            Opcja wyciągnięcia modułu do osobnego kwantu, gdy biznes <strong>tego wymusi</strong>.
+                        </p>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

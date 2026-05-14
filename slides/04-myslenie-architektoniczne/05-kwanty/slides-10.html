@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - Antypattern: rozproszony monolit</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --rose: #f43f5e;
+            --rose-soft: #fb7185;
+            --red: #ef4444;
+            --amber: #f59e0b;
+            --amber-soft: #fbbf24;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Top warning stripe === */
+        .warn-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, transparent, var(--rose), var(--rose-soft), var(--rose), transparent);
+            z-index: 5;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.1s forwards;
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 22px;
+        }
+
+        .warn-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 20px;
+            border-radius: 999px;
+            background: rgba(244,63,94,0.18);
+            border: 1px solid rgba(244,63,94,0.55);
+            color: var(--rose-soft);
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .warn-tag i { font-size: 20px; line-height: 1; }
+
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--rose-soft), var(--rose));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Body grid === */
+        .body-grid {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            gap: 26px;
+            align-items: stretch;
+        }
+
+        /* === Diagram === */
+        .quantum-wrap {
+            position: relative;
+            border-radius: 22px;
+            background: linear-gradient(140deg, rgba(244,63,94,0.16), rgba(244,63,94,0.04) 60%, rgba(17,24,39,0.65));
+            border: 2px dashed rgba(244,63,94,0.55);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.32), 0 0 60px rgba(244,63,94,0.12);
+            backdrop-filter: blur(6px);
+            padding: 44px 28px 28px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .quantum-label {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 7px 18px;
+            border-radius: 999px;
+            background: var(--rose);
+            color: #2a0710;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.40);
+            white-space: nowrap;
+        }
+
+        .mesh {
+            position: relative;
+            width: 100%;
+            height: 460px;
+        }
+
+        .mesh svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .node {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border-radius: 14px;
+            background: rgba(17,24,39,0.95);
+            border: 1.5px solid rgba(244,63,94,0.55);
+            box-shadow: 0 6px 22px rgba(0,0,0,0.50), 0 0 24px rgba(244,63,94,0.12);
+            opacity: 0;
+            z-index: 2;
+        }
+
+        .node:nth-child(2) { animation: nodeIn 0.5s ease-out 0.85s forwards; }
+        .node:nth-child(3) { animation: nodeIn 0.5s ease-out 0.95s forwards; }
+        .node:nth-child(4) { animation: nodeIn 0.5s ease-out 1.05s forwards; }
+        .node:nth-child(5) { animation: nodeIn 0.5s ease-out 1.15s forwards; }
+        .node:nth-child(6) { animation: nodeIn 0.5s ease-out 1.25s forwards; }
+
+        .node-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(244,63,94,0.16);
+            border: 1px solid rgba(244,63,94,0.50);
+            color: var(--rose-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .node-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: #f8fafc;
+            text-align: center;
+            line-height: 1.15;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .node--a { top: 18%; left: 22%; }
+        .node--b { top: 18%; left: 78%; }
+        .node--c { top: 78%; left: 22%; }
+        .node--d { top: 78%; left: 78%; }
+        .node--e { top: 50%; left: 50%; }
+
+        /* === Right column === */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .lead-card {
+            position: relative;
+            padding: 24px 28px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.65);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            border-left: 3px solid var(--rose);
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.7s forwards;
+        }
+
+        .lead-card-key {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--rose-soft);
+            margin-bottom: 12px;
+        }
+
+        .lead-card-key i { font-size: 18px; line-height: 1; }
+
+        .lead-card-text {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.35;
+            color: #f0f4f8;
+        }
+
+        .lead-card-text strong { color: #f8fafc; font-weight: 800; }
+        .lead-card-text em { font-style: normal; color: var(--rose-soft); font-weight: 800; }
+
+        /* === Quote === */
+        .quote-card {
+            position: relative;
+            padding: 24px 28px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.65);
+            border: 1px solid rgba(244,63,94,0.32);
+            backdrop-filter: blur(6px);
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            opacity: 0;
+            animation: slideFromRight 0.8s ease-out 0.95s forwards;
+        }
+
+        .quote-icon {
+            flex: 0 0 auto;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(244,63,94,0.16);
+            border: 1px solid rgba(244,63,94,0.55);
+            color: var(--rose-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .quote-text {
+            font-size: 19px;
+            font-weight: 500;
+            font-style: italic;
+            line-height: 1.45;
+            color: #f0f4f8;
+        }
+
+        .quote-text strong {
+            color: var(--rose-soft);
+            font-weight: 800;
+            font-style: normal;
+        }
+
+        /* === Bullet stack === */
+        .bullets {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.2s forwards;
+        }
+
+        .bullet {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.30);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .bullet i {
+            font-size: 20px;
+            line-height: 1;
+            color: var(--rose-soft);
+            flex: 0 0 auto;
+        }
+
+        .bullet-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes nodeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+            to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes drawLine {
+            from { stroke-dashoffset: 600; }
+            to   { stroke-dashoffset: 0; }
+        }
+
+        .edge {
+            stroke: var(--rose);
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            fill: none;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            opacity: 0.75;
+            animation: drawLine 1.0s ease-out 1.3s forwards;
+        }
+
+        .edge--b { animation-delay: 1.35s; }
+        .edge--c { animation-delay: 1.40s; }
+        .edge--d { animation-delay: 1.45s; }
+        .edge--e { animation-delay: 1.50s; }
+        .edge--f { animation-delay: 1.55s; }
+        .edge--g { animation-delay: 1.60s; }
+        .edge--h { animation-delay: 1.65s; }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+        <div class="warn-stripe"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <div class="warn-tag">
+                    <i class="ti ti-alert-triangle-filled"></i>
+                    <span>Antypattern</span>
+                </div>
+                <h2 class="title">Rozproszony <span class="highlight">monolit</span></h2>
+            </header>
+
+            <section class="body-grid">
+                <!-- Diagram -->
+                <article class="quantum-wrap">
+                    <div class="quantum-label">Jeden wielki kwant w wielu procesach</div>
+                    <div class="mesh">
+                        <svg viewBox="0 0 600 460" preserveAspectRatio="none">
+                            <defs>
+                                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+                                        markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M0,0 L10,5 L0,10 z" fill="#fb7185"/>
+                                </marker>
+                            </defs>
+                            <!-- A↔B -->
+                            <path class="edge" d="M150,90 L450,90"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <!-- A↔C -->
+                            <path class="edge edge--b" d="M150,90 L150,370"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <!-- B↔D -->
+                            <path class="edge edge--c" d="M450,90 L450,370"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <!-- C↔D -->
+                            <path class="edge edge--d" d="M150,370 L450,370"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <!-- A↔D -->
+                            <path class="edge edge--e" d="M150,90 L450,370"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <!-- B↔C -->
+                            <path class="edge edge--f" d="M450,90 L150,370"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <!-- E↔A,B,C,D -->
+                            <path class="edge edge--g" d="M300,230 L150,90"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <path class="edge edge--g" d="M300,230 L450,90"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <path class="edge edge--h" d="M300,230 L150,370"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                            <path class="edge edge--h" d="M300,230 L450,370"
+                                  marker-end="url(#arr)" marker-start="url(#arr)" />
+                        </svg>
+
+                        <div class="node node--a">
+                            <div class="node-icon"><i class="ti ti-shopping-cart"></i></div>
+                            <div class="node-name">Zamówienia</div>
+                        </div>
+                        <div class="node node--b">
+                            <div class="node-icon"><i class="ti ti-credit-card"></i></div>
+                            <div class="node-name">Płatności</div>
+                        </div>
+                        <div class="node node--c">
+                            <div class="node-icon"><i class="ti ti-package"></i></div>
+                            <div class="node-name">Magazyn</div>
+                        </div>
+                        <div class="node node--d">
+                            <div class="node-icon"><i class="ti ti-truck"></i></div>
+                            <div class="node-name">Wysyłka</div>
+                        </div>
+                        <div class="node node--e">
+                            <div class="node-icon"><i class="ti ti-users"></i></div>
+                            <div class="node-name">Klienci</div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Right column -->
+                <div class="right-col">
+                    <article class="lead-card">
+                        <div class="lead-card-key"><i class="ti ti-network"></i> Diagnoza</div>
+                        <p class="lead-card-text">
+                            Wiele mikroserwisów połączonych <em>synchronicznymi zależnościami</em> =
+                            <strong>jeden wielki kwant podzielony na wiele procesów</strong>.
+                        </p>
+                    </article>
+
+                    <article class="quote-card">
+                        <div class="quote-icon"><i class="ti ti-quote"></i></div>
+                        <p class="quote-text">
+                            Najgorszy możliwy scenariusz: <strong>cała złożoność</strong> systemu rozproszonego
+                            <strong>bez żadnych korzyści</strong> z niezależności.
+                        </p>
+                    </article>
+
+                    <div class="bullets">
+                        <div class="bullet">
+                            <i class="ti ti-network"></i>
+                            <span class="bullet-text">złożoność operacyjna systemu rozproszonego</span>
+                        </div>
+                        <div class="bullet">
+                            <i class="ti ti-x"></i>
+                            <span class="bullet-text">brak niezależności wdrożeń i awarii</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

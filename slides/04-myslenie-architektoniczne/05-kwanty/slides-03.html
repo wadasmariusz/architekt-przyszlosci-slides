@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Przykład: checkout vs. rekomendacje</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --rose: #f43f5e;
+            --rose-soft: #fb7185;
+            --emerald: #10b981;
+            --emerald-soft: #34d399;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 36px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Compare grid === */
+        .compare {
+            width: 1320px;
+            display: grid;
+            grid-template-columns: 1fr 70px 1fr;
+            gap: 0;
+            align-items: stretch;
+            margin-bottom: 24px;
+        }
+
+        .col {
+            position: relative;
+            border-radius: 22px;
+            backdrop-filter: blur(6px);
+            padding: 24px 28px 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            opacity: 0;
+        }
+
+        .col--critical {
+            background: linear-gradient(140deg, rgba(244,63,94,0.16), rgba(244,63,94,0.04) 60%, rgba(17,24,39,0.65));
+            border: 1px solid rgba(251,113,133,0.40);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 0 50px rgba(244,63,94,0.10);
+            animation: slideFromLeft 0.8s ease-out 0.55s forwards;
+        }
+
+        .col--relaxed {
+            background: linear-gradient(140deg, rgba(34,211,238,0.16), rgba(34,211,238,0.04) 60%, rgba(17,24,39,0.65));
+            border: 1px solid rgba(34,211,238,0.40);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 0 50px rgba(34,211,238,0.10);
+            animation: slideFromRight 0.8s ease-out 0.55s forwards;
+        }
+
+        .col-key {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .col--critical .col-key { color: var(--rose-soft); }
+        .col--relaxed .col-key { color: var(--cyan-400); }
+
+        .col-key i { font-size: 22px; line-height: 1; }
+
+        .col-headline {
+            font-size: 32px;
+            font-weight: 800;
+            color: #f8fafc;
+            line-height: 1.2;
+        }
+
+        /* === Attribute rows === */
+        .attrs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 6px 0 2px;
+        }
+
+        .attr {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(17,24,39,0.85);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.30);
+        }
+
+        .attr-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #94a3b8;
+        }
+
+        .attr-label i { font-size: 16px; line-height: 1; }
+
+        .attr-value {
+            font-size: 19px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.35;
+        }
+
+        .col--critical .attr-value strong { color: var(--rose-soft); font-weight: 800; }
+        .col--relaxed .attr-value strong { color: var(--cyan-400); font-weight: 800; }
+
+        /* === Versus pill === */
+        .versus {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.95s forwards;
+        }
+
+        .versus-pill {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark-surface);
+            border: 1px solid rgba(255,255,255,0.18);
+            font-size: 16px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.40);
+        }
+
+        /* === Bottom comment === */
+        .comment {
+            width: 1320px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 20px 28px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.15s forwards;
+        }
+
+        .comment-icon {
+            flex: 0 0 auto;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(34,211,238,0.16);
+            border: 1px solid rgba(34,211,238,0.45);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .comment-text {
+            font-size: 19px;
+            font-weight: 300;
+            line-height: 1.45;
+            color: #f0f4f8;
+        }
+
+        .comment-text strong { color: var(--cyan-400); font-weight: 700; }
+        .comment-text em { color: #f8fafc; font-style: normal; font-weight: 700; }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <p class="eyebrow">Przykład</p>
+                <h2 class="title">Checkout vs. <span class="highlight">rekomendacje</span></h2>
+            </header>
+
+            <section class="compare">
+                <article class="col col--critical">
+                    <div class="col-key"><i class="ti ti-shopping-cart"></i> Krytyczne dla biznesu</div>
+                    <h3 class="col-headline">Checkout</h3>
+
+                    <div class="attrs">
+                        <div class="attr">
+                            <div class="attr-label"><i class="ti ti-alert-triangle"></i> Konsekwencja niedostępności</div>
+                            <div class="attr-value"><strong>stracone zamówienia</strong>, realne straty</div>
+                        </div>
+                        <div class="attr">
+                            <div class="attr-label"><i class="ti ti-activity"></i> Wymagana dostępność</div>
+                            <div class="attr-value"><strong>wysoka</strong> (np. 99,9%)</div>
+                        </div>
+                        <div class="attr">
+                            <div class="attr-label"><i class="ti ti-coin"></i> Uzasadnienie kosztów</div>
+                            <div class="attr-value"><strong>tak</strong> — inwestycja się zwraca</div>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="versus">
+                    <div class="versus-pill">vs</div>
+                </div>
+
+                <article class="col col--relaxed">
+                    <div class="col-key"><i class="ti ti-sparkles"></i> Dodatkowa wartość</div>
+                    <h3 class="col-headline">Rekomendacje produktowe</h3>
+
+                    <div class="attrs">
+                        <div class="attr">
+                            <div class="attr-label"><i class="ti ti-alert-triangle"></i> Konsekwencja niedostępności</div>
+                            <div class="attr-value">użytkownik zobaczy <strong>generyczne wyniki</strong></div>
+                        </div>
+                        <div class="attr">
+                            <div class="attr-label"><i class="ti ti-activity"></i> Wymagana dostępność</div>
+                            <div class="attr-value"><strong>niska</strong> — bez większych konsekwencji</div>
+                        </div>
+                        <div class="attr">
+                            <div class="attr-label"><i class="ti ti-coin"></i> Uzasadnienie kosztów</div>
+                            <div class="attr-value"><strong>nie</strong> — niepotrzebne nakłady</div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="comment">
+                <div class="comment-icon"><i class="ti ti-bulb"></i></div>
+                <p class="comment-text">
+                    Jednolite wymagania <em>dla całego systemu</em> prowadzą albo do
+                    <strong>nadmiarowych kosztów</strong>, albo do kompromisu, który <em>nikogo nie zadowala</em>.
+                </p>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
