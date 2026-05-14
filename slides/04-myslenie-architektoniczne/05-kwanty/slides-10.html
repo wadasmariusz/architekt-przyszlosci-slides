@@ -155,10 +155,13 @@
         /* === Body grid === */
         .body-grid {
             width: 1320px;
-            display: grid;
-            grid-template-columns: 1.05fr 1fr;
-            gap: 26px;
+            display: flex;
+            justify-content: center;
             align-items: stretch;
+        }
+
+        .body-grid > .quantum-wrap {
+            width: 680px;
         }
 
         /* === Diagram === */
@@ -533,36 +536,6 @@
                         </div>
                     </div>
                 </article>
-
-                <!-- Right column -->
-                <div class="right-col">
-                    <article class="lead-card">
-                        <div class="lead-card-key"><i class="ti ti-network"></i> Diagnoza</div>
-                        <p class="lead-card-text">
-                            Wiele mikroserwisów połączonych <em>synchronicznymi zależnościami</em> =
-                            <strong>jeden wielki kwant podzielony na wiele procesów</strong>.
-                        </p>
-                    </article>
-
-                    <article class="quote-card">
-                        <div class="quote-icon"><i class="ti ti-quote"></i></div>
-                        <p class="quote-text">
-                            Najgorszy możliwy scenariusz: <strong>cała złożoność</strong> systemu rozproszonego
-                            <strong>bez żadnych korzyści</strong> z niezależności.
-                        </p>
-                    </article>
-
-                    <div class="bullets">
-                        <div class="bullet">
-                            <i class="ti ti-network"></i>
-                            <span class="bullet-text">złożoność operacyjna systemu rozproszonego</span>
-                        </div>
-                        <div class="bullet">
-                            <i class="ti ti-x"></i>
-                            <span class="bullet-text">brak niezależności wdrożeń i awarii</span>
-                        </div>
-                    </div>
-                </div>
             </section>
         </main>
 

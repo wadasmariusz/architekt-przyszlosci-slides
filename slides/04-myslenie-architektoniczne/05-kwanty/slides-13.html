@@ -93,7 +93,7 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 60px 90px 340px;
+            padding: 56px 80px 315px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -106,7 +106,7 @@
         }
 
         .eyebrow {
-            font-size: 22px;
+            font-size: 25px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 4px;
@@ -117,7 +117,7 @@
         }
 
         .title {
-            font-size: 54px;
+            font-size: 82px;
             font-weight: 800;
             letter-spacing: -1px;
             line-height: 1.15;
@@ -141,22 +141,22 @@
 
         /* === Compare grid === */
         .compare {
-            width: 1500px;
+            width: 1580px;
             display: grid;
-            grid-template-columns: 1fr 70px 1fr;
+            grid-template-columns: 1fr 86px 1fr;
             gap: 0;
             align-items: stretch;
-            margin-bottom: 22px;
+            margin-bottom: 30px;
         }
 
         .col {
             position: relative;
             border-radius: 22px;
             backdrop-filter: blur(6px);
-            padding: 26px 28px 24px;
+            padding: 30px 32px 28px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 22px;
             opacity: 0;
         }
 
@@ -177,8 +177,8 @@
         .col-key {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 14px;
+            gap: 12px;
+            font-size: 17px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 3px;
@@ -187,10 +187,10 @@
         .col--more .col-key { color: var(--cyan-400); }
         .col--less .col-key { color: var(--violet-soft); }
 
-        .col-key i { font-size: 22px; line-height: 1; }
+        .col-key i { font-size: 26px; line-height: 1; }
 
         .col-headline {
-            font-size: 30px;
+            font-size: 35px;
             font-weight: 800;
             color: #f8fafc;
             line-height: 1.2;
@@ -203,28 +203,28 @@
         .pros {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 14px;
         }
 
         .pro {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
+            gap: 15px;
+            padding: 16px 18px;
             border-radius: 12px;
             background: rgba(17,24,39,0.78);
             border: 1px solid rgba(255,255,255,0.08);
         }
 
         .pro i {
-            font-size: 22px;
+            font-size: 27px;
             line-height: 1;
             color: var(--emerald-soft);
             flex: 0 0 auto;
         }
 
         .pro-text {
-            font-size: 19px;
+            font-size: 23px;
             font-weight: 600;
             color: #f0f4f8;
             line-height: 1.3;
@@ -233,7 +233,7 @@
         /* === Cons (but) === */
         .cons-card {
             margin-top: 4px;
-            padding: 14px 18px;
+            padding: 18px 20px;
             border-radius: 14px;
             background: rgba(0,0,0,0.30);
             border: 1px solid rgba(244,63,94,0.32);
@@ -243,39 +243,39 @@
         .cons-key {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: 10px;
+            font-size: 16px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--rose-soft);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
-        .cons-key i { font-size: 16px; line-height: 1; }
+        .cons-key i { font-size: 20px; line-height: 1; }
 
         .cons-list {
             list-style: none;
             display: flex;
             flex-wrap: wrap;
-            gap: 6px 10px;
+            gap: 9px 12px;
         }
 
         .cons-list li {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 5px 11px;
+            gap: 8px;
+            padding: 7px 13px;
             border-radius: 999px;
             background: rgba(244,63,94,0.12);
             color: #fecdd3;
             border: 1px solid rgba(244,63,94,0.32);
-            font-size: 14px;
+            font-size: 17px;
             font-weight: 700;
             line-height: 1.2;
         }
 
-        .cons-list li i { font-size: 13px; line-height: 1; color: var(--rose-soft); }
+        .cons-list li i { font-size: 16px; line-height: 1; color: var(--rose-soft); }
 
         /* === Versus pill === */
         .versus {
@@ -287,15 +287,15 @@
         }
 
         .versus-pill {
-            width: 56px;
-            height: 56px;
+            width: 66px;
+            height: 66px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             background: var(--dark-surface);
             border: 1px solid rgba(255,255,255,0.18);
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 800;
             color: #94a3b8;
             text-transform: uppercase;
@@ -305,11 +305,11 @@
 
         /* === Bottom punch === */
         .punch {
-            width: 1500px;
+            width: 1580px;
             display: flex;
             align-items: center;
-            gap: 18px;
-            padding: 22px 28px;
+            gap: 22px;
+            padding: 24px 34px;
             border-radius: 18px;
             background: rgba(17,24,39,0.62);
             border: 1px solid rgba(34,211,238,0.32);
@@ -320,8 +320,8 @@
 
         .punch-icon {
             flex: 0 0 auto;
-            width: 56px;
-            height: 56px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             background: rgba(34,211,238,0.16);
             border: 1px solid rgba(34,211,238,0.45);
@@ -329,12 +329,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 32px;
             line-height: 1;
         }
 
         .punch-text {
-            font-size: 22px;
+            font-size: 26px;
             font-weight: 500;
             line-height: 1.4;
             color: #f0f4f8;
@@ -483,8 +483,9 @@
             <section class="punch">
                 <div class="punch-icon"><i class="ti ti-scale"></i></div>
                 <p class="punch-text">
-                    Architektura to nie szukanie <em>idealnego rozwiązania</em> —
-                    to szukanie <strong>najlepszego kompromisu</strong> dla konkretnego kontekstu.
+                    Architektura to nie szukanie <em>idealnego rozwiązania</em>. 
+                    </br>
+                    Architektura to szukanie <strong>najlepszego kompromisu</strong> dla konkretnego kontekstu.
                 </p>
             </section>
         </main>
