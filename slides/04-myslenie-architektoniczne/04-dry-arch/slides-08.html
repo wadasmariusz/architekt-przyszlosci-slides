@@ -104,7 +104,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 4px;
-            color: var(--cyan-400);
+            color: #fff;
             margin-bottom: 12px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.3s forwards;
@@ -211,13 +211,13 @@
         }
 
         .scenario-service {
-            font-size: 26px;
+            font-size: 32px;
             font-weight: 700;
             color: #f0f4f8;
         }
 
         .scenario-tag {
-            font-size: 13px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--emerald);
             text-transform: uppercase;
@@ -231,7 +231,7 @@
         }
 
         .scenario-change {
-            font-size: 21px;
+            font-size: 24px;
             font-weight: 400;
             line-height: 1.42;
             color: #cbd5e1;
@@ -248,31 +248,32 @@
             color: var(--cyan-400);
             padding: 2px 8px;
             border-radius: 6px;
-            font-size: 19px;
+            font-size: 22px;
             border: 1px solid rgba(34,211,238,0.2);
         }
 
         .scenario-tags {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .stamp {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
+            gap: 10px;
+            padding: 10px 16px;
             background: rgba(16,185,129,0.10);
             border: 1px solid rgba(16,185,129,0.28);
             border-radius: 10px;
-            font-size: 15px;
+            font-size: 20px;
             color: #a7f3d0;
             font-weight: 500;
+            align-self: flex-start;
         }
 
         .stamp i {
-            font-size: 16px;
+            font-size: 22px;
             color: var(--emerald);
         }
 
@@ -394,14 +395,14 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Teza, którą trudno przełknąć</div>
+                <div class="eyebrow">Teza</div>
             </div>
 
             <!-- Central thesis -->
             <div class="thesis">
                 <span class="thesis-word thesis-word--win">Autonomia</span>
                 <span class="thesis-gt">&gt;</span>
-                <span class="thesis-word thesis-word--lose">eliminacja duplikacji</span>
+                <span class="thesis-word thesis-word--lose">duplikacja</span>
             </div>
 
             <!-- Two autonomous scenarios -->
@@ -416,10 +417,6 @@
                         </div>
                     </div>
                     <div class="scenario-body">
-                        <div class="scenario-change">
-                            Dodaje <span class="accent">pole dla kuriera</span> i <span class="accent">okno czasowe dostawy</span>
-                            <span class="code">deliveryWindow</span>
-                        </div>
                         <div class="scenario-tags">
                             <div class="stamp"><i class="ti ti-check"></i>bez koordynacji</div>
                             <div class="stamp"><i class="ti ti-rocket"></i>własny release</div>
@@ -438,10 +435,6 @@
                         </div>
                     </div>
                     <div class="scenario-body">
-                        <div class="scenario-change">
-                            Zmienia <span class="accent">walidację kodu pocztowego</span> pod nowy rynek
-                            <span class="code">postalCode.validator</span>
-                        </div>
                         <div class="scenario-tags">
                             <div class="stamp"><i class="ti ti-check"></i>bez wspólnego release'u</div>
                             <div class="stamp"><i class="ti ti-world"></i>nowy rynek live</div>
@@ -455,7 +448,7 @@
             <div class="conclusion">
                 <div class="conclusion-icon"><i class="ti ti-target-arrow"></i></div>
                 <div class="conclusion-text">
-                    <span class="good">Duplikacja kodu</span> między serwisami nie zabija autonomii. <span class="bad">Współdzielona biblioteka domenowa</span> &mdash; <span class="accent">tak</span>.
+                    <span class="good">Duplikacja kodu</span> między serwisami nie zabija autonomii.</span>.
                 </div>
             </div>
         </div>

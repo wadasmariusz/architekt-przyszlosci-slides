@@ -112,7 +112,7 @@
         }
 
         .title {
-            font-size: 56px;
+            font-size: 78px;
             font-weight: 800;
             letter-spacing: -1px;
             line-height: 1.2;
@@ -177,12 +177,29 @@
 
         .metz-author {
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
+            align-items: center;
+            gap: 16px;
             padding-left: 24px;
             border-left: 1px solid rgba(255,255,255,0.08);
             flex-shrink: 0;
+        }
+
+        .metz-author-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(6,182,212,0.5);
+            box-shadow: 0 0 24px rgba(6,182,212,0.3);
+            flex-shrink: 0;
+            background: rgba(6,182,212,0.08);
+        }
+
+        .metz-author-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
         }
 
         .metz-author-name {
@@ -429,8 +446,7 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Argumentacja kosztowa</div>
-                <h2 class="title">Koszt <span class="highlight">duplikacji</span> vs. koszt <span class="highlight">złej abstrakcji</span></h2>
+                <h2 class="title">Koszt <span class="highlight">duplikacji</span> a <span class="highlight">złej abstrakcji</span></h2>
             </div>
 
             <!-- Sandi Metz quote -->
@@ -440,8 +456,11 @@
                     „Duplication is far cheaper than the <span class="hl">wrong abstraction</span>."
                 </div>
                 <div class="metz-author">
-                    <span class="metz-author-name">Sandi Metz</span>
-                    <span class="metz-author-talk">RailsConf 2014 &middot; The Wrong Abstraction</span>
+                    <img src="images/Sandi Metz.png" alt="Sandi Metz" class="metz-author-photo">
+                    <div class="metz-author-text">
+                        <span class="metz-author-name">Sandi Metz</span>
+                        <span class="metz-author-talk">The Wrong Abstraction</span>
+                    </div>
                 </div>
             </div>
 
@@ -452,7 +471,6 @@
                     <div class="cost-header">
                         <div class="cost-icon"><i class="ti ti-copy"></i></div>
                         <div class="cost-titles">
-                            <div class="cost-label">Tańsze niż się wydaje</div>
                             <div class="cost-name">Duplikacja kodu</div>
                         </div>
                     </div>
@@ -461,21 +479,18 @@
                             <div class="trait-icon"><i class="ti ti-bolt"></i></div>
                             <div class="trait-body">
                                 <div class="trait-title">Koszt jednorazowy</div>
-                                <div class="trait-desc">Płacisz raz, w momencie napisania. Później koszt nie rośnie.</div>
                             </div>
                         </div>
                         <div class="trait">
                             <div class="trait-icon"><i class="ti ti-map-pin"></i></div>
                             <div class="trait-body">
-                                <div class="trait-title">Lokalny</div>
-                                <div class="trait-desc">Zmiana zostaje w jednym serwisie, nie wycieka na zewnątrz.</div>
+                                <div class="trait-title">Lokalny - Zmiana zostaje w jednym serwisie</div>
                             </div>
                         </div>
                         <div class="trait">
                             <div class="trait-icon"><i class="ti ti-eye"></i></div>
                             <div class="trait-body">
-                                <div class="trait-title">Przewidywalny</div>
-                                <div class="trait-desc">Wiesz dokładnie, ile cię kosztuje &mdash; teraz i w przyszłości.</div>
+                                <div class="trait-title">Wiesz dokładnie, ile Cię kosztuje</div>
                             </div>
                         </div>
                     </div>
@@ -491,7 +506,6 @@
                     <div class="cost-header">
                         <div class="cost-icon"><i class="ti ti-stack-3"></i></div>
                         <div class="cost-titles">
-                            <div class="cost-label">Droższe niż się wydaje</div>
                             <div class="cost-name">Zła abstrakcja</div>
                         </div>
                     </div>
@@ -499,22 +513,19 @@
                         <div class="trait">
                             <div class="trait-icon"><i class="ti ti-chart-line"></i></div>
                             <div class="trait-body">
-                                <div class="trait-title">Kumuluje się</div>
-                                <div class="trait-desc">Każda kolejna zmiana płaci procent od długu. Odsetki rosną.</div>
+                                <div class="trait-title">Kumuluje zaciągniety dług</div>
                             </div>
                         </div>
                         <div class="trait">
                             <div class="trait-icon"><i class="ti ti-package-import"></i></div>
                             <div class="trait-body">
-                                <div class="trait-title">Z każdym nowym klientem</div>
-                                <div class="trait-desc">Każdy serwis dołączający do <code style="font-family:monospace;color:#fca5a5">common</code> dokłada presji na model.</div>
+                                <div class="trait-title">Z każdym nowym klientem dokłada presji na model.</div>
                             </div>
                         </div>
                         <div class="trait">
                             <div class="trait-icon"><i class="ti ti-spider"></i></div>
                             <div class="trait-body">
-                                <div class="trait-title">Nieprzewidywalny</div>
-                                <div class="trait-desc">Koszt ujawnia się dopiero przy zmianie wymagań &mdash; gdy już za późno.</div>
+                                <div class="trait-title">Koszt ujawnia się dopiero przy zmianie wymagań</div>
                             </div>
                         </div>
                     </div>

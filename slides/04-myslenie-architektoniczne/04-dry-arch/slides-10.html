@@ -111,7 +111,7 @@
         }
 
         .title {
-            font-size: 56px;
+            font-size: 78px;
             font-weight: 800;
             letter-spacing: -1px;
             line-height: 1.2;
@@ -147,7 +147,7 @@
             display: flex;
             align-items: center;
             gap: 22px;
-            max-width: 1120px;
+            max-width: 1320px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.8s forwards;
         }
@@ -399,8 +399,8 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Heurystyka decyzyjna</div>
-                <h2 class="title">Duplikacja <span class="highlight">wiedzy</span> vs. duplikacja <span class="highlight">kodu</span></h2>
+                <div class="eyebrow">Heurystyka</div>
+                <h2 class="title">Duplikacja <span class="highlight">wiedzy</span> czy <span class="highlight">kodu</span></h2>
             </div>
 
             <!-- Decision tree -->
@@ -431,7 +431,7 @@
                     <div class="leaf leaf--bad">
                         <div class="path-tag">
                             <i class="ti ti-arrow-down-right"></i>
-                            TAK &mdash; zawsze razem
+                            TAK - zawsze razem
                         </div>
                         <div class="leaf-question">
                             Zmiana w <span class="strong">serwisie A</span> wymusza zmianę w <span class="strong">serwisie B</span>?
@@ -440,12 +440,12 @@
                             <div class="verdict-icon"><i class="ti ti-brain"></i></div>
                             <div>
                                 <div class="verdict-title">Duplikacja wiedzy</div>
-                                <div class="verdict-sub">to nie kod &mdash; to znaczenie</div>
+                                <div class="verdict-sub">Coupling semantyczny</div>
                             </div>
                         </div>
                         <div class="leaf-action">
                             <i class="ti ti-tool"></i>
-                            <div><span class="em">Problem do rozwiązania.</span> Wiedza powinna mieć jedno źródło prawdy &mdash; przez kontrakt, OHS albo świadomy Shared Kernel.</div>
+                            <div><span class="em">Problem do rozwiązania.</span> Wiedza powinna mieć jedno źródło prawdy przez kontrakt, OHS albo świadomy Shared Kernel.</div>
                         </div>
                     </div>
 
@@ -453,7 +453,7 @@
                     <div class="leaf leaf--good">
                         <div class="path-tag">
                             <i class="ti ti-arrow-down-right"></i>
-                            NIE &mdash; ewoluują osobno
+                            NIE - ewoluują osobno
                         </div>
                         <div class="leaf-question">
                             Serwisy mogą ewoluować <span class="strong">niezależnie</span> bez szkody dla biznesu?
@@ -467,7 +467,7 @@
                         </div>
                         <div class="leaf-action">
                             <i class="ti ti-check"></i>
-                            <div><span class="em">Dopuszczalna, wręcz pożądana.</span> Każdy serwis trzyma swoją wersję &mdash; chroni autonomię i lokalne tempo zmian.</div>
+                            <div><span class="em">Dopuszczalna, wręcz pożądana.</span> Każdy serwis trzyma swoją wersję, chroni autonomię i lokalne tempo zmian.</div>
                         </div>
                     </div>
                 </div>
