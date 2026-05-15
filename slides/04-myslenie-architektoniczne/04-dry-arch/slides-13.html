@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 13 - Shared Kernel — świadomy wyjątek</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --amber: #f59e0b;
+            --amber-light: #fbbf24;
+            --red: #ef4444;
+            --emerald: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 60px 110px 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 24px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--amber);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .title {
+            font-size: 58px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--amber-light), var(--amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Example block (Money) === */
+        .example {
+            width: 100%;
+            max-width: 1680px;
+            padding: 24px 32px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(245,158,11,0.28);
+            border-left: 5px solid var(--amber);
+            backdrop-filter: blur(6px);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 26px;
+            align-items: center;
+            margin-bottom: 26px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.8s forwards;
+        }
+
+        .example-icon {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            background: rgba(245,158,11,0.16);
+            color: var(--amber);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            flex-shrink: 0;
+        }
+
+        .example-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .example-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--amber);
+        }
+
+        .example-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+
+        .example-title .code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--amber-light);
+            font-weight: 700;
+            padding: 0 6px;
+        }
+
+        .example-title .strong {
+            color: #fde68a;
+            font-weight: 700;
+        }
+
+        .money-card {
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: rgba(10,14,23,0.6);
+            border: 1px solid rgba(245,158,11,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 220px;
+        }
+
+        .money-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            color: #cbd5e1;
+        }
+
+        .money-line i {
+            font-size: 14px;
+            color: var(--amber);
+        }
+
+        .money-line .field {
+            color: #f0f4f8;
+            font-weight: 600;
+        }
+
+        .money-line .type {
+            color: var(--amber-light);
+        }
+
+        /* === Two conditions === */
+        .conditions-label {
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #94a3b8;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.0s forwards;
+        }
+
+        .conditions-label::before,
+        .conditions-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+        }
+
+        .conditions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            width: 100%;
+            max-width: 1680px;
+            margin-bottom: 28px;
+        }
+
+        .condition {
+            display: flex;
+            gap: 22px;
+            padding: 24px 28px;
+            border-radius: 20px;
+            background: rgba(16,185,129,0.06);
+            border: 1px solid rgba(16,185,129,0.28);
+            border-left: 5px solid var(--emerald);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            opacity: 0;
+        }
+
+        .condition:nth-child(1) {
+            animation: slideFromLeft 0.8s ease-out 1.2s forwards;
+        }
+
+        .condition:nth-child(2) {
+            animation: slideFromRight 0.8s ease-out 1.2s forwards;
+        }
+
+        .condition-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(16,185,129,0.16);
+            border: 2px solid var(--emerald);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--emerald);
+            flex-shrink: 0;
+        }
+
+        .condition-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .condition-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+
+        .condition-title .em {
+            color: #a7f3d0;
+        }
+
+        .condition-desc {
+            font-size: 16px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* === Bottom warning === */
+        .warning {
+            width: 100%;
+            max-width: 1680px;
+            padding: 22px 36px;
+            border-radius: 18px;
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.35);
+            border-left: 5px solid var(--red);
+            backdrop-filter: blur(6px);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 26px;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.5s forwards;
+        }
+
+        .warning-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: rgba(239,68,68,0.16);
+            color: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            flex-shrink: 0;
+            animation: tickTock 2s ease-in-out 2s infinite;
+        }
+
+        .warning-text {
+            font-size: 23px;
+            font-weight: 400;
+            line-height: 1.42;
+            color: #f0f4f8;
+        }
+
+        .warning-text .red {
+            color: #fca5a5;
+            font-weight: 700;
+        }
+
+        .warning-text .code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(239,68,68,0.15);
+            color: #fecaca;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 21px;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes tickTock {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(4deg); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Wyjątek, który potwierdza regułę</div>
+                <h2 class="title">Shared Kernel — <span class="highlight">świadomy wyjątek</span></h2>
+            </div>
+
+            <!-- Example: Money model -->
+            <div class="example">
+                <div class="example-icon"><i class="ti ti-coin"></i></div>
+                <div class="example-body">
+                    <div class="example-label">Klasyczny przypadek</div>
+                    <div class="example-title">
+                        Model <span class="code">Money</span> w systemie finansowym — <span class="strong">błędna duplikacja kosztuje dosłownie pieniądze</span>.
+                    </div>
+                </div>
+                <div class="money-card">
+                    <div class="money-line"><i class="ti ti-point-filled"></i><span class="field">amount:</span> <span class="type">BigDecimal</span></div>
+                    <div class="money-line"><i class="ti ti-point-filled"></i><span class="field">currency:</span> <span class="type">ISO 4217</span></div>
+                    <div class="money-line"><i class="ti ti-point-filled"></i><span class="field">scale:</span> <span class="type">2..4</span></div>
+                </div>
+            </div>
+
+            <!-- Two conditions of admissibility -->
+            <div class="conditions-label">Dopuszczalny tylko przy dwóch warunkach</div>
+            <div class="conditions">
+                <div class="condition">
+                    <div class="condition-number">1</div>
+                    <div class="condition-body">
+                        <div class="condition-title">
+                            Oba zespoły <span class="em">świadomie akceptują</span> współzależność.
+                        </div>
+                        <div class="condition-desc">
+                            Nie domyślnie, nie z lenistwa &mdash; decyzja architektoniczna spisana i odhaczona.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="condition">
+                    <div class="condition-number">2</div>
+                    <div class="condition-body">
+                        <div class="condition-title">
+                            <span class="em">Ustalony proces</span> koordynacji zmian.
+                        </div>
+                        <div class="condition-desc">
+                            Wersjonowanie, kanał komunikacji, reguła kto-pyta-kogo, sposób wdrożenia breaking change.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom warning -->
+            <div class="warning">
+                <div class="warning-icon"><i class="ti ti-bomb"></i></div>
+                <div class="warning-text">
+                    Shared Kernel bez tej umowy = <span class="red">tykająca bomba</span>. Z czasem staje się <span class="red">kolejnym</span> <span class="code">common</span>.
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

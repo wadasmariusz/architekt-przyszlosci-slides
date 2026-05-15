@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - DRY w architekturze — inna skala, inne ryzyko</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --good: #10b981;
+            --bad: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 110px 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 30px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .title {
+            font-size: 78px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Comparison area === */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 40px;
+            width: 100%;
+            max-width: 1620px;
+            align-items: stretch;
+            margin-bottom: 36px;
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            padding: 28px 32px 32px;
+            border-radius: 22px;
+            background: rgba(17,24,39,0.62);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .panel--good {
+            border-left: 4px solid var(--good);
+            animation: slideFromLeft 0.8s ease-out 0.8s forwards;
+        }
+
+        .panel--bad {
+            border-left: 4px solid var(--bad);
+            animation: slideFromRight 0.8s ease-out 0.8s forwards;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .panel-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .panel--good .panel-badge {
+            background: rgba(16,185,129,0.14);
+            color: var(--good);
+        }
+
+        .panel--bad .panel-badge {
+            background: rgba(239,68,68,0.14);
+            color: var(--bad);
+        }
+
+        .panel-label {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #64748b;
+        }
+
+        .panel-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+
+        .panel--good .panel-title strong { color: var(--good); }
+        .panel--bad .panel-title strong { color: var(--bad); }
+
+        .diagram-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            height: 380px;
+        }
+
+        /* Versus divider */
+        .versus {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.1s forwards;
+        }
+
+        .versus-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(10,14,23,0.85);
+            border: 2px solid var(--cyan-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--cyan-400);
+            letter-spacing: 1px;
+            box-shadow: 0 0 24px rgba(6,182,212,0.25);
+        }
+
+        /* === Annotation === */
+        .annotation {
+            max-width: 1180px;
+            padding: 24px 36px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.7);
+            border: 1px solid rgba(6,182,212,0.2);
+            backdrop-filter: blur(6px);
+            font-size: 26px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #f0f4f8;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.4s forwards;
+        }
+
+        .annotation .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">context</div>
+                <h2 class="title">DRY na poziomie <span class="highlight">architektury</span></h2>
+            </div>
+
+            <div class="comparison">
+                <!-- Left panel: GOOD - independent services -->
+                <div class="panel panel--good">
+                    <div class="panel-header">
+                        <div class="panel-badge"><i class="ti ti-check"></i></div>
+                        <div>
+                            <div class="panel-label">Stan pożądany</div>
+                            <div class="panel-title"><strong>Niezależne serwisy</strong></div>
+                        </div>
+                    </div>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" viewBox="0 0 520 380" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="goodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+                                    <stop offset="100%" stop-color="#059669" stop-opacity="0.10"/>
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Service A -->
+                            <g>
+                                <rect x="50" y="50" width="160" height="100" rx="14"
+                                      fill="url(#goodGrad)" stroke="#10b981" stroke-width="2"/>
+                                <text x="130" y="92" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="18" font-weight="600">Service A</text>
+                                <text x="130" y="118" text-anchor="middle" fill="#94a3b8"
+                                      font-family="Inter" font-size="13">własny model</text>
+                            </g>
+
+                            <!-- Service B -->
+                            <g>
+                                <rect x="310" y="50" width="160" height="100" rx="14"
+                                      fill="url(#goodGrad)" stroke="#10b981" stroke-width="2"/>
+                                <text x="390" y="92" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="18" font-weight="600">Service B</text>
+                                <text x="390" y="118" text-anchor="middle" fill="#94a3b8"
+                                      font-family="Inter" font-size="13">własny model</text>
+                            </g>
+
+                            <!-- Service C -->
+                            <g>
+                                <rect x="50" y="230" width="160" height="100" rx="14"
+                                      fill="url(#goodGrad)" stroke="#10b981" stroke-width="2"/>
+                                <text x="130" y="272" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="18" font-weight="600">Service C</text>
+                                <text x="130" y="298" text-anchor="middle" fill="#94a3b8"
+                                      font-family="Inter" font-size="13">własny model</text>
+                            </g>
+
+                            <!-- Service D -->
+                            <g>
+                                <rect x="310" y="230" width="160" height="100" rx="14"
+                                      fill="url(#goodGrad)" stroke="#10b981" stroke-width="2"/>
+                                <text x="390" y="272" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="18" font-weight="600">Service D</text>
+                                <text x="390" y="298" text-anchor="middle" fill="#94a3b8"
+                                      font-family="Inter" font-size="13">własny model</text>
+                            </g>
+
+                            <!-- Independence indicator -->
+                            <text x="260" y="365" text-anchor="middle" fill="#10b981"
+                                  font-family="Inter" font-size="13" font-weight="600"
+                                  letter-spacing="2">BRAK WSPÓLNYCH ZALEŻNOŚCI</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Versus divider -->
+                <div class="versus">
+                    <div class="versus-circle">vs</div>
+                </div>
+
+                <!-- Right panel: BAD - tangled via common library -->
+                <div class="panel panel--bad">
+                    <div class="panel-header">
+                        <div class="panel-badge"><i class="ti ti-alert-triangle"></i></div>
+                        <div>
+                            <div class="panel-label">Stan rzeczywisty</div>
+                            <div class="panel-title"><strong>Big ball of mud</strong> przez wspólną bibliotekę</div>
+                        </div>
+                    </div>
+                    <div class="diagram-wrap">
+                        <svg class="diagram-svg" viewBox="0 0 520 380" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="badGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ef4444" stop-opacity="0.22"/>
+                                    <stop offset="100%" stop-color="#b91c1c" stop-opacity="0.10"/>
+                                </linearGradient>
+                                <linearGradient id="commonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.35"/>
+                                    <stop offset="100%" stop-color="#b45309" stop-opacity="0.18"/>
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Dependency lines (drawn first so they go behind boxes) -->
+                            <g stroke="#ef4444" stroke-width="1.6" stroke-dasharray="4,3" opacity="0.75">
+                                <!-- A -> common -->
+                                <line x1="130" y1="115" x2="260" y2="190"/>
+                                <!-- B -> common -->
+                                <line x1="390" y1="115" x2="260" y2="190"/>
+                                <!-- C -> common -->
+                                <line x1="130" y1="265" x2="260" y2="190"/>
+                                <!-- D -> common -->
+                                <line x1="390" y1="265" x2="260" y2="190"/>
+                                <!-- crossed entanglement (A<->D, B<->C) -->
+                                <line x1="130" y1="115" x2="390" y2="265" opacity="0.5"/>
+                                <line x1="390" y1="115" x2="130" y2="265" opacity="0.5"/>
+                                <!-- adjacent ties -->
+                                <line x1="130" y1="115" x2="390" y2="115" opacity="0.5"/>
+                                <line x1="130" y1="265" x2="390" y2="265" opacity="0.5"/>
+                            </g>
+
+                            <!-- Central common library -->
+                            <g>
+                                <circle cx="260" cy="190" r="44"
+                                        fill="url(#commonGrad)" stroke="#f59e0b" stroke-width="2.5"/>
+                                <text x="260" y="187" text-anchor="middle" fill="#fbbf24"
+                                      font-family="Inter" font-size="16" font-weight="700">common</text>
+                                <text x="260" y="206" text-anchor="middle" fill="#fcd34d"
+                                      font-family="Inter" font-size="11" font-style="italic">shared lib</text>
+                            </g>
+
+                            <!-- Service A -->
+                            <g>
+                                <rect x="60" y="75" width="140" height="80" rx="12"
+                                      fill="url(#badGrad)" stroke="#ef4444" stroke-width="2"/>
+                                <text x="130" y="105" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="16" font-weight="600">Service A</text>
+                                <text x="130" y="128" text-anchor="middle" fill="#fca5a5"
+                                      font-family="Inter" font-size="11">używa common</text>
+                            </g>
+
+                            <!-- Service B -->
+                            <g>
+                                <rect x="320" y="75" width="140" height="80" rx="12"
+                                      fill="url(#badGrad)" stroke="#ef4444" stroke-width="2"/>
+                                <text x="390" y="105" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="16" font-weight="600">Service B</text>
+                                <text x="390" y="128" text-anchor="middle" fill="#fca5a5"
+                                      font-family="Inter" font-size="11">używa common</text>
+                            </g>
+
+                            <!-- Service C -->
+                            <g>
+                                <rect x="60" y="225" width="140" height="80" rx="12"
+                                      fill="url(#badGrad)" stroke="#ef4444" stroke-width="2"/>
+                                <text x="130" y="255" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="16" font-weight="600">Service C</text>
+                                <text x="130" y="278" text-anchor="middle" fill="#fca5a5"
+                                      font-family="Inter" font-size="11">używa common</text>
+                            </g>
+
+                            <!-- Service D -->
+                            <g>
+                                <rect x="320" y="225" width="140" height="80" rx="12"
+                                      fill="url(#badGrad)" stroke="#ef4444" stroke-width="2"/>
+                                <text x="390" y="255" text-anchor="middle" fill="#f0f4f8"
+                                      font-family="Inter" font-size="16" font-weight="600">Service D</text>
+                                <text x="390" y="278" text-anchor="middle" fill="#fca5a5"
+                                      font-family="Inter" font-size="11">używa common</text>
+                            </g>
+
+                            <!-- Coupling indicator -->
+                            <text x="260" y="365" text-anchor="middle" fill="#ef4444"
+                                  font-family="Inter" font-size="13" font-weight="600"
+                                  letter-spacing="2">GĘSTA SIATKA ZALEŻNOŚCI</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
