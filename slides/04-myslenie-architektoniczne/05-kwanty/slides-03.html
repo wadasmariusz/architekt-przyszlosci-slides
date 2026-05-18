@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Oś kosztu niedostępności</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --rose: #f43f5e;
+            --rose-soft: #fb7185;
+            --amber: #f59e0b;
+            --amber-soft: #fbbf24;
+            --emerald: #10b981;
+            --emerald-soft: #34d399;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 310px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1280px;
+            margin: 0 auto 42px;
+        }
+
+        .title {
+            font-size: 82px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.35s forwards;
+        }
+
+        .subtitle {
+            margin-top: 16px;
+            font-size: 23px;
+            font-weight: 400;
+            line-height: 1.35;
+            color: #cbd5e1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Availability spectrum === */
+        .availability-spectrum {
+            position: relative;
+            width: 1500px;
+            height: 520px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.65s forwards;
+        }
+
+        .axis-caption {
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: max-content;
+            padding: 10px 18px;
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            background: rgba(17,24,39,0.58);
+            backdrop-filter: blur(6px);
+            color: #cbd5e1;
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .axis-caption i {
+            color: var(--cyan-400);
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .axis {
+            position: absolute;
+            top: 230px;
+            left: 0;
+            right: 0;
+            height: 112px;
+        }
+
+        .axis-track {
+            position: absolute;
+            top: 42px;
+            left: 0;
+            right: 0;
+            height: 24px;
+            border-radius: 999px;
+            background: linear-gradient(
+                90deg,
+                var(--cyan-400) 0%,
+                var(--emerald-soft) 34%,
+                var(--amber) 64%,
+                var(--rose) 100%
+            );
+            box-shadow:
+                0 0 36px rgba(34,211,238,0.16),
+                0 0 44px rgba(244,63,94,0.14),
+                0 14px 38px rgba(0,0,0,0.36);
+        }
+
+        .axis-track::before {
+            content: '';
+            position: absolute;
+            inset: -28px 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0,
+                transparent calc(8.333% - 1px),
+                rgba(255,255,255,0.20) calc(8.333% - 1px),
+                rgba(255,255,255,0.20) 8.333%
+            );
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .axis-track::after {
+            content: '';
+            position: absolute;
+            right: -22px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 16px solid transparent;
+            border-bottom: 16px solid transparent;
+            border-left: 24px solid var(--rose);
+            filter: drop-shadow(0 0 14px rgba(244,63,94,0.28));
+        }
+
+        .continuum {
+            position: absolute;
+            top: 78px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #e2e8f0;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .continuum::before,
+        .continuum::after {
+            content: '';
+            width: 82px;
+            height: 1px;
+            background: rgba(255,255,255,0.24);
+        }
+
+        .scale-label {
+            position: absolute;
+            top: 82px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #f8fafc;
+            text-transform: lowercase;
+            letter-spacing: 0;
+            white-space: nowrap;
+        }
+
+        .scale-label i {
+            font-size: 26px;
+            line-height: 1;
+        }
+
+        .scale-label--low {
+            left: 0;
+            color: var(--cyan-400);
+        }
+
+        .scale-label--high {
+            right: 0;
+            color: var(--rose-soft);
+        }
+
+        .module {
+            --module-color: var(--cyan-400);
+            --module-glow: rgba(34,211,238,0.22);
+            --module-border: rgba(34,211,238,0.42);
+            position: absolute;
+            top: 284px;
+            left: var(--x);
+            width: 1px;
+            height: 1px;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: popIn 0.65s cubic-bezier(.2,.9,.2,1.1) var(--delay) forwards;
+        }
+
+        .module-card {
+            position: absolute;
+            left: 50%;
+            width: 270px;
+            transform: translateX(-50%);
+            padding: 18px 20px 19px;
+            border: 1px solid var(--module-border);
+            border-radius: 8px;
+            background: linear-gradient(145deg, rgba(17,24,39,0.92), rgba(17,24,39,0.62));
+            backdrop-filter: blur(8px);
+            box-shadow: 0 18px 48px rgba(0,0,0,0.34), 0 0 34px var(--module-glow);
+        }
+
+        .module--top .module-card { bottom: 76px; }
+        .module--bottom .module-card { top: 76px; }
+
+        .module-kicker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 9px;
+            color: var(--module-color);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .module-kicker i {
+            font-size: 19px;
+            line-height: 1;
+        }
+
+        .module-name {
+            font-size: 27px;
+            font-weight: 800;
+            line-height: 1.12;
+            color: #f8fafc;
+        }
+
+        .module-note {
+            margin-top: 9px;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.35;
+            color: #cbd5e1;
+        }
+
+        .module-stem {
+            position: absolute;
+            left: 0;
+            width: 2px;
+            height: 48px;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, transparent, var(--module-color), transparent);
+            opacity: 0.72;
+        }
+
+        .module--top .module-stem { bottom: 28px; }
+        .module--bottom .module-stem { top: 28px; }
+
+        .module-dot {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 62px;
+            height: 62px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #08111f;
+            background: var(--module-color);
+            border: 5px solid rgba(10,14,23,0.94);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 0 34px var(--module-glow);
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .module--recommendations {
+            --module-color: var(--cyan-400);
+            --module-glow: rgba(34,211,238,0.24);
+            --module-border: rgba(34,211,238,0.42);
+        }
+
+        .module--catalog {
+            --module-color: var(--emerald-soft);
+            --module-glow: rgba(52,211,153,0.22);
+            --module-border: rgba(52,211,153,0.42);
+        }
+
+        .module--checkout {
+            --module-color: var(--amber-soft);
+            --module-glow: rgba(251,191,36,0.22);
+            --module-border: rgba(251,191,36,0.42);
+        }
+
+        .module--payments {
+            --module-color: var(--rose-soft);
+            --module-glow: rgba(251,113,133,0.25);
+            --module-border: rgba(251,113,133,0.42);
+        }
+
+        .takeaway {
+            position: absolute;
+            left: 0;
+            bottom: 8px;
+            width: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 14px;
+            padding: 18px 20px;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 8px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            color: #e2e8f0;
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1.35;
+            text-align: left;
+            opacity: 0;
+            animation: fadeUp 0.75s ease-out 1.35s forwards;
+        }
+
+        .takeaway i {
+            flex: 0 0 auto;
+            color: var(--cyan-400);
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .takeaway strong {
+            color: #f8fafc;
+            font-weight: 800;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: translate(-50%, 16px) scale(0.92); }
+            to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <h2 class="title">Koszt<span class="highlight"> niedostępności</span></h2>
+            </header>
+
+            <section class="availability-spectrum" aria-label="Oś kosztu niedostępności modułów sklepu">
+                <div class="axis" aria-hidden="true">
+                    <div class="axis-track"></div>
+                    <div class="scale-label scale-label--low"><i class="ti ti-arrow-bar-left"></i> niska cena niedostępności</div>
+                    <div class="scale-label scale-label--high">wysoka cena niedostępności <i class="ti ti-arrow-bar-right"></i></div>
+                </div>
+
+                <article class="module module--top module--recommendations" style="--x: 13%; --delay: 0.8s;">
+                    <div class="module-card">
+                        <div class="module-kicker"><i class="ti ti-sparkles"></i> niski koszt</div>
+                        <h3 class="module-name">Rekomendacje</h3>
+                        <p class="module-note">spadek jakości doświadczenia, ale sklep nadal działa</p>
+                    </div>
+                    <div class="module-stem"></div>
+                    <div class="module-dot"><i class="ti ti-sparkles"></i></div>
+                </article>
+
+                <article class="module module--bottom module--catalog" style="--x: 47%; --delay: 0.95s;">
+                    <div class="module-card">
+                        <div class="module-kicker"><i class="ti ti-list-search"></i> środek osi</div>
+                        <h3 class="module-name">Katalog</h3>
+                        <p class="module-note">klient traci dostęp do oferty i porównania produktów</p>
+                    </div>
+                    <div class="module-stem"></div>
+                    <div class="module-dot"><i class="ti ti-list-search"></i></div>
+                </article>
+
+                <article class="module module--top module--checkout" style="--x: 76%; --delay: 1.1s;">
+                    <div class="module-card">
+                        <div class="module-kicker"><i class="ti ti-shopping-cart"></i> wysoki koszt</div>
+                        <h3 class="module-name">Checkout</h3>
+                        <p class="module-note">porzucone koszyki i utracone zamówienia</p>
+                    </div>
+                    <div class="module-stem"></div>
+                    <div class="module-dot"><i class="ti ti-shopping-cart"></i></div>
+                </article>
+
+                <article class="module module--bottom module--payments" style="--x: 91%; --delay: 1.25s;">
+                    <div class="module-card">
+                        <div class="module-kicker"><i class="ti ti-credit-card"></i>Bardzo wysoki koszt</div>
+                        <h3 class="module-name">Płatności</h3>
+                        <p class="module-note">blokada przychodu w najbardziej krytycznym momencie</p>
+                    </div>
+                    <div class="module-stem"></div>
+                    <div class="module-dot"><i class="ti ti-credit-card"></i></div>
+                </article>
+            </section>
+            
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
