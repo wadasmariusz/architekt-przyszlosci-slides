@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 09 - Shared Database — ukryty coupling</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.84)),
+                url('../../../images/background-1.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Main grid === */
+        .main {
+            display: grid;
+            grid-template-columns: minmax(0, 840px);
+            justify-content: center;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* === Diagram === */
+        .diagram {
+            position: relative;
+            padding: 28px 28px 32px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.55);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.75s forwards;
+            min-height: 540px;
+        }
+
+        .modules-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mod-card {
+            padding: 16px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.78);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .mod-card .ic {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+        }
+
+        .mod-card .nm {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f0f4f8;
+        }
+
+        .mod-card .role {
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+        }
+
+        .connector {
+            position: relative;
+            height: 80px;
+            z-index: 1;
+        }
+
+        .connector svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* table */
+        .db-table {
+            position: relative;
+            z-index: 2;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(10,14,23,0.78);
+            overflow: hidden;
+        }
+
+        .db-table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .db-table-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        .db-table-name i { color: var(--cyan-400); }
+
+        .db-table-warn {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+        }
+
+        .tbl th, .tbl td {
+            padding: 10px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .tbl th {
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tbl td { color: #e2e8f0; }
+
+        .tbl tr:last-child td { border-bottom: none; }
+
+        .col-hot {
+            background: rgba(34,211,238,0.10);
+            position: relative;
+        }
+
+        th.col-hot {
+            color: var(--cyan-400) !important;
+            font-weight: 700;
+        }
+
+        td.col-hot {
+            color: var(--cyan-400) !important;
+        }
+
+        /* === Quote panel === */
+        .quote-panel {
+            padding: 36px 40px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.95s forwards;
+        }
+
+        .quote-kicker {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--cyan-400);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quote-text {
+            font-size: 30px;
+            font-weight: 400;
+            color: #f0f4f8;
+            line-height: 1.45;
+            font-style: italic;
+        }
+
+        .quote-text p {
+            margin-bottom: 14px;
+        }
+
+        .quote-text p:last-child { margin-bottom: 0; }
+
+        .quote-text strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .quote-stat {
+            margin-top: 26px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 38px;
+            font-weight: 600;
+            color: var(--cyan-400);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #94a3b8;
+            line-height: 1.35;
+        }
+
+        /* === Footer note === */
+        .footnote {
+            margin: 38px auto 0;
+            max-width: 1500px;
+            padding: 22px 30px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.45);
+            text-align: center;
+            font-size: 24px;
+            font-weight: 300;
+            font-style: italic;
+            color: #cbd5e1;
+            line-height: 1.45;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
+        }
+
+        .footnote strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Shared Database</div>
+                <h1 class="title">Ukryty <span class="highlight">coupling na schemacie</span></h1>
+            </div>
+
+            <div class="main">
+                <div class="diagram">
+                    <div class="modules-row">
+                        <div class="mod-card">
+                            <div class="ic"><i class="ti ti-box"></i></div>
+                            <div class="nm">Moduł A</div>
+                            <div class="role">zespół 1</div>
+                        </div>
+                        <div class="mod-card">
+                            <div class="ic"><i class="ti ti-box"></i></div>
+                            <div class="nm">Moduł B</div>
+                            <div class="role">zespół 2</div>
+                        </div>
+                        <div class="mod-card">
+                            <div class="ic"><i class="ti ti-box"></i></div>
+                            <div class="nm">Moduł C</div>
+                            <div class="role">zespół 3</div>
+                        </div>
+                    </div>
+
+                    <div class="connector">
+                        <svg viewBox="0 0 600 80" preserveAspectRatio="none">
+                            <defs>
+                                <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5"
+                                        markerWidth="8" markerHeight="8" orient="auto">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee" />
+                                </marker>
+                            </defs>
+                            <line x1="100"  y1="0" x2="220" y2="80"
+                                  stroke="#22d3ee" stroke-width="2" stroke-opacity="0.7"
+                                  marker-end="url(#arr2)" />
+                            <line x1="300" y1="0" x2="300" y2="80"
+                                  stroke="#22d3ee" stroke-width="2" stroke-opacity="0.7"
+                                  marker-end="url(#arr2)" />
+                            <line x1="500" y1="0" x2="380" y2="80"
+                                  stroke="#22d3ee" stroke-width="2" stroke-opacity="0.7"
+                                  marker-end="url(#arr2)" />
+                        </svg>
+                    </div>
+
+                    <div class="db-table">
+                        <div class="db-table-header">
+                            <div class="db-table-name">
+                                <i class="ti ti-table"></i> products
+                            </div>
+                            <div class="db-table-warn">
+                                <i class="ti ti-alert-triangle"></i>
+                                kolumna współdzielona
+                            </div>
+                        </div>
+                        <table class="tbl">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th class="col-hot">status</th>
+                                    <th>price</th>
+                                    <th>updated_at</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>142</td>
+                                    <td>T-shirt basic</td>
+                                    <td class="col-hot">ACTIVE</td>
+                                    <td>89.99</td>
+                                    <td>2026-05-12</td>
+                                </tr>
+                                <tr>
+                                    <td>187</td>
+                                    <td>Kubek 300 ml</td>
+                                    <td class="col-hot">DRAFT</td>
+                                    <td>24.50</td>
+                                    <td>2026-05-14</td>
+                                </tr>
+                                <tr>
+                                    <td>203</td>
+                                    <td>Plecak miejski</td>
+                                    <td class="col-hot">ARCHIVED</td>
+                                    <td>199.00</td>
+                                    <td>2026-04-30</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footnote">
+                Refaktoryzacja schematu wymaga <strong>zmian przez 3 zespoły</strong>.
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

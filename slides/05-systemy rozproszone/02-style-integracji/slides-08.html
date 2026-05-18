@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Shared Database — mechanizm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.84)),
+                url('../../../images/background-2.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 56px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Y-Diagram === */
+        .diagram {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            height: 420px;
+        }
+
+        .diagram-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .modules-row {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mod-node {
+            width: 320px;
+            padding: 26px 28px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.72);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            opacity: 0;
+        }
+
+        .mod-node:nth-child(1) { animation: fadeUp 0.7s ease-out 0.75s forwards; }
+        .mod-node:nth-child(2) { animation: fadeUp 0.7s ease-out 0.95s forwards; }
+
+        .mod-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .mod-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.2px;
+        }
+
+        .mod-sub {
+            font-size: 16px;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .db-node {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 500px;
+            padding: 28px 32px;
+            border-radius: 22px;
+            border: 1px solid rgba(34,211,238,0.20);
+            background: rgba(17,24,39,0.78);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+            z-index: 2;
+            opacity: 0;
+            animation: dbFadeUp 0.7s ease-out 1.15s forwards;
+            box-shadow: 0 0 60px rgba(34,211,238,0.10);
+        }
+
+        .db-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .db-name {
+            font-size: 30px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.3px;
+        }
+
+        .db-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--cyan-400);
+            letter-spacing: 1px;
+            margin-top: 4px;
+            white-space: nowrap;
+        }
+
+        .rw-label {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+            background: rgba(10,14,23,0.85);
+            padding: 4px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(34,211,238,0.20);
+            z-index: 3;
+            opacity: 0;
+        }
+
+        .rw-left  {
+            left: 28%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-26deg);
+            animation: rwLeftFadeUp 0.7s ease-out 1.05s forwards;
+        }
+
+        .rw-right {
+            right: 28%;
+            top: 50%;
+            transform: translate(50%, -50%) rotate(26deg);
+            animation: rwRightFadeUp 0.7s ease-out 1.05s forwards;
+        }
+
+        /* === Three "brak" items === */
+        .braks {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 22px;
+            max-width: 1300px;
+            margin: 36px auto 0;
+            width: 100%;
+        }
+
+        .brak {
+            padding: 22px 26px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.55);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+        }
+
+        .brak:nth-child(1) { animation: fadeUp 0.7s ease-out 1.45s forwards; }
+        .brak:nth-child(2) { animation: fadeUp 0.7s ease-out 1.60s forwards; }
+        .brak:nth-child(3) { animation: fadeUp 0.7s ease-out 1.75s forwards; }
+
+        .brak-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: rgba(148,163,184,0.10);
+            color: #94a3b8;
+            flex-shrink: 0;
+        }
+
+        .brak-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .brak-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.2px;
+        }
+
+        /* === Headline === */
+        .headline {
+            margin: 36px auto 0;
+            max-width: 1400px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 300;
+            font-style: italic;
+            color: #cbd5e1;
+            line-height: 1.45;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.95s forwards;
+        }
+
+        .headline strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes dbFadeUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(24px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes rwLeftFadeUp {
+            from { opacity: 0; transform: translate(-50%, -50%) rotate(-26deg) translateY(24px); }
+            to   { opacity: 1; transform: translate(-50%, -50%) rotate(-26deg) translateY(0); }
+        }
+
+        @keyframes rwRightFadeUp {
+            from { opacity: 0; transform: translate(50%, -50%) rotate(26deg) translateY(24px); }
+            to   { opacity: 1; transform: translate(50%, -50%) rotate(26deg) translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Styl 2</div>
+                <h1 class="title"><span class="highlight"> </span>Shared Database</h1>
+            </div>
+
+            <div class="diagram">
+                <svg class="diagram-svg" viewBox="0 0 1100 420" preserveAspectRatio="none">
+                    <defs>
+                        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+                                markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee" />
+                        </marker>
+                    </defs>
+                    <!-- left module bottom edge to shared database top edge -->
+                    <line x1="160" y1="116" x2="450" y2="282"
+                          stroke="#22d3ee" stroke-width="2"
+                          stroke-opacity="0.65"
+                          marker-start="url(#arr)" marker-end="url(#arr)" />
+                    <!-- right module bottom edge to shared database top edge -->
+                    <line x1="940" y1="116" x2="650" y2="282"
+                          stroke="#22d3ee" stroke-width="2"
+                          stroke-opacity="0.65"
+                          marker-start="url(#arr)" marker-end="url(#arr)" />
+                </svg>
+
+                <div class="modules-row">
+                    <div class="mod-node">
+                        <div class="mod-icon"><i class="ti ti-box"></i></div>
+                        <div>
+                            <div class="mod-name">Moduł A</div>
+                            <div class="mod-sub">odczyt i zapis</div>
+                        </div>
+                    </div>
+                    <div class="mod-node">
+                        <div class="mod-icon"><i class="ti ti-box"></i></div>
+                        <div>
+                            <div class="mod-name">Moduł B</div>
+                            <div class="mod-sub">odczyt i zapis</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rw-label rw-left">read / write</div>
+                <div class="rw-label rw-right">read / write</div>
+
+                <div class="db-node">
+                    <div class="db-icon"><i class="ti ti-database"></i></div>
+                    <div>
+                        <div class="db-name">Shared Database</div>
+                        <div class="db-sub">jeden schemat · jedna instancja</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="braks">
+                <div class="brak">
+                    <div class="brak-icon"><i class="ti ti-x"></i></div>
+                    <div>
+                        <div class="brak-label">Brak</div>
+                        <div class="brak-name">brokera</div>
+                    </div>
+                </div>
+                <div class="brak">
+                    <div class="brak-icon"><i class="ti ti-x"></i></div>
+                    <div>
+                        <div class="brak-label">Brak</div>
+                        <div class="brak-name">API</div>
+                    </div>
+                </div>
+                <div class="brak">
+                    <div class="brak-icon"><i class="ti ti-x"></i></div>
+                    <div>
+                        <div class="brak-label">Brak</div>
+                        <div class="brak-name">kolejki</div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="headline">
+                Dane spójne <strong>natychmiast po ZMIANIE</strong>
+            </p>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

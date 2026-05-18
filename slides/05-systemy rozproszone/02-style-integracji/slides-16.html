@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 16 - Messaging — komunikacja przez zdarzenia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.82)),
+                url('../../../images/background-1.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Pub/Sub diagram === */
+        .pubsub {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr auto 1.15fr auto 1fr;
+            align-items: center;
+            gap: 16px;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .producer {
+            padding: 28px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.66);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+            min-height: 280px;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.75s forwards;
+        }
+
+        .prod-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+        }
+
+        .prod-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.2px;
+        }
+
+        .prod-role {
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+        }
+
+        .event-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            border: 1px solid rgba(34,211,238,0.20);
+            margin-top: 4px;
+        }
+
+        /* arrow producer → bus */
+        .arrow-publish {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 130px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.95s forwards;
+        }
+
+        .arrow-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan-400);
+        }
+
+        .arrow-line {
+            position: relative;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(34,211,238,0.35), rgba(34,211,238,0.85));
+            border-radius: 2px;
+        }
+
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid var(--cyan-400);
+        }
+
+        /* Event Bus */
+        .bus {
+            position: relative;
+            padding: 28px 28px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(17,24,39,0.78);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+            min-height: 320px;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.10s forwards;
+            box-shadow: 0 0 60px rgba(34,211,238,0.10);
+        }
+
+        .bus-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+        }
+
+        .bus-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.3px;
+        }
+
+        .bus-sub {
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+        }
+
+        .bus-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        .chip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #cbd5e1;
+        }
+
+        /* fan-out arrows */
+        .fanout {
+            position: relative;
+            min-width: 130px;
+            height: 320px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.30s forwards;
+        }
+
+        .fanout svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .fanout-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan-400);
+            background: rgba(10,14,23,0.85);
+            padding: 4px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(34,211,238,0.20);
+            white-space: nowrap;
+        }
+
+        /* Consumers */
+        .consumers {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .consumer {
+            padding: 16px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            opacity: 0;
+        }
+
+        .consumer:nth-child(1) { animation: fadeUp 0.7s ease-out 1.40s forwards; }
+        .consumer:nth-child(2) { animation: fadeUp 0.7s ease-out 1.55s forwards; }
+        .consumer:nth-child(3) { animation: fadeUp 0.7s ease-out 1.70s forwards; }
+
+        .cons-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .cons-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .cons-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f0f4f8;
+        }
+
+        .cons-action {
+            font-size: 14px;
+            font-weight: 500;
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+
+        /* === Key callout === */
+        .callouts {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 22px;
+            max-width: 1500px;
+            margin: 40px auto 0;
+            width: 100%;
+        }
+
+        .callout {
+            padding: 22px 26px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.50);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+        }
+
+        .callout:nth-child(1) { animation: fadeUp 0.7s ease-out 1.90s forwards; }
+        .callout:nth-child(2) { animation: fadeUp 0.7s ease-out 2.05s forwards; }
+        .callout:nth-child(3) { animation: fadeUp 0.7s ease-out 2.20s forwards; }
+
+        .callout-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .callout-text {
+            font-size: 19px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+
+        .callout-text span {
+            display: block;
+            font-size: 14px;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Styl 4</div>
+                <h1 class="title"><span class="highlight">Messaging</span></h1>
+            </div>
+
+            <div class="pubsub">
+                <div class="producer">
+                    <div class="prod-icon"><i class="ti ti-box"></i></div>
+                    <div class="prod-name">Orders</div>
+                    <div class="prod-role">producent</div>
+                    <div class="event-tag">OrderPlaced</div>
+                </div>
+
+                <div class="arrow-publish">
+                    <span class="arrow-label">publish</span>
+                    <div class="arrow-line"></div>
+                </div>
+
+                <div class="bus">
+                    <div class="bus-icon"><i class="ti ti-broadcast"></i></div>
+                    <div class="bus-name">Event Bus</div>
+                    <div class="bus-sub">szyna zdarzeń</div>
+                    <div class="bus-chips">
+                        <span class="chip">Kafka</span>
+                        <span class="chip">RabbitMQ</span>
+                        <span class="chip">Azure SB</span>
+                    </div>
+                </div>
+
+                <div class="fanout">
+                    <svg viewBox="0 0 130 320" preserveAspectRatio="none">
+                        <defs>
+                            <marker id="arrMsg" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="8" markerHeight="8" orient="auto">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee" />
+                            </marker>
+                        </defs>
+                        <line x1="0" y1="160" x2="118" y2="38"
+                              stroke="#22d3ee" stroke-width="2.5" stroke-opacity="0.75"
+                              marker-end="url(#arrMsg)" />
+                        <line x1="0" y1="160" x2="118" y2="160"
+                              stroke="#22d3ee" stroke-width="2.5" stroke-opacity="0.75"
+                              marker-end="url(#arrMsg)" />
+                        <line x1="0" y1="160" x2="118" y2="282"
+                              stroke="#22d3ee" stroke-width="2.5" stroke-opacity="0.75"
+                              marker-end="url(#arrMsg)" />
+                    </svg>
+                    <span class="fanout-label">subscribe</span>
+                </div>
+
+                <div class="consumers">
+                    <div class="consumer">
+                        <div class="cons-icon"><i class="ti ti-package"></i></div>
+                        <div class="cons-body">
+                            <div class="cons-name">Warehouse</div>
+                            <div class="cons-action">rezerwacja stanu magazynowego</div>
+                        </div>
+                    </div>
+                    <div class="consumer">
+                        <div class="cons-icon"><i class="ti ti-mail"></i></div>
+                        <div class="cons-body">
+                            <div class="cons-name">Notification</div>
+                            <div class="cons-action">e-mail / SMS do klienta</div>
+                        </div>
+                    </div>
+                    <div class="consumer">
+                        <div class="cons-icon"><i class="ti ti-receipt"></i></div>
+                        <div class="cons-body">
+                            <div class="cons-name">Billing</div>
+                            <div class="cons-action">wystawienie faktury</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="callouts">
+                <div class="callout">
+                    <div class="callout-icon"><i class="ti ti-clock-off"></i></div>
+                    <div class="callout-text">
+                        Producent nie czeka
+                        <span>publish-and-forget</span>
+                    </div>
+                </div>
+                <div class="callout">
+                    <div class="callout-icon"><i class="ti ti-eye-off"></i></div>
+                    <div class="callout-text">
+                        Nie wie kto subskrybuje
+                        <span>brak listy konsumentów po stronie producenta</span>
+                    </div>
+                </div>
+                <div class="callout">
+                    <div class="callout-icon"><i class="ti ti-player-play"></i></div>
+                    <div class="callout-text">
+                        Każdy we własnym tempie
+                        <span>konsumenci niezależnie, asynchronicznie</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

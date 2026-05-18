@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Direct Call — synchroniczne wywołanie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.82)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Sequence diagram === */
+        .sequence {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1fr;
+            align-items: center;
+            gap: 18px;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .seq-node {
+            padding: 32px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.65);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+            min-height: 270px;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .seq-node:nth-child(1) { animation: fadeUp 0.7s ease-out 0.75s forwards; }
+        .seq-node:nth-child(3) { animation: fadeUp 0.7s ease-out 1.10s forwards; }
+
+        .seq-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+        }
+
+        .seq-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.2px;
+        }
+
+        .seq-role {
+            font-size: 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+        }
+
+        /* arrows column */
+        .seq-arrows {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            padding: 8px 0;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.95s forwards;
+        }
+
+        .seq-arrow {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .seq-arrow-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--cyan-400);
+        }
+
+        .seq-arrow-label .step {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .seq-arrow-line {
+            position: relative;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(34,211,238,0.85), rgba(34,211,238,0.25));
+            border-radius: 2px;
+        }
+
+        .seq-arrow.response .seq-arrow-line {
+            background: linear-gradient(90deg, rgba(34,211,238,0.25), rgba(34,211,238,0.85));
+        }
+
+        .seq-arrow-line::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; height: 0;
+            border-top: 9px solid transparent;
+            border-bottom: 9px solid transparent;
+            border-left: 13px solid var(--cyan-400);
+        }
+
+        .seq-arrow.response .seq-arrow-line::after {
+            right: auto;
+            left: -1px;
+            border-left: none;
+            border-right: 13px solid var(--cyan-400);
+        }
+
+        .seq-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .chip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #cbd5e1;
+        }
+
+        .seq-wait {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #64748b;
+            padding: 4px 0;
+        }
+
+        /* === Features === */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 22px;
+            max-width: 1500px;
+            margin: 44px auto 0;
+            width: 100%;
+        }
+
+        .feature {
+            padding: 22px 26px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.55);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            opacity: 0;
+        }
+
+        .feature:nth-child(1) { animation: fadeUp 0.7s ease-out 1.30s forwards; }
+        .feature:nth-child(2) { animation: fadeUp 0.7s ease-out 1.45s forwards; }
+        .feature:nth-child(3) { animation: fadeUp 0.7s ease-out 1.60s forwards; }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+
+        .feature-text span {
+            display: block;
+            font-size: 15px;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* === Warning === */
+        .warning {
+            margin: 38px auto 0;
+            max-width: 1500px;
+            padding: 22px 32px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.55);
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.80s forwards;
+        }
+
+        .warning-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--cyan-400);
+            padding-right: 22px;
+            border-right: 1px solid rgba(255,255,255,0.10);
+            white-space: nowrap;
+        }
+
+        .warning-badge i { font-size: 22px; }
+
+        .warning-text {
+            font-size: 22px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .warning-text strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Styl 3</div>
+                <h1 class="title">Direct Call <span class="highlight"></span></h1>
+            </div>
+
+            <div class="sequence">
+                <div class="seq-node">
+                    <div class="seq-icon"><i class="ti ti-box"></i></div>
+                    <div class="seq-name">Moduł A</div>
+                    <div class="seq-role">konsument</div>
+                </div>
+
+                <div class="seq-arrows">
+                    <div class="seq-arrow request">
+                        <div class="seq-arrow-label">
+                            <span>① request</span>
+                            <span class="step">czeka na odpowiedź</span>
+                        </div>
+                        <div class="seq-arrow-line"></div>
+                        <div class="seq-chips">
+                            <span class="chip">REST</span>
+                            <span class="chip">gRPC</span>
+                            <span class="chip">GraphQL</span>
+                            <span class="chip">wywołanie metody</span>
+                        </div>
+                    </div>
+                    <div class="seq-wait">— Moduł B przetwarza —</div>
+                    <div class="seq-arrow response">
+                        <div class="seq-arrow-label">
+                            <span class="step">A kontynuuje</span>
+                            <span>② response</span>
+                        </div>
+                        <div class="seq-arrow-line"></div>
+                    </div>
+                </div>
+
+                <div class="seq-node">
+                    <div class="seq-icon"><i class="ti ti-box"></i></div>
+                    <div class="seq-name">Moduł B</div>
+                    <div class="seq-role">dostawca</div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon"><i class="ti ti-bolt"></i></div>
+                    <div class="feature-text">
+                        Natychmiastowa spójność
+                        <span>po odpowiedzi A widzi aktualny stan B</span>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="ti ti-arrow-back-up"></i></div>
+                    <div class="feature-text">
+                        Odpowiedź od razu
+                        <span>wynik wraca tym samym wywołaniem</span>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="ti ti-alert-circle"></i></div>
+                    <div class="feature-text">
+                        Błąd widoczny natychmiast
+                        <span>exception / status code w odpowiedzi</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning">
+                <div class="warning-badge">
+                    <i class="ti ti-clock-hour-4"></i> Coupling czasowy
+                </div>
+                <div class="warning-text">
+                    Oba moduły muszą działać <strong>w tej samej sekundzie</strong>.
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

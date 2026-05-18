@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 17 - Direct Call vs Messaging — zachowanie przy awarii</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --fail: #f87171;
+            --warn: #fbbf24;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.82)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Panels === */
+        .panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .panel {
+            padding: 30px 32px 32px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            opacity: 0;
+        }
+
+        .panel.direct  { animation: fadeUp 0.8s ease-out 0.75s forwards; }
+        .panel.msging  { animation: fadeUp 0.8s ease-out 0.95s forwards; }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .panel-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .panel-kicker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: #94a3b8;
+        }
+
+        .panel-name {
+            font-size: 36px;
+            font-weight: 800;
+            color: #f0f4f8;
+            letter-spacing: -0.4px;
+            line-height: 1.1;
+        }
+
+        .panel-side {
+            font-size: 15px;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        .status-badge.fail {
+            color: var(--fail);
+            background: rgba(248,113,113,0.12);
+            border: 1px solid rgba(248,113,113,0.30);
+        }
+
+        .status-badge.warn {
+            color: var(--warn);
+            background: rgba(251,191,36,0.10);
+            border: 1px solid rgba(251,191,36,0.28);
+        }
+
+        .status-badge i { font-size: 14px; }
+
+        /* === Mini diagram === */
+        .mini-diagram {
+            position: relative;
+            padding: 24px 18px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.05);
+            min-height: 230px;
+        }
+
+        .diag-row {
+            display: grid;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            height: 100%;
+        }
+
+        .direct-row {
+            grid-template-columns: 1fr auto 1fr;
+            gap: 18px;
+        }
+
+        .msg-row {
+            grid-template-columns: 1fr auto 1.1fr auto 1fr;
+            gap: 12px;
+        }
+
+        .mini-node {
+            padding: 16px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(17,24,39,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            min-height: 130px;
+            justify-content: center;
+        }
+
+        .mini-node.failing {
+            background: rgba(248,113,113,0.06);
+        }
+
+        .mini-node.idle-ok {
+            background: rgba(34,211,238,0.04);
+        }
+
+        .mini-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+        }
+
+        .mini-node.failing .mini-icon {
+            background: rgba(248,113,113,0.14);
+            color: var(--fail);
+        }
+
+        .mini-node .nm {
+            font-size: 17px;
+            font-weight: 700;
+            color: #f0f4f8;
+        }
+
+        .mini-node .sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+        }
+
+        .mini-node.failing .sub { color: var(--fail); }
+        .mini-node.idle-ok .sub { color: var(--cyan-400); }
+
+        .arrow-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 60px;
+        }
+
+        .arrow-cell svg {
+            width: 100%;
+            height: 22px;
+        }
+
+        .arrow-cell .lbl {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--cyan-400);
+        }
+
+        .arrow-cell.broken .lbl { color: var(--fail); }
+
+        /* Queue node */
+        .queue-node {
+            padding: 12px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(17,24,39,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-height: 130px;
+            justify-content: center;
+        }
+
+        .queue-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--warn);
+        }
+
+        .queue-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .q-evt {
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(251,191,36,0.10);
+            border: 1px solid rgba(251,191,36,0.20);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--warn);
+            text-align: center;
+        }
+
+        .queue-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        /* === Outcome === */
+        .outcome {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 18px 22px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .outcome-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .outcome.fail .outcome-icon {
+            background: rgba(248,113,113,0.12);
+            color: var(--fail);
+        }
+
+        .outcome.warn .outcome-icon {
+            background: rgba(251,191,36,0.12);
+            color: var(--warn);
+        }
+
+        .outcome-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.5;
+        }
+
+        .outcome-text strong {
+            font-weight: 700;
+        }
+
+        .outcome.fail .outcome-text strong { color: var(--fail); }
+        .outcome.warn .outcome-text strong { color: var(--warn); }
+
+        /* === Footnote === */
+        .footnote {
+            margin: 40px auto 0;
+            max-width: 1500px;
+            padding: 26px 36px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.55);
+            text-align: center;
+            font-size: 26px;
+            font-weight: 400;
+            color: #f0f4f8;
+            line-height: 1.45;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.25s forwards;
+        }
+
+        .footnote strong {
+            color: var(--cyan-400);
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50%      { opacity: 0.35; }
+        }
+
+        .blink-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: blink 1.4s ease-in-out infinite;
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Porównanie</div>
+                <h1 class="title">Direct Call <span class="highlight">vs</span> Messaging</h1>
+            </div>
+
+            <div class="panels">
+                <!-- ====== DIRECT CALL ====== -->
+                <div class="panel direct">
+                    <div class="panel-head">
+                        <div class="panel-titles">
+                            <span class="panel-kicker">Direct Call</span>
+                            <span class="panel-name">Moduł B niedostępny</span>
+                            <span class="panel-side">A wywołuje B synchronicznie</span>
+                        </div>
+                        <span class="status-badge fail">
+                            <span class="blink-dot"></span> Zablokowany
+                        </span>
+                    </div>
+
+                    <div class="mini-diagram">
+                        <div class="diag-row direct-row">
+                            <div class="mini-node">
+                                <div class="mini-icon"><i class="ti ti-box"></i></div>
+                                <div class="nm">Moduł A</div>
+                                <div class="sub" style="color: var(--fail);">czeka · timeout</div>
+                            </div>
+                            <div class="arrow-cell broken">
+                                <span class="lbl">request</span>
+                                <svg viewBox="0 0 60 22">
+                                    <line x1="0" y1="11" x2="44" y2="11"
+                                          stroke="#f87171" stroke-width="2"
+                                          stroke-dasharray="4 4" stroke-opacity="0.7" />
+                                    <polygon points="44,5 60,11 44,17" fill="#f87171" fill-opacity="0.55" />
+                                </svg>
+                                <span class="lbl">brak response</span>
+                            </div>
+                            <div class="mini-node failing">
+                                <div class="mini-icon"><i class="ti ti-alert-octagon"></i></div>
+                                <div class="nm">Moduł B</div>
+                                <div class="sub">DOWN</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="outcome fail">
+                        <div class="outcome-icon"><i class="ti ti-x"></i></div>
+                        <div class="outcome-text">
+                            Moduł A <strong>zablokowany</strong>, operacja <strong>przerwana</strong>. 
+                            </br>Użytkownik widzi błąd albo czeka aż timeoutuje.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ====== MESSAGING ====== -->
+                <div class="panel msging">
+                    <div class="panel-head">
+                        <div class="panel-titles">
+                            <span class="panel-kicker">Messaging</span>
+                            <span class="panel-name">Moduł B niedostępny</span>
+                            <span class="panel-side">A publikuje zdarzenie do kolejki</span>
+                        </div>
+                        <span class="status-badge warn">
+                            <span class="blink-dot"></span> Opóźnione
+                        </span>
+                    </div>
+
+                    <div class="mini-diagram">
+                        <div class="diag-row msg-row">
+                            <div class="mini-node idle-ok">
+                                <div class="mini-icon"><i class="ti ti-box"></i></div>
+                                <div class="nm">Moduł A</div>
+                                <div class="sub">działa dalej</div>
+                            </div>
+                            <div class="arrow-cell">
+                                <span class="lbl">publish</span>
+                                <svg viewBox="0 0 60 22">
+                                    <line x1="0" y1="11" x2="44" y2="11"
+                                          stroke="#22d3ee" stroke-width="2" />
+                                    <polygon points="44,5 60,11 44,17" fill="#22d3ee" />
+                                </svg>
+                            </div>
+                            <div class="queue-node">
+                                <span class="queue-label">Kolejka</span>
+                                <div class="queue-stack">
+                                    <div class="q-evt">OrderPlaced #142</div>
+                                    <div class="q-evt">OrderPlaced #143</div>
+                                    <div class="q-evt">OrderPlaced #144</div>
+                                </div>
+                                <span class="queue-count">+ 17 czeka</span>
+                            </div>
+                            <div class="arrow-cell broken">
+                                <span class="lbl">consume</span>
+                                <svg viewBox="0 0 60 22">
+                                    <line x1="0" y1="11" x2="44" y2="11"
+                                          stroke="#fbbf24" stroke-width="2"
+                                          stroke-dasharray="4 4" stroke-opacity="0.7" />
+                                    <polygon points="44,5 60,11 44,17" fill="#fbbf24" fill-opacity="0.55" />
+                                </svg>
+                            </div>
+                            <div class="mini-node failing">
+                                <div class="mini-icon"><i class="ti ti-alert-octagon"></i></div>
+                                <div class="nm">Moduł B</div>
+                                <div class="sub">DOWN</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="outcome warn">
+                        <div class="outcome-icon"><i class="ti ti-clock-hour-4"></i></div>
+                        <div class="outcome-text">
+                            Zdarzenia czekają w kolejce. Moduł A <strong>nieprzerwanie działa</strong>.</br>Po powrocie B <strong>nadrobi zaległości</strong>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 10 - Shared Database — kiedy TAK, kiedy NIE</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.82)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 56px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Comparison columns === */
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .col {
+            padding: 40px 40px 36px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .col.yes { animation: fadeUp 0.8s ease-out 0.75s forwards; }
+        .col.no  { animation: fadeUp 0.8s ease-out 0.95s forwards; }
+
+        .col-head {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding-bottom: 24px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .col-badge {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .col.yes .col-badge {
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+        }
+
+        .col.no .col-badge {
+            background: rgba(148,163,184,0.10);
+            color: #94a3b8;
+        }
+
+        .col-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .col-kicker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: #94a3b8;
+        }
+
+        .col.yes .col-kicker { color: var(--cyan-400); }
+
+        .col-heading {
+            font-size: 34px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.3px;
+        }
+
+        .items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .item {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 16px 18px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .item-bullet {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .col.yes .item-bullet {
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+        }
+
+        .col.no .item-bullet {
+            background: rgba(148,163,184,0.10);
+            color: #64748b;
+        }
+
+        .item-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .item-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #f0f4f8;
+            letter-spacing: -0.2px;
+            line-height: 1.3;
+        }
+
+        .item-note {
+            font-size: 17px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* === Quote === */
+        .quote {
+            margin: 50px auto 0;
+            max-width: 1300px;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 300;
+            font-style: italic;
+            color: #cbd5e1;
+            line-height: 1.45;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.25s forwards;
+        }
+
+        .quote strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Shared Database</div>
+                <h1 class="title">Kiedy <span class="highlight">stosować</span> a kiedy <span class="highlight">NIE</span></h1>
+            </div>
+
+            <div class="compare">
+                <div class="col yes">
+                    <div class="col-head">
+                        <div class="col-badge"><i class="ti ti-check"></i></div>
+                        <div class="col-titles">
+                            <span class="col-heading">Ma sens</span>
+                        </div>
+                    </div>
+                    <ul class="items">
+                        <li class="item">
+                            <span class="item-bullet"><i class="ti ti-tool"></i></span>
+                            <div class="item-content">
+                                <div class="item-name">Wewnętrzne narzędzie</div>
+                                <div class="item-note">jeden konsument, jeden zespół, zero interfejsów na zewnątrz</div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="item-bullet"><i class="ti ti-bulb"></i></span>
+                            <div class="item-content">
+                                <div class="item-name">Prototyp</div>
+                                <div class="item-note">walidacja pomysłu, nie produkcyjna architektura</div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="item-bullet"><i class="ti ti-user"></i></span>
+                            <div class="item-content">
+                                <div class="item-name">Mały serwis jednego programisty</div>
+                                <div class="item-note">koszt brokera większy niż zysk z rozdzielenia</div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="item-bullet"><i class="ti ti-package"></i></span>
+                            <div class="item-content">
+                                <div class="item-name">Brak potrzeby niezależnego deploymentu</div>
+                                <div class="item-note">moduły wypuszczane razem, w jednym cyklu</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col no">
+                    <div class="col-head">
+                        <div class="col-badge"><i class="ti ti-x"></i></div>
+                        <div class="col-titles">
+                            <span class="col-heading">Przeszkadza</span>
+                        </div>
+                    </div>
+                    <ul class="items">
+                        <li class="item">
+                            <span class="item-bullet"><i class="ti ti-rocket"></i></span>
+                            <div class="item-content">
+                                <div class="item-name">Niezależne deploymenty</div>
+                                <div class="item-note">jedna migracja blokuje wszystkich, którzy z niej czytają</div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="item-bullet"><i class="ti ti-users-group"></i></span>
+                            <div class="item-content">
+                                <div class="item-name">Osobne zespoły</div>
+                                <div class="item-note">każda zmiana schematu = planwoanie wspólnego wdrożenia</div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <span class="item-bullet"><i class="ti ti-trending-up"></i></span>
+                            <div class="item-content">
+                                <div class="item-name">Skalowanie modułów osobno</div>
+                                <div class="item-note">jedna baza staje się wąskim gardłem dla wszystkich</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="quote">
+                Im później to zauważysz, tym <strong>drożej</strong> będzie to rozplątać.
+            </p>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

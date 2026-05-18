@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07 - File Transfer — gdzie szukać zastosowań</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.82)),
+                url('../../../images/background-3.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 56px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Two-column layout === */
+        .columns {
+            display: grid;
+            grid-template-columns: minmax(0, 760px);
+            justify-content: center;
+            gap: 40px;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .panel {
+            padding: 36px 38px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .panel.contexts { animation: fadeUp 0.8s ease-out 0.75s forwards; }
+        .panel.cost     { animation: fadeUp 0.8s ease-out 0.95s forwards; }
+
+        .panel-kicker {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--cyan-400);
+            margin-bottom: 8px;
+        }
+
+        .panel-title {
+            font-size: 30px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.3px;
+            text-align: center;
+            margin-bottom: 22px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* === Contexts list === */
+        .contexts-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .ctx {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 16px 18px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .ctx-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            flex-shrink: 0;
+        }
+
+        .ctx-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .ctx-name {
+            font-size: 23px;
+            font-weight: 600;
+            color: #f0f4f8;
+            letter-spacing: -0.2px;
+        }
+
+        .ctx-note {
+            font-size: 17px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* === Cost panel === */
+        .cost-headline {
+            font-size: 26px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.35;
+            margin-bottom: 20px;
+        }
+
+        .cost-headline em {
+            font-style: normal;
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        .clock-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 22px 0;
+        }
+
+        .clock {
+            padding: 18px 18px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .clock-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 500;
+            color: var(--cyan-400);
+            letter-spacing: 1px;
+        }
+
+        .clock-label {
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+        }
+
+        .clock-sub {
+            font-size: 15px;
+            font-weight: 400;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        .cost-bar {
+            position: relative;
+            height: 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.06);
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .cost-bar-fill {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(34,211,238,0.55), rgba(34,211,238,0.10));
+        }
+
+        .cost-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 14px;
+        }
+
+        .cost-note {
+            font-size: 17px;
+            font-weight: 400;
+            color: #cbd5e1;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .cost-note strong {
+            color: #f0f4f8;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Closing line === */
+        .closing {
+            margin: 44px auto 0;
+            max-width: 1300px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 300;
+            font-style: italic;
+            color: #cbd5e1;
+            line-height: 1.45;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.25s forwards;
+        }
+
+        .closing strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">File Transfer</div>
+                <h1 class="title">Zastosowania <span class="highlight"></span></h1>
+            </div>
+
+            <div class="columns">
+                <div class="panel contexts">
+                    <ul class="contexts-list">
+                        <li class="ctx">
+                            <div class="ctx-icon"><i class="ti ti-world"></i></div>
+                            <div class="ctx-body">
+                                <div class="ctx-name">Partner zewnętrzny</div>
+                                <div class="ctx-note">brak wspólnej infrastruktury, plik jest jedynym mianownikiem</div>
+                            </div>
+                        </li>
+                        <li class="ctx">
+                            <div class="ctx-icon"><i class="ti ti-cloud"></i></div>
+                            <div class="ctx-body">
+                                <div class="ctx-name">SaaS bez stabilnego API</div>
+                                <div class="ctx-note">eksport / import przez SFTP jest jedyną gwarancją</div>
+                            </div>
+                        </li>
+                        <li class="ctx">
+                            <div class="ctx-icon"><i class="ti ti-building-bank"></i></div>
+                            <div class="ctx-body">
+                                <div class="ctx-name">System legacy / ERP</div>
+                                <div class="ctx-note">to często jedyna formalnie wspierana metoda integracji</div>
+                            </div>
+                        </li>
+                        <li class="ctx">
+                            <div class="ctx-icon"><i class="ti ti-versions"></i></div>
+                            <div class="ctx-body">
+                                <div class="ctx-name">Różne cykle życia</div>
+                                <div class="ctx-note">moduły deployowane niezależnie, w innym rytmie</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

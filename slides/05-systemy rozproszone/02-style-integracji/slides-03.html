@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 03 - Coupling w File Transfer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.82)),
+                url('../../../images/background-2.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 56px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        h1.title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Two-column layout === */
+        .columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .column {
+            padding: 40px 40px 36px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .column.shared    { animation: fadeUp 0.8s ease-out 0.75s forwards; }
+        .column.notshared { animation: fadeUp 0.8s ease-out 0.95s forwards; }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 22px;
+            margin-bottom: 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .column-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            flex-shrink: 0;
+        }
+
+        .column.shared .column-icon {
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+        }
+
+        .column.notshared .column-icon {
+            background: rgba(148,163,184,0.10);
+            color: #94a3b8;
+        }
+
+        .column-title {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .column-kicker {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #94a3b8;
+        }
+
+        .column.shared .column-kicker { color: var(--cyan-400); }
+
+        .column-heading {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.3px;
+        }
+
+        .column ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .column li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 1.35;
+        }
+
+        .column.shared li     { color: #f0f4f8; }
+        .column.notshared li  { color: #94a3b8; }
+
+        .bullet {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .column.shared .bullet {
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+        }
+
+        .column.notshared .bullet {
+            background: rgba(148,163,184,0.10);
+            color: #64748b;
+        }
+
+        .item-label {
+            font-weight: 600;
+            color: #f0f4f8;
+        }
+
+        .column.notshared .item-label {
+            text-decoration: line-through;
+            text-decoration-color: rgba(148,163,184,0.4);
+            text-decoration-thickness: 1px;
+            color: #cbd5e1;
+        }
+
+        .item-note {
+            font-size: 18px;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-left: 8px;
+        }
+
+        /* === Footer quote === */
+        .quote {
+            margin: 56px auto 0;
+            max-width: 1200px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 300;
+            font-style: italic;
+            color: #cbd5e1;
+            line-height: 1.45;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.25s forwards;
+        }
+
+        .quote strong {
+            color: var(--cyan-400);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Coupling</div>
+                <h1 class="title">Na czym opiera się <span class="highlight">zależność</span>?</h1>
+            </div>
+
+            <div class="columns">
+                <div class="column shared">
+                    <div class="column-header">
+                        <div class="column-icon"><i class="ti ti-link"></i></div>
+                        <div class="column-title">
+                            <span class="column-heading">Współdzielone</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>
+                            <span class="bullet"><i class="ti ti-check"></i></span>
+                            <span><span class="item-label">Format pliku</span><span class="item-note"> - CSV, JSON, Parquet…</span></span>
+                        </li>
+                        <li>
+                            <span class="bullet"><i class="ti ti-check"></i></span>
+                            <span><span class="item-label">Schemat i nazwy kolumn</span><span class="item-note"> - kolejność, typy</span></span>
+                        </li>
+                        <li>
+                            <span class="bullet"><i class="ti ti-check"></i></span>
+                            <span><span class="item-label">Kodowanie znaków</span><span class="item-note"> - UTF-8, Windows-1250</span></span>
+                        </li>
+                        <li>
+                            <span class="bullet"><i class="ti ti-check"></i></span>
+                            <span><span class="item-label">Lokalizacja pliku</span><span class="item-note"> - ścieżka, bucket, nazwa</span></span>
+                        </li>
+                        <li>
+                            <span class="bullet"><i class="ti ti-check"></i></span>
+                            <span><span class="item-label">Harmonogram</span><span class="item-note"> - kiedy produkować, kiedy czytać</span></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="column notshared">
+                    <div class="column-header">
+                        <div class="column-icon"><i class="ti ti-unlink"></i></div>
+                        <div class="column-title">
+                            <span class="column-heading">Niezależne</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>
+                            <span class="bullet"><i class="ti ti-x"></i></span>
+                            <span><span class="item-label">Język programowania</span><span class="item-note"> - Java po jednej, Python po drugiej</span></span>
+                        </li>
+                        <li>
+                            <span class="bullet"><i class="ti ti-x"></i></span>
+                            <span><span class="item-label">Baza danych</span><span class="item-note"> - różne silniki, różne schematy</span></span>
+                        </li>
+                        <li>
+                            <span class="bullet"><i class="ti ti-x"></i></span>
+                            <span><span class="item-label">Środowisko uruchomieniowe</span><span class="item-note"> - runtime, wersje, OS</span></span>
+                        </li>
+                        <li>
+                            <span class="bullet"><i class="ti ti-x"></i></span>
+                            <span><span class="item-label">Dostępność w czasie rzeczywistym</span><span class="item-note"> - moduły mogą żyć niezależnie</span></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="quote">
+                Jeden moduł nie musi nawet <strong>wiedzieć</strong>, kto czyta jego pliki.
+            </p>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
