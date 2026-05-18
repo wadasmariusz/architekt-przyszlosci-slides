@@ -303,7 +303,9 @@
         /* === Beyond list === */
         .beyond {
             width: 100%;
-            max-width: 1500px;
+            max-width: 1120px;
+            align-self: flex-start;
+            margin-left: 130px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
@@ -413,7 +415,7 @@
             <section class="hero">
                 <div class="hero-icon"><i class="ti ti-shield-lock"></i></div>
                 <p class="hero-text">
-                    Nie można <strong>ufać sieci</strong> — nawet wewnątrz własnej infrastruktury.
+                    Nie można <strong>ufać sieci</strong>, nawet wewnątrz własnej infrastruktury.
                 </p>
             </section>
 
@@ -428,22 +430,18 @@
                 <article class="zt-card">
                     <div class="zt-icon"><i class="ti ti-certificate"></i></div>
                     <div class="zt-title">Wzajemne uwierzytelnianie usług</div>
-                    <div class="zt-sub">mTLS — obie strony potwierdzają tożsamość</div>
                 </article>
                 <article class="zt-card">
                     <div class="zt-icon"><i class="ti ti-key"></i></div>
                     <div class="zt-title">Tokeny JWT / OAuth 2.0</div>
-                    <div class="zt-sub">krótkożyciowe, weryfikowalne uprawnienia</div>
                 </article>
                 <article class="zt-card">
                     <div class="zt-icon"><i class="ti ti-refresh"></i></div>
                     <div class="zt-title">Rotacja sekretów</div>
-                    <div class="zt-sub">klucze i hasła wymieniane automatycznie</div>
                 </article>
                 <article class="zt-card">
                     <div class="zt-icon"><i class="ti ti-lock-square"></i></div>
                     <div class="zt-title">Kontrola dostępu</div>
-                    <div class="zt-sub">RBAC / ABAC — kto co i kiedy może</div>
                 </article>
             </section>
 
@@ -457,15 +455,15 @@
             <section class="beyond">
                 <div class="beyond-item">
                     <div class="beyond-icon"><i class="ti ti-list-search"></i></div>
-                    <div class="beyond-text">Audyt i logowanie operacji<small>kto, co i kiedy zrobił</small></div>
+                    <div class="beyond-text">Audyt i logowanie operacji</div>
                 </div>
                 <div class="beyond-item">
                     <div class="beyond-icon"><i class="ti ti-route"></i></div>
-                    <div class="beyond-text">Distributed tracing bezpieczeństwa<small>śledzenie żądania przez wszystkie usługi</small></div>
+                    <div class="beyond-text">Distributed tracing bezpieczeństwa</div>
                 </div>
                 <div class="beyond-item">
                     <div class="beyond-icon"><i class="ti ti-target-off"></i></div>
-                    <div class="beyond-text">Ograniczanie blast radius<small>minimalizacja zasięgu potencjalnego ataku</small></div>
+                    <div class="beyond-text">Ograniczanie blast radius</div>
                 </div>
             </section>
         </main>

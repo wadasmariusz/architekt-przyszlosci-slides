@@ -148,20 +148,38 @@ Slajd nie faworyzuje jednego podejścia — pokazuje **trade-off**, który archi
 **Tytuł:** Mit #3 — Przepustowość jest nieskończona
 
 **Opis:**
-Slajd wyjaśniający — w centrum pojęcie **wąskiego gardła (bottleneck)** z trzema strzałkami wskazującymi źródła problemu:
+Slajd diagnozujący problem. W centrum znajduje się pojęcie **wąskiego gardła (bottleneck)**, do którego zbiegają trzy źródła presji:
 
 1. Liczba połączeń (connection pool, limity TCP)
 2. Koszt serializacji (JSON, XML — narzut CPU/pamięć)
 3. Przepustowość infrastruktury (sieć, message broker, baza danych)
 
-Pod spodem sekcja „Mechanizmy ochronne" — hasła:
+Po prawej stronie widoczny jest efekt przeciążenia: kolejka żądań, rosnące opóźnienia, uciekające p95/p99 i timeouty.
+
+Kluczowy przekaz: *„Każdy element ścieżki ma limit przepływu."*
+
+Slajd nie pokazuje jeszcze mechanizmów ochronnych — służy temu, żeby widz najpierw zobaczył i poczuł problem.
+
+---
+
+## Slajd 7A
+
+**Wejście po słowach:** *„Dlatego architekt nie może zakładać nieskończonej przepustowości — musi zarządzać przepływem."*
+
+**Tytuł:** Co z tym robi architekt?
+
+**Opis:**
+Slajd odpowiedzi architektonicznej. Mechanizmy ochronne są pokazane jako regulatory przepływu w pipeline:
+
 - Batching (grupowanie operacji)
 - Cache
 - Kompresja
 - Streaming
 - **Backpressure** — kontrola przepływu, gdy producent jest szybszy niż konsument
 
-Slajd łączy diagnozę problemu z odpowiedzią architektoniczną w jednym widoku, ponieważ skrypt omawia je łącznie.
+Najmocniej wyróżniony jest **Backpressure**, bo zamyka narrację: konsument sygnalizuje tempo, a producent zwalnia zanim kolejka urośnie bez kontroli.
+
+Kluczowy przekaz: *„Nie więcej przepustowości wszędzie, tylko kontrola przepływu."*
 
 ---
 

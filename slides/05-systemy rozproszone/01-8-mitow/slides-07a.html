@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07A - Co z przepustowością robi architekt</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --emerald-400: #34d399;
+            --amber-300: #fcd34d;
+            --amber-400: #f59e0b;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.70), rgba(10,14,23,0.82)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.60) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.45) 0%, transparent 25%, transparent 75%, rgba(3,7,18,0.45) 100%);
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px 158px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 34px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .title {
+            font-size: 78px;
+            font-weight: 800;
+            letter-spacing: 0;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .control-board {
+            width: 100%;
+            max-width: 1540px;
+            display: grid;
+            grid-template-columns: 320px 1fr 360px;
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .flow-card {
+            min-height: 420px;
+            padding: 26px 28px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.66);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out forwards;
+        }
+
+        .flow-card--source { animation-delay: 0.60s; }
+        .flow-card--sink { animation-delay: 1.15s; }
+
+        .flow-label {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.56);
+            margin-bottom: 18px;
+        }
+
+        .flow-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 22px;
+        }
+
+        .flow-title {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: 0;
+            color: #f0f4f8;
+            margin-bottom: 10px;
+        }
+
+        .flow-sub {
+            font-size: 19px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: rgba(240,244,248,0.64);
+        }
+
+        .pipeline {
+            position: relative;
+            min-height: 500px;
+            padding: 34px 0;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.75s forwards;
+        }
+
+        .pipe-line {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            top: 50%;
+            height: 18px;
+            transform: translateY(-50%);
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(34,211,238,0.34), rgba(52,211,153,0.34), rgba(245,158,11,0.34));
+            box-shadow: 0 0 24px rgba(34,211,238,0.12);
+        }
+
+        .controls {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .control {
+            min-height: 170px;
+            padding: 22px 22px 20px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.82);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.65s ease-out forwards;
+        }
+
+        .control:nth-child(1) { animation-delay: 0.85s; }
+        .control:nth-child(2) { animation-delay: 0.95s; }
+        .control:nth-child(3) { animation-delay: 1.05s; }
+        .control:nth-child(4) { animation-delay: 1.15s; }
+
+        .control-top {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .control-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(34,211,238,0.11);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex: 0 0 auto;
+        }
+
+        .control-knob {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 8px solid rgba(34,211,238,0.32);
+            border-top-color: var(--cyan-400);
+        }
+
+        .control-title {
+            font-size: 25px;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #f0f4f8;
+        }
+
+        .control-sub {
+            font-size: 16px;
+            line-height: 1.35;
+            font-weight: 500;
+            color: rgba(240,244,248,0.62);
+        }
+
+        .backpressure {
+            grid-column: 1 / -1;
+            min-height: 166px;
+            padding: 24px 28px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.20), rgba(17,24,39,0.84));
+            border: 1px solid rgba(245,158,11,0.36);
+            display: grid;
+            grid-template-columns: 74px 1fr 180px;
+            gap: 22px;
+            align-items: center;
+            opacity: 0;
+            animation: fadeUp 0.75s ease-out 1.28s forwards;
+        }
+
+        .backpressure-icon {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: rgba(245,158,11,0.18);
+            color: var(--amber-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        .backpressure-title {
+            font-size: 31px;
+            font-weight: 800;
+            color: #f0f4f8;
+            letter-spacing: 0;
+            margin-bottom: 6px;
+        }
+
+        .backpressure-sub {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.35;
+            color: rgba(240,244,248,0.72);
+        }
+
+        .backpressure-meter {
+            height: 74px;
+            border-radius: 999px;
+            background: rgba(10,14,23,0.58);
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            gap: 8px;
+        }
+
+        .meter-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--amber-300);
+            opacity: 0.95;
+        }
+
+        .meter-dot:nth-child(4),
+        .meter-dot:nth-child(5) {
+            background: rgba(240,244,248,0.20);
+        }
+
+        .principle {
+            margin-top: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 30px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.64);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.45s forwards;
+        }
+
+        .principle i {
+            font-size: 22px;
+            color: var(--emerald-400);
+        }
+
+        .principle-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: rgba(240,244,248,0.90);
+        }
+
+        .principle-text strong {
+            color: var(--emerald-400);
+            font-weight: 800;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-image"></div>
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <main class="content">
+            <header class="header">
+                <h1 class="title">Przepustowością trzeba <span class="highlight">zarządzać</span></h1>
+            </header>
+
+            <section class="control-board" aria-label="Mechanizmy zarządzania przepływem">
+                <article class="flow-card flow-card--source">
+                    <div class="flow-label">Wejście</div>
+                    <div class="flow-icon"><i class="ti ti-cloud-upload"></i></div>
+                    <div class="flow-title">Producent wysyła szybciej, niż system przerabia.</div>
+                </article>
+
+                <div class="pipeline">
+                    <div class="pipe-line"></div>
+                    <div class="controls">
+                        <article class="control">
+                            <div class="control-top">
+                                <div class="control-icon"><i class="ti ti-stack"></i></div>
+                                <div class="control-title">Batching</div>
+                            </div>
+                            <div class="control-sub">grupuje operacje, zmniejsza narzut wywołań</div>
+                        </article>
+
+                        <article class="control">
+                            <div class="control-top">
+                                <div class="control-icon"><i class="ti ti-database"></i></div>
+                                <div class="control-title">Cache</div>
+                            </div>
+                            <div class="control-sub">zdejmuje powtarzalny ruch z wolnych zależności</div>
+                        </article>
+
+                        <article class="control">
+                            <div class="control-top">
+                                <div class="control-icon"><i class="ti ti-arrows-minimize"></i></div>
+                                <div class="control-title">Kompresja</div>
+                            </div>
+                            <div class="control-sub">zmniejsza payload kosztem CPU</div>
+                        </article>
+
+                        <article class="control">
+                            <div class="control-top">
+                                <div class="control-icon"><i class="ti ti-wave-saw-tool"></i></div>
+                                <div class="control-title">Streaming</div>
+                            </div>
+                            <div class="control-sub">przetwarza dane porcjami zamiast jednym blokiem</div>
+                        </article>
+
+                        <article class="backpressure">
+                            <div class="backpressure-icon"><i class="ti ti-hand-stop"></i></div>
+                            <div>
+                                <div class="backpressure-title">Backpressure</div>
+                                <div class="backpressure-sub">konsument sygnalizuje tempo, a producent zwalnia zanim kolejka urośnie bez kontroli</div>
+                            </div>
+                            <div class="backpressure-meter" aria-hidden="true">
+                                <span class="meter-dot"></span>
+                                <span class="meter-dot"></span>
+                                <span class="meter-dot"></span>
+                                <span class="meter-dot"></span>
+                                <span class="meter-dot"></span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <article class="flow-card flow-card--sink">
+                    <div class="flow-label">Wyjście</div>
+                    <div class="flow-icon"><i class="ti ti-cloud-check"></i></div>
+                    <div class="flow-title">System utrzymuje tempo, które jest w stanie obsłużyć.</div>
+                </article>
+            </section>
+        </main>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

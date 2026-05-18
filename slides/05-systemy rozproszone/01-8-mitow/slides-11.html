@@ -48,7 +48,7 @@
             pointer-events: none;
             background:
                 linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
-                url('../../../images/background-2.jpg') center / cover no-repeat;
+                url('../../../images/background-1.jpg') center / cover no-repeat;
         }
 
         .bg-image::after {
@@ -104,13 +104,13 @@
         .eyebrow {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            font-size: 22px;
+            gap: 14px;
+            font-size: 24px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 4px;
             color: var(--cyan-400);
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             opacity: 0;
             animation: fadeUp 0.7s ease-out 0.2s forwards;
         }
@@ -119,12 +119,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
             background: rgba(34,211,238,0.12);
             color: var(--cyan-400);
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             letter-spacing: 0;
         }
@@ -151,8 +151,8 @@
             align-items: center;
             gap: 14px;
             width: 100%;
-            max-width: 1620px;
-            margin-bottom: 14px;
+            max-width: 1700px;
+            margin-bottom: 18px;
             opacity: 0;
             animation: fadeUp 0.6s ease-out 0.55s forwards;
         }
@@ -160,12 +160,12 @@
         .dim-label-tag {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 18px;
+            gap: 12px;
+            padding: 10px 22px;
             border-radius: 999px;
             background: rgba(34,211,238,0.14);
             color: var(--cyan-400);
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 800;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -179,22 +179,22 @@
 
         .dims {
             width: 100%;
-            max-width: 1620px;
+            max-width: 1700px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 30px;
             margin-bottom: 30px;
         }
 
         .dim {
-            padding: 26px 26px;
-            border-radius: 18px;
+            padding: 34px 34px;
+            border-radius: 20px;
             background: rgba(17,24,39,0.62);
             backdrop-filter: blur(6px);
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            min-height: 220px;
+            gap: 18px;
+            min-height: 270px;
             opacity: 0;
             animation: fadeUp 0.7s ease-out forwards;
         }
@@ -205,30 +205,30 @@
         .dim-head {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 18px;
         }
 
         .dim-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
+            width: 68px;
+            height: 68px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: rgba(34,211,238,0.10);
             color: var(--cyan-400);
-            font-size: 28px;
+            font-size: 34px;
             flex: 0 0 auto;
         }
 
         .dim-meta {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 4px;
         }
 
         .dim-kind {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -236,7 +236,7 @@
         }
 
         .dim-title {
-            font-size: 26px;
+            font-size: 31px;
             font-weight: 800;
             color: #f0f4f8;
             line-height: 1.1;
@@ -245,10 +245,10 @@
 
         .dim-example {
             margin-top: 4px;
-            padding: 16px 18px;
-            border-radius: 12px;
+            padding: 22px 24px;
+            border-radius: 14px;
             background: rgba(10,14,23,0.55);
-            font-size: 19px;
+            font-size: 22px;
             font-weight: 500;
             color: #f0f4f8;
             line-height: 1.4;
@@ -450,7 +450,7 @@
                         </div>
                     </div>
                     <div class="dim-example">
-                        <strong>Serializacja / deserializacja</strong> — narzut CPU i pamięci na każdym wywołaniu
+                        <strong>Serializacja / deserializacja</strong> powoduje narzut CPU i pamięci na każdym wywołaniu
                     </div>
                 </article>
 
@@ -479,33 +479,6 @@
                         <strong>Transfer danych</strong> między regionami chmury (egress costs)
                     </div>
                 </article>
-            </section>
-
-            <!-- Tradeoff -->
-            <section class="tradeoff">
-                <div class="tradeoff-headline">
-                    <div class="tradeoff-icon"><i class="ti ti-scale"></i></div>
-                    <div class="tradeoff-title">Mikroserwisy <em>≠</em> cel &nbsp;·&nbsp; Mikroserwisy <em>=</em> kompromis</div>
-                </div>
-
-                <div class="tradeoff-col">
-                    <div class="tradeoff-key tradeoff-key--pro"><i class="ti ti-circle-check"></i> Co zyskujesz</div>
-                    <div class="tradeoff-text">Niezależność zespołów, skalowalność organizacyjna</div>
-                </div>
-
-                <div class="tradeoff-col">
-                    <div class="tradeoff-key tradeoff-key--con"><i class="ti ti-alert-triangle"></i> Co płacisz</div>
-                    <div class="tradeoff-text">Koszt komunikacji, złożoność operacyjna</div>
-                </div>
-            </section>
-
-            <!-- Quote -->
-            <section class="quote">
-                <span class="quote-mark">&ldquo;</span>
-                <p class="quote-text">
-                    Nadmierna granularność mikroserwisów może dać system <strong>droższy i wolniejszy</strong>
-                    niż dobrze zaprojektowany monolit.
-                </p>
             </section>
         </main>
 

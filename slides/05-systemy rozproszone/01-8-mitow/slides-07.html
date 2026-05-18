@@ -12,7 +12,9 @@
             --cyan-500: #06b6d4;
             --cyan-600: #0891b2;
             --cyan-700: #0e7490;
-            --cyan-900: #164e63;
+            --amber-300: #fcd34d;
+            --amber-400: #f59e0b;
+            --rose-400: #fb7185;
             --dark-bg: #0a0e17;
             --dark-surface: #111827;
         }
@@ -37,13 +39,12 @@
             align-items: center;
         }
 
-        /* === Background layers === */
         .bg-image {
             position: absolute;
             inset: 0;
             pointer-events: none;
             background:
-                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                linear-gradient(rgba(10,14,23,0.70), rgba(10,14,23,0.82)),
                 url('../../../images/background-5.jpg') center / cover no-repeat;
         }
 
@@ -52,11 +53,10 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
-                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.60) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.45) 0%, transparent 25%, transparent 75%, rgba(3,7,18,0.45) 100%);
         }
 
-        /* === Corners === */
         .corner {
             position: absolute;
             width: 60px;
@@ -79,13 +79,12 @@
         .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
         .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
 
-        /* === Content === */
         .content {
             position: relative;
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 60px 80px 160px;
+            padding: 60px 80px 158px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -93,8 +92,8 @@
 
         .header {
             text-align: center;
-            max-width: 1400px;
-            margin: 0 auto 28px;
+            max-width: 1500px;
+            margin: 0 auto 36px;
         }
 
         .eyebrow {
@@ -106,7 +105,7 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             color: var(--cyan-400);
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             opacity: 0;
             animation: fadeUp 0.7s ease-out 0.2s forwards;
         }
@@ -126,9 +125,9 @@
         }
 
         .title {
-            font-size: 80px;
+            font-size: 78px;
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: 0;
             line-height: 1.12;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.4s forwards;
@@ -141,210 +140,236 @@
             background-clip: text;
         }
 
-        /* === Sources === */
-        .sources {
+        .problem-map {
             width: 100%;
-            max-width: 1500px;
+            max-width: 1540px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            margin-bottom: 18px;
+            grid-template-columns: 420px 1fr 420px;
+            align-items: center;
+            gap: 38px;
+            margin-top: 4px;
         }
 
-        .source {
-            padding: 22px 24px;
+        .pressure-stack {
+            display: grid;
+            gap: 20px;
+        }
+
+        .pressure {
+            min-height: 134px;
+            padding: 24px 26px;
             border-radius: 18px;
-            background: rgba(17,24,39,0.62);
+            background: rgba(17,24,39,0.66);
             backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
+            display: grid;
+            grid-template-columns: 62px 1fr;
             gap: 18px;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.04);
             opacity: 0;
             animation: fadeUp 0.7s ease-out forwards;
         }
-        .source:nth-child(1) { animation-delay: 0.6s; }
-        .source:nth-child(2) { animation-delay: 0.75s; }
-        .source:nth-child(3) { animation-delay: 0.9s; }
 
-        .source-num {
-            flex: 0 0 auto;
-            font-size: 42px;
+        .pressure:nth-child(1) { animation-delay: 0.65s; }
+        .pressure:nth-child(2) { animation-delay: 0.80s; }
+        .pressure:nth-child(3) { animation-delay: 0.95s; }
+
+        .pressure-icon {
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34,211,238,0.11);
+            color: var(--cyan-400);
+            font-size: 30px;
+        }
+
+        .pressure-title {
+            font-size: 24px;
             font-weight: 800;
-            line-height: 1;
-            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
-            min-width: 36px;
-        }
-
-        .source-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(34,211,238,0.10);
-            color: var(--cyan-400);
-            font-size: 28px;
-            flex: 0 0 auto;
-        }
-
-        .source-body { display: flex; flex-direction: column; gap: 4px; }
-        .source-title {
-            font-size: 22px;
-            font-weight: 700;
+            line-height: 1.15;
             color: #f0f4f8;
-            line-height: 1.2;
-            letter-spacing: -0.2px;
-        }
-        .source-sub {
-            font-size: 15px;
-            font-weight: 500;
-            color: rgba(240,244,248,0.6);
-            line-height: 1.35;
         }
 
-        /* === Arrows down === */
-        .arrows {
-            width: 100%;
-            max-width: 1500px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            opacity: 0;
-            animation: fadeIn 0.6s ease-out 1.0s forwards;
-        }
-        .arrow-down {
-            display: flex;
-            justify-content: center;
-            color: var(--cyan-700);
-        }
-        .arrow-down svg { width: 28px; height: 40px; }
-
-        /* === Bottleneck === */
-        .bottleneck {
-            width: 100%;
-            max-width: 1500px;
-            margin-top: 8px;
-            padding: 26px 36px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, rgba(34,211,238,0.18), rgba(17,24,39,0.78));
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.15s forwards;
-        }
-        .bottleneck-icon {
-            flex: 0 0 auto;
-            width: 76px;
-            height: 76px;
-            border-radius: 50%;
-            background: rgba(34,211,238,0.20);
-            color: var(--cyan-400);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 38px;
-        }
-        .bottleneck-label {
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(240,244,248,0.55);
-            margin-bottom: 4px;
-        }
-        .bottleneck-title {
-            font-size: 36px;
-            font-weight: 800;
-            color: #f0f4f8;
-            letter-spacing: -0.4px;
-            line-height: 1.1;
-        }
-        .bottleneck-title em {
-            font-style: normal;
-            color: var(--cyan-400);
-        }
-
-        /* === Mechanisms === */
-        .mech-section {
-            width: 100%;
-            max-width: 1500px;
-            margin-top: 36px;
-        }
-        .mech-head {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 18px;
-            opacity: 0;
-            animation: fadeUp 0.6s ease-out 1.35s forwards;
-        }
-        .mech-head-line {
-            flex: 1;
-            height: 1px;
-            background: rgba(255,255,255,0.10);
-        }
-        .mech-head-label {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(240,244,248,0.65);
-        }
-        .mech-head i {
-            color: var(--cyan-400);
-            font-size: 22px;
-        }
-
-        .mechs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .mech {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 22px;
-            border-radius: 999px;
-            background: rgba(17,24,39,0.62);
-            backdrop-filter: blur(6px);
-            font-size: 20px;
-            font-weight: 600;
-            color: #f0f4f8;
-            opacity: 0;
-            animation: fadeUp 0.6s ease-out forwards;
-        }
-        .mech i {
-            color: var(--cyan-400);
-            font-size: 22px;
-        }
-        .mech-sub {
+        .pressure-sub {
+            margin-top: 6px;
             font-size: 16px;
             font-weight: 500;
-            color: rgba(240,244,248,0.55);
-            margin-left: 4px;
+            line-height: 1.35;
+            color: rgba(240,244,248,0.62);
         }
-        .mech--strong {
-            background: linear-gradient(135deg, rgba(34,211,238,0.18), rgba(17,24,39,0.78));
-            padding: 16px 26px;
+
+        .funnel {
+            position: relative;
+            min-height: 488px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.05s forwards;
         }
-        .mech--strong .mech-sub { color: rgba(240,244,248,0.75); }
 
-        .mech:nth-child(1) { animation-delay: 1.50s; }
-        .mech:nth-child(2) { animation-delay: 1.58s; }
-        .mech:nth-child(3) { animation-delay: 1.66s; }
-        .mech:nth-child(4) { animation-delay: 1.74s; }
-        .mech:nth-child(5) { animation-delay: 1.82s; }
+        .flow-lines {
+            position: absolute;
+            inset: 0;
+            overflow: visible;
+        }
 
-        /* === Animations === */
+        .flow-line {
+            fill: none;
+            stroke: rgba(34,211,238,0.56);
+            stroke-width: 10;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 10px rgba(34,211,238,0.22));
+        }
+
+        .flow-line--dim {
+            stroke: rgba(34,211,238,0.26);
+            stroke-width: 5;
+        }
+
+        .choke {
+            position: relative;
+            z-index: 2;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at center, rgba(245,158,11,0.22), rgba(17,24,39,0.88) 64%),
+                linear-gradient(135deg, rgba(34,211,238,0.10), rgba(245,158,11,0.12));
+            border: 2px solid rgba(245,158,11,0.58);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 0 34px rgba(245,158,11,0.16);
+        }
+
+        .choke i {
+            font-size: 58px;
+            color: var(--amber-300);
+            margin-bottom: 12px;
+        }
+
+        .choke-label {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.60);
+            margin-bottom: 5px;
+        }
+
+        .choke-title {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.08;
+            color: #f0f4f8;
+            letter-spacing: 0;
+        }
+
+        .impact {
+            padding: 28px 28px 30px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.72);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(251,113,133,0.22);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.25s forwards;
+        }
+
+        .impact-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--rose-400);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .impact-label i { font-size: 21px; }
+
+        .queue {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .request {
+            height: 30px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(34,211,238,0.20), rgba(251,113,133,0.34));
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .request:nth-child(1) { width: 64%; }
+        .request:nth-child(2) { width: 80%; }
+        .request:nth-child(3) { width: 94%; }
+        .request:nth-child(4) { width: 100%; }
+
+        .impact-title {
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: 0;
+            color: #f0f4f8;
+            margin-bottom: 18px;
+        }
+
+        .impact-list {
+            display: grid;
+            gap: 13px;
+        }
+
+        .impact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: rgba(240,244,248,0.88);
+        }
+
+        .impact-item i {
+            color: var(--rose-400);
+            font-size: 22px;
+        }
+
+        .punch {
+            margin-top: 34px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 30px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.64);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.45s forwards;
+        }
+
+        .punch i {
+            color: var(--cyan-400);
+            font-size: 22px;
+        }
+
+        .punch-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: rgba(240,244,248,0.90);
+        }
+
+        .punch-text strong {
+            color: var(--cyan-400);
+            font-weight: 800;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to   { opacity: 1; }
@@ -355,7 +380,6 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* === Fixed elements === */
         .slide-logo {
             position: absolute;
             z-index: 100;
@@ -387,101 +411,81 @@
 </head>
 <body>
     <div class="stage" id="stage">
-        <!-- background layers -->
         <div class="bg-image"></div>
-
-        <!-- corner accents -->
         <div class="corner corner--tl"></div>
         <div class="corner corner--br"></div>
 
-        <!-- slide content -->
         <main class="content">
             <header class="header">
                 <p class="eyebrow"><span class="eyebrow-num">03</span> Mit trzeci</p>
                 <h1 class="title">Przepustowość jest <span class="highlight">nieskończona</span></h1>
             </header>
 
-            <!-- Sources -->
-            <section class="sources">
-                <article class="source">
-                    <div class="source-num">1</div>
-                    <div class="source-icon"><i class="ti ti-plug-connected"></i></div>
-                    <div class="source-body">
-                        <div class="source-title">Liczba połączeń</div>
-                        <div class="source-sub">connection pool, limity TCP</div>
+            <section class="problem-map" aria-label="Źródła ograniczeń przepustowości">
+                <div class="pressure-stack">
+                    <article class="pressure">
+                        <div class="pressure-icon"><i class="ti ti-plug-connected"></i></div>
+                        <div>
+                            <div class="pressure-title">Liczba połączeń</div>
+                            <div class="pressure-sub">connection pool, limity TCP, limity klienta</div>
+                        </div>
+                    </article>
+                    <article class="pressure">
+                        <div class="pressure-icon"><i class="ti ti-code"></i></div>
+                        <div>
+                            <div class="pressure-title">Koszt serializacji</div>
+                            <div class="pressure-sub">JSON, XML, narzut CPU i pamięci</div>
+                        </div>
+                    </article>
+                    <article class="pressure">
+                        <div class="pressure-icon"><i class="ti ti-server-2"></i></div>
+                        <div>
+                            <div class="pressure-title">Infrastruktura</div>
+                            <div class="pressure-sub">sieć, message broker, baza danych</div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="funnel">
+                    <svg class="flow-lines" viewBox="0 0 560 500" aria-hidden="true">
+                        <path class="flow-line flow-line--dim" d="M20 92 C180 92 210 210 280 250" />
+                        <path class="flow-line flow-line--dim" d="M20 250 C170 250 218 250 280 250" />
+                        <path class="flow-line flow-line--dim" d="M20 408 C180 408 210 290 280 250" />
+                        <path class="flow-line" d="M280 250 C350 250 380 250 540 250" />
+                    </svg>
+                    <div class="choke">
+                        <i class="ti ti-filter"></i>
+                        <div class="choke-label">Efekt</div>
+                        <div class="choke-title">Wąskie<br>gardło</div>
                     </div>
-                </article>
-                <article class="source">
-                    <div class="source-num">2</div>
-                    <div class="source-icon"><i class="ti ti-code"></i></div>
-                    <div class="source-body">
-                        <div class="source-title">Koszt serializacji</div>
-                        <div class="source-sub">JSON, XML - narzut CPU / pamięć</div>
+                </div>
+
+                <aside class="impact">
+                    <div class="impact-label"><i class="ti ti-alert-triangle"></i> Skutek</div>
+                    <div class="queue" aria-hidden="true">
+                        <div class="request"></div>
+                        <div class="request"></div>
+                        <div class="request"></div>
+                        <div class="request"></div>
                     </div>
-                </article>
-                <article class="source">
-                    <div class="source-num">3</div>
-                    <div class="source-icon"><i class="ti ti-server-2"></i></div>
-                    <div class="source-body">
-                        <div class="source-title">Przepustowość infrastruktury</div>
-                        <div class="source-sub">sieć, message broker, baza danych</div>
+                    <div class="impact-title">Wydajność całego łańcucha zależy od jego najsłabszego ogniwa.</div>
+                    <div class="impact-list">
+                        <div class="impact-item"><i class="ti ti-clock-exclamation"></i> rosną opóźnienia</div>
+                        <div class="impact-item"><i class="ti ti-wave-square"></i> p95 / p99 uciekają</div>
+                        <div class="impact-item"><i class="ti ti-hourglass-empty"></i> pojawiają się timeouty</div>
                     </div>
-                </article>
+                </aside>
             </section>
 
-            <!-- arrows down -->
-            <section class="arrows">
-                <div class="arrow-down">
-                    <svg viewBox="0 0 28 40" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="14" y1="2" x2="14" y2="32"/>
-                        <polyline points="6,24 14,34 22,24"/>
-                    </svg>
-                </div>
-                <div class="arrow-down">
-                    <svg viewBox="0 0 28 40" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="14" y1="2" x2="14" y2="32"/>
-                        <polyline points="6,24 14,34 22,24"/>
-                    </svg>
-                </div>
-                <div class="arrow-down">
-                    <svg viewBox="0 0 28 40" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="14" y1="2" x2="14" y2="32"/>
-                        <polyline points="6,24 14,34 22,24"/>
-                    </svg>
-                </div>
-            </section>
-
-            <!-- Bottleneck -->
-            <section class="bottleneck">
-                <div class="bottleneck-icon"><i class="ti ti-filter"></i></div>
-                <div>
-                    <div class="bottleneck-label">Efekt</div>
-                    <div class="bottleneck-title"><em>Wąskie gardło</em> (bottleneck) całego systemu</div>
-                </div>
-            </section>
-
-            <!-- Mechanisms -->
-            <section class="mech-section">
-                <div class="mech-head">
-                    <i class="ti ti-shield-check"></i>
-                    <span class="mech-head-label">Mechanizmy ochronne</span>
-                    <span class="mech-head-line"></span>
-                </div>
-                <div class="mechs">
-                    <span class="mech"><i class="ti ti-stack"></i> Batching <span class="mech-sub">grupowanie operacji</span></span>
-                    <span class="mech"><i class="ti ti-database"></i> Cache</span>
-                    <span class="mech"><i class="ti ti-arrows-minimize"></i> Kompresja</span>
-                    <span class="mech"><i class="ti ti-wave-saw-tool"></i> Streaming</span>
-                    <span class="mech mech--strong"><i class="ti ti-hand-stop"></i> Backpressure <span class="mech-sub">kontrola przepływu producent → konsument</span></span>
-                </div>
-            </section>
+            <div class="punch">
+                <i class="ti ti-route"></i>
+                <span class="punch-text">Każdy element ścieżki ma <strong>limit przepływu</strong>.</span>
+            </div>
         </main>
 
-        <!-- logo -->
         <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
              alt="Architekt Przyszłości" class="slide-logo">
 
-        <!-- camera overlay -->
         <div class="camera-box">kamera 480 &times; 270</div>
     </div>
 
