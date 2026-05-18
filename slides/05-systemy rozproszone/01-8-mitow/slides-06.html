@@ -248,6 +248,10 @@
             font-weight: 700;
         }
 
+        .cell-text {
+            display: block;
+        }
+
         .cell--sync strong  { color: var(--cyan-400); }
         .cell--async strong { color: var(--violet-400); }
 
@@ -342,8 +346,7 @@
         <!-- slide content -->
         <main class="content">
             <header class="header">
-                <p class="eyebrow">Świadomy wybór architekta</p>
-                <h1 class="title"><span class="highlight">Synchroniczna</span> vs. <span class="highlight--violet">asynchroniczna</span> komunikacja</h1>
+                <h1 class="title">Komunikacja</br><span class="highlight">Synchroniczna</span> vs. <span class="highlight--violet">asynchroniczna</span></h1>
             </header>
 
             <section class="compare">
@@ -352,14 +355,14 @@
                 <div class="col-head col-head--sync">
                     <div class="col-head-icon"><i class="ti ti-arrow-bounce"></i></div>
                     <div>
-                        <div class="col-head-label">Tryb</div>
+                        <div class="col-head-label">Komunikacja</div>
                         <div class="col-head-title">Synchroniczna</div>
                     </div>
                 </div>
                 <div class="col-head col-head--async">
                     <div class="col-head-icon"><i class="ti ti-arrows-shuffle"></i></div>
                     <div>
-                        <div class="col-head-label">Tryb</div>
+                        <div class="col-head-label">Komunikacja</div>
                         <div class="col-head-title">Asynchroniczna</div>
                     </div>
                 </div>
@@ -367,35 +370,35 @@
                 <!-- row 1: mechanizm -->
                 <div class="row-1" style="display: contents;">
                     <div class="row-label"><i class="ti ti-settings"></i> Mechanizm</div>
-                    <div class="cell cell--sync">Żądanie → <strong>oczekiwanie</strong> → odpowiedź</div>
-                    <div class="cell cell--async">Zdarzenie / wiadomość → przetworzenie <strong>w swoim czasie</strong></div>
+                    <div class="cell cell--sync"><span class="cell-text">Żądanie → <strong>oczekiwanie</strong> → odpowiedź</span></div>
+                    <div class="cell cell--async"><span class="cell-text">Zdarzenie / wiadomość → przetworzenie <strong>w swoim czasie</strong></span></div>
                 </div>
 
                 <!-- row 2: zaleta -->
                 <div class="row-2" style="display: contents;">
                     <div class="row-label"><i class="ti ti-thumb-up"></i> Zaleta</div>
-                    <div class="cell cell--sync"><strong>Prostota</strong> implementacji, natychmiastowa odpowiedź</div>
-                    <div class="cell cell--async"><strong>Odporność</strong> na awarie, mniejsze sprzężenie czasowe</div>
+                    <div class="cell cell--sync"><span class="cell-text"><strong>Prostota</strong> implementacji, natychmiastowa odpowiedź</span></div>
+                    <div class="cell cell--async"><span class="cell-text"><strong>Odporność</strong> na awarie, mniejsze sprzężenie czasowe</span></div>
                 </div>
 
                 <!-- row 3: ryzyko -->
                 <div class="row-3" style="display: contents;">
                     <div class="row-label"><i class="ti ti-alert-triangle"></i> Ryzyko</div>
-                    <div class="cell cell--sync"><strong>Kaskadowe opóźnienia</strong>, zależność od dostępności</div>
-                    <div class="cell cell--async">Złożona <strong>spójność danych</strong>, trudniejsze debugowanie</div>
+                    <div class="cell cell--sync"><span class="cell-text"><strong>Kaskadowe opóźnienia</strong>, zależność od dostępności</span></div>
+                    <div class="cell cell--async"><span class="cell-text">Złożona <strong>spójność danych</strong>, trudniejsze debugowanie</span></div>
                 </div>
 
                 <!-- row 4: typowe użycie -->
                 <div class="row-4" style="display: contents;">
                     <div class="row-label"><i class="ti ti-target"></i> Użycie</div>
-                    <div class="cell cell--sync">Zapytania wymagające <strong>natychmiastowego wyniku</strong></div>
-                    <div class="cell cell--async"><strong>Event-driven</strong>, kolejki, CQRS</div>
+                    <div class="cell cell--sync"><span class="cell-text">Zapytania wymagające <strong>natychmiastowego wyniku</strong></span></div>
+                    <div class="cell cell--async"><span class="cell-text"><strong>Event-driven</strong>, kolejki, CQRS</span></div>
                 </div>
             </section>
 
             <div class="punch">
                 <i class="ti ti-scale"></i>
-                <span class="punch-text">Żadna opcja nie wygrywa — to <strong>trade-off do świadomej oceny</strong>.</span>
+                <span class="punch-text"><strong>trade-off do świadomej oceny</strong>.</span>
             </div>
         </main>
 

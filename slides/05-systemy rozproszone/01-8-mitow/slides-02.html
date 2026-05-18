@@ -203,25 +203,99 @@
             margin-top: auto;
         }
 
-        /* === Footnote === */
-        .footnote {
-            margin-top: 38px;
+        /* === Credits === */
+        .credits {
+            margin-top: 44px;
+            margin-right: 360px;
             display: inline-flex;
             align-items: center;
-            gap: 14px;
-            padding: 14px 26px;
-            border-radius: 999px;
+            gap: 42px;
+            padding: 22px 38px 22px 30px;
+            border-radius: 22px;
             background: rgba(17,24,39,0.55);
-            color: rgba(240,244,248,0.65);
-            font-size: 18px;
-            font-style: italic;
+            backdrop-filter: blur(6px);
             opacity: 0;
             animation: fadeUp 0.8s ease-out 1.5s forwards;
         }
 
-        .footnote i {
+        .credits-meta {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .credits-meta > i {
             color: var(--cyan-400);
+            font-size: 32px;
+        }
+
+        .credits-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.5);
+        }
+
+        .credits-text {
             font-size: 22px;
+            font-weight: 600;
+            color: #f0f4f8;
+            font-style: italic;
+            line-height: 1.2;
+            margin-top: 3px;
+        }
+
+        .credits-divider {
+            width: 1px;
+            height: 92px;
+            background: rgba(255,255,255,0.10);
+        }
+
+        .credits-authors {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .author-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .author-avatar--icon {
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+        }
+
+        .author-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.1px;
+            line-height: 1.15;
+        }
+
+        .author-role {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.5);
+            margin-top: 4px;
         }
 
         /* === Animations === */
@@ -354,9 +428,33 @@
                 </article>
             </section>
 
-            <div class="footnote">
-                <i class="ti ti-history"></i>
-                <span>Sun Microsystems, lata 90. * Peter Deutsch, James Gosling i in.</span>
+            <div class="credits">
+                <div class="credits-meta">
+                    <i class="ti ti-history"></i>
+                    <div>
+                        <div class="credits-label">Źródło</div>
+                        <div class="credits-text">Sun Microsystems, lata 90.</div>
+                    </div>
+                </div>
+
+                <div class="credits-divider"></div>
+
+                <div class="credits-authors">
+                    <div class="author">
+                        <img src="images/Peter Deutsch.png" alt="Peter Deutsch" class="author-avatar">
+                        <div>
+                            <div class="author-name">Peter Deutsch</div>
+                            <div class="author-role">autor listy</div>
+                        </div>
+                    </div>
+                    <div class="author">
+                        <img src="images/James Gosling.png" alt="James Gosling" class="author-avatar">
+                        <div>
+                            <div class="author-name">James Gosling</div>
+                            <div class="author-role">współautor</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
 
