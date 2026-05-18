@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07 - Mit #3: Przepustowość jest nieskończona</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 28px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Sources === */
+        .sources {
+            width: 100%;
+            max-width: 1500px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-bottom: 18px;
+        }
+
+        .source {
+            padding: 22px 24px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out forwards;
+        }
+        .source:nth-child(1) { animation-delay: 0.6s; }
+        .source:nth-child(2) { animation-delay: 0.75s; }
+        .source:nth-child(3) { animation-delay: 0.9s; }
+
+        .source-num {
+            flex: 0 0 auto;
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            min-width: 36px;
+        }
+
+        .source-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            font-size: 28px;
+            flex: 0 0 auto;
+        }
+
+        .source-body { display: flex; flex-direction: column; gap: 4px; }
+        .source-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+            letter-spacing: -0.2px;
+        }
+        .source-sub {
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.6);
+            line-height: 1.35;
+        }
+
+        /* === Arrows down === */
+        .arrows {
+            width: 100%;
+            max-width: 1500px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 1.0s forwards;
+        }
+        .arrow-down {
+            display: flex;
+            justify-content: center;
+            color: var(--cyan-700);
+        }
+        .arrow-down svg { width: 28px; height: 40px; }
+
+        /* === Bottleneck === */
+        .bottleneck {
+            width: 100%;
+            max-width: 1500px;
+            margin-top: 8px;
+            padding: 26px 36px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.18), rgba(17,24,39,0.78));
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.15s forwards;
+        }
+        .bottleneck-icon {
+            flex: 0 0 auto;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: rgba(34,211,238,0.20);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+        .bottleneck-label {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.55);
+            margin-bottom: 4px;
+        }
+        .bottleneck-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #f0f4f8;
+            letter-spacing: -0.4px;
+            line-height: 1.1;
+        }
+        .bottleneck-title em {
+            font-style: normal;
+            color: var(--cyan-400);
+        }
+
+        /* === Mechanisms === */
+        .mech-section {
+            width: 100%;
+            max-width: 1500px;
+            margin-top: 36px;
+        }
+        .mech-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 1.35s forwards;
+        }
+        .mech-head-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.10);
+        }
+        .mech-head-label {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.65);
+        }
+        .mech-head i {
+            color: var(--cyan-400);
+            font-size: 22px;
+        }
+
+        .mechs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .mech {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 22px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            font-size: 20px;
+            font-weight: 600;
+            color: #f0f4f8;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+        .mech i {
+            color: var(--cyan-400);
+            font-size: 22px;
+        }
+        .mech-sub {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.55);
+            margin-left: 4px;
+        }
+        .mech--strong {
+            background: linear-gradient(135deg, rgba(34,211,238,0.18), rgba(17,24,39,0.78));
+            padding: 16px 26px;
+        }
+        .mech--strong .mech-sub { color: rgba(240,244,248,0.75); }
+
+        .mech:nth-child(1) { animation-delay: 1.50s; }
+        .mech:nth-child(2) { animation-delay: 1.58s; }
+        .mech:nth-child(3) { animation-delay: 1.66s; }
+        .mech:nth-child(4) { animation-delay: 1.74s; }
+        .mech:nth-child(5) { animation-delay: 1.82s; }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <p class="eyebrow"><span class="eyebrow-num">03</span> Mit trzeci</p>
+                <h1 class="title">Przepustowość jest <span class="highlight">nieskończona</span></h1>
+            </header>
+
+            <!-- Sources -->
+            <section class="sources">
+                <article class="source">
+                    <div class="source-num">1</div>
+                    <div class="source-icon"><i class="ti ti-plug-connected"></i></div>
+                    <div class="source-body">
+                        <div class="source-title">Liczba połączeń</div>
+                        <div class="source-sub">connection pool, limity TCP</div>
+                    </div>
+                </article>
+                <article class="source">
+                    <div class="source-num">2</div>
+                    <div class="source-icon"><i class="ti ti-code"></i></div>
+                    <div class="source-body">
+                        <div class="source-title">Koszt serializacji</div>
+                        <div class="source-sub">JSON, XML — narzut CPU / pamięć</div>
+                    </div>
+                </article>
+                <article class="source">
+                    <div class="source-num">3</div>
+                    <div class="source-icon"><i class="ti ti-server-2"></i></div>
+                    <div class="source-body">
+                        <div class="source-title">Przepustowość infrastruktury</div>
+                        <div class="source-sub">sieć, message broker, baza danych</div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- arrows down -->
+            <section class="arrows">
+                <div class="arrow-down">
+                    <svg viewBox="0 0 28 40" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="14" y1="2" x2="14" y2="32"/>
+                        <polyline points="6,24 14,34 22,24"/>
+                    </svg>
+                </div>
+                <div class="arrow-down">
+                    <svg viewBox="0 0 28 40" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="14" y1="2" x2="14" y2="32"/>
+                        <polyline points="6,24 14,34 22,24"/>
+                    </svg>
+                </div>
+                <div class="arrow-down">
+                    <svg viewBox="0 0 28 40" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="14" y1="2" x2="14" y2="32"/>
+                        <polyline points="6,24 14,34 22,24"/>
+                    </svg>
+                </div>
+            </section>
+
+            <!-- Bottleneck -->
+            <section class="bottleneck">
+                <div class="bottleneck-icon"><i class="ti ti-filter"></i></div>
+                <div>
+                    <div class="bottleneck-label">Efekt</div>
+                    <div class="bottleneck-title"><em>Wąskie gardło</em> (bottleneck) całego systemu</div>
+                </div>
+            </section>
+
+            <!-- Mechanisms -->
+            <section class="mech-section">
+                <div class="mech-head">
+                    <i class="ti ti-shield-check"></i>
+                    <span class="mech-head-label">Mechanizmy ochronne</span>
+                    <span class="mech-head-line"></span>
+                </div>
+                <div class="mechs">
+                    <span class="mech"><i class="ti ti-stack"></i> Batching <span class="mech-sub">grupowanie operacji</span></span>
+                    <span class="mech"><i class="ti ti-database"></i> Cache</span>
+                    <span class="mech"><i class="ti ti-arrows-minimize"></i> Kompresja</span>
+                    <span class="mech"><i class="ti ti-wave-saw-tool"></i> Streaming</span>
+                    <span class="mech mech--strong"><i class="ti ti-hand-stop"></i> Backpressure <span class="mech-sub">kontrola przepływu producent → konsument</span></span>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

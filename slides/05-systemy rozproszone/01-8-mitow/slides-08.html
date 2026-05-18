@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Mit #4: Sieć jest bezpieczna</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 30px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Hero quote === */
+        .hero {
+            width: 100%;
+            max-width: 1500px;
+            margin-bottom: 32px;
+            padding: 28px 44px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.14), rgba(17,24,39,0.78));
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .hero-icon {
+            flex: 0 0 auto;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(34,211,238,0.18);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .hero-text {
+            font-size: 30px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: #f0f4f8;
+            font-style: italic;
+        }
+
+        .hero-text strong {
+            color: var(--cyan-400);
+            font-weight: 800;
+            font-style: normal;
+        }
+
+        /* === Zero Trust label === */
+        .zt-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            max-width: 1500px;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 0.75s forwards;
+        }
+
+        .zt-label-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .zt-label-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.10);
+        }
+
+        /* === Zero Trust grid === */
+        .zt {
+            width: 100%;
+            max-width: 1500px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+            margin-bottom: 36px;
+        }
+
+        .zt-card {
+            padding: 26px 22px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+            min-height: 200px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out forwards;
+        }
+
+        .zt-card:nth-child(1) { animation-delay: 0.85s; }
+        .zt-card:nth-child(2) { animation-delay: 0.95s; }
+        .zt-card:nth-child(3) { animation-delay: 1.05s; }
+        .zt-card:nth-child(4) { animation-delay: 1.15s; }
+
+        .zt-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            font-size: 28px;
+        }
+
+        .zt-title {
+            font-size: 23px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.25;
+            letter-spacing: -0.2px;
+        }
+
+        .zt-sub {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.6);
+            line-height: 1.35;
+        }
+
+        /* === Divider with motto === */
+        .motto {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding: 14px 28px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.72);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 1.30s forwards;
+        }
+
+        .motto i { color: var(--cyan-400); font-size: 22px; }
+
+        .motto-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            letter-spacing: -0.2px;
+        }
+
+        .motto-text em {
+            font-style: normal;
+            color: var(--cyan-400);
+        }
+
+        /* === Beyond list === */
+        .beyond {
+            width: 100%;
+            max-width: 1500px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .beyond-item {
+            padding: 20px 24px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.48);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+
+        .beyond-item:nth-child(1) { animation-delay: 1.45s; }
+        .beyond-item:nth-child(2) { animation-delay: 1.55s; }
+        .beyond-item:nth-child(3) { animation-delay: 1.65s; }
+
+        .beyond-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            font-size: 22px;
+            flex: 0 0 auto;
+        }
+
+        .beyond-text {
+            font-size: 19px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+        .beyond-text small {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.55);
+            margin-top: 2px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <p class="eyebrow"><span class="eyebrow-num">04</span> Mit czwarty</p>
+                <h1 class="title">Sieć jest <span class="highlight">bezpieczna</span></h1>
+            </header>
+
+            <!-- Hero quote -->
+            <section class="hero">
+                <div class="hero-icon"><i class="ti ti-shield-lock"></i></div>
+                <p class="hero-text">
+                    Nie można <strong>ufać sieci</strong> — nawet wewnątrz własnej infrastruktury.
+                </p>
+            </section>
+
+            <!-- Zero Trust label -->
+            <div class="zt-label">
+                <span class="zt-label-tag"><i class="ti ti-fingerprint"></i> Zero Trust</span>
+                <span class="zt-label-line"></span>
+            </div>
+
+            <!-- Zero Trust grid -->
+            <section class="zt">
+                <article class="zt-card">
+                    <div class="zt-icon"><i class="ti ti-certificate"></i></div>
+                    <div class="zt-title">Wzajemne uwierzytelnianie usług</div>
+                    <div class="zt-sub">mTLS — obie strony potwierdzają tożsamość</div>
+                </article>
+                <article class="zt-card">
+                    <div class="zt-icon"><i class="ti ti-key"></i></div>
+                    <div class="zt-title">Tokeny JWT / OAuth 2.0</div>
+                    <div class="zt-sub">krótkożyciowe, weryfikowalne uprawnienia</div>
+                </article>
+                <article class="zt-card">
+                    <div class="zt-icon"><i class="ti ti-refresh"></i></div>
+                    <div class="zt-title">Rotacja sekretów</div>
+                    <div class="zt-sub">klucze i hasła wymieniane automatycznie</div>
+                </article>
+                <article class="zt-card">
+                    <div class="zt-icon"><i class="ti ti-lock-square"></i></div>
+                    <div class="zt-title">Kontrola dostępu</div>
+                    <div class="zt-sub">RBAC / ABAC — kto co i kiedy może</div>
+                </article>
+            </section>
+
+            <!-- Motto divider -->
+            <div class="motto">
+                <i class="ti ti-arrow-bar-to-down"></i>
+                <span class="motto-text">Bezpieczeństwo <em>≠</em> tylko szyfrowanie</span>
+            </div>
+
+            <!-- Beyond encryption -->
+            <section class="beyond">
+                <div class="beyond-item">
+                    <div class="beyond-icon"><i class="ti ti-list-search"></i></div>
+                    <div class="beyond-text">Audyt i logowanie operacji<small>kto, co i kiedy zrobił</small></div>
+                </div>
+                <div class="beyond-item">
+                    <div class="beyond-icon"><i class="ti ti-route"></i></div>
+                    <div class="beyond-text">Distributed tracing bezpieczeństwa<small>śledzenie żądania przez wszystkie usługi</small></div>
+                </div>
+                <div class="beyond-item">
+                    <div class="beyond-icon"><i class="ti ti-target-off"></i></div>
+                    <div class="beyond-text">Ograniczanie blast radius<small>minimalizacja zasięgu potencjalnego ataku</small></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

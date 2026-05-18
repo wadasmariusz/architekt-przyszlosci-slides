@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - Mit #8: Sieć jest jednorodna</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                url('../../../images/background-1.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 56px 80px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 24px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram === */
+        .diagram {
+            position: relative;
+            width: 100%;
+            max-width: 1620px;
+            height: 440px;
+            padding: 20px 30px;
+            border-radius: 22px;
+            background: rgba(17,24,39,0.55);
+            backdrop-filter: blur(6px);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .diagram-tag {
+            position: absolute;
+            top: 18px;
+            left: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .diagram-tag i { font-size: 16px; }
+
+        .diagram-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .service {
+            position: absolute;
+            width: 280px;
+            padding: 18px 22px;
+            border-radius: 16px;
+            background: rgba(10,14,23,0.78);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex: 0 0 auto;
+        }
+
+        .service-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.1;
+            letter-spacing: -0.2px;
+        }
+
+        .service-role {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.55);
+            margin-top: 2px;
+        }
+
+        .service-legacy {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            background: rgba(251,191,36,0.16);
+            color: #fbbf24;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .svc-tl { top: 78px;  left: 60px;   animation-delay: 0.7s; }
+        .svc-tr { top: 78px;  right: 60px;  animation-delay: 0.8s; }
+        .svc-bl { bottom: 30px; left: 60px;  animation-delay: 0.9s; }
+        .svc-br { bottom: 30px; right: 60px; animation-delay: 1.0s; }
+
+        .proto-label {
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: rgba(10,14,23,0.92);
+            color: var(--cyan-400);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            z-index: 3;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .proto-label i { font-size: 14px; }
+
+        .lbl-rest      { top: 130px; left: 50%; transform: translateX(-50%); animation-delay: 1.15s; }
+        .lbl-grpc      { bottom: 80px; left: 50%; transform: translateX(-50%); animation-delay: 1.20s; }
+        .lbl-graphql   { top: 50%; left: 340px; transform: translateY(-50%); animation-delay: 1.25s; }
+        .lbl-kafka     { top: 50%; right: 340px; transform: translateY(-50%); animation-delay: 1.30s; }
+        .lbl-rabbit    { top: 40%; left: 47%;  animation-delay: 1.35s; }
+        .lbl-legacy    { top: 60%; left: 50%; transform: translateX(-50%); animation-delay: 1.40s; }
+
+        /* === Responses === */
+        .resp-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            max-width: 1620px;
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 1.5s forwards;
+        }
+
+        .resp-label-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .resp-label-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.10);
+        }
+
+        .responses {
+            width: 100%;
+            max-width: 1620px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .resp {
+            padding: 24px 26px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out forwards;
+        }
+        .resp:nth-child(1) { animation-delay: 1.65s; }
+        .resp:nth-child(2) { animation-delay: 1.75s; }
+        .resp:nth-child(3) { animation-delay: 1.85s; }
+
+        .resp-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex: 0 0 auto;
+        }
+
+        .resp-text {
+            font-size: 21px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.25;
+        }
+        .resp-text small {
+            display: block;
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.6);
+            margin-top: 4px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <p class="eyebrow"><span class="eyebrow-num">08</span> Mit ósmy</p>
+                <h1 class="title">Sieć jest <span class="highlight">jednorodna</span></h1>
+            </header>
+
+            <!-- Diagram -->
+            <section class="diagram">
+                <span class="diagram-tag"><i class="ti ti-affiliate"></i> Heterogeniczny ekosystem</span>
+
+                <!-- Connection lines -->
+                <svg class="diagram-svg" viewBox="0 0 1560 440" preserveAspectRatio="none">
+                    <!-- top horizontal (REST) -->
+                    <line x1="340" y1="120" x2="1220" y2="120" stroke="#0e7490" stroke-width="2" stroke-dasharray="0"/>
+                    <!-- bottom horizontal (gRPC) -->
+                    <line x1="340" y1="380" x2="1220" y2="380" stroke="#0e7490" stroke-width="2"/>
+                    <!-- left vertical (GraphQL) -->
+                    <line x1="200" y1="160" x2="200" y2="340" stroke="#0e7490" stroke-width="2"/>
+                    <!-- right vertical (Kafka) -->
+                    <line x1="1360" y1="160" x2="1360" y2="340" stroke="#0e7490" stroke-width="2"/>
+                    <!-- diagonal TL->BR (RabbitMQ) -->
+                    <line x1="340" y1="140" x2="1220" y2="360" stroke="#164e63" stroke-width="2" stroke-dasharray="6 6"/>
+                    <!-- diagonal TR->BL (legacy fragile) -->
+                    <line x1="1220" y1="140" x2="340" y2="360" stroke="#164e63" stroke-width="2" stroke-dasharray="6 6"/>
+                </svg>
+
+                <!-- Services -->
+                <article class="service svc-tl">
+                    <div class="service-icon"><i class="ti ti-brand-c-sharp"></i></div>
+                    <div>
+                        <div class="service-name">.NET</div>
+                        <div class="service-role">Usługa płatności</div>
+                    </div>
+                </article>
+
+                <article class="service svc-tr">
+                    <div class="service-icon"><i class="ti ti-brand-nodejs"></i></div>
+                    <div>
+                        <div class="service-name">Node.js</div>
+                        <div class="service-role">API gateway</div>
+                    </div>
+                </article>
+
+                <article class="service svc-bl">
+                    <div class="service-icon"><i class="ti ti-brand-golang"></i></div>
+                    <div>
+                        <div class="service-name">Go</div>
+                        <div class="service-role">Real-time engine</div>
+                    </div>
+                </article>
+
+                <article class="service svc-br">
+                    <div class="service-icon"><i class="ti ti-brand-python"></i></div>
+                    <div>
+                        <div class="service-name">Python</div>
+                        <div class="service-role">ML / analytics</div>
+                        <span class="service-legacy">Legacy v1</span>
+                    </div>
+                </article>
+
+                <!-- Protocol labels -->
+                <span class="proto-label lbl-rest"><i class="ti ti-world-www"></i> REST</span>
+                <span class="proto-label lbl-grpc"><i class="ti ti-binary"></i> gRPC</span>
+                <span class="proto-label lbl-graphql"><i class="ti ti-schema"></i> GraphQL</span>
+                <span class="proto-label lbl-kafka"><i class="ti ti-stack-2"></i> Kafka</span>
+                <span class="proto-label lbl-rabbit"><i class="ti ti-mail-forward"></i> RabbitMQ</span>
+                <span class="proto-label lbl-legacy"><i class="ti ti-alert-triangle"></i> Legacy SOAP</span>
+            </section>
+
+            <!-- Responses label -->
+            <div class="resp-label">
+                <span class="resp-label-tag"><i class="ti ti-tools"></i> Odpowiedzi architektoniczne</span>
+                <span class="resp-label-line"></span>
+            </div>
+
+            <!-- Responses -->
+            <section class="responses">
+                <div class="resp">
+                    <div class="resp-icon"><i class="ti ti-file-text"></i></div>
+                    <div class="resp-text">Standaryzacja kontraktów<small>OpenAPI, Protocol Buffers</small></div>
+                </div>
+                <div class="resp">
+                    <div class="resp-icon"><i class="ti ti-database-export"></i></div>
+                    <div class="resp-text">Standaryzacja formatów danych<small>jeden słownik typów i pól</small></div>
+                </div>
+                <div class="resp">
+                    <div class="resp-icon"><i class="ti ti-checklist"></i></div>
+                    <div class="resp-text">Contract testing<small>testy zgodności na granicy usług</small></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

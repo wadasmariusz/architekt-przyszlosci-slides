@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Mit #7: Koszt transportu jest zerowy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --emerald-400: #34d399;
+            --emerald-500: #10b981;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                url('../../../images/background-2.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 56px 80px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 28px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Dim cards === */
+        .dim-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            max-width: 1620px;
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out 0.55s forwards;
+        }
+
+        .dim-label-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .dim-label-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.10);
+        }
+
+        .dims {
+            width: 100%;
+            max-width: 1620px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .dim {
+            padding: 26px 26px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 220px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out forwards;
+        }
+        .dim:nth-child(1) { animation-delay: 0.7s; }
+        .dim:nth-child(2) { animation-delay: 0.85s; }
+        .dim:nth-child(3) { animation-delay: 1.0s; }
+
+        .dim-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .dim-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            font-size: 28px;
+            flex: 0 0 auto;
+        }
+
+        .dim-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dim-kind {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.55);
+        }
+
+        .dim-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.1;
+            letter-spacing: -0.3px;
+        }
+
+        .dim-example {
+            margin-top: 4px;
+            padding: 16px 18px;
+            border-radius: 12px;
+            background: rgba(10,14,23,0.55);
+            font-size: 19px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .dim-example strong {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Tradeoff card === */
+        .tradeoff {
+            width: 100%;
+            max-width: 1620px;
+            padding: 28px 36px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.14), rgba(17,24,39,0.78));
+            backdrop-filter: blur(6px);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 32px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
+            margin-bottom: 24px;
+        }
+
+        .tradeoff-headline {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .tradeoff-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(34,211,238,0.16);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            flex: 0 0 auto;
+        }
+
+        .tradeoff-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+        }
+
+        .tradeoff-title em {
+            font-style: normal;
+            color: var(--cyan-400);
+        }
+
+        .tradeoff-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tradeoff-key {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .tradeoff-key--pro { color: var(--emerald-400); }
+        .tradeoff-key--con { color: var(--amber-400); }
+
+        .tradeoff-key i { font-size: 20px; }
+
+        .tradeoff-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.35;
+        }
+
+        /* === Quote === */
+        .quote {
+            width: 100%;
+            max-width: 1620px;
+            padding: 20px 36px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.55);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.55s forwards;
+        }
+
+        .quote-mark {
+            font-size: 70px;
+            line-height: 0.6;
+            color: var(--cyan-400);
+            font-family: Georgia, serif;
+            font-weight: 800;
+            flex: 0 0 auto;
+            opacity: 0.7;
+        }
+
+        .quote-text {
+            font-size: 23px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+            font-style: italic;
+        }
+        .quote-text strong {
+            color: var(--cyan-400);
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <p class="eyebrow"><span class="eyebrow-num">07</span> Mit siódmy</p>
+                <h1 class="title">Koszt transportu jest <span class="highlight">zerowy</span></h1>
+            </header>
+
+            <!-- Dimensions label -->
+            <div class="dim-label">
+                <span class="dim-label-tag"><i class="ti ti-coin"></i> Trzy wymiary kosztu komunikacji</span>
+                <span class="dim-label-line"></span>
+            </div>
+
+            <!-- Dimensions -->
+            <section class="dims">
+                <article class="dim">
+                    <div class="dim-head">
+                        <div class="dim-icon"><i class="ti ti-cpu"></i></div>
+                        <div class="dim-meta">
+                            <div class="dim-kind">Wymiar</div>
+                            <div class="dim-title">Technologiczny</div>
+                        </div>
+                    </div>
+                    <div class="dim-example">
+                        <strong>Serializacja / deserializacja</strong> — narzut CPU i pamięci na każdym wywołaniu
+                    </div>
+                </article>
+
+                <article class="dim">
+                    <div class="dim-head">
+                        <div class="dim-icon"><i class="ti ti-activity"></i></div>
+                        <div class="dim-meta">
+                            <div class="dim-kind">Wymiar</div>
+                            <div class="dim-title">Wydajnościowy</div>
+                        </div>
+                    </div>
+                    <div class="dim-example">
+                        <strong>Narzut sieciowy</strong> per wywołanie × tysiące wywołań na sekundę
+                    </div>
+                </article>
+
+                <article class="dim">
+                    <div class="dim-head">
+                        <div class="dim-icon"><i class="ti ti-wallet"></i></div>
+                        <div class="dim-meta">
+                            <div class="dim-kind">Wymiar</div>
+                            <div class="dim-title">Finansowy</div>
+                        </div>
+                    </div>
+                    <div class="dim-example">
+                        <strong>Transfer danych</strong> między regionami chmury (egress costs)
+                    </div>
+                </article>
+            </section>
+
+            <!-- Tradeoff -->
+            <section class="tradeoff">
+                <div class="tradeoff-headline">
+                    <div class="tradeoff-icon"><i class="ti ti-scale"></i></div>
+                    <div class="tradeoff-title">Mikroserwisy <em>≠</em> cel &nbsp;·&nbsp; Mikroserwisy <em>=</em> kompromis</div>
+                </div>
+
+                <div class="tradeoff-col">
+                    <div class="tradeoff-key tradeoff-key--pro"><i class="ti ti-circle-check"></i> Co zyskujesz</div>
+                    <div class="tradeoff-text">Niezależność zespołów, skalowalność organizacyjna</div>
+                </div>
+
+                <div class="tradeoff-col">
+                    <div class="tradeoff-key tradeoff-key--con"><i class="ti ti-alert-triangle"></i> Co płacisz</div>
+                    <div class="tradeoff-text">Koszt komunikacji, złożoność operacyjna</div>
+                </div>
+            </section>
+
+            <!-- Quote -->
+            <section class="quote">
+                <span class="quote-mark">&ldquo;</span>
+                <p class="quote-text">
+                    Nadmierna granularność mikroserwisów może dać system <strong>droższy i wolniejszy</strong>
+                    niż dobrze zaprojektowany monolit.
+                </p>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
