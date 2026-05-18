@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 14 - Rekomendacja — kiedy stosować DRY</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --panel: rgba(15, 23, 42, 0.72);
+            --panel-soft: rgba(15, 23, 42, 0.48);
+            --line: rgba(148, 163, 184, 0.24);
+            --text: #f0f4f8;
+            --muted: #94a3b8;
+            --soft: #cbd5e1;
+            --emerald: #10b981;
+            --emerald-soft: #a7f3d0;
+            --amber: #f59e0b;
+            --amber-soft: #fde68a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.76), rgba(10,14,23,0.88)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 32% 28%, rgba(34,211,238,0.12) 0%, transparent 35%),
+                radial-gradient(ellipse at 70% 52%, rgba(245,158,11,0.10) 0%, transparent 32%),
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.20) 48%, rgba(3,7,18,0.72) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.50) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.50) 100%);
+        }
+
+        .grid {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.14;
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.22) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 76%);
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 58px 110px 330px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 1500px;
+            text-align: center;
+            margin: 0 auto 26px;
+        }
+
+        .eyebrow {
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.18s forwards;
+        }
+
+        .title {
+            font-size: 78px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.34s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-body {
+            width: 100%;
+            max-width: 1540px;
+            min-height: 535px;
+            opacity: 0;
+            animation: fadeUp 0.75s ease-out 0.58s forwards;
+        }
+
+        .decision-map {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 535px;
+            overflow: visible;
+        }
+
+        .map-layout {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 180px minmax(0, 1fr);
+            grid-template-rows: 1fr 1fr;
+            gap: 25px 34px;
+            align-items: stretch;
+        }
+
+        .hub {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            align-self: center;
+            justify-self: center;
+            width: 142px;
+            height: 142px;
+            border-radius: 50%;
+            border: 1px solid rgba(34,211,238,0.46);
+            background:
+                radial-gradient(circle at center, rgba(34,211,238,0.22), rgba(34,211,238,0.06) 62%, rgba(15,23,42,0.90) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 36px;
+            font-weight: 800;
+            color: #e0faff;
+            box-shadow: 0 0 0 12px rgba(34,211,238,0.04), 0 24px 50px rgba(0,0,0,0.30);
+            position: relative;
+        }
+
+        .hub::before,
+        .hub::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 92px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.42), transparent);
+        }
+
+        .hub::before { right: 100%; }
+        .hub::after { left: 100%; }
+
+        .rule {
+            min-height: 255px;
+            position: relative;
+            display: grid;
+            grid-template-columns: 58px 1fr;
+            gap: 20px;
+            align-items: start;
+            padding: 28px 30px;
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.055), transparent 42%),
+                var(--panel);
+            border: 1px solid rgba(148,163,184,0.22);
+            overflow: hidden;
+            opacity: 0;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.22);
+        }
+
+        .rule--service {
+            grid-column: 1;
+            grid-row: 1;
+            animation: revealCard 0.65s ease-out 0.82s forwards;
+        }
+
+        .rule--infra {
+            grid-column: 1;
+            grid-row: 2;
+            animation: revealCard 0.65s ease-out 1.0s forwards;
+        }
+
+        .rule--domain {
+            grid-column: 3;
+            grid-row: 1 / 3;
+            min-height: 535px;
+            padding: 38px;
+            animation: revealCard 0.65s ease-out 1.18s forwards;
+        }
+
+        .rule::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-left: 5px solid var(--emerald);
+            pointer-events: none;
+        }
+
+        .rule--domain::before {
+            border-left-color: var(--amber);
+        }
+
+        .rule::after {
+            content: '';
+            position: absolute;
+            right: -68px;
+            top: -68px;
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            background: rgba(16,185,129,0.09);
+        }
+
+        .rule--domain::after {
+            width: 250px;
+            height: 250px;
+            background: rgba(245,158,11,0.10);
+        }
+
+        .rule-num {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 800;
+            background: rgba(16,185,129,0.13);
+            color: var(--emerald-soft);
+            border: 1px solid rgba(16,185,129,0.38);
+            position: relative;
+            z-index: 1;
+        }
+
+        .rule--domain .rule-num {
+            background: rgba(245,158,11,0.14);
+            color: var(--amber-soft);
+            border-color: rgba(245,158,11,0.42);
+        }
+
+        .rule-context {
+            min-width: 0;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .rule-where {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--muted);
+        }
+
+        .rule-name {
+            font-size: 33px;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.1;
+            letter-spacing: -0.4px;
+        }
+
+        .rule--domain .rule-name {
+            font-size: 41px;
+            line-height: 1.12;
+            max-width: 430px;
+        }
+
+        .rule-name .em {
+            color: var(--amber-soft);
+        }
+
+        .rule-arrow {
+            display: none;
+        }
+
+        .rule-verdict {
+            grid-column: 1 / -1;
+            align-self: end;
+            min-height: 86px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 18px;
+            border-radius: 8px;
+            background: rgba(16,185,129,0.10);
+            border: 1px solid rgba(16,185,129,0.28);
+            position: relative;
+            z-index: 1;
+        }
+
+        .rule--domain .rule-verdict {
+            margin-top: auto;
+            min-height: 112px;
+            padding: 20px 22px;
+            background: rgba(245,158,11,0.12);
+            border-color: rgba(245,158,11,0.32);
+        }
+
+        .verdict-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(16,185,129,0.18);
+            color: var(--emerald-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            flex-shrink: 0;
+        }
+
+        .rule--domain .verdict-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(245,158,11,0.18);
+            color: var(--amber-soft);
+            font-size: 29px;
+        }
+
+        .verdict-text {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .verdict-main {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--emerald-soft);
+            line-height: 1.1;
+            letter-spacing: -0.3px;
+        }
+
+        .rule--domain .verdict-main {
+            font-size: 31px;
+            color: var(--amber-soft);
+        }
+
+        .verdict-sub {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        .rule--domain .verdict-sub {
+            font-size: 17px;
+            color: #d6c79d;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes revealCard {
+            from { opacity: 0; transform: translateY(26px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <div class="bg-image"></div>
+        <div class="grid"></div>
+
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Rekomendacja</div>
+                <h2 class="title">Kiedy stosować <span class="highlight">DRY</span></h2>
+            </div>
+
+            <div class="slide-body">
+                <main class="decision-map">
+                    <div class="map-layout">
+                        <div class="rule rule--service">
+                            <div class="rule-num">1</div>
+                            <div class="rule-context">
+                                <div class="rule-where">Obszar</div>
+                                <div class="rule-name">Wewnątrz serwisu</div>
+                            </div>
+                            <i class="ti ti-arrow-narrow-right rule-arrow"></i>
+                            <div class="rule-verdict">
+                                <div class="verdict-icon"><i class="ti ti-check"></i></div>
+                                <div class="verdict-text">
+                                    <div class="verdict-main">DRY zawsze</div>
+                                    <div class="verdict-sub">jeden kontekst, jedna prawda</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rule rule--infra">
+                            <div class="rule-num">2</div>
+                            <div class="rule-context">
+                                <div class="rule-where">Obszar</div>
+                                <div class="rule-name">Infrastruktura</div>
+                            </div>
+                            <i class="ti ti-arrow-narrow-right rule-arrow"></i>
+                            <div class="rule-verdict">
+                                <div class="verdict-icon"><i class="ti ti-check"></i></div>
+                                <div class="verdict-text">
+                                    <div class="verdict-main">DRY zawsze</div>
+                                    <div class="verdict-sub">cross-cutting concerns</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hub">DRY</div>
+
+                        <div class="rule rule--domain">
+                            <div class="rule-num">3</div>
+                            <div class="rule-context">
+                                <div class="rule-where">Obszar</div>
+                                <div class="rule-name">Logika <span class="em">domenowa</span> między serwisami</div>
+                            </div>
+                            <i class="ti ti-arrow-narrow-right rule-arrow"></i>
+                            <div class="rule-verdict">
+                                <div class="verdict-icon"><i class="ti ti-alert-triangle"></i></div>
+                                <div class="verdict-text">
+                                    <div class="verdict-main">DRY tylko świadomie</div>
+                                    <div class="verdict-sub">Shared Kernel + porozumienie zespołów</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

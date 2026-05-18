@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 15 - DRY to zasada o wiedzy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --text: #f0f4f8;
+            --soft: #cbd5e1;
+            --muted: #94a3b8;
+            --line: rgba(148, 163, 184, 0.24);
+            --panel: rgba(15, 23, 42, 0.54);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.84), rgba(10,14,23,0.92)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(3,7,18,0.48) 0%, transparent 34%, rgba(3,7,18,0.54) 100%),
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.24) 52%, rgba(3,7,18,0.72) 100%);
+        }
+
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 132px 410px;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            align-items: center;
+        }
+
+        .title {
+            width: 100%;
+            max-width: 1420px;
+            justify-self: center;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.16s forwards;
+        }
+
+        .title-text {
+            font-size: 64px;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1.1;
+            color: var(--soft);
+        }
+
+        .title-text .accent {
+            color: var(--text);
+            font-weight: 800;
+        }
+
+        .statement {
+            align-self: center;
+            justify-self: center;
+            text-align: center;
+            max-width: 1500px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            opacity: 0;
+            animation: fadeUp 0.85s ease-out 0.42s forwards;
+        }
+
+        .statement-line,
+        .statement-line-2 {
+            position: relative;
+            padding: 28px 54px 32px;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.055), transparent 48%),
+                rgba(15, 23, 42, 0.52);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.20);
+            font-weight: 800;
+            letter-spacing: 0;
+            line-height: 1.13;
+            color: var(--text);
+        }
+
+        .statement-line-2 {
+            font-size: 50px;
+        }
+
+        .statement-line {
+            border-color: rgba(34, 211, 238, 0.40);
+            background:
+                linear-gradient(135deg, rgba(34,211,238,0.11), transparent 46%),
+                rgba(15, 23, 42, 0.60);
+            font-size: 54px;
+        }
+
+        .statement-line::before,
+        .statement-line-2::before {
+            content: '“';
+            position: absolute;
+            top: -20px;
+            left: 28px;
+            font-size: 84px;
+            font-weight: 800;
+            line-height: 1;
+            color: rgba(34, 211, 238, 0.18);
+            pointer-events: none;
+        }
+
+        .statement-muted {
+            color: var(--muted);
+            font-weight: 650;
+        }
+
+        .statement-accent {
+            color: var(--cyan-400);
+            font-weight: 900;
+        }
+
+        .slogans {
+            width: 100%;
+            max-width: 1120px;
+            justify-self: center;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+            align-items: center;
+            gap: 36px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.72s forwards;
+        }
+
+        .slogan {
+            min-height: 96px;
+            padding: 24px 34px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            font-size: 31px;
+            font-weight: 500;
+            color: var(--soft);
+            letter-spacing: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .slogan-strong {
+            color: var(--text);
+            font-weight: 800;
+        }
+
+        .slogans-divider {
+            width: 1px;
+            height: 76px;
+            background: linear-gradient(180deg, transparent, rgba(34,211,238,0.42), transparent);
+        }
+
+        .footer-note {
+            position: absolute;
+            bottom: 318px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 100%;
+            max-width: 1120px;
+            padding: 0 24px;
+            font-size: 22px;
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.5;
+            color: var(--muted);
+            opacity: 0;
+            animation: fadeIn 0.9s ease-out 0.96s forwards;
+        }
+
+        .footer-note::before {
+            content: '';
+            display: block;
+            width: 54px;
+            height: 1px;
+            background: var(--cyan-700);
+            margin: 0 auto 20px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+ 
+            <!-- Main statement -->
+            <div class="statement">
+                <div class="statement-line-2">
+                    Duplikacja <span class="statement-muted">kodu</span> w osobnych kontekstach<br>to nie problem.
+                </div>
+                <div class="statement-line">
+                    Duplikacja <span class="statement-accent">wiedzy biznesowej</span> jest zawsze problemem.
+                </div>
+            </div>
+
+            <!-- Two slogans -->
+            <div class="slogans">
+                <div class="slogan">
+                    <span>Projektuj pod <span class="slogan-strong">autonomię</span></span>
+                </div>
+                <div class="slogans-divider"></div>
+                <div class="slogan">
+                    <span>Projektuj pod <span class="slogan-strong">usuwalność</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer note -->
+        <div class="footer-note">
+            Przedwczesna abstrakcja odbiera swobodę ewolucji.
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
