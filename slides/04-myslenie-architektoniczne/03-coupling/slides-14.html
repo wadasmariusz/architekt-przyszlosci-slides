@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 14 - Jak ograniczać coupling?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --good: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 30px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--good);
+            padding: 8px 18px;
+            border: 1px solid rgba(34,197,94,0.35);
+            border-radius: 999px;
+            background: rgba(34,197,94,0.08);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #4ade80, var(--good));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Section labels === */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            max-width: 1640px;
+            margin: 0 auto 16px;
+            opacity: 0;
+        }
+
+        .section-label--day { animation: fadeIn 0.8s ease-out 0.55s forwards; }
+        .section-label--scale { animation: fadeIn 0.8s ease-out 1.25s forwards; margin-top: 22px; }
+
+        .section-label .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .section-label--day .badge {
+            color: #86efac;
+            background: rgba(34,197,94,0.10);
+            border: 1px solid rgba(34,197,94,0.3);
+        }
+
+        .section-label--scale .badge {
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.08);
+            border: 1px solid rgba(34,211,238,0.3);
+        }
+
+        .section-label .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255,255,255,0.18), transparent);
+        }
+
+        /* === Practices grid (6 cards) === */
+        .practices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            max-width: 1640px;
+            margin: 0 auto;
+        }
+
+        .practice {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            background: rgba(17,24,39,0.65);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+        }
+
+        .practice:nth-child(1) { animation: fadeUp 0.6s ease-out 0.65s forwards; }
+        .practice:nth-child(2) { animation: fadeUp 0.6s ease-out 0.75s forwards; }
+        .practice:nth-child(3) { animation: fadeUp 0.6s ease-out 0.85s forwards; }
+        .practice:nth-child(4) { animation: fadeUp 0.6s ease-out 0.95s forwards; }
+        .practice:nth-child(5) { animation: fadeUp 0.6s ease-out 1.05s forwards; }
+        .practice:nth-child(6) { animation: fadeUp 0.6s ease-out 1.15s forwards; }
+
+        .practice-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(34,197,94,0.14);
+            color: var(--good);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex: 0 0 auto;
+        }
+
+        .practice-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .practice-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .practice-desc {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #cbd5e1;
+        }
+
+        .practice-desc strong {
+            color: #86efac;
+            font-weight: 600;
+        }
+
+        /* === Patterns row (3) === */
+        .patterns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1640px;
+            margin: 0 auto;
+        }
+
+        .pattern {
+            position: relative;
+            padding: 22px 26px;
+            border: 1px solid rgba(34,211,238,0.25);
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.16), rgba(17,24,39,0.65));
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            opacity: 0;
+        }
+
+        .pattern:nth-child(1) { animation: fadeUp 0.7s ease-out 1.35s forwards; }
+        .pattern:nth-child(2) { animation: fadeUp 0.7s ease-out 1.50s forwards; }
+        .pattern:nth-child(3) { animation: fadeUp 0.7s ease-out 1.65s forwards; }
+
+        .pattern-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(34,211,238,0.16);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex: 0 0 auto;
+        }
+
+        .pattern-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .pattern-tag {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+        }
+
+        .pattern-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .pattern-desc {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow"><i class="ti ti-tools"></i>Dobre Praktyki</div>
+                <h2 class="title">Jak <span class="highlight">ograniczać</span> coupling?</h2>
+            </div>
+
+            <div class="practices">
+                <div class="practice">
+                    <div class="practice-icon"><i class="ti ti-border-all"></i></div>
+                    <div class="practice-body">
+                        <div class="practice-title">Wyraźne granice modułów</div>
+                        <p class="practice-desc">Komunikacja przez <strong>kontrakty</strong>, nie przez znajomość wnętrza.</p>
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <div class="practice-icon"><i class="ti ti-lock"></i></div>
+                    <div class="practice-body">
+                        <div class="practice-title">Enkapsulacja</div>
+                        <p class="practice-desc">Ukrywanie implementacji, moduł pokazuje <strong>tylko to, co publiczne</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <div class="practice-icon"><i class="ti ti-plug-connected"></i></div>
+                    <div class="practice-body">
+                        <div class="practice-title">Dependency Injection</div>
+                        <p class="practice-desc">Oddziel <strong>użycie</strong> od <strong>tworzenia</strong> zależności.</p>
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <div class="practice-icon"><i class="ti ti-arrows-exchange"></i></div>
+                    <div class="practice-body">
+                        <div class="practice-title">Tylko potrzebne dane</div>
+                        <p class="practice-desc">Przekazuj <strong>fragmenty</strong>, nie całe obiekty na zapas.</p>
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <div class="practice-icon"><i class="ti ti-flag-off"></i></div>
+                    <div class="practice-body">
+                        <div class="practice-title">Rozbij metody wieloscenariuszowe</div>
+                        <p class="practice-desc">Funkcje sterowane flagami zaień na <strong>mniejsze, jednoznaczne operacje</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="practice">
+                    <div class="practice-icon"><i class="ti ti-shield-half-filled"></i></div>
+                    <div class="practice-body">
+                        <div class="practice-title">Izoalcja od zależności zewnętrznych</div>
+                        <p class="practice-desc">Adapter między dostawcą a <strong>rdzeniem domenowym</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-label section-label--scale">
+                <span class="badge"><i class="ti ti-layout-grid"></i>Wzorce architektoniczne</span>
+                <span class="line"></span>
+            </div>
+
+            <div class="patterns">
+                <div class="pattern">
+                    <div class="pattern-icon"><i class="ti ti-plug"></i></div>
+                    <div class="pattern-body">
+                        <span class="pattern-tag">Pattern</span>
+                        <div class="pattern-title">Porty i adaptery</div>
+                        <p class="pattern-desc">Domena rozmawia ze światem tylko przez porty.</p>
+                    </div>
+                </div>
+
+                <div class="pattern">
+                    <div class="pattern-icon"><i class="ti ti-shield-lock"></i></div>
+                    <div class="pattern-body">
+                        <span class="pattern-tag">Pattern</span>
+                        <div class="pattern-title">Warstwa antykorupcyjna</div>
+                        <p class="pattern-desc">Tłumaczy obce modele na własne pojęcia.</p>
+                    </div>
+                </div>
+
+                <div class="pattern">
+                    <div class="pattern-icon"><i class="ti ti-broadcast"></i></div>
+                    <div class="pattern-body">
+                        <span class="pattern-tag">Pattern</span>
+                        <div class="pattern-title">Komunikacja zdarzeniowa</div>
+                        <p class="pattern-desc">Publish / subscribe zamiast bezpośrednich zależności.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

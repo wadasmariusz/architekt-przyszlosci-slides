@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Control coupling</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 76px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 32px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--warn);
+            padding: 8px 18px;
+            border: 1px solid rgba(245,158,11,0.35);
+            border-radius: 999px;
+            background: rgba(245,158,11,0.08);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 62px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fbbf24, var(--warn));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lede {
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 1.5;
+            color: #cbd5e1;
+            max-width: 1300px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .lede strong { color: var(--cyan-400); font-weight: 600; }
+
+        /* === Body: code + consequences === */
+        .body {
+            display: grid;
+            grid-template-columns: 1fr 520px;
+            gap: 48px;
+            max-width: 1640px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        /* Code block */
+        .code-card {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            background: rgba(10,14,23,0.78);
+            backdrop-filter: blur(6px);
+            padding: 0;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.75s forwards;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 22px;
+            background: rgba(17,24,39,0.85);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #475569;
+        }
+
+        .dot--r { background: #ef4444; }
+        .dot--y { background: #f59e0b; }
+        .dot--g { background: #22c55e; }
+
+        .code-file {
+            margin-left: 18px;
+            color: #cbd5e1;
+        }
+
+        .code-flag {
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--warn);
+            padding: 4px 10px;
+            border: 1px solid rgba(245,158,11,0.35);
+            border-radius: 999px;
+            background: rgba(245,158,11,0.08);
+        }
+
+        .code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            line-height: 1.7;
+            padding: 26px 30px 28px;
+            color: #e2e8f0;
+            flex: 1;
+        }
+
+        .code .ln { color: #475569; user-select: none; display: inline-block; width: 30px; }
+        .code .code-line {
+            display: block;
+            min-height: 1.7em;
+            white-space: pre-wrap;
+        }
+        .code .kw { color: #c084fc; font-weight: 600; }
+        .code .fn { color: #fcd34d; font-weight: 600; }
+        .code .ty { color: #67e8f9; }
+        .code .pm { color: #f0f4f8; }
+        .code .flag-name { color: #fda4af; font-weight: 600; }
+        .code .flag-val  { color: #fb923c; }
+        .code .cm { color: #64748b; font-style: italic; }
+        .code .str { color: #86efac; }
+
+        .code .flag-line {
+            background: rgba(239,68,68,0.07);
+            border-left: 2px solid rgba(239,68,68,0.4);
+            padding-left: 12px;
+            margin-left: -14px;
+            display: block;
+        }
+
+        .code-foot {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            background: rgba(245,158,11,0.05);
+            font-size: 15px;
+            color: #fcd34d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-foot i { font-size: 18px; }
+
+        /* Consequences */
+        .panel {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.95s forwards;
+        }
+
+        .panel-card {
+            padding: 22px 26px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+        }
+
+        .panel-card--accent {
+            border: 1px solid rgba(245,158,11,0.3);
+            background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(17,24,39,0.55));
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .panel-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(34,211,238,0.13);
+            color: var(--cyan-400);
+            flex: 0 0 auto;
+        }
+
+        .panel-icon--warn {
+            background: rgba(245,158,11,0.15);
+            color: var(--warn);
+        }
+
+        .panel-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+        }
+
+        .panel-text {
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1.45;
+            color: #cbd5e1;
+        }
+
+        .panel-text em {
+            font-style: italic;
+            color: #f0f4f8;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow"><i class="ti ti-flag-filled"></i>Sterowanie flagami</div>
+                <h2 class="title">Control <span class="highlight">coupling</span></h2>
+                <p class="lede">
+                    Moduł wywołujący <strong>steruje zachowaniem</strong> wywoływanego przez flagi i parametry sterujące.
+                </p>
+            </div>
+
+            <div class="body">
+                <div class="code-card">
+                    <div class="code-head">
+                        <span class="dot dot--r"></span>
+                        <span class="dot dot--y"></span>
+                        <span class="dot dot--g"></span>
+                        <span class="code-file">order-service.ts</span>
+                        <span class="code-flag">kombajn</span>
+                    </div>
+
+                    <div class="code">
+<span class="code-line cm"><span class="ln">1</span>// jedna metoda, ale wiele scenariuszy</span>
+<span class="code-line"><span class="ln">2</span><span class="kw">function</span> <span class="fn">processOrder</span>(</span>
+<span class="code-line"><span class="ln">3</span>  <span class="pm">order</span>: <span class="ty">Order</span>,</span>
+<span class="code-line flag-line"><span class="ln">4</span>  <span class="flag-name">mode</span>: <span class="ty">string</span>,             <span class="cm">// "draft" | "final" | "preview"</span></span>
+<span class="code-line flag-line"><span class="ln">5</span>  <span class="flag-name">isAdmin</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">6</span>  <span class="flag-name">isTest</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">7</span>  <span class="flag-name">skipEmail</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">8</span>  <span class="flag-name">includeDetails</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line flag-line"><span class="ln">9</span>  <span class="flag-name">validateStock</span>: <span class="ty">boolean</span>,</span>
+<span class="code-line"><span class="ln">10</span>) { <span class="cm">/* ... 200 linii ifów ... */</span> }</span>
+<span class="code-line"><span class="ln">11</span></span>
+<span class="code-line cm"><span class="ln">12</span>// wywołanie:</span>
+<span class="code-line"><span class="ln">13</span><span class="fn">processOrder</span>(o, <span class="str">"final"</span>, <span class="flag-val">true</span>, <span class="flag-val">false</span>, <span class="flag-val">false</span>, <span class="flag-val">true</span>, <span class="flag-val">true</span>);</span>
+                    </div>
+
+                    <div class="code-foot">
+                        <i class="ti ti-alert-triangle-filled"></i>
+                        Każda flaga = nowa gałąź logiki w środku, którą wywołujący musi znać.
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-card panel-card--accent">
+                        <div class="panel-head">
+                            <div class="panel-icon panel-icon--warn"><i class="ti ti-tools"></i></div>
+                            <div class="panel-title">Metoda wieloscenariuszowa</div>
+                        </div>
+                        <p class="panel-text">
+                            Jedna funkcja obsługuje wiele scenariuszy.
+                        </p>
+                    </div>
+
+                    <div class="panel-card">
+                        <div class="panel-head">
+                            <div class="panel-icon"><i class="ti ti-eye-off"></i></div>
+                            <div class="panel-title">Wyciekająca implementacja</div>
+                        </div>
+                        <p class="panel-text">
+                            Wywołujący musi <em>wiedzieć, co robią flagi</em> w środku
+                        </p>
+                    </div>
+
+                    <div class="panel-card">
+                        <div class="panel-head">
+                            <div class="panel-icon"><i class="ti ti-test-pipe"></i></div>
+                            <div class="panel-title">Eksplozja testów</div>
+                        </div>
+                        <p class="panel-text">
+                            Liczba kombinacji flag rośnie wykładniczo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

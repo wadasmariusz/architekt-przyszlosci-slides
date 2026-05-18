@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 17 - Podsumowanie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --danger: #ef4444;
+            --good: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 78px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            padding: 8px 18px;
+            border: 1px solid rgba(34,211,238,0.3);
+            border-radius: 999px;
+            background: rgba(34,211,238,0.06);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 84px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Theses grid === */
+        .theses {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+            max-width: 1640px;
+            margin: 0 auto;
+        }
+
+        .thesis {
+            position: relative;
+            padding: 30px 26px 28px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            background: rgba(17,24,39,0.65);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+        }
+
+        .thesis:nth-child(1) { animation: fadeUp 0.7s ease-out 0.7s forwards; }
+        .thesis:nth-child(2) { animation: fadeUp 0.7s ease-out 0.85s forwards; }
+        .thesis:nth-child(3) { animation: fadeUp 0.7s ease-out 1.0s forwards; }
+        .thesis:nth-child(4) { animation: fadeUp 0.7s ease-out 1.15s forwards; }
+
+        .thesis-num {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            font-size: 64px;
+            font-weight: 800;
+            color: rgba(34,211,238,0.12);
+            line-height: 0.9;
+        }
+
+        .thesis-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+            background: rgba(34,211,238,0.13);
+            color: var(--cyan-400);
+        }
+
+        .thesis--def .thesis-icon { background: rgba(34,211,238,0.13); color: var(--cyan-400); }
+        .thesis--bad .thesis-icon { background: rgba(239,68,68,0.13);  color: var(--danger); }
+        .thesis--ok  .thesis-icon { background: rgba(34,197,94,0.13);  color: var(--good); }
+        .thesis--goal .thesis-icon { background: rgba(34,211,238,0.13); color: var(--cyan-400); }
+
+        .thesis-tag {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .thesis--def  .thesis-tag { color: var(--cyan-400); }
+        .thesis--bad  .thesis-tag { color: var(--danger); }
+        .thesis--ok   .thesis-tag { color: var(--good); }
+        .thesis--goal .thesis-tag { color: var(--cyan-400); }
+
+        .thesis-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .thesis-desc {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.45;
+            color: #cbd5e1;
+        }
+
+        .thesis-desc strong {
+            color: #f0f4f8;
+            font-weight: 600;
+        }
+
+        /* === Final quote === */
+        .quote {
+            max-width: 1500px;
+            margin: 44px auto 0;
+            padding: 36px 60px 36px 80px;
+            border: 1px solid rgba(34,211,238,0.22);
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(14,116,144,0.22), rgba(17,24,39,0.55));
+            backdrop-filter: blur(6px);
+            position: relative;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.4s forwards;
+        }
+
+        .quote-mark {
+            position: absolute;
+            top: 18px;
+            left: 26px;
+            font-size: 56px;
+            color: var(--cyan-400);
+            opacity: 0.45;
+            line-height: 1;
+        }
+
+        .quote-text {
+            font-size: 28px;
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.4;
+            color: #f0f4f8;
+            text-align: center;
+        }
+
+        .quote-text em {
+            color: var(--cyan-400);
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow"><i class="ti ti-checks"></i>Koniec lekcji</div>
+                <h2 class="title"><span class="highlight">Podsumowanie</span></h2>
+            </div>
+
+            <div class="theses">
+                <div class="thesis thesis--def">
+                    <div class="thesis-icon"><i class="ti ti-link"></i></div>
+                    <span class="thesis-tag">Definicja</span>
+                    <div class="thesis-title">Siła powiązań</div>
+                    <p class="thesis-desc">
+                        Coupling = <strong>siła powiązań</strong> między częściami systemu. Za tą definicją stoi duża część jakości architektury.
+                    </p>
+                </div>
+
+                <div class="thesis thesis--bad">
+                    <div class="thesis-icon"><i class="ti ti-alert-triangle"></i></div>
+                    <span class="thesis-tag">Za wysokie</span>
+                    <div class="thesis-title">Sztywność i koszt</div>
+                    <p class="thesis-desc">
+                        Zbyt silne sprzężenie = <strong>sztywność</strong>, trudne testowanie, kosztowny rozwój i ryzykowne zmiany.
+                    </p>
+                </div>
+
+                <div class="thesis thesis--ok">
+                    <div class="thesis-icon"><i class="ti ti-circle-check"></i></div>
+                    <span class="thesis-tag">Kontrolowane</span>
+                    <div class="thesis-title">Autonomia modułów</div>
+                    <p class="thesis-desc">
+                        Dobrze kontrolowane sprzężenie = <strong>niezależne moduły</strong>, lokalne i przewidywalne zmiany.
+                    </p>
+                </div>
+
+                <div class="thesis thesis--goal">
+                    <div class="thesis-icon"><i class="ti ti-target-arrow"></i></div>
+                    <span class="thesis-tag">Cel</span>
+                    <div class="thesis-title">Świadome zależności</div>
+                    <p class="thesis-desc">
+                        Nie eliminować zależności, lecz <strong>budować je świadomie</strong>, ograniczać i opierać na dobrych kontraktach.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quote">
+                <div class="quote-mark"><i class="ti ti-quote"></i></div>
+                <p class="quote-text">
+                    Coupling to nie tylko <em>miara bieżącej funkcjonalności</em> systemu, ale też wskaźnik jego zdolności do <em>zrównoważonej ewolucji </em> w perspektywie miesięcy i lat.
+                </p>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

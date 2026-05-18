@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 16 - Wspólny model vs. lokalne kontrakty</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+            --good: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.66), rgba(10,14,23,0.76)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 64px 130px 150px;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 24px;
+        }
+
+        .eyebrow {
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .sep { color: #475569; margin: 0 14px; font-weight: 400; }
+
+        /* === Compare === */
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 1640px;
+            margin: 0 auto;
+        }
+
+        .col {
+            padding: 22px 26px 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            background: rgba(17,24,39,0.65);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+        }
+
+        .col--bad  { animation: slideFromLeft 0.8s ease-out 0.65s forwards; }
+        .col--good { animation: slideFromRight 0.8s ease-out 0.65s forwards; }
+
+        .col-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .col-head-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .col-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex: 0 0 auto;
+        }
+
+        .col--bad  .col-icon { background: rgba(239,68,68,0.15); color: var(--danger); }
+        .col--good .col-icon { background: rgba(34,197,94,0.15);  color: var(--good); }
+
+        .col-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .col--bad  .col-label { color: var(--danger); }
+        .col--good .col-label { color: var(--good); }
+
+        .col-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .col-badge {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 999px;
+        }
+
+        .col--bad .col-badge {
+            color: var(--danger);
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.35);
+        }
+
+        .col--good .col-badge {
+            color: var(--good);
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.35);
+        }
+
+        /* Diagram */
+        .diagram {
+            padding: 10px;
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-radius: 14px;
+            background: rgba(10,14,23,0.55);
+            margin-bottom: 14px;
+        }
+
+        .diagram svg {
+            display: block;
+            width: 100%;
+            height: 330px;
+        }
+
+        /* Bullets */
+        .bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bullets li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #e2e8f0;
+        }
+
+        .bullets li i {
+            margin-top: 3px;
+            font-size: 17px;
+            flex: 0 0 auto;
+        }
+
+        .col--bad  .bullets li i { color: var(--danger); }
+        .col--good .bullets li i { color: var(--good); }
+
+        .bullets strong {
+            color: #f0f4f8;
+            font-weight: 700;
+        }
+
+        /* === Trade-off note === */
+        .tradeoff {
+            max-width: 1640px;
+            margin: 24px auto 0;
+            padding: 18px 26px;
+            border: 1px solid rgba(245,158,11,0.28);
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.10), rgba(17,24,39,0.55));
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.35s forwards;
+        }
+
+        .tradeoff-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(245,158,11,0.18);
+            color: var(--warn);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex: 0 0 auto;
+        }
+
+        .tradeoff-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .tradeoff-tag {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--warn);
+        }
+
+        .tradeoff-text {
+            font-size: 19px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #f0f4f8;
+        }
+
+        .tradeoff-text em {
+            font-style: italic;
+            color: #fcd34d;
+            font-weight: 600;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideFromLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideFromRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes dashFlow {
+            from { stroke-dashoffset: 24; }
+            to   { stroke-dashoffset: 0; }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Przykład</div>
+                <h2 class="title">Wspólny model <span class="sep">vs.</span> lokalne kontrakty</h2>
+            </div>
+
+            <div class="compare">
+                <div class="col col--bad">
+                    <div class="col-head">
+                        <div class="col-head-left">
+                            <div class="col-icon"><i class="ti ti-target"></i></div>
+                            <div>
+                                <span class="col-label">Wariant A</span>
+                                <div class="col-title">Jeden wspólny model dla wszystkich</div>
+                            </div>
+                        </div>
+                        <span class="col-badge">Wysokie coupling</span>
+                    </div>
+
+                    <div class="diagram">
+                        <svg viewBox="0 0 700 330" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <marker id="arrowR2" viewBox="0 0 10 10" refX="9" refY="5"
+                                        markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+                                </marker>
+                                <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#ef4444" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+
+                            <!-- Halo -->
+                            <circle cx="350" cy="165" r="120" fill="url(#centerGlow)"/>
+
+                            <!-- Central User model -->
+                            <rect x="265" y="120" width="170" height="90" rx="16"
+                                  fill="rgba(239,68,68,0.16)" stroke="#ef4444" stroke-width="2.5"/>
+                            <text x="350" y="152" text-anchor="middle" font-size="20" font-weight="800" fill="#fca5a5">User</text>
+                            <text x="350" y="175" text-anchor="middle" font-size="11" fill="#fda4af">id · name · email</text>
+                            <text x="350" y="192" text-anchor="middle" font-size="11" fill="#fda4af">address · payment · …</text>
+
+                            <!-- Layers -->
+                            <rect x="20" y="20" width="160" height="56" rx="12"
+                                  fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2"/>
+                            <text x="100" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#f0f4f8">Prezentacja</text>
+
+                            <rect x="520" y="20" width="160" height="56" rx="12"
+                                  fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2"/>
+                            <text x="600" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#f0f4f8">Logika</text>
+
+                            <rect x="20" y="254" width="160" height="56" rx="12"
+                                  fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2"/>
+                            <text x="100" y="289" text-anchor="middle" font-size="16" font-weight="700" fill="#f0f4f8">Integracje</text>
+
+                            <rect x="520" y="254" width="160" height="56" rx="12"
+                                  fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="2"/>
+                            <text x="600" y="289" text-anchor="middle" font-size="16" font-weight="700" fill="#f0f4f8">Persystencja</text>
+
+                            <!-- Arrows to center -->
+                            <line x1="180" y1="55"  x2="270" y2="135" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowR2)"/>
+                            <line x1="520" y1="55"  x2="430" y2="135" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowR2)"/>
+                            <line x1="180" y1="280" x2="270" y2="200" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowR2)"/>
+                            <line x1="520" y1="280" x2="430" y2="200" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowR2)"/>
+
+                        </svg>
+                    </div>
+
+                    <ul class="bullets">
+                        <li><i class="ti ti-point-filled"></i>Każda zmiana modelu dotyka <strong>czterech warstw</strong> naraz</li>
+                        <li><i class="ti ti-point-filled"></i>Pola dodane dla bazy <strong>wyciekają</strong> do UI i integracji</li>
+                        <li><i class="ti ti-point-filled"></i>Refactor pól = <strong>łańcuch zmian</strong> po całym systemie</li>
+                    </ul>
+                </div>
+
+                <div class="col col--good">
+                    <div class="col-head">
+                        <div class="col-head-left">
+                            <div class="col-icon"><i class="ti ti-layout-grid"></i></div>
+                            <div>
+                                <span class="col-label">Wariant B</span>
+                                <div class="col-title">Własny model dla każdej warstwy</div>
+                            </div>
+                        </div>
+                        <span class="col-badge">Niskie coupling</span>
+                    </div>
+
+                    <div class="diagram">
+                        <svg viewBox="0 0 700 330" preserveAspectRatio="xMidYMid meet">
+                            <defs>
+                                <marker id="arrowG2" viewBox="0 0 10 10" refX="9" refY="5"
+                                        markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e" />
+                                </marker>
+                            </defs>
+
+                            <!-- Layer 1: Prezentacja -->
+                            <rect x="40" y="20" width="620" height="58" rx="14"
+                                  fill="rgba(34,197,94,0.06)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="78" y="46" font-size="14" font-weight="700" fill="#86efac">Prezentacja</text>
+                            <rect x="240" y="32" width="160" height="34" rx="8"
+                                  fill="rgba(34,197,94,0.18)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="320" y="54" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">UserViewModel</text>
+
+                            <!-- Layer 2: Logika -->
+                            <rect x="40" y="100" width="620" height="58" rx="14"
+                                  fill="rgba(34,197,94,0.06)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="78" y="126" font-size="14" font-weight="700" fill="#86efac">Logika</text>
+                            <rect x="240" y="112" width="160" height="34" rx="8"
+                                  fill="rgba(34,197,94,0.18)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="320" y="134" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">UserDomain</text>
+
+                            <!-- Layer 3: Integracje -->
+                            <rect x="40" y="180" width="620" height="58" rx="14"
+                                  fill="rgba(34,197,94,0.06)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="78" y="206" font-size="14" font-weight="700" fill="#86efac">Integracje</text>
+                            <rect x="240" y="192" width="160" height="34" rx="8"
+                                  fill="rgba(34,197,94,0.18)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="320" y="214" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">UserDto</text>
+
+                            <!-- Layer 4: Persystencja -->
+                            <rect x="40" y="260" width="620" height="58" rx="14"
+                                  fill="rgba(34,197,94,0.06)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="78" y="286" font-size="14" font-weight="700" fill="#86efac">Persystencja</text>
+                            <rect x="240" y="272" width="160" height="34" rx="8"
+                                  fill="rgba(34,197,94,0.18)" stroke="#22c55e" stroke-width="1.5"/>
+                            <text x="320" y="294" text-anchor="middle" font-size="14" font-weight="700" fill="#86efac">UserEntity</text>
+
+                            <!-- Mapping arrows between layers -->
+                            <line x1="500" y1="66" x2="500" y2="112" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrowG2)"/>
+                            <line x1="500" y1="146" x2="500" y2="192" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrowG2)"/>
+                            <line x1="500" y1="226" x2="500" y2="272" stroke="#22c55e" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrowG2)"/>
+
+                            <text x="560" y="90"  font-size="11" fill="#86efac">map()</text>
+                            <text x="560" y="170" font-size="11" fill="#86efac">map()</text>
+                            <text x="560" y="250" font-size="11" fill="#86efac">map()</text>
+                        </svg>
+                    </div>
+
+                    <ul class="bullets">
+                        <li><i class="ti ti-point-filled"></i>Zmiana modelu <strong>lokalna</strong> dla jednej warstwy</li>
+                        <li><i class="ti ti-point-filled"></i>Każda warstwa decyduje <strong>czego potrzebuje</strong></li>
+                        <li><i class="ti ti-point-filled"></i>Granice oddzielają wiedzę — <strong>większa autonomia</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tradeoff">
+                <div class="tradeoff-icon"><i class="ti ti-scale"></i></div>
+                <div class="tradeoff-body">
+                    <span class="tradeoff-tag">Trade-off</span>
+                    <p class="tradeoff-text">
+                        Nadmiar mapowania <em>też bywa kosztowny</em>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
