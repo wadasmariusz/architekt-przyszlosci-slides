@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Synchroniczna vs. asynchroniczna komunikacja</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --violet-400: #a78bfa;
+            --violet-500: #8b5cf6;
+            --violet-600: #7c3aed;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                url('../../../images/background-1.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 72px 80px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .highlight--violet {
+            background: linear-gradient(135deg, var(--violet-400), var(--violet-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Compare grid === */
+        .compare {
+            width: 100%;
+            max-width: 1620px;
+            display: grid;
+            grid-template-columns: 220px 1fr 1fr;
+            gap: 20px 24px;
+            align-items: stretch;
+        }
+
+        /* column headers */
+        .col-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 26px;
+            border-radius: 18px;
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out forwards;
+        }
+
+        .col-head--sync {
+            background: linear-gradient(135deg, rgba(34,211,238,0.16), rgba(17,24,39,0.72));
+            animation-delay: 0.55s;
+        }
+
+        .col-head--async {
+            background: linear-gradient(135deg, rgba(139,92,246,0.16), rgba(17,24,39,0.72));
+            animation-delay: 0.65s;
+        }
+
+        .col-head-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex: 0 0 auto;
+        }
+
+        .col-head--sync .col-head-icon {
+            background: rgba(34,211,238,0.16);
+            color: var(--cyan-400);
+        }
+
+        .col-head--async .col-head-icon {
+            background: rgba(139,92,246,0.16);
+            color: var(--violet-400);
+        }
+
+        .col-head-label {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.55);
+            margin-bottom: 3px;
+        }
+
+        .col-head-title {
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.3px;
+        }
+
+        .col-head--sync  .col-head-title { color: var(--cyan-400); }
+        .col-head--async .col-head-title { color: var(--violet-400); }
+
+        /* row label */
+        .row-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 22px;
+            font-size: 18px;
+            font-weight: 700;
+            color: rgba(240,244,248,0.8);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+
+        .row-label i {
+            font-size: 22px;
+            color: var(--cyan-400);
+        }
+
+        /* cell */
+        .cell {
+            padding: 22px 24px;
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 500;
+            line-height: 1.35;
+            color: #f0f4f8;
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+
+        .cell--sync  { background: rgba(34,211,238,0.07); }
+        .cell--async { background: rgba(139,92,246,0.07); }
+
+        .cell strong {
+            font-weight: 700;
+        }
+
+        .cell-text {
+            display: block;
+        }
+
+        .cell--sync strong  { color: var(--cyan-400); }
+        .cell--async strong { color: var(--violet-400); }
+
+        /* per-row delays */
+        .row-1 .row-label, .row-1 .cell { animation-delay: 0.8s; }
+        .row-2 .row-label, .row-2 .cell { animation-delay: 0.95s; }
+        .row-3 .row-label, .row-3 .cell { animation-delay: 1.10s; }
+        .row-4 .row-label, .row-4 .cell { animation-delay: 1.25s; }
+
+        /* === Bottom punch === */
+        .punch {
+            margin-top: 36px;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 30px;
+            border-radius: 999px;
+            background: rgba(17,24,39,0.55);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.45s forwards;
+        }
+
+        .punch i {
+            font-size: 22px;
+            color: var(--cyan-400);
+        }
+
+        .punch-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.85);
+            font-style: italic;
+        }
+
+        .punch-text strong {
+            color: var(--cyan-400);
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <h1 class="title">Komunikacja</br><span class="highlight">Synchroniczna</span> vs. <span class="highlight--violet">asynchroniczna</span></h1>
+            </header>
+
+            <section class="compare">
+                <!-- header row -->
+                <div></div>
+                <div class="col-head col-head--sync">
+                    <div class="col-head-icon"><i class="ti ti-arrow-bounce"></i></div>
+                    <div>
+                        <div class="col-head-label">Komunikacja</div>
+                        <div class="col-head-title">Synchroniczna</div>
+                    </div>
+                </div>
+                <div class="col-head col-head--async">
+                    <div class="col-head-icon"><i class="ti ti-arrows-shuffle"></i></div>
+                    <div>
+                        <div class="col-head-label">Komunikacja</div>
+                        <div class="col-head-title">Asynchroniczna</div>
+                    </div>
+                </div>
+
+                <!-- row 1: mechanizm -->
+                <div class="row-1" style="display: contents;">
+                    <div class="row-label"><i class="ti ti-settings"></i> Mechanizm</div>
+                    <div class="cell cell--sync"><span class="cell-text">Żądanie → <strong>oczekiwanie</strong> → odpowiedź</span></div>
+                    <div class="cell cell--async"><span class="cell-text">Zdarzenie / wiadomość → przetworzenie <strong>w swoim czasie</strong></span></div>
+                </div>
+
+                <!-- row 2: zaleta -->
+                <div class="row-2" style="display: contents;">
+                    <div class="row-label"><i class="ti ti-thumb-up"></i> Zaleta</div>
+                    <div class="cell cell--sync"><span class="cell-text"><strong>Prostota</strong> implementacji, natychmiastowa odpowiedź</span></div>
+                    <div class="cell cell--async"><span class="cell-text"><strong>Odporność</strong> na awarie, mniejsze sprzężenie czasowe</span></div>
+                </div>
+
+                <!-- row 3: ryzyko -->
+                <div class="row-3" style="display: contents;">
+                    <div class="row-label"><i class="ti ti-alert-triangle"></i> Ryzyko</div>
+                    <div class="cell cell--sync"><span class="cell-text"><strong>Kaskadowe opóźnienia</strong>, zależność od dostępności</span></div>
+                    <div class="cell cell--async"><span class="cell-text">Złożona <strong>spójność danych</strong>, trudniejsze debugowanie</span></div>
+                </div>
+
+                <!-- row 4: typowe użycie -->
+                <div class="row-4" style="display: contents;">
+                    <div class="row-label"><i class="ti ti-target"></i> Użycie</div>
+                    <div class="cell cell--sync"><span class="cell-text">Zapytania wymagające <strong>natychmiastowego wyniku</strong></span></div>
+                    <div class="cell cell--async"><span class="cell-text"><strong>Event-driven</strong>, kolejki, CQRS</span></div>
+                </div>
+            </section>
+
+            <div class="punch">
+                <i class="ti ti-scale"></i>
+                <span class="punch-text"><strong>trade-off do świadomej oceny</strong>.</span>
+            </div>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

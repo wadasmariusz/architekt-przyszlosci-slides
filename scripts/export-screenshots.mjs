@@ -19,7 +19,7 @@ function findSlideFolders(dir, base = '') {
     if (!entry.isDirectory()) continue;
     const fullPath = join(dir, entry.name);
     const relPath = base ? `${base}/${entry.name}` : entry.name;
-    const files = readdirSync(fullPath).filter(f => /^slides-\d+\.html$/.test(f));
+    const files = readdirSync(fullPath).filter(f => /^slides-\d+[a-z]?\.html$/.test(f));
     if (files.length > 0) {
       folders.push({ path: fullPath, rel: relPath, files: files.sort() });
     }
@@ -31,7 +31,7 @@ function findSlideFolders(dir, base = '') {
 
 function getSlideFiles(dirPath) {
   return readdirSync(dirPath)
-    .filter(f => /^slides-\d+\.html$/.test(f))
+    .filter(f => /^slides-\d+[a-z]?\.html$/.test(f))
     .sort();
 }
 
@@ -40,8 +40,8 @@ async function run() {
   const slideArgIndex = process.argv.indexOf('--slide');
   const slideFilter = slideArgIndex !== -1 ? process.argv[slideArgIndex + 1] : null;
 
-  if (slideFilter && !/^\d+$/.test(slideFilter)) {
-    console.error('Flaga --slide wymaga numeru slajdu, np. --slide 5');
+  if (slideFilter && !/^\d+[a-z]?$/.test(slideFilter)) {
+    console.error('Flaga --slide wymaga numeru slajdu (opcjonalnie z literą), np. --slide 5 lub --slide 7a');
     process.exit(1);
   }
 
@@ -69,8 +69,8 @@ async function run() {
 
   // Filter to single slide if --slide flag is used
   if (slideFilter) {
-    const slideNum = slideFilter.padStart(2, '0');
-    const slideFile = `slides-${slideNum}.html`;
+    const [, slideDigits, slideSuffix] = slideFilter.match(/^(\d+)([a-z]?)$/);
+    const slideFile = `slides-${slideDigits.padStart(2, '0')}${slideSuffix}.html`;
     selectedFolders = selectedFolders.map(f => ({
       ...f,
       files: f.files.filter(file => file === slideFile),

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 05 - Mit #2: Opóźnienie jest zerowe</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                url('../../../images/background-2.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 68px 80px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 30px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Tree === */
+        .tree {
+            position: relative;
+            width: 1620px;
+            height: 540px;
+            margin-top: 12px;
+        }
+
+        .tree svg.connectors {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .node {
+            position: absolute;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.72);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 20px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .node-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            font-size: 22px;
+            flex: 0 0 auto;
+        }
+
+        .node-body { display: flex; flex-direction: column; gap: 2px; }
+
+        .node-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.1;
+            letter-spacing: -0.2px;
+        }
+
+        .node-ms {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--cyan-400);
+            letter-spacing: 0.5px;
+        }
+
+        /* root */
+        .node--root {
+            left: 0;
+            top: 220px;
+            width: 280px;
+            padding: 22px 26px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.14), rgba(17,24,39,0.78));
+            animation-delay: 0.55s;
+        }
+        .node--root .node-ico { width: 56px; height: 56px; font-size: 28px; border-radius: 14px; }
+        .node--root .node-name { font-size: 24px; }
+        .node--root .node-ms { font-size: 13px; color: rgba(240,244,248,0.55); font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* mid services */
+        .node--mid {
+            left: 540px;
+            width: 280px;
+            padding: 16px 22px;
+        }
+        .node--mid .node-name { font-size: 22px; }
+
+        .node--a { top: 30px;  animation-delay: 0.85s; }
+        .node--b { top: 230px; animation-delay: 0.95s; }
+        .node--c { top: 430px; animation-delay: 1.05s; }
+
+        /* leaves */
+        .node--leaf {
+            left: 1080px;
+            width: 240px;
+            padding: 10px 16px;
+        }
+        .node--leaf .node-ico { width: 32px; height: 32px; font-size: 18px; }
+        .node--leaf .node-name { font-size: 18px; }
+        .node--leaf .node-ms { font-size: 13px; }
+
+        .leaf-d { top: 0;   animation-delay: 1.15s; }
+        .leaf-e { top: 64px;  animation-delay: 1.20s; }
+        .leaf-f { top: 128px; animation-delay: 1.25s; }
+        .leaf-g { top: 200px; animation-delay: 1.30s; }
+        .leaf-h { top: 264px; animation-delay: 1.35s; }
+        .leaf-i { top: 328px; animation-delay: 1.40s; }
+        .leaf-j { top: 400px; animation-delay: 1.45s; }
+        .leaf-k { top: 464px; animation-delay: 1.50s; }
+
+        /* ellipsis label */
+        .ellipsis {
+            position: absolute;
+            left: 1380px;
+            font-size: 32px;
+            font-weight: 800;
+            color: rgba(240,244,248,0.45);
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.6s forwards;
+        }
+        .dots-1 { top: 60px; }
+        .dots-2 { top: 260px; }
+        .dots-3 { top: 460px; }
+
+        /* === Total bar === */
+        .total {
+            margin-top: 30px;
+            width: 1500px;
+            display: flex;
+            align-items: center;
+            gap: 26px;
+            padding: 22px 36px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.14), rgba(17,24,39,0.72));
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.75s forwards;
+        }
+
+        .total-icon {
+            flex: 0 0 auto;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(34,211,238,0.18);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.6);
+            margin-bottom: 4px;
+        }
+
+        .total-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .total-value strong {
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--cyan-400);
+            letter-spacing: -0.5px;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <p class="eyebrow"><span class="eyebrow-num">02</span> Mit drugi</p>
+                <h1 class="title">Opóźnienie jest <span class="highlight">zerowe</span></h1>
+            </header>
+
+            <section class="tree">
+                <svg class="connectors" viewBox="0 0 1620 540" preserveAspectRatio="none">
+                    <!-- root -> mid services -->
+                    <path d="M 280 260 C 410 260, 410 70,  540 70"  fill="none" stroke="#0e7490" stroke-width="2"/>
+                    <path d="M 280 260 L 540 270"                    fill="none" stroke="#0e7490" stroke-width="2"/>
+                    <path d="M 280 260 C 410 260, 410 470, 540 470" fill="none" stroke="#0e7490" stroke-width="2"/>
+
+                    <!-- A -> D, E, F -->
+                    <path d="M 820 70 C 950 70,  950 25,  1080 25"  fill="none" stroke="#164e63" stroke-width="1.5"/>
+                    <path d="M 820 70 L 1080 89"                     fill="none" stroke="#164e63" stroke-width="1.5"/>
+                    <path d="M 820 70 C 950 70,  950 153, 1080 153" fill="none" stroke="#164e63" stroke-width="1.5"/>
+
+                    <!-- B -> G, H, I -->
+                    <path d="M 820 270 C 950 270, 950 225, 1080 225" fill="none" stroke="#164e63" stroke-width="1.5"/>
+                    <path d="M 820 270 L 1080 289"                    fill="none" stroke="#164e63" stroke-width="1.5"/>
+                    <path d="M 820 270 C 950 270, 950 353, 1080 353" fill="none" stroke="#164e63" stroke-width="1.5"/>
+
+                    <!-- C -> J, K, ... -->
+                    <path d="M 820 470 C 950 470, 950 425, 1080 425" fill="none" stroke="#164e63" stroke-width="1.5"/>
+                    <path d="M 820 470 L 1080 489"                    fill="none" stroke="#164e63" stroke-width="1.5"/>
+                </svg>
+
+                <!-- root -->
+                <div class="node node--root">
+                    <div class="node-ico"><i class="ti ti-user"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Endpoint użytkownika</div>
+                        <div class="node-ms">Wywołanie</div>
+                    </div>
+                </div>
+
+                <!-- mid services -->
+                <div class="node node--mid node--a">
+                    <div class="node-ico"><i class="ti ti-cube"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa A</div>
+                        <div class="node-ms">~15 ms</div>
+                    </div>
+                </div>
+                <div class="node node--mid node--b">
+                    <div class="node-ico"><i class="ti ti-cube"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa B</div>
+                        <div class="node-ms">~20 ms</div>
+                    </div>
+                </div>
+                <div class="node node--mid node--c">
+                    <div class="node-ico"><i class="ti ti-cube"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa C</div>
+                        <div class="node-ms">~11 ms</div>
+                    </div>
+                </div>
+
+                <!-- leaves -->
+                <div class="node node--leaf leaf-d">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa D</div>
+                        <div class="node-ms">~12 ms</div>
+                    </div>
+                </div>
+                <div class="node node--leaf leaf-e">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa E</div>
+                        <div class="node-ms">~18 ms</div>
+                    </div>
+                </div>
+                <div class="node node--leaf leaf-f">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa F</div>
+                        <div class="node-ms">~10 ms</div>
+                    </div>
+                </div>
+                <div class="node node--leaf leaf-g">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa G</div>
+                        <div class="node-ms">~14 ms</div>
+                    </div>
+                </div>
+                <div class="node node--leaf leaf-h">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa H</div>
+                        <div class="node-ms">~17 ms</div>
+                    </div>
+                </div>
+                <div class="node node--leaf leaf-i">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa I</div>
+                        <div class="node-ms">~13 ms</div>
+                    </div>
+                </div>
+                <div class="node node--leaf leaf-j">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa J</div>
+                        <div class="node-ms">~9 ms</div>
+                    </div>
+                </div>
+                <div class="node node--leaf leaf-k">
+                    <div class="node-ico"><i class="ti ti-box"></i></div>
+                    <div class="node-body">
+                        <div class="node-name">Usługa K</div>
+                        <div class="node-ms">~16 ms</div>
+                    </div>
+                </div>
+
+                <span class="ellipsis dots-1">...</span>
+                <span class="ellipsis dots-2">...</span>
+                <span class="ellipsis dots-3">...</span>
+            </section>
+
+            <section class="total">
+                <div class="total-icon"><i class="ti ti-hourglass-high"></i></div>
+                <div>
+                    <div class="total-label">Sumaryczne opóźnienie odczuwane przez użytkownika</div>
+                    <div class="total-value"><strong>~800+ ms</strong> &nbsp;→&nbsp; kilka sekund</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

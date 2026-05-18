@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 09 - Mit #5: Topologia jest stała</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.78)),
+                url('../../../images/background-6.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.16) 48%, rgba(3,7,18,0.56) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 56px 80px 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 26px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--cyan-400);
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .eyebrow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.12);
+            color: var(--cyan-400);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.12;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Layout grid === */
+        .grid {
+            width: 100%;
+            max-width: 1620px;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 32px;
+            margin-bottom: 28px;
+        }
+
+        /* === Cluster visual === */
+        .cluster {
+            padding: 24px 26px 26px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .cluster-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cluster-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.55);
+        }
+
+        .cluster-label i { color: var(--cyan-400); font-size: 18px; }
+
+        .lb {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 22px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.14), rgba(17,24,39,0.55));
+            margin-bottom: 4px;
+        }
+
+        .lb-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.16);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex: 0 0 auto;
+        }
+
+        .lb-text {
+            font-size: 19px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+        .lb-text small {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.6);
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .routes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            color: var(--cyan-700);
+            justify-items: center;
+        }
+        .routes svg { width: 22px; height: 26px; }
+
+        .nodes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .node {
+            padding: 14px 14px 16px;
+            border-radius: 14px;
+            background: rgba(10,14,23,0.62);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .node-name {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(240,244,248,0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .node-name i { font-size: 16px; color: rgba(240,244,248,0.5); }
+
+        .pods {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pod {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(17,24,39,0.75);
+            font-size: 15px;
+            font-weight: 600;
+            color: #f0f4f8;
+        }
+
+        .pod-name { display: inline-flex; align-items: center; gap: 8px; }
+        .pod-name i { color: var(--cyan-400); font-size: 18px; }
+
+        .pod-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .pod-badge--add    { background: rgba(34,211,238,0.18); color: var(--cyan-400); }
+        .pod-badge--remove { background: rgba(244,114,114,0.18); color: #f87171; }
+        .pod-badge--move   { background: rgba(251,191,36,0.18);  color: #fbbf24; }
+
+        .pod--ghost { opacity: 0.4; }
+
+        /* === Mechanisms === */
+        .mech-panel {
+            padding: 26px 28px;
+            border-radius: 20px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.75s forwards;
+        }
+
+        .mech-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 4px;
+        }
+
+        .mech-head-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .mech-head-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.10);
+        }
+
+        .mech-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .mech-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 18px;
+            border-radius: 14px;
+            background: rgba(10,14,23,0.55);
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+        .mech-item:nth-child(1) { animation-delay: 0.95s; }
+        .mech-item:nth-child(2) { animation-delay: 1.05s; }
+        .mech-item:nth-child(3) { animation-delay: 1.15s; }
+        .mech-item:nth-child(4) { animation-delay: 1.25s; }
+
+        .mech-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex: 0 0 auto;
+        }
+
+        .mech-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+        .mech-sub {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.6);
+            margin-top: 2px;
+        }
+
+        /* === Quote === */
+        .quote {
+            width: 100%;
+            max-width: 1620px;
+            padding: 22px 36px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.14), rgba(17,24,39,0.78));
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.45s forwards;
+        }
+
+        .quote-mark {
+            font-size: 70px;
+            line-height: 0.6;
+            color: var(--cyan-400);
+            font-family: Georgia, serif;
+            font-weight: 800;
+            flex: 0 0 auto;
+            opacity: 0.7;
+        }
+
+        .quote-text {
+            font-size: 26px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.35;
+            font-style: italic;
+        }
+        .quote-text strong {
+            color: var(--cyan-400);
+            font-weight: 800;
+            font-style: normal;
+        }
+
+        /* === Animations === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50%      { opacity: 0.5; }
+        }
+
+        .pod-badge--add,
+        .pod-badge--remove,
+        .pod-badge--move {
+            animation: pulse 2.4s ease-in-out infinite;
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <main class="content">
+            <header class="header">
+                <p class="eyebrow"><span class="eyebrow-num">05</span> Mit piąty</p>
+                <h1 class="title">Topologia jest <span class="highlight">stała</span></h1>
+            </header>
+
+            <section class="grid">
+                <!-- Cluster visual -->
+                <div class="cluster">
+                    <div class="cluster-head">
+                        <span class="cluster-label"><i class="ti ti-affiliate"></i> Klaster w ruchu</span>
+                    </div>
+
+                    <div class="lb">
+                        <div class="lb-icon"><i class="ti ti-route"></i></div>
+                        <div class="lb-text">Load balancer<small>przekierowuje ruch w locie</small></div>
+                    </div>
+
+                    <div class="routes">
+                        <svg viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="11" y1="2" x2="11" y2="20"/>
+                            <polyline points="5,14 11,22 17,14"/>
+                        </svg>
+                        <svg viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="11" y1="2" x2="11" y2="20"/>
+                            <polyline points="5,14 11,22 17,14"/>
+                        </svg>
+                        <svg viewBox="0 0 22 26" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="11" y1="2" x2="11" y2="20"/>
+                            <polyline points="5,14 11,22 17,14"/>
+                        </svg>
+                    </div>
+
+                    <div class="nodes">
+                        <div class="node">
+                            <div class="node-name"><i class="ti ti-server"></i> Node&nbsp;1</div>
+                            <div class="pods">
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> api-7d2</span>
+                                    <span class="pod-badge pod-badge--add">+</span>
+                                </div>
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> api-a91</span>
+                                    <span class="pod-badge pod-badge--add">+</span>
+                                </div>
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> auth-c0e</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="node">
+                            <div class="node-name"><i class="ti ti-server"></i> Node&nbsp;2</div>
+                            <div class="pods">
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> orders-22f</span>
+                                </div>
+                                <div class="pod pod--ghost">
+                                    <span class="pod-name"><i class="ti ti-box"></i> orders-b14</span>
+                                    <span class="pod-badge pod-badge--remove">−</span>
+                                </div>
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> billing-9a3</span>
+                                    <span class="pod-badge pod-badge--move">⇄</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="node">
+                            <div class="node-name"><i class="ti ti-server"></i> Node&nbsp;3</div>
+                            <div class="pods">
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> billing-9a3</span>
+                                    <span class="pod-badge pod-badge--move">⇄</span>
+                                </div>
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> search-e7b</span>
+                                </div>
+                                <div class="pod">
+                                    <span class="pod-name"><i class="ti ti-box"></i> search-f8c</span>
+                                    <span class="pod-badge pod-badge--add">+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mechanisms -->
+                <div class="mech-panel">
+                    <div class="mech-head">
+                        <span class="mech-head-tag"><i class="ti ti-bolt"></i> Mechanizmy odpowiedzi</span>
+                        <span class="mech-head-line"></span>
+                    </div>
+
+                    <div class="mech-list">
+                        <div class="mech-item">
+                            <div class="mech-icon"><i class="ti ti-radar-2"></i></div>
+                            <div>
+                                <div class="mech-title">Service Discovery</div>
+                                <div class="mech-sub">automatyczne wykrywanie dostępnych usług</div>
+                            </div>
+                        </div>
+                        <div class="mech-item">
+                            <div class="mech-icon"><i class="ti ti-list-details"></i></div>
+                            <div>
+                                <div class="mech-title">Service Registry</div>
+                                <div class="mech-sub">aktualny rejestr instancji w klastrze</div>
+                            </div>
+                        </div>
+                        <div class="mech-item">
+                            <div class="mech-icon"><i class="ti ti-settings-bolt"></i></div>
+                            <div>
+                                <div class="mech-title">Dynamiczna konfiguracja</div>
+                                <div class="mech-sub">parametry pobierane runtime, nie z pliku</div>
+                            </div>
+                        </div>
+                        <div class="mech-item">
+                            <div class="mech-icon"><i class="ti ti-world"></i></div>
+                            <div>
+                                <div class="mech-title">DNS wewnętrzny</div>
+                                <div class="mech-sub">np. CoreDNS w Kubernetes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="quote">
+                <span class="quote-mark">&ldquo;</span>
+                <p class="quote-text">
+                    Adres usługi <strong>nie może być zakodowany na sztywno</strong>.
+                </p>
+            </section>
+        </main>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
