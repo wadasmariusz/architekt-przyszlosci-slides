@@ -94,7 +94,7 @@
         .header {
             text-align: center;
             max-width: 1500px;
-            margin: 0 auto 36px;
+            margin: 0 auto 32px;
         }
 
         .eyebrow {
@@ -206,20 +206,20 @@
             width: 100%;
             max-width: 1620px;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 22px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
         }
 
         .pillar {
             position: relative;
-            padding: 30px 26px;
+            padding: 34px 36px;
             border-radius: 20px;
             background: rgba(17,24,39,0.62);
             backdrop-filter: blur(6px);
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            min-height: 280px;
+            gap: 18px;
+            min-height: 234px;
             opacity: 0;
             animation: fadeUp 0.7s ease-out forwards;
         }
@@ -231,13 +231,13 @@
 
         .pillar-num {
             position: absolute;
-            top: 22px;
-            right: 26px;
-            font-size: 38px;
+            top: 26px;
+            right: 34px;
+            font-size: 66px;
             font-weight: 800;
             line-height: 1;
-            color: rgba(34,211,238,0.18);
-            letter-spacing: -1px;
+            color: rgba(34,211,238,0.13);
+            letter-spacing: -2px;
         }
 
         .pillar-icon {
@@ -253,29 +253,38 @@
         }
 
         .pillar-title {
-            font-size: 26px;
+            max-width: 620px;
+            font-size: 32px;
             font-weight: 800;
             color: #f0f4f8;
             line-height: 1.2;
             letter-spacing: -0.3px;
         }
 
+        .pillar-desc {
+            max-width: 650px;
+            font-size: 20px;
+            font-weight: 500;
+            color: rgba(240,244,248,0.68);
+            line-height: 1.35;
+        }
+
         .pillar-chips {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
             margin-top: auto;
         }
 
         .pillar-chip {
             display: inline-flex;
             align-items: center;
-            padding: 5px 12px;
+            padding: 9px 16px;
             border-radius: 999px;
-            background: rgba(10,14,23,0.55);
-            color: rgba(240,244,248,0.85);
-            font-size: 14px;
-            font-weight: 600;
+            background: rgba(34,211,238,0.10);
+            color: rgba(240,244,248,0.92);
+            font-size: 17px;
+            font-weight: 700;
             letter-spacing: 0.2px;
         }
 
