@@ -17,6 +17,7 @@
             --dark-surface: #111827;
             --danger: #f43f5e;
             --warn: #f59e0b;
+            --emerald: #10b981;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -83,7 +84,7 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 80px 130px 170px;
+            padding: 72px 130px 170px;
             display: flex;
             flex-direction: column;
         }
@@ -94,11 +95,11 @@
             justify-content: center;
             gap: 36px;
             max-width: 1500px;
-            margin: 0 auto 40px;
+            margin: 0 auto 28px;
         }
 
         .letter-mark {
-            font-size: 180px;
+            font-size: 168px;
             font-weight: 800;
             line-height: 1;
             background: linear-gradient(135deg, var(--cyan-400), var(--cyan-700));
@@ -138,7 +139,7 @@
         }
 
         .title {
-            font-size: 80px;
+            font-size: 74px;
             font-weight: 800;
             letter-spacing: -1.5px;
             line-height: 1.05;
@@ -153,7 +154,7 @@
         }
 
         .subtitle {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 300;
             color: #cbd5e1;
             font-style: italic;
@@ -162,11 +163,11 @@
         /* === Definition === */
         .definition {
             max-width: 1500px;
-            margin: 0 auto 40px;
-            padding: 32px 44px;
+            margin: 0 auto 34px;
+            padding: 28px 40px;
             background: rgba(17,24,39,0.62);
             backdrop-filter: blur(8px);
-            border-radius: 18px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             gap: 26px;
@@ -188,10 +189,10 @@
         }
 
         .definition-text {
-            font-size: 30px;
+            font-size: 27px;
             font-weight: 500;
             color: #f0f4f8;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
         .definition-text b {
@@ -202,141 +203,277 @@
             background-clip: text;
         }
 
-        /* === Comparison === */
-        .comparison {
+        /* === Timeline diagram === */
+        .timeline-panel {
             max-width: 1500px;
-            margin: 0 auto 32px;
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
-            gap: 28px;
+            height: 402px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(8px);
+            border-radius: 18px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.8s forwards;
         }
 
-        .node-card {
-            flex: 1;
-            max-width: 540px;
-            background: rgba(17,24,39,0.60);
-            backdrop-filter: blur(8px);
-            border-radius: 18px;
-            padding: 26px 32px;
-            display: flex;
-            align-items: center;
-            gap: 22px;
+        .timeline-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(34,211,238,0.08), transparent 34%, transparent 68%, rgba(16,185,129,0.06)),
+                repeating-linear-gradient(90deg, transparent 0, transparent 118px, rgba(148,163,184,0.06) 119px, transparent 120px);
+            pointer-events: none;
         }
 
-        .node-card-icon {
+        .timeline-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .lane-line {
+            stroke: rgba(148,163,184,0.22);
+            stroke-width: 2;
+            stroke-dasharray: 9 13;
+        }
+
+        .time-axis {
+            stroke: rgba(34,211,238,0.82);
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .event-tick {
+            stroke: rgba(34,211,238,0.48);
+            stroke-width: 2.5;
+            stroke-dasharray: 7 7;
+        }
+
+        .order-arrow {
+            fill: none;
+            stroke: var(--cyan-400);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 10 8;
+            filter: drop-shadow(0 0 10px rgba(34,211,238,0.35));
+        }
+
+        .lane-tag {
+            position: absolute;
+            left: 42px;
+            width: 280px;
+            min-height: 96px;
+            padding: 18px 20px;
+            border-radius: 16px;
+            background: rgba(15,23,42,0.78);
+            border: 1px solid rgba(148,163,184,0.16);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .lane-tag--branch { top: 54px; }
+        .lane-tag--mobile { top: 258px; }
+
+        .lane-icon {
             flex: 0 0 auto;
-            width: 64px;
-            height: 64px;
+            width: 58px;
+            height: 58px;
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: #94a3b8;
-            background: rgba(148,163,184,0.10);
-        }
-
-        .node-card-body {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .node-card-label {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #94a3b8;
-        }
-
-        .node-card-state {
-            font-size: 36px;
-            font-weight: 800;
-            color: #f0f4f8;
-            line-height: 1.1;
-        }
-
-        .node-card-state .quote {
-            color: var(--warn);
-        }
-
-        .node-card-state .quote--ok {
+            font-size: 30px;
             color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
         }
 
-        /* Conflict divider (between cards) */
-        .conflict-divider {
+        .lane-body {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-width: 140px;
-            color: var(--danger);
+            gap: 4px;
         }
 
-        .conflict-divider-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: rgba(244,63,94,0.14);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 34px;
-        }
-
-        .conflict-divider-text {
-            font-size: 13px;
+        .lane-label {
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 3px;
-            text-align: center;
-            line-height: 1.25;
+            color: #94a3b8;
         }
 
-        /* === Insight footnote === */
-        .insight {
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 22px 32px;
-            background: rgba(34,211,238,0.08);
-            backdrop-filter: blur(6px);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.0s forwards;
+        .lane-name {
+            font-size: 23px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.15;
         }
 
-        .insight-icon {
-            flex: 0 0 auto;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
+        .event-card {
+            position: absolute;
+            padding: 22px 24px;
+            border-radius: 18px;
+            background: rgba(15,23,42,0.90);
+            border: 1px solid rgba(34,211,238,0.22);
+            box-shadow: 0 18px 46px rgba(0,0,0,0.24);
+        }
+
+        .event-card--write {
+            top: 54px;
+            left: 400px;
+            width: 410px;
+        }
+
+        .event-card--read {
+            top: 198px;
+            left: 875px;
+            width: 492px;
+            border-color: rgba(16,185,129,0.28);
+        }
+
+        .event-kicker {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
             color: var(--cyan-400);
-            background: rgba(34,211,238,0.14);
+            margin-bottom: 12px;
         }
 
-        .insight-text {
-            font-size: 20px;
+        .event-kicker::before {
+            content: '';
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 16px currentColor;
+        }
+
+        .event-card--read .event-kicker { color: var(--emerald); }
+
+        .event-title {
+            font-size: 25px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.18;
+            margin-bottom: 8px;
+        }
+
+        .event-note {
+            font-size: 17px;
             font-weight: 500;
             color: #cbd5e1;
             line-height: 1.4;
         }
 
-        .insight-text b {
+        .event-note b {
             color: #f0f4f8;
             font-weight: 700;
+        }
+
+        .order-label {
+            position: absolute;
+            top: 176px;
+            left: 540px;
+            width: 470px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(34,211,238,0.10);
+            color: #cbd5e1;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0;
+        }
+
+        .result-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .result {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 86px;
+            padding: 14px 12px;
+            border-radius: 14px;
+            text-align: center;
+            background: rgba(2,6,23,0.44);
+            border: 1px solid rgba(148,163,184,0.12);
+        }
+
+        .result--ok {
+            border-color: rgba(16,185,129,0.36);
+            background: rgba(16,185,129,0.10);
+        }
+
+        .result--bad {
+            border-color: rgba(244,63,94,0.34);
+            background: rgba(244,63,94,0.08);
+            opacity: 0.78;
+        }
+
+        .result--bad::after {
+            content: '';
+            position: absolute;
+            width: 86%;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--danger);
+            transform: rotate(-10deg);
+            box-shadow: 0 0 12px rgba(244,63,94,0.35);
+        }
+
+        .status-value {
+            font-size: 21px;
+            font-weight: 800;
+            line-height: 1.1;
+            color: #f0f4f8;
+        }
+
+        .result--ok .status-value { color: var(--emerald); }
+        .result--bad .status-value { color: #fecdd3; }
+
+        .result-caption {
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #94a3b8;
+        }
+
+        .result--ok .result-caption { color: var(--emerald); }
+        .result--bad .result-caption { color: var(--danger); }
+
+        .timeline-caption {
+            position: absolute;
+            left: 400px;
+            bottom: 22px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+
+        .timeline-caption i {
+            color: var(--cyan-400);
+            font-size: 24px;
         }
 
         /* === Animations === */
@@ -391,47 +528,78 @@
                 <div class="header-text">
                     <div class="eyebrow">
                     </div>
-                    <h1 class="title"><span class="accent">Consistency</span></h1>
-                    <div class="subtitle">spójność liniowa <span style="opacity:0.7"></span></div>
+                    <h1 class="title"><span class="accent">— Consistency</span></h1>
+                    <div class="subtitle">Spójność liniowa (linearizability)</div>
                 </div>
             </div>
 
             <div class="definition">
-                <div class="definition-icon"><i class="ti ti-equal"></i></div>
+                <div class="definition-icon"><i class="ti ti-history"></i></div>
                 <div class="definition-text">
-                    Wszystkie węzły systemu widzą <b>te&nbsp;same dane</b>
-                    w&nbsp;<b>tej samej kolejności</b>.
+                    Każdy odczyt zwraca wynik <b>ostatniego zakończonego zapisu</b> —
+                    niezależnie od tego, który węzeł obsługuje żądanie.
                 </div>
             </div>
 
-            <div class="comparison">
-                <div class="node-card">
-                    <div class="node-card-icon"><i class="ti ti-building-store"></i></div>
-                    <div class="node-card-body">
-                        <div class="node-card-label">Panel pracownika</div>
-                        <div class="node-card-state"><span class="quote">„wypożyczony"</span></div>
+            <div class="timeline-panel">
+                <svg class="timeline-svg" viewBox="0 0 1500 402" preserveAspectRatio="none">
+                    <defs>
+                        <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5"
+                                markerWidth="8" markerHeight="8" orient="auto">
+                            <path d="M0,0 L10,5 L0,10 z" fill="#22d3ee"/>
+                        </marker>
+                    </defs>
+
+                    <line class="lane-line" x1="330" y1="102" x2="1320" y2="102"/>
+                    <line class="lane-line" x1="330" y1="306" x2="1320" y2="306"/>
+                    <line class="time-axis" x1="346" y1="204" x2="1275" y2="204" marker-end="url(#arrow-cyan)"/>
+                    <line class="event-tick" x1="616" y1="100" x2="616" y2="204"/>
+                    <line class="event-tick" x1="986" y1="204" x2="986" y2="306"/>
+                    <path class="order-arrow" d="M 620 156 C 710 198, 846 210, 980 246" marker-end="url(#arrow-cyan)"/>
+                </svg>
+
+                <div class="lane-tag lane-tag--branch">
+                    <div class="lane-icon"><i class="ti ti-building-store"></i></div>
+                    <div class="lane-body">
+                        <div class="lane-label">Węzeł</div>
+                        <div class="lane-name">Oddział Rzeszów</div>
                     </div>
                 </div>
 
-                <div class="conflict-divider">
-                    <div class="conflict-divider-icon"><i class="ti ti-circle-x"></i></div>
-                    <div class="conflict-divider-text">Niedopusz&shy;czalne</div>
-                </div>
-
-                <div class="node-card">
-                    <div class="node-card-icon"><i class="ti ti-device-mobile"></i></div>
-                    <div class="node-card-body">
-                        <div class="node-card-label">Aplikacja klienta</div>
-                        <div class="node-card-state"><span class="quote--ok">„dostępny"</span></div>
+                <div class="lane-tag lane-tag--mobile">
+                    <div class="lane-icon"><i class="ti ti-device-mobile"></i></div>
+                    <div class="lane-body">
+                        <div class="lane-label">Węzeł</div>
+                        <div class="lane-name">Aplikacja mobilna</div>
                     </div>
                 </div>
-            </div>
 
-            <div class="insight">
-                <div class="insight-icon"><i class="ti ti-bulb"></i></div>
-                <div class="insight-text">
-                    <b>C</b> w&nbsp;CAP oznacza zgodność widoku między węzłami —
-                    nie poprawność reguł biznesowych.
+                <div class="event-card event-card--write">
+                    <div class="event-kicker">1 · zapis</div>
+                    <div class="event-title">Przypisanie auta klientowi w oddziale</div>
+                    <div class="event-note">Nowy stan: <b>auto jest wypożyczone</b>.</div>
+                </div>
+
+                <div class="order-label">odczyt po zapisie musi zwrócić nowy stan</div>
+
+                <div class="event-card event-card--read">
+                    <div class="event-kicker">2 · odczyt</div>
+                    <div class="event-title">Zapytanie o dostępność z aplikacji</div>
+                    <div class="result-list">
+                        <div class="result result--ok">
+                            <div class="status-value">status: wypożyczony</div>
+                            <div class="result-caption">poprawnie</div>
+                        </div>
+                        <div class="result result--bad">
+                            <div class="status-value">status: dostępny</div>
+                            <div class="result-caption">naruszenie spójności</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-caption">
+                    <i class="ti ti-arrow-right"></i>
+                    Strzałka porządku pokazuje, co musi być widoczne dla kolejnego żądania.
                 </div>
             </div>
         </div>
