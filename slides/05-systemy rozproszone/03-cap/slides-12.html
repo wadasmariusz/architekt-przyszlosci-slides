@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 12 - „Ta baza jest CP" — dlaczego to uproszczenie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --danger: #f43f5e;
+            --emerald: #10b981;
+            --amber: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 24px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title .strike {
+            color: #94a3b8;
+            text-decoration: line-through;
+            text-decoration-color: rgba(244,63,94,0.65);
+            text-decoration-thickness: 5px;
+            font-weight: 700;
+        }
+
+        /* === Cassandra example === */
+        .example {
+            max-width: 1500px;
+            margin: 0 auto 26px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 28px;
+            align-items: stretch;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .example-head {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+            padding: 24px 28px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+        }
+
+        .example-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+        }
+
+        .example-name {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 32px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.1;
+        }
+
+        .example-name i {
+            font-size: 36px;
+            color: var(--cyan-400);
+        }
+
+        .example-hint {
+            font-size: 15px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.4;
+            margin-top: 4px;
+        }
+
+        .modes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .mode {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 22px 26px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+        }
+
+        .mode-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .mode-icon {
+            flex: 0 0 auto;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .mode--ap .mode-icon {
+            color: var(--emerald);
+            background: rgba(16,185,129,0.14);
+        }
+
+        .mode--cp .mode-icon {
+            color: var(--amber);
+            background: rgba(245,158,11,0.14);
+        }
+
+        .mode-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .mode--ap .mode-tag {
+            color: var(--emerald);
+            background: rgba(16,185,129,0.14);
+        }
+
+        .mode--cp .mode-tag {
+            color: var(--amber);
+            background: rgba(245,158,11,0.14);
+        }
+
+        .mode-title {
+            font-size: 21px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.25;
+        }
+
+        .mode-desc {
+            font-size: 15px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.45;
+            margin-top: 4px;
+        }
+
+        .mode-desc b { color: #e2e8f0; font-weight: 600; }
+        .mode-desc code {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            color: var(--cyan-400);
+            padding: 1px 8px;
+            border-radius: 6px;
+            background: rgba(34,211,238,0.10);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        /* === Questions section === */
+        .questions-wrap {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 24px 30px 26px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            border-radius: 22px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.8s forwards;
+        }
+
+        .questions-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .questions-glyph {
+            flex: 0 0 auto;
+            width: 50px;
+            height: 50px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .questions-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .questions-title b { color: var(--cyan-400); font-weight: 800; }
+
+        .q-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        .q {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 18px 18px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 14px;
+        }
+
+        .q-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .q-text {
+            font-size: 17px;
+            font-weight: 600;
+            color: #e2e8f0;
+            line-height: 1.35;
+        }
+
+        .q-text b { color: #f0f4f8; font-weight: 800; }
+
+        /* === Reference strip === */
+        .reference {
+            max-width: 1500px;
+            margin: 24px auto 0;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 16px 28px;
+            background: rgba(17,24,39,0.55);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.05s forwards;
+        }
+
+        .reference-icon {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .reference-text {
+            font-size: 17px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .reference-text b { color: #e2e8f0; font-weight: 700; }
+        .reference-text i { color: var(--cyan-400); font-style: italic; font-weight: 600; }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <span class="dot"></span> Etykietowanie technologii
+                </div>
+                <h1 class="title"><span class="strike">„Ta baza jest CP"</span> — dlaczego to <span class="accent">uproszczenie</span></h1>
+            </div>
+
+            <!-- Cassandra example -->
+            <div class="example">
+                <div class="example-head">
+                    <div class="example-eyebrow">Przykład</div>
+                    <div class="example-name"><i class="ti ti-database"></i> Cassandra</div>
+                    <div class="example-hint">Jedna baza — dwa zachowania, zależnie od poziomu spójności konkretnej operacji</div>
+                </div>
+
+                <div class="modes">
+                    <div class="mode mode--ap">
+                        <div class="mode-row">
+                            <div class="mode-icon"><i class="ti ti-bolt"></i></div>
+                            <span class="mode-tag">Bliżej AP</span>
+                        </div>
+                        <div class="mode-title">Domyślny zapis / odczyt</div>
+                        <div class="mode-desc">np. <code>ONE</code> — pojedyncza replika potwierdza operację, system odpowiada nawet podczas partycji</div>
+                    </div>
+
+                    <div class="mode mode--cp">
+                        <div class="mode-row">
+                            <div class="mode-icon"><i class="ti ti-lock"></i></div>
+                            <span class="mode-tag">Bliżej CP</span>
+                        </div>
+                        <div class="mode-title">Operacja z&nbsp;kworum</div>
+                        <div class="mode-desc">np. <code>QUORUM</code> — większość replik musi się zgodzić, część żądań <b>odmawia odpowiedzi</b> w&nbsp;partycji</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Better questions -->
+            <div class="questions-wrap">
+                <div class="questions-head">
+                    <div class="questions-glyph"><i class="ti ti-help-square-rounded"></i></div>
+                    <div class="questions-title">Zamiast <b>„CP czy AP?"</b> — pytaj o&nbsp;zachowanie per operacja:</div>
+                </div>
+
+                <div class="q-grid">
+                    <div class="q">
+                        <div class="q-num">1</div>
+                        <div class="q-text">Które operacje są <b>blokowane</b> podczas partycji?</div>
+                    </div>
+                    <div class="q">
+                        <div class="q-num">2</div>
+                        <div class="q-text">Które <b>dalej działają</b> — i&nbsp;na jakich danych?</div>
+                    </div>
+                    <div class="q">
+                        <div class="q-num">3</div>
+                        <div class="q-text">Czy odczyty mogą być <b>nieaktualne</b> i&nbsp;jak długo?</div>
+                    </div>
+                    <div class="q">
+                        <div class="q-num">4</div>
+                        <div class="q-text">Jak wykrywane i&nbsp;rozwiązywane są <b>konflikty</b>?</div>
+                    </div>
+                    <div class="q">
+                        <div class="q-num">5</div>
+                        <div class="q-text">Co dzieje się <b>po zakończeniu</b> awarii?</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reference -->
+            <div class="reference">
+                <div class="reference-icon"><i class="ti ti-bookmark"></i></div>
+                <div class="reference-text">
+                    <b>Martin Kleppmann</b> — <i>„Please stop calling databases CP or AP"</i> &nbsp;·&nbsp; etykieta na całą technologię ukrywa decyzje, które realnie zapadają <b>na poziomie konkretnej operacji</b>.
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

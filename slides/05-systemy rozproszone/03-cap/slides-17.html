@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 17 - Wzorce wspierające decyzje CAP</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 72px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 38px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 54px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.2px;
+            line-height: 1.06;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Pattern groups grid === */
+        .groups {
+            width: 1560px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 22px;
+        }
+
+        .group {
+            grid-column: span 2;
+            position: relative;
+            background: rgba(17,24,39,0.66);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px 26px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 226px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .group:nth-child(1) { animation-delay: 0.55s; }
+        .group:nth-child(2) { animation-delay: 0.65s; }
+        .group:nth-child(3) { animation-delay: 0.75s; }
+        .group:nth-child(4) { animation-delay: 0.85s; }
+        .group:nth-child(5) { animation-delay: 0.95s; }
+
+        /* Layout: 3 cards top, 2 cards bottom centered */
+        .group:nth-child(4) { grid-column: 2 / span 2; }
+        .group:nth-child(5) { grid-column: 4 / span 2; }
+
+        .group-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .group-icon {
+            flex: 0 0 auto;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .group-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.22;
+        }
+
+        .group-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.6px;
+            color: var(--cyan-400);
+            margin-bottom: 4px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 13px;
+            font-size: 20px;
+            font-weight: 500;
+            color: #e2e8f0;
+            background: rgba(34,211,238,0.07);
+            border-radius: 999px;
+            line-height: 1.1;
+        }
+
+        /* === Closing question === */
+        .question {
+            margin: 32px auto 0;
+            max-width: 1380px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 24px 36px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
+        }
+
+        .question-icon {
+            flex: 0 0 auto;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .question-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .question-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.8px;
+            color: var(--cyan-400);
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .question-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Wzorce wspierające decyzje <span class="accent">CAP</span></h1>
+            </div>
+
+            <!-- Pattern groups -->
+            <div class="groups">
+                <div class="group">
+                    <div class="group-head">
+                        <div class="group-icon"><i class="ti ti-shield-check"></i></div>
+                        <div>
+                            <div class="group-title">Bezpieczeństwo operacji</div>
+                        </div>
+                    </div>
+                    <div class="chips">
+                        <span class="chip">idempotencja</span>
+                        <span class="chip">optimistic locking</span>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="group-head">
+                        <div class="group-icon"><i class="ti ti-arrows-transfer-up"></i></div>
+                        <div>
+                            <div class="group-title">Komunikacja i niezawodność</div>
+                        </div>
+                    </div>
+                    <div class="chips">
+                        <span class="chip">retry</span>
+                        <span class="chip">kolejki</span>
+                        <span class="chip">outbox pattern</span>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="group-head">
+                        <div class="group-icon"><i class="ti ti-route"></i></div>
+                        <div>
+                            <div class="group-title">Koordynacja rozproszona</div>
+                        </div>
+                    </div>
+                    <div class="chips">
+                        <span class="chip">saga</span>
+                        <span class="chip">kompensacje</span>
+                        <span class="chip">quorum</span>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="group-head">
+                        <div class="group-icon"><i class="ti ti-versions"></i></div>
+                        <div>
+                            <div class="group-title">Zarządzanie stanem</div>
+                        </div>
+                    </div>
+                    <div class="chips">
+                        <span class="chip">wersjonowanie zdarzeń</span>
+                        <span class="chip">read/write separation</span>
+                        <span class="chip">read-your-writes</span>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="group-head">
+                        <div class="group-icon"><i class="ti ti-git-merge"></i></div>
+                        <div>
+                            <div class="group-title">Rozwiązywanie konfliktów</div>
+                        </div>
+                    </div>
+                    <div class="chips">
+                        <span class="chip">wykrywanie konfliktów</span>
+                        <span class="chip">strategie scalania</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

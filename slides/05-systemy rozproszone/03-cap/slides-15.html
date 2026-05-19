@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 15 - Kluczowe wnioski CAP</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 78px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 44px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 54px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.06;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Takeaways grid === */
+        .grid {
+            max-width: 1560px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 26px 32px;
+        }
+
+        .card {
+            background: rgba(17,24,39,0.68);
+            backdrop-filter: blur(10px);
+            border-radius: 22px;
+            padding: 28px 34px 30px;
+            display: flex;
+            gap: 22px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.55s; }
+        .card:nth-child(2) { animation-delay: 0.7s; }
+        .card:nth-child(3) { animation-delay: 0.85s; }
+        .card:nth-child(4) { animation-delay: 1.0s; }
+
+        .card-num {
+            flex: 0 0 auto;
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+            line-height: 1;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .card-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.8px;
+            color: var(--cyan-400);
+        }
+
+        .card-label i { font-size: 16px; }
+
+        .card-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.22;
+        }
+
+        .card-text {
+            font-size: 18px;
+            font-weight: 400;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+
+        .card-text b {
+            color: #f0f4f8;
+            font-weight: 700;
+        }
+
+        /* === Closing thesis === */
+        .thesis {
+            margin: 30px auto 0;
+            max-width: 1380px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 24px 36px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
+        }
+
+        .thesis-icon {
+            flex: 0 0 auto;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .thesis-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .thesis-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.8px;
+            color: var(--cyan-400);
+        }
+
+        .thesis-text {
+            font-size: 24px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .thesis-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Podsumowanie</div>
+                <h1 class="title">Kluczowe <span class="accent">wnioski</span> z&nbsp;CAP</h1>
+            </div>
+
+            <!-- Takeaways grid -->
+            <div class="grid">
+                <div class="card">
+                    <div class="card-num">1</div>
+                    <div class="card-body">
+                        <div class="card-label"><i class="ti ti-network"></i> Partycje są faktem</div>
+                        <div class="card-title">P jest niewybieralne</div>
+                        <div class="card-text">
+                            W&nbsp;systemie rozproszonym <b>sieć zawsze może zawieść</b>. Nie projektujesz „czy" partycja wystąpi — tylko jak system się wtedy zachowa.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-num">2</div>
+                    <div class="card-body">
+                        <div class="card-label"><i class="ti ti-arrows-exchange"></i> Realny wybór</div>
+                        <div class="card-title">CP albo AP — tylko podczas awarii</div>
+                        <div class="card-text">
+                            Poza partycją możesz mieć <b>C i&nbsp;A jednocześnie</b>. CAP wymusza decyzję tylko w&nbsp;momencie problemu sieciowego.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-num">3</div>
+                    <div class="card-body">
+                        <div class="card-label"><i class="ti ti-aperture"></i> Granularność</div>
+                        <div class="card-title">Decyzja per operacja, nie per system</div>
+                        <div class="card-text">
+                            Płatność i&nbsp;katalog produktów w&nbsp;tej samej aplikacji <b>mogą mieć różne wymagania</b>. CAP wybierasz dla scenariusza biznesowego.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-num">4</div>
+                    <div class="card-body">
+                        <div class="card-label"><i class="ti ti-messages"></i> Język rozmowy</div>
+                        <div class="card-title">CAP to wspólny język z&nbsp;biznesem</div>
+                        <div class="card-text">
+                            Zamiast „replikacji" i&nbsp;„quorum" rozmawiasz o&nbsp;tym, <b>co gorsze: brak odpowiedzi czy odpowiedź nieaktualna</b>. To decyzja produktowa.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Closing thesis -->
+            <div class="thesis">
+                <div class="thesis-icon"><i class="ti ti-bulb"></i></div>
+                <div class="thesis-body">
+                    <div class="thesis-label">Rola architekta</div>
+                    <div class="thesis-text">
+                        Architekt <b>nie eliminuje trade-offu</b> — świadomie go projektuje i&nbsp;komunikuje konsekwencje biznesowi.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

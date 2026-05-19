@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 13 - CAP jako narzędzie rozmowy z biznesem</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --emerald: #10b981;
+            --amber: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 32px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Cases grid === */
+        .cases {
+            max-width: 1560px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .case {
+            display: grid;
+            grid-template-columns: 64px 1fr auto;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 28px;
+            background: rgba(17,24,39,0.68);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .case:nth-child(1) { animation-delay: 0.55s; }
+        .case:nth-child(2) { animation-delay: 0.65s; }
+        .case:nth-child(3) { animation-delay: 0.75s; }
+        .case:nth-child(4) { animation-delay: 0.85s; }
+
+        .case-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .case-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .case-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.6px;
+            color: var(--cyan-400);
+        }
+
+        .case-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.25;
+        }
+
+        .case-note {
+            margin-top: 4px;
+            font-size: 15px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .case-note b { color: #e2e8f0; font-weight: 600; }
+
+        .tag {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .tag i { font-size: 16px; }
+
+        .tag--ap {
+            color: var(--emerald);
+            background: rgba(16,185,129,0.14);
+        }
+
+        .tag--cp {
+            color: var(--amber);
+            background: rgba(245,158,11,0.14);
+        }
+
+        /* === Key question === */
+        .question {
+            margin: 32px auto 0;
+            max-width: 1400px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 28px 40px;
+            background: rgba(34,211,238,0.10);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.05s forwards;
+        }
+
+        .question-icon {
+            flex: 0 0 auto;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.16);
+        }
+
+        .question-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.35;
+        }
+
+        .question-text b {
+            color: var(--cyan-400);
+            font-weight: 800;
+        }
+
+        .question-text .vs {
+            display: inline-block;
+            margin: 0 10px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <span class="dot"></span> Rozmowa z&nbsp;biznesem
+                </div>
+                <h1 class="title">CAP jako <span class="accent">narzędzie decyzji</span> biznesowych</h1>
+            </div>
+
+            <!-- Cases -->
+            <div class="cases">
+                <!-- Case 1 -->
+                <div class="case">
+                    <div class="case-icon"><i class="ti ti-gift"></i></div>
+                    <div class="case-body">
+                        <div class="case-label">Punkty lojalnościowe · podgląd</div>
+                        <div class="case-title">Wyświetlanie salda klienta</div>
+                        <div class="case-note">Lekkie opóźnienie akceptowalne: klient zobaczy aktualne saldo po sekundach</div>
+                    </div>
+                    <div class="tag tag--ap"><i class="ti ti-bolt"></i> AP</div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="case">
+                    <div class="case-icon"><i class="ti ti-coin"></i></div>
+                    <div class="case-body">
+                        <div class="case-label">Punkty lojalnościowe · wymiana</div>
+                        <div class="case-title">Odliczenie punktów na upgrade</div>
+                        <div class="case-note">Nie wolno wykorzystać tych samych punktów <b>dwa razy</b></div>
+                    </div>
+                    <div class="tag tag--cp"><i class="ti ti-lock"></i> CP</div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="case">
+                    <div class="case-icon"><i class="ti ti-shield-lock"></i></div>
+                    <div class="case-body">
+                        <div class="case-label">Bezpieczeństwo</div>
+                        <div class="case-title">Cofnięcie dostępu pracownika</div>
+                        <div class="case-note">Opóźnienie propagacji = <b>ryzyko bezpieczeństwa</b> w&nbsp;systemie kasowym</div>
+                    </div>
+                    <div class="tag tag--cp"><i class="ti ti-lock"></i> CP</div>
+                </div>
+
+                <!-- Case 4 -->
+                <div class="case">
+                    <div class="case-icon"><i class="ti ti-bell-ringing"></i></div>
+                    <div class="case-body">
+                        <div class="case-label">Komunikacja z&nbsp;klientem</div>
+                        <div class="case-title">Push: auto gotowe do odbioru</div>
+                        <div class="case-note">Ponowienie lub opóźnienie mniej groźne niż <b>blokada procesu</b></div>
+                    </div>
+                    <div class="tag tag--ap"><i class="ti ti-bolt"></i> AP</div>
+                </div>
+            </div>
+
+            <!-- Key question -->
+            <div class="question">
+                <div class="question-icon"><i class="ti ti-message-question"></i></div>
+                <div class="question-text">
+                    Pytanie: co jest gorsze?</br><b>Brak odpowiedzi</b><span class="vs">vs.</span><b>odpowiedź potencjalnie nieaktualna</b>?
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
