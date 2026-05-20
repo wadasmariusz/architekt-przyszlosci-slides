@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - CAP: punkt wyjścia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 80px 130px 170px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto 50px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 54px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.08;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Cards row === */
+        .cards {
+            display: flex;
+            gap: 36px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            flex: 1;
+            background: rgba(17,24,39,0.74);
+            backdrop-filter: blur(9px);
+            border-radius: 20px;
+            padding: 38px 36px 34px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 26px 70px rgba(0,0,0,0.34), 0 0 60px rgba(34,211,238,0.05);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.55s; }
+        .card:nth-child(2) { animation-delay: 0.7s; }
+        .card:nth-child(3) { animation-delay: 0.85s; }
+
+        .card-letter {
+            font-size: 78px;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--cyan-400);
+            text-shadow: 0 0 26px rgba(34,211,238,0.28);
+            margin-bottom: 10px;
+        }
+
+        .card-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+
+        .card-name-pl {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--cyan-400);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .card-desc {
+            font-size: 19px;
+            font-weight: 400;
+            color: #cbd5e1;
+            line-height: 1.5;
+            max-width: 380px;
+        }
+
+        /* === Key message === */
+        .key-message {
+            margin: 50px auto 0;
+            max-width: 1180px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 26px 40px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.05s forwards;
+        }
+
+        .key-message-icon {
+            flex: 0 0 auto;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .key-message-text {
+            font-size: 26px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .key-message-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Punkt wyjścia</div>
+                <h1 class="title">Model <span class="accent">CAP</span></h1>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="card-letter">C</div>
+                    <div class="card-name">Consistency</div>
+                    <div class="card-name-pl">Spójność</div>
+                    <div class="card-desc">
+                        Każdy odczyt zwraca najnowsze dane i wszystkie węzły widzą tę samą wersję w&nbsp;tym samym momencie.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-letter">A</div>
+                    <div class="card-name">Availability</div>
+                    <div class="card-name-pl">Dostępność</div>
+                    <div class="card-desc">
+                        Każde żądanie otrzymuje odpowiedź, nawet jeśli dane mogą być nieaktualne.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-letter">P</div>
+                    <div class="card-name">Partition Tolerance</div>
+                    <div class="card-name-pl">Tolerancja partycji</div>
+                    <div class="card-desc">
+                        System działa dalej pomimo utraty komunikacji między węzłami.
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-message">
+                <div class="key-message-icon"><i class="ti ti-bolt"></i></div>
+                <div class="key-message-text">
+                    CAP opisuje <b>sytuację awaryjną</b>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
