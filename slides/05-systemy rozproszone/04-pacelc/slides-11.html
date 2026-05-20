@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 11 - Wpływ PACELC: granice usług</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --ok: #34d399;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 72px 110px 170px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1560px;
+            margin: 0 auto 36px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 54px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.08;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Variants grid === */
+        .variants {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            width: 100%;
+            max-width: 1680px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .variant {
+            position: relative;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(34,211,238,0.10), rgba(34,211,238,0.02) 45%, rgba(17,24,39,0.74) 100%),
+                rgba(17,24,39,0.7);
+            backdrop-filter: blur(9px);
+            border-radius: 22px;
+            padding: 30px 34px 30px;
+            box-shadow: 0 22px 60px rgba(0,0,0,0.34);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .variant-head {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .variant-badge {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            height: 50px;
+            padding: 0 18px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.14);
+            color: var(--cyan-400);
+        }
+
+        .variant-name {
+            font-size: 26px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.18;
+            letter-spacing: -0.3px;
+        }
+
+        .variant-sub {
+            margin-top: 3px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .variant-sub.warn { color: var(--warn); }
+        .variant-sub.ok { color: var(--ok); }
+
+        /* === Mini diagram === */
+        .diagram {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            margin-bottom: 22px;
+        }
+
+        .diagram-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .svc {
+            position: absolute;
+            width: 220px;
+            padding: 14px 16px;
+            background: rgba(8,13,24,0.75);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .svc-icon {
+            flex: 0 0 auto;
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .svc-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            line-height: 1;
+            margin-bottom: 3px;
+        }
+
+        .svc-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .svc--res { top: 60px; left: 0; }
+        .svc--fleet { top: 60px; right: 0; }
+
+        .svc--res-b { top: 0; left: 0; }
+        .svc--projection {
+            top: 98px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            background: rgba(8,13,24,0.6);
+        }
+        .svc--fleet-b { top: 0; right: 0; }
+        .svc--validate {
+            top: 190px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            background: rgba(8,13,24,0.55);
+            padding: 10px 14px;
+        }
+        .svc--validate .svc-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 19px;
+        }
+        .svc--validate .svc-name { font-size: 15px; }
+
+        /* === Edge label === */
+        .edge-label {
+            position: absolute;
+            padding: 4px 10px;
+            background: rgba(8,13,24,0.85);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #cbd5e1;
+            white-space: nowrap;
+        }
+
+        .edge-label.warn { color: var(--warn); }
+        .edge-label.ok { color: var(--ok); }
+
+        /* === Variant traits === */
+        .traits {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .trait {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #cbd5e1;
+            line-height: 1.35;
+        }
+
+        .trait i {
+            flex: 0 0 auto;
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: rgba(34,211,238,0.10);
+            color: var(--cyan-400);
+        }
+
+        .trait.warn i { background: rgba(245,158,11,0.14); color: var(--warn); }
+        .trait.ok i { background: rgba(52,211,153,0.14); color: var(--ok); }
+
+        .trait b { color: #f0f4f8; font-weight: 700; }
+
+        /* === Key question === */
+        .question {
+            margin-top: 28px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 36px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            max-width: 1480px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1s forwards;
+        }
+
+        .question-icon {
+            flex: 0 0 auto;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .question-text b {
+            color: var(--cyan-400);
+            font-weight: 800;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes dashFlow {
+            to { stroke-dashoffset: -28; }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h1 class="title">Granice <span class="accent">usług</span></h1>
+            </div>
+
+            <div class="variants">
+                <!-- Variant A: Synchroniczna integracja -->
+                <div class="variant">
+                    <div class="variant-head">
+                        <div class="variant-badge">A</div>
+                        <div>
+                            <div class="variant-sub warn">Sync · Silne sprzężenie</div>
+                            <div class="variant-name">Każda rezerwacja pyta Flotę</div>
+                        </div>
+                    </div>
+
+                    <div class="diagram">
+                        <svg class="diagram-svg" viewBox="0 0 600 250" preserveAspectRatio="none">
+                            <defs>
+                                <marker id="arr-warn-a" viewBox="0 0 10 10" refX="8" refY="5"
+                                        markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                                    <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b" opacity="0.9"/>
+                                </marker>
+                            </defs>
+                            <!-- sync request -->
+                            <path d="M 220 78 Q 300 50, 380 78"
+                                  fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.9"
+                                  marker-end="url(#arr-warn-a)"/>
+                            <!-- sync response -->
+                            <path d="M 380 105 Q 300 132, 220 105"
+                                  fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.9"
+                                  marker-end="url(#arr-warn-a)"/>
+                        </svg>
+
+                        <div class="svc svc--res">
+                            <div class="svc-icon"><i class="ti ti-calendar-event"></i></div>
+                            <div>
+                                <div class="svc-label">Usługa</div>
+                                <div class="svc-name">Rezerwacje</div>
+                            </div>
+                        </div>
+
+                        <div class="svc svc--fleet">
+                            <div class="svc-icon"><i class="ti ti-car-garage"></i></div>
+                            <div>
+                                <div class="svc-label">Usługa</div>
+                                <div class="svc-name">Flota</div>
+                            </div>
+                        </div>
+
+                        <div class="edge-label warn" style="top: 32px; left: 50%; transform: translateX(-50%);">
+                            request / response
+                        </div>
+                        <div class="edge-label warn" style="top: 140px; left: 50%; transform: translateX(-50%);">
+                            blokuje, czeka
+                        </div>
+                    </div>
+
+                    <div class="traits">
+                        <div class="trait warn">
+                            <i class="ti ti-link"></i>
+                            <span><b>Silne sprzężenie</b> czasowe. Rezerwacje nie działają bez Floty.</span>
+                        </div>
+                        <div class="trait warn">
+                            <i class="ti ti-clock-pause"></i>
+                            <span>Latencja Floty <b>dodaje się do każdej rezerwacji</b>.</span>
+                        </div>
+                        <div class="trait warn">
+                            <i class="ti ti-alert-triangle"></i>
+                            <span>Awaria Floty = <b>brak rezerwacji</b> w całym systemie.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variant B: Lokalna projekcja + finalna walidacja -->
+                <div class="variant">
+                    <div class="variant-head">
+                        <div class="variant-badge">B</div>
+                        <div>
+                            <div class="variant-sub ok">Async · Projekcja + finalna walidacja</div>
+                            <div class="variant-name">Lokalna projekcja, EC tylko na finalizacji</div>
+                        </div>
+                    </div>
+
+                    <div class="diagram">
+                        <svg class="diagram-svg" viewBox="0 0 600 250" preserveAspectRatio="none">
+                            <defs>
+                                <marker id="arr-cyan-b" viewBox="0 0 10 10" refX="8" refY="5"
+                                        markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                                    <path d="M0,0 L10,5 L0,10 z" fill="#22d3ee" opacity="0.9"/>
+                                </marker>
+                                <marker id="arr-ok-b" viewBox="0 0 10 10" refX="8" refY="5"
+                                        markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                                    <path d="M0,0 L10,5 L0,10 z" fill="#34d399" opacity="0.9"/>
+                                </marker>
+                            </defs>
+                            <!-- Fleet -> projection (events, async) -->
+                            <path d="M 486 50 Q 435 92, 358 122"
+                                  fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-opacity="0.8"
+                                  stroke-dasharray="9 7"
+                                  style="animation: dashFlow 1.8s linear infinite;"
+                                  marker-end="url(#arr-cyan-b)"/>
+                            <!-- Reservations -> projection (local read) -->
+                            <path d="M 136 50 Q 190 90, 242 122"
+                                  fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-opacity="0.7"
+                                  marker-end="url(#arr-cyan-b)"/>
+                            <!-- Reservations -> final EC validation -->
+                            <path d="M 108 64 Q 82 152, 230 214"
+                                  fill="none" stroke="#34d399" stroke-width="2.5" stroke-opacity="0.85"
+                                  marker-end="url(#arr-ok-b)"/>
+                            <!-- Final EC validation -> Fleet/source of truth -->
+                            <path d="M 370 214 Q 528 150, 492 64"
+                                  fill="none" stroke="#34d399" stroke-width="2.5" stroke-opacity="0.85"
+                                  marker-end="url(#arr-ok-b)"/>
+                        </svg>
+
+                        <div class="svc svc--res-b">
+                            <div class="svc-icon"><i class="ti ti-calendar-event"></i></div>
+                            <div>
+                                <div class="svc-label">Usługa</div>
+                                <div class="svc-name">Rezerwacje</div>
+                            </div>
+                        </div>
+
+                        <div class="svc svc--projection">
+                            <div class="svc-icon"><i class="ti ti-database"></i></div>
+                            <div>
+                                <div class="svc-label">Lokalna projekcja</div>
+                                <div class="svc-name">Dostępność (EL)</div>
+                            </div>
+                        </div>
+
+                        <div class="svc svc--fleet-b">
+                            <div class="svc-icon"><i class="ti ti-car-garage"></i></div>
+                            <div>
+                                <div class="svc-label">Usługa</div>
+                                <div class="svc-name">Flota</div>
+                            </div>
+                        </div>
+
+                        <div class="svc svc--validate">
+                            <div class="svc-icon"><i class="ti ti-shield-check"></i></div>
+                            <div>
+                                <div class="svc-label">Tylko finalizacja</div>
+                                <div class="svc-name">EC w źródle prawdy</div>
+                            </div>
+                        </div>
+
+                        <div class="edge-label" style="top: 64px; right: 8px; color: var(--cyan-400);">
+                            eventy
+                        </div>
+          
+                    </div>
+
+                    <div class="traits">
+                        <div class="trait ok">
+                            <i class="ti ti-bolt"></i>
+                            <span>Przeglądanie oferty <b>nie wymaga Floty</b> bo działa szybka odpowiedź z projekcji.</span>
+                        </div>
+                        <div class="trait ok">
+                            <i class="ti ti-shield-check"></i>
+                            <span>Silna walidacja <b>tylko przy finalizacji</b> rezerwacji.</span>
+                        </div>
+                        <div class="trait ok">
+                            <i class="ti ti-plug"></i>
+                            <span>Awaria Floty <b>nie blokuje</b> ścieżki przeglądania.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 05 - Silna spójność kosztuje — nawet bez awarii</title>
+    <title>Slide 07 - Spójność per operacja, nie per system</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -15,7 +15,7 @@
             --dark-bg: #0a0e17;
             --dark-surface: #111827;
             --warn: #f59e0b;
-            --danger: #f43f5e;
+            --ok: #34d399;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,7 +40,7 @@
             inset: 0;
             pointer-events: none;
             background:
-                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
                 url('../../../images/background-4.jpg') center / cover no-repeat;
         }
 
@@ -91,7 +91,7 @@
         .header {
             text-align: center;
             max-width: 1500px;
-            margin: 0 auto 28px;
+            margin: 0 auto 30px;
         }
 
         .eyebrow {
@@ -119,7 +119,7 @@
         .title {
             font-size: 80px;
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
             line-height: 1.08;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.4s forwards;
@@ -132,191 +132,157 @@
             background-clip: text;
         }
 
-        /* === Equation hero === */
-        .equation {
+        /* === Central principle === */
+        .principle {
+            margin: 6px auto 36px;
+            max-width: 1380px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 28px;
-            margin: 18px auto 48px;
+            gap: 22px;
+            padding: 26px 38px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.55s forwards;
         }
 
-        .eq-term {
-            padding: 22px 36px;
-            background: rgba(17,24,39,0.66);
-            backdrop-filter: blur(8px);
-            border-radius: 16px;
-            font-size: 30px;
-            font-weight: 700;
-            color: #f0f4f8;
-            line-height: 1.2;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.28);
-        }
-
-        .eq-term .eq-sub {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-top: 4px;
-        }
-
-        .eq-term--accent {
-            color: var(--cyan-400);
-            background:
-                radial-gradient(circle at 50% 0%, rgba(34,211,238,0.18), rgba(34,211,238,0.04) 60%, rgba(17,24,39,0.72) 100%),
-                rgba(17,24,39,0.72);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.28), 0 0 60px rgba(34,211,238,0.08);
-        }
-
-        .eq-term--accent .eq-sub { color: var(--cyan-400); opacity: 0.85; }
-
-        .eq-op {
-            font-size: 56px;
-            font-weight: 300;
-            color: var(--cyan-400);
-            line-height: 1;
-        }
-
-        /* === Cost cards === */
-        .costs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            width: 1500px;
-            margin: 0 auto 40px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.8s forwards;
-        }
-
-        .cost {
-            position: relative;
-            padding: 32px 32px 30px;
-            background: rgba(17,24,39,0.72);
-            backdrop-filter: blur(10px);
-            border-radius: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.30);
-        }
-
-        .cost-head {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-
-        .cost-icon {
+        .principle-icon {
             flex: 0 0 auto;
             width: 64px;
             height: 64px;
-            border-radius: 16px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 34px;
             color: var(--cyan-400);
-            background: rgba(34,211,238,0.12);
+            background: rgba(34,211,238,0.14);
         }
 
-        .cost-step {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--cyan-400);
-            opacity: 0.85;
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .cost-title {
+        .principle-text {
             font-size: 26px;
-            font-weight: 700;
+            font-weight: 500;
             color: #f0f4f8;
-            line-height: 1.2;
+            line-height: 1.4;
         }
 
-        .cost-desc {
-            font-size: 18px;
-            font-weight: 400;
-            color: #cbd5e1;
-            line-height: 1.45;
-        }
-
-        .cost-meter {
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .cost-meter-track {
-            flex: 1 1 auto;
-            height: 8px;
-            border-radius: 999px;
-            background: rgba(148,163,184,0.14);
-            overflow: hidden;
-        }
-
-        .cost-meter-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--cyan-500), var(--cyan-400));
-            border-radius: 999px;
-        }
-
-        .cost-meter-tag {
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+        .principle-text b {
             color: var(--cyan-400);
+            font-weight: 700;
         }
 
-        /* === Bottom takeaway === */
-        .takeaway {
-            max-width: 1300px;
-            margin: 0 auto;
+        /* === Comparison === */
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            width: 100%;
+            max-width: 1500px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.75s forwards;
+        }
+
+        .card {
+            position: relative;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(34,211,238,0.10), rgba(34,211,238,0.02) 45%, rgba(17,24,39,0.74) 100%),
+                rgba(17,24,39,0.7);
+            backdrop-filter: blur(9px);
+            border-radius: 22px;
+            padding: 38px 42px 34px;
+            box-shadow: 0 22px 60px rgba(0,0,0,0.34);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-head {
             display: flex;
             align-items: center;
             gap: 22px;
-            padding: 22px 36px;
-            background: rgba(245,158,11,0.10);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.28);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.05s forwards;
+            padding-bottom: 22px;
+            margin-bottom: 22px;
+            border-bottom: 1px solid rgba(148,163,184,0.18);
         }
 
-        .takeaway-icon {
+        .card-icon {
             flex: 0 0 auto;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            color: var(--warn);
-            background: rgba(245,158,11,0.16);
+            font-size: 38px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
         }
 
-        .takeaway-text {
-            font-size: 24px;
-            font-weight: 500;
+        .card-head-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-tag {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--cyan-400);
+        }
+
+        .card-name {
+            font-size: 32px;
+            font-weight: 800;
             color: #f0f4f8;
+            line-height: 1.15;
+        }
+
+        .traits {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .trait {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 21px;
+            font-weight: 400;
+            color: #cbd5e1;
             line-height: 1.35;
         }
 
-        .takeaway-text b {
-            color: var(--warn);
+        .trait i {
+            flex: 0 0 auto;
+            font-size: 22px;
+            color: var(--cyan-400);
+            margin-top: 4px;
+        }
+
+        .trait b {
+            color: #f0f4f8;
             font-weight: 700;
+        }
+
+        .conclusion {
+            margin-top: auto;
+            padding: 14px 20px;
+            background: rgba(15,23,42,0.55);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.3;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .conclusion span {
+            color: var(--cyan-400);
         }
 
         /* === Animations === */
@@ -367,81 +333,76 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Trade-off</div>
-                <h1 class="title">Silna spójność <span class="accent">kosztuje</span></h1>
+                <div class="eyebrow">Zasada architektoniczna</div>
+                <h1 class="title">Spójność <span class="accent">per operacja</span>, nie per system</h1>
             </div>
 
-            <div class="equation" aria-label="Silna spójność równa się dodatkowa latencja">
-                <div class="eq-term eq-term--accent">
-                    Silna spójność
-                    <span class="eq-sub">gwarancja aktualności</span>
-                </div>
-                <div class="eq-op">=</div>
-                <div class="eq-term">
-                    Czas odpowiedzi
-                    <span class="eq-sub">obliczenia</span>
-                </div>
-                <div class="eq-op">+</div>
-                <div class="eq-term">
-                    Dodatkowa koordynacja
-                    <span class="eq-sub">extra latencja</span>
+            <div class="principle">
+                <div class="principle-icon"><i class="ti ti-bulb"></i></div>
+                <div class="principle-text">
+                    Nie projektujemy <b>jednego poziomu spójności</b> dla całego systemu</b>.
                 </div>
             </div>
 
-            <div class="costs">
-                <div class="cost">
-                    <div class="cost-head">
-                        <div class="cost-icon"><i class="ti ti-crown"></i></div>
-                        <div>
-                            <div class="cost-step">Krok 1</div>
-                            <div class="cost-title">Zapytanie do API</div>
+            <div class="compare">
+                <!-- Przeglądanie oferty -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-icon"><i class="ti ti-eye-search"></i></div>
+                        <div class="card-head-body">
+                            <div class="card-tag">Operacja · Read</div>
+                            <div class="card-name">Przeglądanie oferty</div>
                         </div>
                     </div>
-                    <div class="cost-meter">
-                        <div class="cost-meter-track">
-                            <div class="cost-meter-fill" style="width: 30%;"></div>
+
+                    <div class="traits">
+                        <div class="trait">
+                            <i class="ti ti-bolt"></i>
+                            <span><b>Szybkość</b> jest ważniejsza niż perfekcyjna aktualność.</span>
                         </div>
-                        <div class="cost-meter-tag">+ RTT</div>
+                        <div class="trait">
+                            <i class="ti ti-database"></i>
+                            <span>Odczyt z&nbsp;<b>lokalnej repliki</b> lub projekcji.</span>
+                        </div>
+                        <div class="trait">
+                            <i class="ti ti-clock-hour-3"></i>
+                            <span>Akceptujemy <b>chwilową nieaktualność</b> danych.</span>
+                        </div>
+                    </div>
+
+                    <div class="conclusion">
+                        Wynik: <span>niska latencja</span>, możliwe nieaktulne dane
                     </div>
                 </div>
 
-                <div class="cost">
-                    <div class="cost-head">
-                        <div class="cost-icon"><i class="ti ti-stack-2"></i></div>
-                        <div>
-                            <div class="cost-step">Krok 2</div>
-                            <div class="cost-title">Potwierdzenie na replikach</div>
+                <!-- Finalizacja rezerwacji -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-icon"><i class="ti ti-shield-check"></i></div>
+                        <div class="card-head-body">
+                            <div class="card-tag">Operacja · Commit</div>
+                            <div class="card-name">Finalizacja rezerwacji</div>
                         </div>
                     </div>
-                    <div class="cost-meter">
-                        <div class="cost-meter-track">
-                            <div class="cost-meter-fill" style="width: 62%;"></div>
-                        </div>
-                        <div class="cost-meter-tag">+ Quorum</div>
-                    </div>
-                </div>
 
-                <div class="cost">
-                    <div class="cost-head">
-                        <div class="cost-icon"><i class="ti ti-world"></i></div>
-                        <div>
-                            <div class="cost-step">Krok 3</div>
-                            <div class="cost-title">Synchronizacja regionów</div>
+                    <div class="traits">
+                        <div class="trait">
+                            <i class="ti ti-lock-square"></i>
+                            <span><b>Silna walidacja</b> dostępności w&nbsp;źródle prawdy.</span>
+                        </div>
+                        <div class="trait">
+                            <i class="ti ti-network"></i>
+                            <span>Koordynacja: <b>lider, quorum, blokada</b>.</span>
+                        </div>
+                        <div class="trait">
+                            <i class="ti ti-alert-octagon"></i>
+                            <span>Spójność jest <b>krytyczna</b>.</span>
                         </div>
                     </div>
-                    <div class="cost-meter">
-                        <div class="cost-meter-track">
-                            <div class="cost-meter-fill" style="width: 92%;"></div>
-                        </div>
-                        <div class="cost-meter-tag">+ Geo</div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="takeaway">
-                <div class="takeaway-icon"><i class="ti ti-bolt"></i></div>
-                <div class="takeaway-text">
-                    Wybór <b>L vs C</b> to milisekundy doliczane do <b>każdego zapytania</b>.
+                    <div class="conclusion">
+                        Wynik: <span>wyższa latencja</span>, pewna gwarancja stanu
+                    </div>
                 </div>
             </div>
         </div>

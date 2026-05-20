@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - EL vs EC — dwa podejścia w normalnym działaniu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn-400: #fbbf24;
+            --warn-500: #f59e0b;
+            --warn-600: #d97706;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-3.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 78px 130px 170px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 40px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 54px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.08;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent-cy {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title .accent-wr {
+            background: linear-gradient(135deg, var(--warn-400), var(--warn-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Comparison grid === */
+        .compare {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0;
+            width: 1560px;
+            margin: 0 auto;
+            align-items: stretch;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .card {
+            padding: 40px 44px 36px;
+            background: rgba(17,24,39,0.72);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            box-shadow: 0 28px 70px rgba(0,0,0,0.32);
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .card-glyph {
+            flex: 0 0 auto;
+            width: 110px;
+            height: 110px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 54px;
+            font-weight: 800;
+            line-height: 1;
+            background:
+                radial-gradient(circle at 50% 30%, rgba(34,211,238,0.18), rgba(34,211,238,0.04) 55%, rgba(17,24,39,0.78) 100%),
+                rgba(17,24,39,0.72);
+            color: var(--cyan-400);
+            text-shadow: 0 0 26px rgba(34,211,238,0.28);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+        }
+
+        .card-head-body { display: flex; flex-direction: column; gap: 4px; }
+
+        .card-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--cyan-400);
+            opacity: 0.9;
+        }
+
+        .card-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.1;
+        }
+
+        .card-tagline {
+            font-size: 18px;
+            font-weight: 400;
+            color: #cbd5e1;
+            line-height: 1.35;
+            font-style: italic;
+        }
+
+        .rows {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 168px 1fr;
+            gap: 22px;
+            align-items: center;
+            padding: 16px 4px;
+        }
+
+        .row + .row {
+            background:
+                linear-gradient(180deg, rgba(148,163,184,0.10), transparent 2px);
+        }
+
+        .row-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .row-label i { font-size: 18px; color: var(--cyan-400); opacity: 0.85; }
+
+        .row-value {
+            font-size: 21px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.35;
+        }
+
+        /* === EC variant (warm accent, no colored border) === */
+        .card--ec .card-glyph {
+            background:
+                radial-gradient(circle at 50% 30%, rgba(245,158,11,0.20), rgba(245,158,11,0.04) 55%, rgba(17,24,39,0.78) 100%),
+                rgba(17,24,39,0.72);
+            color: var(--warn-400);
+            text-shadow: 0 0 26px rgba(245,158,11,0.28);
+        }
+
+        .card--ec .card-label { color: var(--warn-400); }
+        .card--ec .row-label i { color: var(--warn-400); }
+
+        /* === Divider === */
+        .divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 26px;
+            color: #94a3b8;
+        }
+
+        .divider-vs {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: rgba(17,24,39,0.78);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #f0f4f8;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.32);
+        }
+
+        .divider-line {
+            flex: 1 1 auto;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, rgba(148,163,184,0.30), transparent);
+        }
+
+        /* === Bottom note === */
+        .note {
+            max-width: 1300px;
+            margin: 38px auto 0;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 36px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.95s forwards;
+        }
+
+        .note-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.16);
+        }
+
+        .note-text {
+            font-size: 23px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.35;
+        }
+
+        .note-text b { color: var(--cyan-400); font-weight: 700; }
+        .note-text b.wr { color: var(--warn-400); }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">2 podejścia</div>
+                <h1 class="title"><span class="accent-cy">EL</span> vs <span class="accent-wr">EC</span></h1>
+            </div>
+
+            <div class="compare">
+                <!-- EL card -->
+                <div class="card card--el">
+                    <div class="card-head">
+                        <div class="card-glyph">EL</div>
+                        <div class="card-head-body">
+                            <div class="card-label">Latency</div>
+                            <div class="card-title">Niska latencja</div>
+                            <div class="card-tagline">Odpowiedz szybko nieaktulnymi danymi</div>
+                        </div>
+                    </div>
+
+                    <div class="rows">
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-target"></i>Priorytet</div>
+                            <div class="row-value">Szybkość odpowiedzi</div>
+                        </div>
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-settings-2"></i>Mechanizm</div>
+                            <div class="row-value">Odczyt z&nbsp;lokalnej repliki lub projekcji</div>
+                        </div>
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-check"></i>Akceptujemy</div>
+                            <div class="row-value">Dane mogą być chwilowo starsze</div>
+                        </div>
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-coin"></i>Koszt</div>
+                            <div class="row-value">Chwilowa niespójność</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-vs">vs</div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- EC card -->
+                <div class="card card--ec">
+                    <div class="card-head">
+                        <div class="card-glyph">EC</div>
+                        <div class="card-head-body">
+                            <div class="card-label">Consistency</div>
+                            <div class="card-title">Silna spójność</div>
+                            <div class="card-tagline">Odpowiedz dokładnie, choćby wolniej</div>
+                        </div>
+                    </div>
+
+                    <div class="rows">
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-target"></i>Priorytet</div>
+                            <div class="row-value">Gwarancja aktualności</div>
+                        </div>
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-settings-2"></i>Mechanizm</div>
+                            <div class="row-value">Koordynacja, quorum, lider</div>
+                        </div>
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-check"></i>Akceptujemy</div>
+                            <div class="row-value">Odpowiedź trwa dłużej</div>
+                        </div>
+                        <div class="row">
+                            <div class="row-label"><i class="ti ti-coin"></i>Koszt</div>
+                            <div class="row-value">Wyższa latencja</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <div class="note-icon"><i class="ti ti-bulb"></i></div>
+                <div class="note-text">
+                    Ten sam system łączy oba podejścia:</br><b>EL</b> dla operacji szybkich, <b class="wr">EC</b> dla decyzji krytycznych.
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
