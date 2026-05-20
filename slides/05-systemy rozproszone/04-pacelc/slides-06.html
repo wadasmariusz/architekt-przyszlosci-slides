@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 06 - Scenariusz: wypożyczalnia samochodów — Toyota Corolla</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --ok: #34d399;
+            --danger: #fb7185;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 78px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 24px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 54px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+        }
+
+        .title {
+            font-size: 68px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram === */
+        .diagram {
+            position: relative;
+            width: 1540px;
+            height: 500px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .diagram-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .node {
+            position: absolute;
+            width: 430px;
+            background: rgba(17,24,39,0.80);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(148,163,184,0.16);
+            border-radius: 12px;
+            padding: 22px 28px;
+            box-shadow: 0 22px 60px rgba(0,0,0,0.34);
+        }
+
+        .node--empty {
+            border-color: rgba(251,113,133,0.34);
+        }
+
+        .node--stale {
+            border-color: rgba(245,158,11,0.42);
+        }
+
+        .node-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .node-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .node-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--cyan-400);
+            margin-bottom: 4px;
+        }
+
+        .node-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .node-body {
+            font-size: 16px;
+            font-weight: 400;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .node-body b {
+            color: #f0f4f8;
+            font-weight: 700;
+        }
+
+        .health-row {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: rgba(15,23,42,0.58);
+            border: 1px solid rgba(52,211,153,0.16);
+            border-radius: 999px;
+            backdrop-filter: blur(8px);
+        }
+
+        .health-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 13px;
+            border-radius: 999px;
+            color: var(--ok);
+            background: rgba(52,211,153,0.10);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .health-pill i {
+            font-size: 16px;
+        }
+
+        .state-board {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: 112px 1fr;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: rgba(15,23,42,0.62);
+        }
+
+        .state-board--empty {
+            border: 1px solid rgba(251,113,133,0.24);
+        }
+
+        .state-board--stale {
+            border: 1px solid rgba(245,158,11,0.28);
+        }
+
+        .state-count {
+            font-size: 76px;
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: 0;
+        }
+
+        .state-board--empty .state-count { color: var(--danger); }
+        .state-board--stale .state-count { color: var(--warn); }
+
+        .state-copy {
+            color: #e2e8f0;
+        }
+
+        .state-name {
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.15;
+        }
+
+        .state-meta {
+            margin-top: 5px;
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.35;
+        }
+
+        .event-card {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(3,7,18,0.42);
+            border: 1px solid rgba(148,163,184,0.16);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.35;
+            color: #cbd5e1;
+        }
+
+        .event-card b {
+            color: var(--danger);
+            font-weight: 800;
+        }
+
+        .phone-screen {
+            margin-top: 14px;
+            padding: 12px;
+            border-radius: 22px;
+            background: #050816;
+            border: 1px solid rgba(148,163,184,0.24);
+            box-shadow: inset 0 0 0 6px rgba(255,255,255,0.04);
+        }
+
+        .phone-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            padding: 0 6px;
+        }
+
+        .car-offer {
+            border-radius: 14px;
+            padding: 13px 14px;
+            background: rgba(15,23,42,0.96);
+            border: 1px solid rgba(245,158,11,0.26);
+        }
+
+        .offer-row {
+            display: grid;
+            grid-template-columns: 78px 1fr;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .phone-count {
+            color: var(--warn);
+            font-size: 68px;
+            font-weight: 800;
+            line-height: 0.9;
+        }
+
+        .car-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #f8fafc;
+        }
+
+        .car-available {
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ok);
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .reserve-button {
+            margin-top: 12px;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: var(--cyan-500);
+            color: #03111a;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 6px 14px;
+            background: rgba(52,211,153,0.12);
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--ok);
+        }
+
+        .status-pill.stale {
+            background: rgba(245,158,11,0.14);
+            color: var(--warn);
+        }
+
+        .status-pill i { font-size: 16px; }
+
+        .node--rzeszow {
+            top: 62px;
+            left: 0;
+        }
+
+        .node--warszawa {
+            top: 294px;
+            left: 50%;
+            width: 360px;
+            padding: 22px 24px;
+            transform: translateX(-50%);
+        }
+
+        .node--gdansk {
+            top: 62px;
+            right: 0;
+        }
+
+        .node--warszawa .node-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 26px;
+        }
+
+        .node--warszawa .node-title {
+            font-size: 21px;
+        }
+
+        /* === Sync delay badge === */
+        .sync-badge {
+            position: absolute;
+            top: 194px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 420px;
+            justify-content: center;
+            padding: 12px 18px;
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.28);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            color: var(--warn);
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            text-align: center;
+        }
+
+        .sync-badge i { font-size: 22px; }
+
+        .lag-label {
+            position: absolute;
+            top: 258px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fbbf24;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        /* === Key message banner === */
+        .key-message {
+            margin: 18px auto 0;
+            max-width: 940px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            padding: 18px 32px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1s forwards;
+        }
+
+        .key-icon {
+            flex: 0 0 auto;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .key-text {
+            font-size: 25px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.35;
+        }
+
+        .key-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes dashFlow {
+            to { stroke-dashoffset: -28; }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Scenariusz</div>
+                <h1 class="title">Wypożyczalnia samochodów<span class="accent"></span></h1>
+            </div>
+
+            <div class="diagram">
+                <div class="health-row" aria-label="Status systemu">
+                    <div class="health-pill"><i class="ti ti-wifi"></i> Sieć OK</div>
+                </div>
+
+                <svg class="diagram-svg" viewBox="0 0 1540 500" preserveAspectRatio="none">
+                    <defs>
+                        <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5"
+                                markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" fill="#22d3ee" opacity="0.85"/>
+                        </marker>
+                        <marker id="arrow-warn" viewBox="0 0 10 10" refX="8" refY="5"
+                                markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b" opacity="0.85"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Rzeszów -> Warszawa: zapis dotarł do huba -->
+                    <path d="M 430 248 C 540 268, 600 326, 704 360"
+                          fill="none" stroke="#22d3ee" stroke-width="3" stroke-opacity="0.82"
+                          marker-end="url(#arrow-cyan)"/>
+
+                    <!-- Warszawa -> Gdańsk: replika w Gdańsku jeszcze czeka -->
+                    <path d="M 836 360 C 940 326, 1000 268, 1110 248"
+                          fill="none" stroke="#f59e0b" stroke-width="3" stroke-opacity="0.86"
+                          stroke-dasharray="10 8"
+                          style="animation: dashFlow 1.8s linear infinite;"
+                          marker-end="url(#arrow-warn)"/>
+
+                    <!-- Bezpośredni kontrast stanów: ten sam samochód widziany inaczej -->
+                    <path d="M 430 176 C 620 116, 920 116, 1110 176"
+                          fill="none" stroke="#64748b" stroke-width="2.2" stroke-opacity="0.42"
+                          stroke-dasharray="10 8"
+                          style="animation: dashFlow 2.4s linear infinite;"/>
+                </svg>
+
+                <!-- Oddział Rzeszów (akcja) -->
+                <div class="node node--rzeszow node--empty">
+                    <div class="node-head">
+                        <div class="node-icon"><i class="ti ti-building-store"></i></div>
+                        <div>
+                            <div class="node-label">Oddział Rzeszów</div>
+                            <div class="node-title">Zdarzenie domenowe</div>
+                        </div>
+                    </div>
+                    <div class="node-body">
+                        Pracownik wydaje <b>ostatnią Toyotę Corollę</b>. Lokalny stan floty jest aktualny.
+                    </div>
+                    <div class="state-board state-board--empty">
+                        <div class="state-count">0</div>
+                        <div class="state-copy">
+                            <div class="state-name">Toyota Corolla</div>
+                        </div>
+                    </div>
+                    <div class="status-pill">
+                        <i class="ti ti-check"></i> Stan aktualny
+                    </div>
+                </div>
+
+                <!-- Centrala Warszawa -->
+                <div class="node node--warszawa">
+                    <div class="node-head">
+                        <div class="node-icon"><i class="ti ti-server-2"></i></div>
+                        <div>
+                            <div class="node-title">Hub replikacji</div>
+                        </div>
+                    </div>
+                    <div class="node-body">
+                        Zdarzenie jest już w drodze, ale odczyty mogą jeszcze korzystać ze starej repliki.
+                    </div>
+                </div>
+
+                <!-- Aplikacja klienta Gdańsk -->
+                <div class="node node--gdansk node--stale">
+                    <div class="node-head">
+                        <div class="node-icon"><i class="ti ti-device-mobile"></i></div>
+                        <div>
+                            <div class="node-label">Klient</div>
+                            <div class="node-title">Odczyt ze starej repliki</div>
+                        </div>
+                    </div>
+                    <div class="node-body">
+                        Aplikacja pokazuje poprzednią wersję danych i pozwala rozpocząć rezerwację.
+                    </div>
+                    <div class="phone-screen" aria-label="Ekran aplikacji klienta">
+                        <div class="phone-bar">
+                            <span>RentApp</span>
+                            <span>Gdańsk</span>
+                        </div>
+                        <div class="car-offer">
+                            <div class="offer-row">
+                                <div class="phone-count">1</div>
+                                <div>
+                                    <div class="car-name">Toyota Corolla</div>
+                                    <div class="car-available"><i class="ti ti-circle-check"></i> Dostępna</div>
+                                </div>
+                            </div>
+                            <div class="reserve-button">Zarezerwuj</div>
+                        </div>
+                    </div>
+                    <div class="status-pill stale">
+                        <i class="ti ti-clock-hour-3"></i> Dane nieaktualne
+                    </div>
+                </div>
+
+                <!-- Sync delay badge -->
+                <div class="sync-badge">
+                    <i class="ti ti-refresh"></i>
+                    Replika jeszcze nie zsynchronizowana
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

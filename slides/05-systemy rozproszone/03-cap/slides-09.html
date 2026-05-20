@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 09 - Podejście AP — dostępność kosztem chwilowej spójności</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --danger: #f43f5e;
+            --emerald: #10b981;
+            --amber: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 26px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Definition strip === */
+        .definition {
+            max-width: 1320px;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 32px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .definition-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .definition-text {
+            font-size: 24px;
+            font-weight: 500;
+            color: #e2e8f0;
+            line-height: 1.4;
+        }
+
+        .definition-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Main grid === */
+        .grid {
+            max-width: 1500px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: stretch;
+        }
+
+        .card {
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 26px 30px 28px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+        }
+
+        .card--left  { animation: fadeUp 0.8s ease-out 0.75s forwards; }
+        .card--right { animation: fadeUp 0.8s ease-out 0.95s forwards; }
+
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            width: fit-content;
+            margin-bottom: 14px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .card-tag--danger {
+            color: var(--danger);
+            background: rgba(244,63,94,0.12);
+        }
+
+        .card-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+
+        /* === Step rows === */
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            list-style: none;
+        }
+
+        .step-list li {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+        }
+
+        .step-icon {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .step-list li.step--ok .step-icon {
+            color: var(--emerald);
+            background: rgba(16,185,129,0.14);
+        }
+
+        .step-list li.step--bad .step-icon {
+            color: var(--danger);
+            background: rgba(244,63,94,0.14);
+        }
+
+        .step-list li.step--warn .step-icon {
+            color: var(--amber);
+            background: rgba(245,158,11,0.14);
+        }
+
+        .step-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .step-title {
+            font-size: 19px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.25;
+        }
+
+        .step-desc {
+            font-size: 15px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.35;
+        }
+
+        .step-desc b {
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        /* === Conclusion strip === */
+        .conclusion {
+            max-width: 1500px;
+            margin: 28px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 26px;
+            padding: 22px 36px;
+            border-radius: 18px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.15s forwards;
+        }
+
+        .conclusion-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .conclusion-body {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .scale-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .scale-pill i { font-size: 20px; }
+
+        .scale-pill--heavy {
+            color: var(--danger);
+            background: rgba(244,63,94,0.12);
+        }
+
+        .scale-pill--light {
+            color: var(--emerald);
+            background: rgba(16,185,129,0.12);
+        }
+
+        .scale-sign {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--cyan-400);
+            line-height: 1;
+        }
+
+        .conclusion-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h1 class="title"><span class="accent">AP</span> - dostępność kosztem </br>chwilowej spójności</h1>
+            </div>
+
+            <!-- Definition -->
+            <div class="definition">
+                <div class="definition-icon"><i class="ti ti-bolt"></i></div>
+                <div class="definition-text">
+                    System <b>odpowiada</b> nawet na podstawie niepełnej lub opóźnionej wiedzy.</br> Projektujemy mechanizmy <b>późniejszego uzgodnienia</b> stanu.
+                </div>
+            </div>
+
+            <!-- Main grid -->
+            <div class="grid">
+                <!-- LEFT: AP example -->
+                <div class="card card--left">
+                    <div class="card-tag"><i class="ti ti-list-search"></i> Przykład AP</div>
+                    <div class="card-title">Przeglądanie aut w&nbsp;Gdańsku na przyszły weekend</div>
+
+                    <ul class="step-list">
+                        <li class="step--ok">
+                            <div class="step-icon"><i class="ti ti-eye"></i></div>
+                            <div class="step-body">
+                                <div class="step-title">Lista odpowiada od razu</div>
+                            </div>
+                        </li>
+                        <li class="step--warn">
+                            <div class="step-icon"><i class="ti ti-clock-pause"></i></div>
+                            <div class="step-body">
+                                <div class="step-title">Opóźnienie kilkanaście–kilkadziesiąt sekund</div>
+                            </div>
+                        </li>
+                        <li class="step--ok">
+                            <div class="step-icon"><i class="ti ti-shield-check"></i></div>
+                            <div class="step-body">
+                                <div class="step-title">Twarde sprawdzenie przy rezerwacji</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- RIGHT: alternative — hard CP applied to browsing -->
+                <div class="card card--right">
+                    <div class="card-tag card-tag--danger"><i class="ti ti-alert-triangle"></i>Przykład CP</div>
+                    <div class="card-title">Ta sama operacja przeglądania pod CP</div>
+
+                    <ul class="step-list">
+                        <li class="step--bad">
+                            <div class="step-icon"><i class="ti ti-loader-2"></i></div>
+                            <div class="step-body">
+                                <div class="step-title">Pusty ekran, spinner, błąd</div>
+                            </div>
+                        </li>
+                        <li class="step--bad">
+                            <div class="step-icon"><i class="ti ti-mood-confuzed"></i></div>
+                            <div class="step-body">
+                                <div class="step-title">Firma nie ma aut lub aplikacja nie działa?</div>
+                            </div>
+                        </li>
+                        <li class="step--bad">
+                            <div class="step-icon"><i class="ti ti-door-exit"></i></div>
+                            <div class="step-body">
+                                <div class="step-title">Odejście do konkurencji</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Conclusion -->
+            <div class="conclusion">
+                <div class="conclusion-icon"><i class="ti ti-scale"></i></div>
+                <div class="conclusion-body">
+                    <span class="scale-pill scale-pill--heavy">
+                        <i class="ti ti-plug-connected-x"></i> koszt niedostępności
+                    </span>
+                    <span class="scale-sign">&gt;</span>
+                    <span class="scale-pill scale-pill--light">
+                        <i class="ti ti-refresh"></i> koszt chwilowo nieaktualnej informacji
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 08 - Podejście CP — spójność kosztem dostępności</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --cyan-900: #164e63;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --danger: #f43f5e;
+            --emerald: #10b981;
+            --amber: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 26px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Definition strip === */
+        .definition {
+            max-width: 1280px;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 32px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .definition-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .definition-text {
+            font-size: 26px;
+            font-weight: 500;
+            color: #e2e8f0;
+            line-height: 1.35;
+        }
+
+        .definition-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Main grid === */
+        .grid {
+            max-width: 1500px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: stretch;
+        }
+
+        .card {
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 26px 30px 28px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+        }
+
+        .card--left  { animation: fadeUp 0.8s ease-out 0.75s forwards; }
+        .card--right { animation: fadeUp 0.8s ease-out 0.95s forwards; }
+
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            width: fit-content;
+            margin-bottom: 14px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+
+        /* === Response list (left card) === */
+        .response-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            list-style: none;
+        }
+
+        .response-list li {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+        }
+
+        .resp-icon {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .resp-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #e2e8f0;
+            line-height: 1.3;
+        }
+
+        .resp-text small {
+            display: block;
+            font-size: 14px;
+            font-weight: 400;
+            color: #94a3b8;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        /* === Scenario (right card) === */
+        .scenario {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .scene-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+        }
+
+        .scene-icon {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .scene-row--danger .scene-icon {
+            color: var(--danger);
+            background: rgba(244,63,94,0.14);
+        }
+
+        .scene-row--shield .scene-icon {
+            color: var(--emerald);
+            background: rgba(16,185,129,0.14);
+        }
+
+        .scene-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .scene-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.25;
+        }
+
+        .scene-desc {
+            font-size: 15px;
+            font-weight: 400;
+            color: #94a3b8;
+            line-height: 1.35;
+        }
+
+        .scene-desc b {
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        /* === Consequences strip === */
+        .consequences {
+            max-width: 1500px;
+            margin: 28px auto 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.15s forwards;
+        }
+
+        .cost {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 26px;
+            border-radius: 16px;
+            background: rgba(17,24,39,0.62);
+            backdrop-filter: blur(10px);
+        }
+
+        .cost-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .cost--ok .cost-icon {
+            color: var(--emerald);
+            background: rgba(16,185,129,0.14);
+        }
+
+        .cost--bad .cost-icon {
+            color: var(--danger);
+            background: rgba(244,63,94,0.14);
+        }
+
+        .cost-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .cost-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+        }
+
+        .cost--ok  .cost-label { color: var(--emerald); }
+        .cost--bad .cost-label { color: var(--danger); }
+
+        .cost-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.3;
+        }
+
+        .cost-text small {
+            display: block;
+            font-size: 15px;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-top: 4px;
+            line-height: 1.35;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <h1 class="title"><span class="accent">CP</span> - spójność kosztem dostępności</h1>
+            </div>
+
+            <!-- Definition -->
+            <div class="definition">
+                <div class="definition-icon"><i class="ti ti-shield-lock"></i></div>
+                <div class="definition-text">
+                    System <b>odmawia wykonania operacji</b>, gdy nie może zagwarantować spójności.
+                </div>
+            </div>
+
+            <!-- Main grid -->
+            <div class="grid">
+                <!-- LEFT: how the system responds -->
+                <div class="card card--left">
+                    <div class="card-tag"><i class="ti ti-message-circle"></i> Jak reaguje system</div>
+                    <div class="card-title">Typowe odpowiedzi</div>
+
+                    <ul class="response-list">
+                        <li>
+                            <div class="resp-icon"><i class="ti ti-alert-triangle"></i></div>
+                            <div class="resp-text">Błąd</div>
+                        </li>
+                        <li>
+                            <div class="resp-icon"><i class="ti ti-clock-hour-4"></i></div>
+                            <div class="resp-text">Timeout</div>
+                        </li>
+                        <li>
+                            <div class="resp-icon"><i class="ti ti-ban"></i></div>
+                            <div class="resp-text">
+                                Komunikat dla użytkownika
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- RIGHT: example scenario -->
+                <div class="card card--right">
+                    <div class="card-tag"><i class="ti ti-car"></i> Przykład</div>
+                    <div class="card-title">Rezerwacja Toyoty Corolli</div>
+
+                    <div class="scenario">
+                        <div class="scene-row">
+                            <div class="scene-icon"><i class="ti ti-users"></i></div>
+                            <div class="scene-body">
+                                <div class="scene-title">Dwie osoby rezerwują jedno auto</div>
+                                <div class="scene-desc">aplikacja mobilna &amp; pracownik oddziału</div>
+                            </div>
+                        </div>
+
+                        <div class="scene-row scene-row--danger">
+                            <div class="scene-icon"><i class="ti ti-plug-connected-x"></i></div>
+                            <div class="scene-body">
+                                <div class="scene-title">Partycja sieciowa</div>
+                                <div class="scene-desc">Api i oddział nie widzą się nawzajem</div>
+                            </div>
+                        </div>
+
+                        <div class="scene-row scene-row--shield">
+                            <div class="scene-icon"><i class="ti ti-shield-check"></i></div>
+                            <div class="scene-body">
+                                <div class="scene-title">CP blokuje jedną z rezerwacji</div>
+                                <div class="scene-desc"><b>żaden węzeł</b> nie potwierdza bez pewności co do drugiego</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

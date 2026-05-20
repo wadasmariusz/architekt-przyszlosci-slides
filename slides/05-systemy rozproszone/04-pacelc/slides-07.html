@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 07 - Spójność per operacja, nie per system</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --warn: #f59e0b;
+            --ok: #34d399;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 78px 130px 170px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 30px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow::before,
+        .eyebrow::after {
+            content: '';
+            width: 54px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.08;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Central principle === */
+        .principle {
+            margin: 6px auto 36px;
+            max-width: 1380px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 26px 38px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.55s forwards;
+        }
+
+        .principle-icon {
+            flex: 0 0 auto;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .principle-text {
+            font-size: 26px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .principle-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Comparison === */
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            width: 100%;
+            max-width: 1500px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.75s forwards;
+        }
+
+        .card {
+            position: relative;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(34,211,238,0.10), rgba(34,211,238,0.02) 45%, rgba(17,24,39,0.74) 100%),
+                rgba(17,24,39,0.7);
+            backdrop-filter: blur(9px);
+            border-radius: 22px;
+            padding: 38px 42px 34px;
+            box-shadow: 0 22px 60px rgba(0,0,0,0.34);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding-bottom: 22px;
+            margin-bottom: 22px;
+            border-bottom: 1px solid rgba(148,163,184,0.18);
+        }
+
+        .card-icon {
+            flex: 0 0 auto;
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .card-head-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-tag {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--cyan-400);
+        }
+
+        .card-name {
+            font-size: 32px;
+            font-weight: 800;
+            color: #f0f4f8;
+            line-height: 1.15;
+        }
+
+        .traits {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .trait {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 21px;
+            font-weight: 400;
+            color: #cbd5e1;
+            line-height: 1.35;
+        }
+
+        .trait i {
+            flex: 0 0 auto;
+            font-size: 22px;
+            color: var(--cyan-400);
+            margin-top: 4px;
+        }
+
+        .trait b {
+            color: #f0f4f8;
+            font-weight: 700;
+        }
+
+        .conclusion {
+            margin-top: auto;
+            padding: 14px 20px;
+            background: rgba(15,23,42,0.55);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f0f4f8;
+            line-height: 1.3;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .conclusion span {
+            color: var(--cyan-400);
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">Zasada architektoniczna</div>
+                <h1 class="title">Spójność <span class="accent">per operacja</span>, nie per system</h1>
+            </div>
+
+            <div class="principle">
+                <div class="principle-icon"><i class="ti ti-bulb"></i></div>
+                <div class="principle-text">
+                    Nie projektujemy <b>jednego poziomu spójności</b> dla całego systemu</b>.
+                </div>
+            </div>
+
+            <div class="compare">
+                <!-- Przeglądanie oferty -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-icon"><i class="ti ti-eye-search"></i></div>
+                        <div class="card-head-body">
+                            <div class="card-tag">Operacja · Read</div>
+                            <div class="card-name">Przeglądanie oferty</div>
+                        </div>
+                    </div>
+
+                    <div class="traits">
+                        <div class="trait">
+                            <i class="ti ti-bolt"></i>
+                            <span><b>Szybkość</b> jest ważniejsza niż perfekcyjna aktualność.</span>
+                        </div>
+                        <div class="trait">
+                            <i class="ti ti-database"></i>
+                            <span>Odczyt z&nbsp;<b>lokalnej repliki</b> lub projekcji.</span>
+                        </div>
+                        <div class="trait">
+                            <i class="ti ti-clock-hour-3"></i>
+                            <span>Akceptujemy <b>chwilową nieaktualność</b> danych.</span>
+                        </div>
+                    </div>
+
+                    <div class="conclusion">
+                        Wynik: <span>niska latencja</span>, możliwe nieaktulne dane
+                    </div>
+                </div>
+
+                <!-- Finalizacja rezerwacji -->
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-icon"><i class="ti ti-shield-check"></i></div>
+                        <div class="card-head-body">
+                            <div class="card-tag">Operacja · Commit</div>
+                            <div class="card-name">Finalizacja rezerwacji</div>
+                        </div>
+                    </div>
+
+                    <div class="traits">
+                        <div class="trait">
+                            <i class="ti ti-lock-square"></i>
+                            <span><b>Silna walidacja</b> dostępności w&nbsp;źródle prawdy.</span>
+                        </div>
+                        <div class="trait">
+                            <i class="ti ti-network"></i>
+                            <span>Koordynacja: <b>lider, quorum, blokada</b>.</span>
+                        </div>
+                        <div class="trait">
+                            <i class="ti ti-alert-octagon"></i>
+                            <span>Spójność jest <b>krytyczna</b>.</span>
+                        </div>
+                    </div>
+
+                    <div class="conclusion">
+                        Wynik: <span>wyższa latencja</span>, pewna gwarancja stanu
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

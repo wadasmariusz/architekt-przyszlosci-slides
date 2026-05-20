@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 14 - Zalety i wady CP vs. AP</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --emerald: #10b981;
+            --emerald-soft: rgba(16,185,129,0.14);
+            --amber: #f59e0b;
+            --amber-soft: rgba(245,158,11,0.14);
+            --rose: #f43f5e;
+            --rose-soft: rgba(244,63,94,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-5.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 30px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Comparison grid === */
+        .compare {
+            max-width: 1560px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .col {
+            background: rgba(17,24,39,0.68);
+            backdrop-filter: blur(10px);
+            border-radius: 22px;
+            padding: 26px 32px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .col--cp { animation-delay: 0.55s; }
+        .col--ap { animation-delay: 0.7s; }
+
+        .col-head {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding-bottom: 14px;
+        }
+
+        .col-badge {
+            flex: 0 0 auto;
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .col--cp .col-badge {
+            color: var(--amber);
+            background: var(--amber-soft);
+        }
+
+        .col--ap .col-badge {
+            color: var(--emerald);
+            background: var(--emerald-soft);
+        }
+
+        .col-name {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .col-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .col--cp .col-label { color: var(--amber); }
+        .col--ap .col-label { color: var(--emerald); }
+
+        .col-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .section {
+            background: rgba(10,14,23,0.55);
+            border-radius: 14px;
+            padding: 16px 22px 18px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.8px;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+        }
+
+        .section-head i { font-size: 18px; }
+        .section--pros .section-head i { color: var(--emerald); }
+        .section--cons .section-head i { color: var(--rose); }
+
+        .item-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 400;
+            color: #e2e8f0;
+            line-height: 1.4;
+        }
+
+        .item i {
+            flex: 0 0 auto;
+            font-size: 18px;
+            margin-top: 3px;
+        }
+
+        .section--pros .item i { color: var(--emerald); }
+        .section--cons .item i { color: var(--rose); }
+
+        .item b { color: #f0f4f8; font-weight: 700; }
+
+        /* === Design questions strip === */
+        .questions {
+            margin: 24px auto 0;
+            max-width: 1560px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 20px 32px;
+            background: rgba(34,211,238,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.95s forwards;
+        }
+
+        .questions-icon {
+            flex: 0 0 auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+        }
+
+        .questions-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .questions-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.8px;
+            color: var(--cyan-400);
+        }
+
+        .questions-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .questions-text .sep {
+            display: inline-block;
+            margin: 0 10px;
+            color: #475569;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <span class="dot"></span> CP vs AP<span class="dot"></span>
+                </div>
+                <h1 class="title">Zalety i wady <span class="accent"></span></h1>
+            </div>
+
+            <!-- Comparison -->
+            <div class="compare">
+                <!-- CP column -->
+                <div class="col col--cp">
+                    <div class="col-head">
+                        <div class="col-badge">CP</div>
+                        <div class="col-name">
+                            <div class="col-label">Priorytet Spójność</div>
+                            <div class="col-title">Wolimy nie odpowiedzieć niż się pomylić</div>
+                        </div>
+                    </div>
+
+                    <div class="section section--pros">
+                        <div class="section-head"><i class="ti ti-circle-check"></i> Zalety</div>
+                        <ul class="item-list">
+                            <li class="item">
+                                <i class="ti ti-check"></i>
+                                <span><b>Przewidywalność</b></span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-check"></i>
+                                <span>Dobrze sprawdza się przy <b>ograniczonych zasobach i bezpieczeństwie</b></span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-check"></i>
+                                <span>Krytyczne <b>reguły domenowe</b> pod kontrolą</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="section section--cons">
+                        <div class="section-head"><i class="ti ti-circle-x"></i> Wady</div>
+                        <ul class="item-list">
+                            <li class="item">
+                                <i class="ti ti-x"></i>
+                                <span>Użytkownik częściej widzi <b>błąd lub timeout</b></span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-x"></i>
+                                <span><b>Utracone zamówienia</b>, porzucone koszyki</span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-x"></i>
+                                <span>Więcej zgłoszeń do <b>supportu</b></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- AP column -->
+                <div class="col col--ap">
+                    <div class="col-head">
+                        <div class="col-badge">AP</div>
+                        <div class="col-name">
+                            <div class="col-label">priorytet Dostępność</div>
+                            <div class="col-title">Wolimy odpowiedzieć i naprawić</div>
+                        </div>
+                    </div>
+
+                    <div class="section section--pros">
+                        <div class="section-head"><i class="ti ti-circle-check"></i> Zalety</div>
+                        <ul class="item-list">
+                            <li class="item">
+                                <i class="ti ti-check"></i>
+                                <span>Wysoka <b>responsywność</b> i&nbsp;odporność z&nbsp;perspektywy użytkownika</span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-check"></i>
+                                <span>System <b>działa mimo problemów</b> z&nbsp;infrastrukturą</span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-check"></i>
+                                <span>Lepsze doświadczenie w&nbsp;operacjach <b>nieblokujących</b></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="section section--cons">
+                        <div class="section-head"><i class="ti ti-circle-x"></i> Wady</div>
+                        <ul class="item-list">
+                            <li class="item">
+                                <i class="ti ti-x"></i>
+                                <span>Trzeba akceptować <b>konflikty</b> i&nbsp;opóźnioną konwergencję</span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-x"></i>
+                                <span>Dodatkowa <b>złożoność mechanizmów naprawczych</b></span>
+                            </li>
+                            <li class="item">
+                                <i class="ti ti-x"></i>
+                                <span>Czasem potrzebny <b>proces kompensacyjny</b> po stronie biznesu</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Design questions strip -->
+            <div class="questions">
+                <div class="questions-icon"><i class="ti ti-bulb"></i></div>
+                <div class="questions-body">
+                    <div class="questions-text">
+                        <span class="sep">Trade-off architektoniczny</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>

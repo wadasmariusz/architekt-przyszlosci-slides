@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 18 - Powrót do scenariusza — precyzyjna odpowiedź</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyan-400: #22d3ee;
+            --cyan-500: #06b6d4;
+            --cyan-600: #0891b2;
+            --cyan-700: #0e7490;
+            --dark-bg: #0a0e17;
+            --dark-surface: #111827;
+            --amber: #f59e0b;
+            --danger: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--dark-bg);
+            color: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .stage {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === Background layers === */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
+                url('../../../images/background-4.jpg') center / cover no-repeat;
+        }
+
+        .bg-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+        }
+
+        /* === Corners === */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 1;
+        }
+
+        .corner::before,
+        .corner::after {
+            content: '';
+            position: absolute;
+            background: var(--cyan-700);
+        }
+
+        .corner--tl { top: 30px; left: 30px; }
+        .corner--tl::before { width: 24px; height: 2px; top: 0; left: 0; }
+        .corner--tl::after  { width: 2px; height: 24px; top: 0; left: 0; }
+
+        .corner--br { bottom: 30px; right: 30px; }
+        .corner--br::before { width: 24px; height: 2px; bottom: 0; right: 0; }
+        .corner--br::after  { width: 2px; height: 24px; bottom: 0; right: 0; }
+
+        /* === Content === */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 70px 130px 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 1500px;
+            margin: 0 auto 28px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--cyan-400);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-400);
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .title .accent {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* === Diagram === */
+        .diagram {
+            position: relative;
+            width: 1500px;
+            height: 360px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .diagram-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .node {
+            position: absolute;
+            background: rgba(17,24,39,0.72);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .node-icon {
+            flex: 0 0 auto;
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .node-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .node-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--cyan-400);
+        }
+
+        .node-title {
+            font-size: 21px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.2;
+        }
+
+        .node-quote {
+            font-size: 14px;
+            font-weight: 400;
+            color: #94a3b8;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .node--central {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+        }
+
+        .node--mobile {
+            top: 220px;
+            left: 30px;
+            width: 380px;
+        }
+
+        .node--branch {
+            top: 220px;
+            right: 30px;
+            width: 380px;
+        }
+
+        /* === Decision tags on diagram === */
+        .decision-tag {
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            backdrop-filter: blur(8px);
+        }
+
+        .decision-tag i { font-size: 16px; }
+
+        .decision-tag--cp {
+            color: var(--amber);
+            background: rgba(245,158,11,0.16);
+            top: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .decision-tag--priority {
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+            top: 326px;
+            right: 70px;
+        }
+
+        .decision-tag--retry {
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.14);
+            top: 326px;
+            left: 70px;
+        }
+
+        /* === Decision blocks === */
+        .decisions {
+            width: 1240px;
+            margin: 28px auto 0 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .decision {
+            display: flex;
+            gap: 22px;
+            padding: 26px 32px;
+            background: rgba(17,24,39,0.68);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .decision:nth-child(1) { animation-delay: 0.85s; }
+        .decision:nth-child(2) { animation-delay: 1.0s; }
+
+        .decision-icon {
+            flex: 0 0 auto;
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.12);
+        }
+
+        .decision-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .decision-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.6px;
+            color: var(--cyan-400);
+        }
+
+        .decision-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f4f8;
+            line-height: 1.22;
+        }
+
+        .decision-text {
+            font-size: 17px;
+            font-weight: 400;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+
+        .decision-text b {
+            color: #f0f4f8;
+            font-weight: 700;
+        }
+
+        /* === Closing thesis === */
+        .thesis {
+            margin: 26px auto 0;
+            max-width: 1400px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 36px;
+            background: rgba(34,211,238,0.10);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.2s forwards;
+        }
+
+        .thesis-icon {
+            flex: 0 0 auto;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--cyan-400);
+            background: rgba(34,211,238,0.16);
+        }
+
+        .thesis-text {
+            font-size: 24px;
+            font-weight: 500;
+            color: #f0f4f8;
+            line-height: 1.4;
+        }
+
+        .thesis-text b {
+            color: var(--cyan-400);
+            font-weight: 700;
+        }
+
+        /* === Animations === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes dashFlow {
+            to { stroke-dashoffset: -24; }
+        }
+
+        /* === Fixed elements === */
+        .slide-logo {
+            position: absolute;
+            z-index: 100;
+            bottom: 40px;
+            left: 40px;
+            height: 100px;
+            width: auto;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .camera-box {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 480px;
+            height: 270px;
+            background: rgba(0,0,0,0.4);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" id="stage">
+        <!-- background layers -->
+        <div class="bg-image"></div>
+
+        <!-- corner accents -->
+        <div class="corner corner--tl"></div>
+        <div class="corner corner--br"></div>
+
+        <!-- slide content -->
+        <div class="content">
+            <div class="header">
+                <div class="eyebrow">
+                    <span class="dot"></span>Scenariusz<span class="dot"></span>
+                </div>
+                <h1 class="title">Scenariusz <span class="accent">z decyzjami</span> architektonicznym</h1>
+            </div>
+
+            <!-- Diagram with architectural decisions -->
+            <div class="diagram">
+                <svg class="diagram-svg" viewBox="0 0 1500 360" preserveAspectRatio="none">
+                    <defs>
+                        <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5"
+                                markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" fill="#22d3ee" opacity="0.85"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Centrala -> Aplikacja (healthy) -->
+                    <path d="M 640 90 Q 460 160, 320 230"
+                          fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-opacity="0.75"
+                          marker-end="url(#arrow-cyan)"/>
+
+                    <!-- Centrala -> Oddział (BROKEN) -->
+                    <path d="M 860 90 Q 1040 160, 1180 230"
+                          fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-opacity="0.7"
+                          stroke-dasharray="10 8"
+                          style="animation: dashFlow 1.6s linear infinite;"/>
+
+                    <!-- X marker on broken line -->
+                    <g transform="translate(1020, 155)">
+                        <circle r="20" fill="#0a0e17" stroke="#f43f5e" stroke-width="2"/>
+                        <line x1="-8" y1="-8" x2="8" y2="8" stroke="#f43f5e" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="-8" y1="8" x2="8" y2="-8" stroke="#f43f5e" stroke-width="3" stroke-linecap="round"/>
+                    </g>
+                </svg>
+
+                <!-- Centrala -->
+                <div class="node node--central">
+                    <div class="node-icon"><i class="ti ti-server-2"></i></div>
+                    <div class="node-body">
+                        <div class="node-label">API · Rezerwacja</div>
+                        <div class="node-title">System centralny</div>
+                    </div>
+                </div>
+
+                <!-- Aplikacja mobilna -->
+                <div class="node node--mobile">
+                    <div class="node-icon"><i class="ti ti-device-mobile"></i></div>
+                    <div class="node-body">
+                        <div class="node-label">Klient</div>
+                        <div class="node-title">Aplikacja mobilna</div>
+                        <div class="node-quote">„Rezerwacja wymaga potwierdzenia"</div>
+                    </div>
+                </div>
+
+                <!-- Oddział Rzeszów -->
+                <div class="node node--branch">
+                    <div class="node-icon"><i class="ti ti-building-store"></i></div>
+                    <div class="node-body">
+                        <div class="node-label">Oddział Rzeszów</div>
+                        <div class="node-title">Pracownik przy ladzie</div>
+                        <div class="node-quote">Klient fizycznie obecny → priorytet</div>
+                    </div>
+                </div>
+
+                <!-- CP decision tag in the middle -->
+                <div class="decision-tag decision-tag--cp">
+                    <i class="ti ti-lock"></i> CP · jedna rezerwacja
+                </div>
+            </div>
+
+            <!-- Decision blocks -->
+            <div class="decisions">
+                <div class="decision">
+                    <div class="decision-icon"><i class="ti ti-shield-check"></i></div>
+                    <div class="decision-body">
+                        <div class="decision-label">Decyzja architektoniczna</div>
+                        <div class="decision-title">System wybiera CP dla rezerwacji</div>
+                        <div class="decision-text">
+                            Podczas partycji <b>blokujemy konflikt</b>: aplikacja zwraca „spróbuj ponownie", zamiast utworzyć drugą rezerwację na to samo auto.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="decision">
+                    <div class="decision-icon"><i class="ti ti-users"></i></div>
+                    <div class="decision-body">
+                        <div class="decision-label">Decyzja produktowa</div>
+                        <div class="decision-title">Pracownik ma pierwszeństwo</div>
+                        <div class="decision-text">
+                            Decyzja, kto wygrywa konflikt, powinna wyjść od <b>biznesu</b>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- logo -->
+        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+             alt="Architekt Przyszłości" class="slide-logo">
+
+        <!-- camera overlay -->
+        <div class="camera-box">kamera 480 &times; 270</div>
+    </div>
+
+    <script>
+        (function () {
+            const stage = document.getElementById('stage');
+            function rescale() {
+                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+                stage.style.transformOrigin = 'top left';
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+            }
+            window.addEventListener('resize', rescale);
+            rescale();
+        })();
+    </script>
+</body>
+</html>
