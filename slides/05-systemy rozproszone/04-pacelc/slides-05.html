@@ -367,8 +367,8 @@
         <!-- slide content -->
         <div class="content">
             <div class="header">
-                <div class="eyebrow">Trade-off L vs C</div>
-                <h1 class="title">Silna spójność <span class="accent">kosztuje</span> — nawet bez awarii</h1>
+                <div class="eyebrow">Trade-off</div>
+                <h1 class="title">Silna spójność <span class="accent">kosztuje</span></h1>
             </div>
 
             <div class="equation" aria-label="Silna spójność równa się dodatkowa latencja">
@@ -397,9 +397,6 @@
                             <div class="cost-title">Komunikacja z&nbsp;liderem</div>
                         </div>
                     </div>
-                    <div class="cost-desc">
-                        Zapis musi trafić do węzła-lidera, nawet jeśli klient łączy się z najbliższą repliką.
-                    </div>
                     <div class="cost-meter">
                         <div class="cost-meter-track">
                             <div class="cost-meter-fill" style="width: 30%;"></div>
@@ -415,9 +412,6 @@
                             <div class="cost-step">Krok 2</div>
                             <div class="cost-title">Potwierdzenie na replikach</div>
                         </div>
-                    </div>
-                    <div class="cost-desc">
-                        Lider czeka na quorum potwierdzeń, zanim odpowie klientowi — to gwarancja trwałości.
                     </div>
                     <div class="cost-meter">
                         <div class="cost-meter-track">
@@ -435,9 +429,6 @@
                             <div class="cost-title">Synchronizacja regionów</div>
                         </div>
                     </div>
-                    <div class="cost-desc">
-                        Repliki w&nbsp;różnych regionach geograficznych potrzebują czasu na uzgodnienie stanu.
-                    </div>
                     <div class="cost-meter">
                         <div class="cost-meter-track">
                             <div class="cost-meter-fill" style="width: 92%;"></div>
@@ -450,7 +441,7 @@
             <div class="takeaway">
                 <div class="takeaway-icon"><i class="ti ti-bolt"></i></div>
                 <div class="takeaway-text">
-                    Wybór <b>L vs C</b> to nie abstrakcja — to milisekundy doliczane do <b>każdego zapytania</b>.
+                    Wybór <b>L vs C</b> to milisekundy doliczane do <b>każdego zapytania</b>.
                 </div>
             </div>
         </div>
