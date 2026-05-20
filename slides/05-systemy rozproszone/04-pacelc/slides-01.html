@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 01 - PACELC — tytuł</title>
+    <title>Slide 01 - Twierdzenie CAP</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -12,6 +12,7 @@
             --cyan-500: #06b6d4;
             --cyan-600: #0891b2;
             --cyan-700: #0e7490;
+            --cyan-900: #164e63;
             --dark-bg: #0a0e17;
             --dark-surface: #111827;
         }
@@ -30,6 +31,10 @@
             height: 1080px;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* === Background layers === */
@@ -38,8 +43,8 @@
             inset: 0;
             pointer-events: none;
             background:
-                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
-                url('../../../images/background-5.jpg') center / cover no-repeat;
+                    linear-gradient(rgba(10,14,23,0.68), rgba(10,14,23,0.80)),
+                    url('../../../images/background-3.jpg') center / cover no-repeat;
         }
 
         .bg-image::after {
@@ -47,8 +52,8 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
-                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+                    radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.60) 100%),
+                    linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
         }
 
         /* === Corners === */
@@ -78,30 +83,25 @@
         .content {
             position: relative;
             z-index: 10;
+            text-align: center;
             width: 100%;
-            height: 100%;
-            padding: 110px 130px 170px;
+            max-width: 1320px;
+            padding: 0 3rem;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .header {
-            text-align: center;
-            max-width: 1500px;
-            margin: 0 auto 60px;
-        }
-
         .eyebrow {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            font-size: 18px;
+            gap: 14px;
+            font-size: 20px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             color: var(--cyan-400);
-            margin-bottom: 26px;
+            margin-bottom: 36px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.2s forwards;
         }
@@ -109,18 +109,19 @@
         .eyebrow::before,
         .eyebrow::after {
             content: '';
-            width: 54px;
+            width: 60px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.55), transparent);
+            background: linear-gradient(90deg, transparent, rgba(34,211,238,0.6), transparent);
         }
 
         .title {
-            font-size: 80px;
+            font-size: 124px;
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
             line-height: 1.08;
+            margin-bottom: 28px;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.4s forwards;
+            animation: fadeUp 0.8s ease-out 0.45s forwards;
         }
 
         .title .accent {
@@ -131,134 +132,87 @@
         }
 
         .subtitle {
-            margin-top: 22px;
             font-size: 30px;
             font-weight: 300;
             color: #cbd5e1;
-            line-height: 1.4;
+            letter-spacing: 0.2px;
+            line-height: 1.5;
+            max-width: 980px;
+            margin: 0 auto;
             opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.55s forwards;
+            animation: fadeUp 0.8s ease-out 0.7s forwards;
         }
 
-        .subtitle b {
-            color: #f0f4f8;
-            font-weight: 600;
-        }
-
-        /* === Letter display === */
-        .letters {
+        /* === Timeline / footer info === */
+        .timeline {
+            margin-top: 90px;
             display: flex;
-            gap: 22px;
             align-items: stretch;
-            justify-content: center;
-            margin-top: 70px;
+            gap: 32px;
             opacity: 0;
-            animation: fadeUp 0.9s ease-out 0.75s forwards;
+            animation: fadeUp 0.8s ease-out 0.95s forwards;
         }
 
-        .letter-card {
-            width: 224px;
-            padding: 42px 20px 34px;
-            border-radius: 18px;
-            background:
-                radial-gradient(circle at 50% 30%, rgba(34,211,238,0.14), rgba(34,211,238,0.03) 50%, rgba(17,24,39,0.74) 100%),
-                rgba(17,24,39,0.7);
-            backdrop-filter: blur(9px);
+        .timeline-item {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            text-align: center;
-            box-shadow: 0 22px 60px rgba(0,0,0,0.34);
+            gap: 20px;
+            padding: 22px 32px;
+            background: rgba(17,24,39,0.55);
+            backdrop-filter: blur(8px);
+            border-radius: 14px;
+            text-align: left;
+            min-width: 360px;
         }
 
-        .letter-card .glyph {
-            font-size: 112px;
-            font-weight: 800;
-            line-height: 1;
+        .timeline-icon {
+            flex: 0 0 auto;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
             color: var(--cyan-400);
-            text-shadow: 0 0 26px rgba(34,211,238,0.28);
-            margin-bottom: 18px;
+            background: rgba(34,211,238,0.10);
         }
 
-        .letter-card .word {
-            font-size: 25px;
-            font-weight: 700;
-            color: #f0f4f8;
-            line-height: 1.25;
+        .timeline-year {
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan-400);
+            margin-bottom: 4px;
         }
 
-        .letter-card .hint {
-            margin-top: 8px;
-            font-size: 17px;
+        .timeline-text {
+            font-size: 28px;
+            font-weight: 500;
+            color: #e2e88f0;
+            line-height: 1.35;
+        }
+
+        .timeline-text small {
+            display: block;
+            font-size: 18px;
             font-weight: 400;
             color: #94a3b8;
-            line-height: 1.3;
-            letter-spacing: 0.2px;
+            margin-top: 2px;
         }
 
-        .letter-card.is-else .glyph {
-            color: #f0f4f8;
-            text-shadow: none;
-        }
-
-        .letter-divider {
-            align-self: center;
-            width: 18px;
-            height: 1px;
-            background: rgba(148,163,184,0.45);
-        }
-
-        /* === Footer attribution === */
-        .footer-meta {
-            position: absolute;
-            top: 510px;
-            bottom: auto;
-            left: 50%;
-            transform: translateX(-50%);
+        .timeline-arrow {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 42px;
-            width: max-content;
-            opacity: 0;
-            animation: footerFadeUp 0.8s ease-out 1s forwards;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            color: #cbd5e1;
-            font-size: 26px;
-            font-weight: 400;
-            line-height: 1.3;
-        }
-
-        .meta-item i {
-            font-size: 31px;
-            color: var(--cyan-400);
-        }
-
-        .meta-item b {
-            color: #f0f4f8;
-            font-weight: 700;
-        }
-
-        .meta-sep {
-            width: 1px;
-            height: 28px;
-            background: rgba(148,163,184,0.35);
+            font-size: 28px;
+            color: rgba(34,211,238,0.55);
         }
 
         /* === Animations === */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(24px); }
             to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes footerFadeUp {
-            from { opacity: 0; transform: translate(-50%, 24px); }
-            to   { opacity: 1; transform: translate(-50%, 0); }
         }
 
         /* === Fixed elements === */
@@ -292,83 +246,54 @@
     </style>
 </head>
 <body>
-    <div class="stage" id="stage">
-        <!-- background layers -->
-        <div class="bg-image"></div>
+<div class="stage" id="stage">
+    <!-- background layers -->
+    <div class="bg-image"></div>
 
-        <!-- corner accents -->
-        <div class="corner corner--tl"></div>
-        <div class="corner corner--br"></div>
+    <!-- corner accents -->
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--br"></div>
 
-        <!-- slide content -->
-        <div class="content">
-            <div class="letters" aria-label="Rozwinięcie akronimu PACELC">
-                <div class="letter-card">
-                    <div class="glyph">P</div>
-                    <div class="word">Partition</div>
-                    <div class="hint">partycja sieci</div>
-                </div>
-                <div class="letter-card">
-                    <div class="glyph">A</div>
-                    <div class="word">Availability</div>
-                    <div class="hint">dostępność</div>
-                </div>
-                <div class="letter-card">
-                    <div class="glyph">C</div>
-                    <div class="word">Consistency</div>
-                    <div class="hint">spójność</div>
-                </div>
-                <div class="letter-card is-else">
-                    <div class="glyph">E</div>
-                    <div class="word">Else</div>
-                    <div class="hint">normalne działanie</div>
-                </div>
-                <div class="letter-card">
-                    <div class="glyph">L</div>
-                    <div class="word">Latency</div>
-                    <div class="hint">latencja</div>
-                </div>
-                <div class="letter-card">
-                    <div class="glyph">C</div>
-                    <div class="word">Consistency</div>
-                    <div class="hint">spójność</div>
-                </div>
-            </div>
-
-            <div class="footer-meta">
-                <div class="meta-item">
-                    <i class="ti ti-user"></i>
-                    <span><b>Daniel J. Abadi</b> · Yale University</span>
-                </div>
-                <div class="meta-sep"></div>
-                <div class="meta-item">
-                    <i class="ti ti-calendar"></i>
-                    <span>2010 / 2012</span>
+    <!-- slide content -->
+    <div class="content">
+        <h1 class="title">
+            Twierdzenie <span class="accent">PACELC</span><br>
+        </h1>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="ti ti-bulb"></i></div>
+                <div>
+                    <div class="timeline-year">Daniel Abadi</div>
+                    <div class="timeline-text">
+                        2010/2012 · Yale University
+                        <small>Rozszerzenie CAP</small>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- logo -->
-        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
-             alt="Architekt Przyszłości" class="slide-logo">
-
-        <!-- camera overlay -->
-        <div class="camera-box">kamera 480 &times; 270</div>
     </div>
 
-    <script>
-        (function () {
-            const stage = document.getElementById('stage');
-            function rescale() {
-                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
-                stage.style.transformOrigin = 'top left';
-                stage.style.transform = 'scale(' + scale + ')';
-                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
-                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
-            }
-            window.addEventListener('resize', rescale);
-            rescale();
-        })();
-    </script>
+    <!-- logo -->
+    <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+         alt="Architekt Przyszłości" class="slide-logo">
+
+    <!-- camera overlay -->
+    <div class="camera-box">kamera 480 &times; 270</div>
+</div>
+
+<script>
+    (function () {
+        const stage = document.getElementById('stage');
+        function rescale() {
+            const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+            stage.style.transformOrigin = 'top left';
+            stage.style.transform = 'scale(' + scale + ')';
+            stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+            stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+        }
+        window.addEventListener('resize', rescale);
+        rescale();
+    })();
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slide 03 - Ograniczenie CAP — co z codziennością?</title>
+    <title>Slide 01 - PACELC — tytuł</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -14,8 +14,6 @@
             --cyan-700: #0e7490;
             --dark-bg: #0a0e17;
             --dark-surface: #111827;
-            --warn: #f59e0b;
-            --danger: #f43f5e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,8 +38,8 @@
             inset: 0;
             pointer-events: none;
             background:
-                linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86)),
-                url('../../../images/background-6.jpg') center / cover no-repeat;
+                    linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
+                    url('../../../images/background-5.jpg') center / cover no-repeat;
         }
 
         .bg-image::after {
@@ -49,8 +47,8 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
-                linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
+                    radial-gradient(ellipse at center, transparent 0%, rgba(3,7,18,0.18) 48%, rgba(3,7,18,0.58) 100%),
+                    linear-gradient(90deg, rgba(3,7,18,0.42) 0%, transparent 24%, transparent 76%, rgba(3,7,18,0.42) 100%);
         }
 
         /* === Corners === */
@@ -82,7 +80,7 @@
             z-index: 10;
             width: 100%;
             height: 100%;
-            padding: 78px 130px 170px;
+            padding: 110px 130px 170px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -90,8 +88,8 @@
 
         .header {
             text-align: center;
-            max-width: 1480px;
-            margin: 0 auto 32px;
+            max-width: 1500px;
+            margin: 0 auto 60px;
         }
 
         .eyebrow {
@@ -103,7 +101,7 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             color: var(--cyan-400);
-            margin-bottom: 18px;
+            margin-bottom: 26px;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.2s forwards;
         }
@@ -132,191 +130,135 @@
             background-clip: text;
         }
 
-        /* === Hero statement === */
-        .hero {
-            text-align: center;
-            max-width: 1400px;
-            margin: 14px auto 38px;
-            font-size: 38px;
+        .subtitle {
+            margin-top: 22px;
+            font-size: 30px;
             font-weight: 300;
-            line-height: 1.35;
-            color: #e2e8f0;
+            color: #cbd5e1;
+            line-height: 1.4;
             opacity: 0;
             animation: fadeUp 0.8s ease-out 0.55s forwards;
         }
 
-        .hero b {
-            font-weight: 700;
+        .subtitle b {
             color: #f0f4f8;
-            background: linear-gradient(180deg, transparent 64%, rgba(34,211,238,0.22) 64%);
-            padding: 0 4px;
-        }
-
-        /* === Lifetime bar === */
-        .lifetime {
-            width: 1400px;
-            margin: 0 auto 40px;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.75s forwards;
-        }
-
-        .lifetime-caption {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            font-size: 14px;
             font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: 10px;
         }
 
-        .lifetime-bar {
+        /* === Letter display === */
+        .letters {
             display: flex;
-            height: 110px;
-            border-radius: 14px;
-            overflow: hidden;
-            background: rgba(17,24,39,0.55);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.32);
+            gap: 22px;
+            align-items: stretch;
+            justify-content: center;
+            margin-top: 70px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.75s forwards;
         }
 
-        .lifetime-seg {
+        .letter-card {
+            width: 224px;
+            padding: 42px 20px 34px;
+            border-radius: 18px;
+            background:
+                    radial-gradient(circle at 50% 30%, rgba(34,211,238,0.14), rgba(34,211,238,0.03) 50%, rgba(17,24,39,0.74) 100%),
+                    rgba(17,24,39,0.7);
+            backdrop-filter: blur(9px);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
             text-align: center;
-            gap: 4px;
+            box-shadow: 0 22px 60px rgba(0,0,0,0.34);
         }
 
-        .lifetime-seg--rare {
-            flex: 0 0 9%;
-            background:
-                linear-gradient(180deg, rgba(244,63,94,0.20), rgba(244,63,94,0.08));
+        .letter-card .glyph {
+            font-size: 112px;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--cyan-400);
+            text-shadow: 0 0 26px rgba(34,211,238,0.28);
+            margin-bottom: 18px;
         }
 
-        .lifetime-seg--daily {
-            flex: 1 1 auto;
-            background:
-                linear-gradient(180deg, rgba(34,211,238,0.18), rgba(34,211,238,0.06));
-        }
-
-        .lifetime-tag {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-        }
-
-        .lifetime-seg--rare .lifetime-tag  { color: var(--danger); }
-        .lifetime-seg--daily .lifetime-tag { color: var(--cyan-400); }
-
-        .lifetime-label {
-            font-size: 22px;
+        .letter-card .word {
+            font-size: 25px;
             font-weight: 700;
             color: #f0f4f8;
-            line-height: 1.15;
+            line-height: 1.25;
         }
 
-        .lifetime-sub {
-            font-size: 15px;
+        .letter-card .hint {
+            margin-top: 8px;
+            font-size: 17px;
             font-weight: 400;
-            color: #cbd5e1;
-            line-height: 1.2;
+            color: #94a3b8;
+            line-height: 1.3;
+            letter-spacing: 0.2px;
         }
 
-        /* === Question card === */
-        .question {
-            max-width: 1320px;
-            margin: 0 auto 28px;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 26px 38px;
-            background: rgba(34,211,238,0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.28);
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 0.95s forwards;
+        .letter-card.is-else .glyph {
+            color: #f0f4f8;
+            text-shadow: none;
         }
 
-        .question-icon {
-            flex: 0 0 auto;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
+        .letter-divider {
+            align-self: center;
+            width: 18px;
+            height: 1px;
+            background: rgba(148,163,184,0.45);
+        }
+
+        /* === Footer attribution === */
+        .footer-meta {
+            position: absolute;
+            top: 510px;
+            bottom: auto;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 34px;
-            color: var(--cyan-400);
-            background: rgba(34,211,238,0.16);
+            gap: 42px;
+            width: max-content;
+            opacity: 0;
+            animation: footerFadeUp 0.8s ease-out 1s forwards;
         }
 
-        .question-text {
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #cbd5e1;
             font-size: 26px;
-            font-weight: 500;
-            color: #f0f4f8;
-            line-height: 1.35;
+            font-weight: 400;
+            line-height: 1.3;
         }
 
-        .question-text b {
+        .meta-item i {
+            font-size: 31px;
             color: var(--cyan-400);
+        }
+
+        .meta-item b {
+            color: #f0f4f8;
             font-weight: 700;
         }
 
-        /* === Abadi quote === */
-        .quote {
-            max-width: 1240px;
-            margin: 0 auto;
-            text-align: center;
-            font-size: 19px;
-            font-weight: 300;
-            font-style: italic;
-            line-height: 1.5;
-            color: #94a3b8;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out 1.15s forwards;
-        }
-
-        .quote::before {
-            content: '“';
-            display: inline;
-            color: var(--cyan-400);
-            font-size: 26px;
-            font-weight: 600;
-            margin-right: 4px;
-        }
-
-        .quote::after {
-            content: '”';
-            display: inline;
-            color: var(--cyan-400);
-            font-size: 26px;
-            font-weight: 600;
-            margin-left: 4px;
-        }
-
-        .quote-attr {
-            display: block;
-            margin-top: 10px;
-            font-style: normal;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--cyan-400);
-            opacity: 0.85;
+        .meta-sep {
+            width: 1px;
+            height: 28px;
+            background: rgba(148,163,184,0.35);
         }
 
         /* === Animations === */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(24px); }
             to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes footerFadeUp {
+            from { opacity: 0; transform: translate(-50%, 24px); }
+            to   { opacity: 1; transform: translate(-50%, 0); }
         }
 
         /* === Fixed elements === */
@@ -350,78 +292,82 @@
     </style>
 </head>
 <body>
-    <div class="stage" id="stage">
-        <!-- background layers -->
-        <div class="bg-image"></div>
+<div class="stage" id="stage">
+    <!-- background layers -->
+    <div class="bg-image"></div>
 
-        <!-- corner accents -->
-        <div class="corner corner--tl"></div>
-        <div class="corner corner--br"></div>
+    <!-- corner accents -->
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--br"></div>
 
-        <!-- slide content -->
-        <div class="content">
-            <div class="header">
-                <div class="eyebrow">Ograniczenie CAP</div>
-                <h1 class="title">Co z <span class="accent">codziennością</span>?</h1>
+    <!-- slide content -->
+    <div class="content">
+        <div class="letters" aria-label="Rozwinięcie akronimu PACELC">
+            <div class="letter-card">
+                <div class="glyph">P</div>
+                <div class="word">Partition</div>
+                <div class="hint">partycja sieci</div>
             </div>
-
-            <div class="hero">
-                <b>Większość życia systemu</b> nie dzieje się w&nbsp;czasie awarii.
+            <div class="letter-card">
+                <div class="glyph">A</div>
+                <div class="word">Availability</div>
+                <div class="hint">dostępność</div>
             </div>
-
-            <div class="lifetime" aria-label="Proporcje czasu działania systemu">
-                <div class="lifetime-caption">
-                    <span>Czas pracy systemu</span>
-                    <span>100%</span>
-                </div>
-                <div class="lifetime-bar">
-                    <div class="lifetime-seg lifetime-seg--rare">
-                        <div class="lifetime-tag">CAP</div>
-                        <div class="lifetime-label">Awaria</div>
-                        <div class="lifetime-sub">partycja sieciowa</div>
-                    </div>
-                    <div class="lifetime-seg lifetime-seg--daily">
-                        <div class="lifetime-tag">PACELC?</div>
-                        <div class="lifetime-label">Normalne działanie</div>
-                        <div class="lifetime-sub">sieć działa · usługi działają · baza działa</div>
-                    </div>
-                </div>
+            <div class="letter-card">
+                <div class="glyph">C</div>
+                <div class="word">Consistency</div>
+                <div class="hint">spójność</div>
             </div>
-
-            <div class="question">
-                <div class="question-icon"><i class="ti ti-help-circle"></i></div>
-                <div class="question-text">
-                    Kiedy wszystko działa — czy <b>odpowiadamy szybko</b>, czy <b>gwarantujemy świeżość danych</b>?
-                </div>
+            <div class="letter-card is-else">
+                <div class="glyph">E</div>
+                <div class="word">Else</div>
             </div>
-
-            <div class="quote">
-                Ignoring the consistency/latency tradeoff of replicated systems is a major oversight, as it is present at all times during system operation.
-                <span class="quote-attr">Daniel J. Abadi · 2012</span>
+            <div class="letter-card">
+                <div class="glyph">L</div>
+                <div class="word">Latency</div>
+                <div class="hint">latencja</div>
+            </div>
+            <div class="letter-card">
+                <div class="glyph">C</div>
+                <div class="word">Consistency</div>
+                <div class="hint">spójność</div>
             </div>
         </div>
 
-        <!-- logo -->
-        <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
-             alt="Architekt Przyszłości" class="slide-logo">
-
-        <!-- camera overlay -->
-        <div class="camera-box">kamera 480 &times; 270</div>
+        <div class="footer-meta">
+            <div class="meta-item">
+                <i class="ti ti-user"></i>
+                <span><b>Daniel J. Abadi</b> · Yale University</span>
+            </div>
+            <div class="meta-sep"></div>
+            <div class="meta-item">
+                <i class="ti ti-calendar"></i>
+                <span>2010 / 2012</span>
+            </div>
+        </div>
     </div>
 
-    <script>
-        (function () {
-            const stage = document.getElementById('stage');
-            function rescale() {
-                const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
-                stage.style.transformOrigin = 'top left';
-                stage.style.transform = 'scale(' + scale + ')';
-                stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
-                stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
-            }
-            window.addEventListener('resize', rescale);
-            rescale();
-        })();
-    </script>
+    <!-- logo -->
+    <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+         alt="Architekt Przyszłości" class="slide-logo">
+
+    <!-- camera overlay -->
+    <div class="camera-box">kamera 480 &times; 270</div>
+</div>
+
+<script>
+    (function () {
+        const stage = document.getElementById('stage');
+        function rescale() {
+            const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+            stage.style.transformOrigin = 'top left';
+            stage.style.transform = 'scale(' + scale + ')';
+            stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+            stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+        }
+        window.addEventListener('resize', rescale);
+        rescale();
+    })();
+</script>
 </body>
 </html>
