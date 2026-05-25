@@ -99,8 +99,8 @@ const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie
   }
 
   .row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: center;
     gap: 36px;
     width: 100%;
     margin-bottom: 56px;
@@ -336,5 +336,10 @@ const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie
   .node.center .desc {
     color: #cbd5e1;
     font-weight: 400;
+  }
+
+  .node:last-child .label,
+  .node:last-child .desc {
+    transform: translateY(-14px);
   }
 </style>

@@ -1,0 +1,203 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 05 - Trzy zasady C4"
+  bgImage="/images/background-5.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86))"
+>
+  <div class="content">
+    <h1 class="title">
+      Fundamenty<span class="highlight">C4</span>
+    </h1>
+
+    <div class="grid">
+      <article class="card">
+        <div class="icon-wrap"><i class="ti ti-feather"></i></div>
+        <h3>Prostota</h3>
+        <span class="divider"></span>
+        <p>
+          Niski <strong> próg wejścia</strong>, brak konieczności nauki rozbudowanej notacji
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="icon-wrap"><i class="ti ti-stack-2"></i></div>
+        <h3>Hierarchia abstrakcji</h3>
+        <span class="divider"></span>
+        <p>
+         Każdy diagram operuje na jednym, świadomie wybranym <strong>poziomie szczegółowości</strong>
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="icon-wrap"><i class="ti ti-message-2"></i></div>
+        <h3>Samoopisowość</h3>
+        <span class="divider"></span>
+        <p>
+          Diagram daje się <strong>zrozumieć bez autora</strong>, każdy element
+          ma nazwę, typ i opis; relacje są opisane.
+        </p>
+      </article>
+    </div>
+    
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1640px;
+    padding: 130px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 80px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 44px;
+    width: 100%;
+    margin-bottom: 70px;
+  }
+
+  .card {
+    position: relative;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 22px;
+    padding: 56px 44px 50px;
+    text-align: center;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--cyan-400), transparent);
+    opacity: 0.65;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.5s; }
+  .card:nth-child(2) { animation-delay: 0.7s; }
+  .card:nth-child(3) { animation-delay: 0.9s; }
+
+  .number {
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: rgba(34, 211, 238, 0.18);
+  }
+
+  .icon-wrap {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at center, rgba(34, 211, 238, 0.2), rgba(34, 211, 238, 0.04) 70%);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.18);
+  }
+
+  .icon-wrap i {
+    font-size: 62px;
+    color: var(--cyan-400);
+  }
+
+  .card h3 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #f1f5f9;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    letter-spacing: -0.3px;
+  }
+
+  .divider {
+    display: block;
+    width: 56px;
+    height: 2px;
+    margin: 0 auto 22px;
+    background: linear-gradient(90deg, transparent, var(--cyan-500), transparent);
+    opacity: 0.8;
+  }
+
+  .card p {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .card p strong {
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  .callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 36px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 999px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #e2e8f0;
+    letter-spacing: 0.2px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 1.2s forwards;
+  }
+
+  .callout i {
+    font-size: 30px;
+    color: var(--cyan-400);
+  }
+
+  .callout strong {
+    font-weight: 700;
+    color: var(--cyan-400);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+</style>

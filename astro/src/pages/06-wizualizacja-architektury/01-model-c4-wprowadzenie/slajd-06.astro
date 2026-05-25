@@ -1,0 +1,209 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 06 - Słownik pojęć C4"
+  bgImage="/images/background-6.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.76), rgba(10,14,23,0.88))"
+>
+  <div class="content">
+    <h1 class="title">
+      Słownik pojęć <span class="highlight">C4</span>
+    </h1>
+
+    <div class="glossary">
+      <div class="row" style="--delay: 0.4s">
+        <div class="icon-cell"><i class="ti ti-user"></i></div>
+        <div class="term-cell">
+          <div class="term">Person</div>
+          <div class="kind">Aktor</div>
+        </div>
+        <div class="desc-cell">
+          <strong>Użytkownik lub rola</strong> korzystająca z systemu.
+        </div>
+      </div>
+
+      <div class="row" style="--delay: 0.55s">
+        <div class="icon-cell"><i class="ti ti-box"></i></div>
+        <div class="term-cell">
+          <div class="term">Software System</div>
+          <div class="kind">System</div>
+        </div>
+        <div class="desc-cell">
+          <strong>Większa całość</strong> dostarczająca wartość biznesową.
+        </div>
+      </div>
+
+      <div class="row accent" style="--delay: 0.7s">
+        <div class="icon-cell"><i class="ti ti-server-2"></i></div>
+        <div class="term-cell">
+          <div class="term">
+            Container
+          </div>
+          <div class="kind">Jednostka wdrożenia</div>
+        </div>
+        <div class="desc-cell">
+          <strong>Uruchamialna lub wdrażalna jednostka</strong>: aplikacja webowa, API,
+          baza danych, worker, kolejka.
+        </div>
+      </div>
+
+      <div class="row" style="--delay: 0.85s">
+        <div class="icon-cell"><i class="ti ti-components"></i></div>
+        <div class="term-cell">
+          <div class="term">Component</div>
+          <div class="kind">Moduł wewnątrz kontenera</div>
+        </div>
+        <div class="desc-cell">
+          <strong>Większy moduł</strong> wewnątrz kontenera, z wyraźną odpowiedzialnością.
+        </div>
+      </div>
+
+      <div class="row" style="--delay: 1.0s">
+        <div class="icon-cell"><i class="ti ti-arrows-right-left"></i></div>
+        <div class="term-cell">
+          <div class="term">Relationship</div>
+          <div class="kind">Komunikacja</div>
+        </div>
+        <div class="desc-cell">
+          Opis komunikacji: <strong>kto, z kim, po co</strong> i <strong>w jaki sposób</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1640px;
+    padding: 110px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glossary {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 120px 360px 1fr;
+    align-items: center;
+    gap: 36px;
+    padding: 18px 36px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 18px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s ease-out forwards;
+    animation-delay: var(--delay, 0.4s);
+  }
+
+  .row.accent {
+    background: linear-gradient(120deg, rgba(34, 211, 238, 0.10), rgba(17, 24, 39, 0.55) 60%);
+    border-color: rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.1), 0 4px 30px rgba(34, 211, 238, 0.08);
+  }
+
+  .icon-cell {
+    width: 88px;
+    height: 88px;
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at center, rgba(34, 211, 238, 0.22), rgba(34, 211, 238, 0.04) 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 1px solid rgba(34, 211, 238, 0.22);
+  }
+
+  .icon-cell i {
+    font-size: 46px;
+    color: var(--cyan-400);
+  }
+
+  .term-cell .term {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
+  }
+
+  .term-cell .kind {
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .warn-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(239, 68, 68, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #fca5a5;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .warn-chip i {
+    font-size: 14px;
+    color: #ef4444;
+  }
+
+  .desc-cell {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+  }
+
+  .desc-cell strong {
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  .row.accent .desc-cell strong {
+    color: var(--cyan-400);
+  }
+</style>
