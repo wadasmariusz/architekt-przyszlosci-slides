@@ -214,9 +214,9 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-    gap: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
     width: 100%;
     align-items: stretch;
   }
@@ -227,6 +227,9 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     border: 1px solid rgba(148, 163, 184, 0.15);
     border-radius: 22px;
     padding: 22px 28px;
+    max-width: 920px;
+    width: 100%;
+    margin: 0 auto;
     opacity: 0;
     transform: translateY(22px);
     animation: fadeUp 0.9s ease-out 0.45s forwards;
@@ -243,7 +246,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     flex-direction: column;
     gap: 22px;
     text-align: left;
-    padding: 8px 0;
   }
 
   .question {

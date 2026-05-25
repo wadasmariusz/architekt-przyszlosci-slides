@@ -16,7 +16,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
     <div class="layout">
       <div class="diagram-wrap">
-        <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 1100 560" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker id="arr-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
@@ -35,68 +35,60 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
           </defs>
 
           <g font-family="Inter, sans-serif">
-            <g transform="translate(90,30)">
-              <circle cx="55" cy="40" r="28" fill="#1e40af" stroke="#60a5fa" stroke-width="2"/>
-              <rect x="20" y="72" width="70" height="50" rx="14" fill="#1e40af" stroke="#60a5fa" stroke-width="2"/>
-              <text x="55" y="148" text-anchor="middle" font-size="22" font-weight="700" fill="#dbeafe">Klient</text>
-              <text x="55" y="172" text-anchor="middle" font-size="14" fill="#93c5fd">[Person]</text>
-              <text x="55" y="194" text-anchor="middle" font-size="13" fill="#cbd5e1">Przegląda, kupuje</text>
+            <g transform="translate(70,160)">
+              <circle cx="70" cy="48" r="30" fill="#1e40af" stroke="#60a5fa" stroke-width="2"/>
+              <rect x="30" y="82" width="80" height="58" rx="16" fill="#1e40af" stroke="#60a5fa" stroke-width="2"/>
+              <text x="70" y="174" text-anchor="middle" font-size="22" font-weight="700" fill="#dbeafe">Personal Banking</text>
+              <text x="70" y="198" text-anchor="middle" font-size="22" font-weight="700" fill="#dbeafe">Customer</text>
+              <text x="70" y="222" text-anchor="middle" font-size="14" fill="#93c5fd">[Person]</text>
+              <text x="70" y="246" text-anchor="middle" font-size="14" font-weight="300" fill="#e0f2fe">A customer of the bank, with</text>
+              <text x="70" y="268" text-anchor="middle" font-size="14" font-weight="300" fill="#e0f2fe">personal bank accounts.</text>
+               
             </g>
 
-            <g transform="translate(720,30)">
-              <circle cx="55" cy="40" r="28" fill="#1e40af" stroke="#60a5fa" stroke-width="2"/>
-              <rect x="20" y="72" width="70" height="50" rx="14" fill="#1e40af" stroke="#60a5fa" stroke-width="2"/>
-              <text x="55" y="148" text-anchor="middle" font-size="22" font-weight="700" fill="#dbeafe">Operator</text>
-              <text x="55" y="172" text-anchor="middle" font-size="14" fill="#93c5fd">[Person]</text>
-              <text x="55" y="194" text-anchor="middle" font-size="13" fill="#cbd5e1">Zarządza zamówieniami</text>
+            <g transform="translate(350,170)" filter="url(#soft-glow)">
+              <rect x="0" y="0" width="360" height="200" rx="20" fill="url(#sys-grad)" stroke="#22d3ee" stroke-width="2.5"/>
+              <text x="180" y="70" text-anchor="middle" font-size="36" font-weight="800" fill="#ffffff">Internet</text>
+              <text x="180" y="112" text-anchor="middle" font-size="36" font-weight="800" fill="#ffffff">Banking System</text>
+              <text x="180" y="142" text-anchor="middle" font-size="14" fill="#a5f3fc" font-weight="600" letter-spacing="2">[SOFTWARE SYSTEM]</text>
+              <text x="180" y="170" text-anchor="middle" font-size="14" font-weight="300" fill="#e0f2fe">Allows customers to view information</text>
+              <text x="180" y="190" text-anchor="middle" font-size="14" font-weight="300" fill="#e0f2fe">about their bank accounts, and make payments.</text>
             </g>
 
-            <g transform="translate(290,250)" filter="url(#soft-glow)">
-              <rect x="0" y="0" width="320" height="170" rx="20" fill="url(#sys-grad)" stroke="#22d3ee" stroke-width="2.5"/>
-              <text x="160" y="60" text-anchor="middle" font-size="32" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Sklep online</text>
-              <text x="160" y="92" text-anchor="middle" font-size="15" fill="#a5f3fc" font-weight="600" letter-spacing="2">[SOFTWARE SYSTEM]</text>
-              <text x="160" y="128" text-anchor="middle" font-size="16" font-weight="300" fill="#e0f2fe">Pozwala klientom kupować</text>
-              <text x="160" y="148" text-anchor="middle" font-size="16" font-weight="300" fill="#e0f2fe">produkty online</text>
+            <g transform="translate(830,70)">
+              <rect x="0" y="0" width="230" height="155" rx="14" fill="#334155" stroke="#94a3b8" stroke-width="1.8"/>
+              <text x="115" y="46" text-anchor="middle" font-size="22" font-weight="700" fill="#f1f5f9">Mainframe</text>
+              <text x="115" y="72" text-anchor="middle" font-size="22" font-weight="700" fill="#f1f5f9">Banking System</text>
+              <text x="115" y="96" text-anchor="middle" font-size="13" fill="#cbd5e1" letter-spacing="1.5">[EXTERNAL SYSTEM]</text>
+              <text x="115" y="122" text-anchor="middle" font-size="13" font-weight="300" fill="#e2e8f0">Stores core banking information</text>
+              <text x="115" y="140" text-anchor="middle" font-size="13" font-weight="300" fill="#e2e8f0">about accounts and transactions.</text>
             </g>
 
-            <g transform="translate(40,470)">
-              <rect x="0" y="0" width="200" height="120" rx="14" fill="#334155" stroke="#94a3b8" stroke-width="1.8"/>
-              <text x="100" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#f1f5f9">Bramka płatności</text>
-              <text x="100" y="62" text-anchor="middle" font-size="13" fill="#cbd5e1" letter-spacing="1.5">[EXTERNAL SYSTEM]</text>
-              <text x="100" y="92" text-anchor="middle" font-size="14" font-weight="300" fill="#e2e8f0">Realizuje płatności</text>
-              <text x="100" y="110" text-anchor="middle" font-size="14" font-weight="300" fill="#e2e8f0">kartą i BLIK-iem</text>
+            <g transform="translate(830,355)">
+              <rect x="0" y="0" width="230" height="125" rx="14" fill="#334155" stroke="#94a3b8" stroke-width="1.8"/>
+              <text x="115" y="46" text-anchor="middle" font-size="24" font-weight="700" fill="#f1f5f9">E-mail System</text>
+              <text x="115" y="70" text-anchor="middle" font-size="13" fill="#cbd5e1" letter-spacing="1.5">[EXTERNAL SYSTEM]</text>
+              <text x="115" y="96" text-anchor="middle" font-size="13" font-weight="300" fill="#e2e8f0">The internal Microsoft</text>
+              <text x="115" y="114" text-anchor="middle" font-size="13" font-weight="300" fill="#e2e8f0">Exchange e-mail system.</text>
             </g>
 
-            <g transform="translate(350,470)">
-              <rect x="0" y="0" width="200" height="120" rx="14" fill="#334155" stroke="#94a3b8" stroke-width="1.8"/>
-              <text x="100" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#f1f5f9">Usługa e-mail</text>
-              <text x="100" y="62" text-anchor="middle" font-size="13" fill="#cbd5e1" letter-spacing="1.5">[EXTERNAL SYSTEM]</text>
-              <text x="100" y="92" text-anchor="middle" font-size="14" font-weight="300" fill="#e2e8f0">Wysyła powiadomienia</text>
-              <text x="100" y="110" text-anchor="middle" font-size="14" font-weight="300" fill="#e2e8f0">transakcyjne</text>
+            <g fill="none" stroke="#94a3b8" stroke-width="1.6" opacity="0.9">
+              <path d="M220 285 C 260 285, 305 278, 350 272" marker-end="url(#arr-c)"/>
+              <path d="M710 232 C 752 210, 785 176, 830 148" marker-end="url(#arr-c)"/>
+              <path d="M710 312 C 754 332, 786 374, 830 412" marker-end="url(#arr-c)"/>
             </g>
 
-            <g transform="translate(660,470)">
-              <rect x="0" y="0" width="200" height="120" rx="14" fill="#334155" stroke="#94a3b8" stroke-width="1.8"/>
-              <text x="100" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#f1f5f9">Kurier</text>
-              <text x="100" y="62" text-anchor="middle" font-size="13" fill="#cbd5e1" letter-spacing="1.5">[EXTERNAL SYSTEM]</text>
-              <text x="100" y="92" text-anchor="middle" font-size="14" font-weight="300" fill="#e2e8f0">Obsługuje dostawę</text>
-              <text x="100" y="110" text-anchor="middle" font-size="14" font-weight="300" fill="#e2e8f0">zamówień</text>
-            </g>
+            <g font-family="Inter, sans-serif" font-size="12" fill="#22d3ee" font-weight="600">
+              <text x="280" y="220" text-anchor="middle">Views account balances</text>
+              <text x="280" y="236" text-anchor="middle">and makes payments</text>
+              <text x="280" y="252" text-anchor="middle">using [HTTPS]</text>
 
-            <g fill="none" stroke="#94a3b8" stroke-width="1.6" opacity="0.85">
-              <path d="M200 200 C 260 220, 290 240, 320 270" marker-end="url(#arr-c)"/>
-              <path d="M720 200 C 660 220, 630 240, 600 270" marker-end="url(#arr-c)"/>
-              <path d="M360 425 C 320 460, 260 470, 220 470" marker-end="url(#arr-c)"/>
-              <path d="M450 425 L450 465" marker-end="url(#arr-c)"/>
-              <path d="M540 425 C 580 460, 640 470, 680 470" marker-end="url(#arr-c)"/>
-            </g>
+              <text x="760" y="126" text-anchor="middle">Gets account info</text>
+              <text x="760" y="142" text-anchor="middle">and makes payments</text>
+              <text x="760" y="158" text-anchor="middle">using [XML/HTTPS]</text>
 
-            <g font-family="Inter, sans-serif" font-size="13" fill="#22d3ee" font-weight="600">
-              <text x="220" y="247">Używa [HTTPS]</text>
-              <text x="635" y="247" text-anchor="end">Używa [HTTPS]</text>
-              <text x="270" y="455">Płatność</text>
-              <text x="460" y="455" text-anchor="start">Wysyła e-mail</text>
-              <text x="600" y="455">Zleca dostawę</text>
+              <text x="765" y="392" text-anchor="middle">Sends e-mails</text>
+              <text x="765" y="408" text-anchor="middle">using [SMTP]</text>
             </g>
           </g>
         </svg>
@@ -160,11 +152,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-    gap: 48px;
+    display: flex;
+    justify-content: center;
     width: 100%;
-    align-items: stretch;
+    align-items: center;
   }
 
   .diagram-wrap {
@@ -173,6 +164,9 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     border: 1px solid rgba(148, 163, 184, 0.15);
     border-radius: 22px;
     padding: 22px 28px;
+    max-width: 1020px;
+    width: 100%;
+    margin: 0 auto;
     opacity: 0;
     transform: translateY(22px);
     animation: fadeUp 0.9s ease-out 0.45s forwards;
