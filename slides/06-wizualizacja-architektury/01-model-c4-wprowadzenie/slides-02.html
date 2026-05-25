@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 02 - Jeden diagram, wiele problemów</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../template.css">
+    <style>
+        .bg-image {
+            --bg-url: url('../../../images/background-2.jpg');
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
+                var(--bg-url) center / cover no-repeat;
+        }
+
+        .stage {
+            justify-content: flex-start;
+        }
+
+        .content {
+            max-width: 1640px;
+            padding: 140px 3rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.25s forwards;
+        }
+
+        .title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 36px;
+            width: 100%;
+        }
+
+        .card {
+            position: relative;
+            background: rgba(17, 24, 39, 0.55);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 48px 36px 44px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(24px);
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.55s; }
+        .card:nth-child(2) { animation-delay: 0.70s; }
+        .card:nth-child(3) { animation-delay: 0.85s; }
+        .card:nth-child(4) { animation-delay: 1.00s; }
+
+        .card .num {
+            position: absolute;
+            top: 18px;
+            right: 24px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: rgba(34, 211, 238, 0.45);
+        }
+
+        .icon-wrap {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at center, rgba(34,211,238,0.18), rgba(34,211,238,0.04) 70%);
+        }
+
+        .icon-wrap i {
+            font-size: 58px;
+            color: var(--cyan-400);
+        }
+
+        .card h3 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f1f5f9;
+            line-height: 1.2;
+            margin-bottom: 18px;
+            letter-spacing: -0.3px;
+        }
+
+        .card p {
+            font-size: 21px;
+            font-weight: 300;
+            line-height: 1.45;
+            color: #cbd5e1;
+            margin: 0;
+        }
+
+        .divider {
+            display: block;
+            width: 44px;
+            height: 2px;
+            margin: 0 auto 22px;
+            background: linear-gradient(90deg, transparent, var(--cyan-500), transparent);
+            opacity: 0.7;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="stage" id="stage">
+    <div class="bg-image"></div>
+
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--br"></div>
+
+    <div class="content">
+        <h1 class="title">
+            Jeden diagram, <span class="highlight">wiele problemów</span>
+        </h1>
+
+        <div class="grid">
+            <article class="card">
+                <div class="icon-wrap"><i class="ti ti-arrows-shuffle"></i></div>
+                <h3>Brak wspólnej<br>notacji</h3>
+                <span class="divider"></span>
+                <p>Każdy zespół rysuje inaczej. Każdy zespół ma swoją notację</p>
+            </article>
+
+            <article class="card">
+                <div class="icon-wrap"><i class="ti ti-users-group"></i></div>
+                <h3>Brak<br>odbiorcy</h3>
+                <span class="divider"></span>
+                <p>Jeden rysunek dla biznesu, architekta i nowego developera naraz.</p>
+            </article>
+
+            <article class="card">
+                <div class="icon-wrap"><i class="ti ti-stack-2"></i></div>
+                <h3>Mieszanie<br>poziomów</h3>
+                <span class="divider"></span>
+                <p>Szczegóły implementacyjne i koncepty biznesowe na jednym widoku</p>
+            </article>
+
+            <article class="card">
+                <div class="icon-wrap"><i class="ti ti-clock-x"></i></div>
+                <h3>Brak<br>aktualizacji</h3>
+                <span class="divider"></span>
+                <p>Diagram opisuje stan, który już nie istnieje.</p>
+            </article>
+        </div>
+    </div>
+
+    <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+         alt="Architekt Przyszłości" class="slide-logo">
+
+    <div class="camera-box">kamera 480 &times; 270</div>
+</div>
+
+<script>
+    (function () {
+        const stage = document.getElementById('stage');
+        function rescale() {
+            const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+            stage.style.transformOrigin = 'top left';
+            stage.style.transform = 'scale(' + scale + ')';
+            stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+            stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+        }
+        window.addEventListener('resize', rescale);
+        rescale();
+    })();
+</script>
+</body>
+</html>

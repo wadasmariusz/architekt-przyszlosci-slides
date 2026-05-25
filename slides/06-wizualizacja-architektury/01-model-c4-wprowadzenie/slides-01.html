@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 01 - Problem z diagramami architektury</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../template.css">
+    <style>
+        .bg-image {
+            --bg-url: url('../../../images/background-1.jpg');
+            background:
+                linear-gradient(rgba(10,14,23,0.72), rgba(10,14,23,0.84)),
+                var(--bg-url) center / cover no-repeat;
+        }
+
+        .content {
+            max-width: 1320px;
+            padding: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 56px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.15s forwards;
+        }
+
+        .title .highlight {
+            background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .chaos {
+            position: relative;
+            width: 1180px;
+            height: 460px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.45s forwards;
+        }
+
+        .chaos svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .question {
+            margin-top: 52px;
+            font-size: 32px;
+            font-weight: 300;
+            font-style: italic;
+            color: #cbd5e1;
+            line-height: 1.4;
+            max-width: 1100px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 1.1s forwards;
+        }
+
+        .question .q-mark {
+            color: var(--cyan-400);
+            font-style: normal;
+            font-weight: 600;
+            margin: 0 6px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="stage" id="stage">
+    <div class="bg-image"></div>
+
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--br"></div>
+
+    <div class="content">
+        <h1 class="title">
+            Problem z <span class="highlight">diagramami architektury</span>
+        </h1>
+
+        <div class="chaos" aria-hidden="true">
+            <svg viewBox="0 0 1180 460" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+                            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+                    </marker>
+                    <marker id="arr-r" viewBox="0 0 10 10" refX="9" refY="5"
+                            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+                    </marker>
+                    <marker id="arr-y" viewBox="0 0 10 10" refX="9" refY="5"
+                            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#eab308"/>
+                    </marker>
+                    <marker id="arr-g" viewBox="0 0 10 10" refX="9" refY="5"
+                            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e"/>
+                    </marker>
+                </defs>
+
+                <g font-family="Inter, sans-serif" font-weight="600">
+                    <g transform="translate(40,30) rotate(-3)">
+                        <rect width="180" height="70" rx="4" fill="#1e3a8a" opacity="0.85"/>
+                        <text x="90" y="32" text-anchor="middle" fill="#dbeafe" font-size="18">Customer Service</text>
+                        <text x="90" y="54" text-anchor="middle" fill="#93c5fd" font-size="13" font-weight="400">Spring Boot · Java 17</text>
+                    </g>
+
+                    <g transform="translate(280,15) rotate(2)">
+                        <rect width="140" height="60" rx="2" fill="#7f1d1d" opacity="0.85"/>
+                        <text x="70" y="28" text-anchor="middle" fill="#fee2e2" font-size="16">OrderAPI</text>
+                        <text x="70" y="46" text-anchor="middle" fill="#fca5a5" font-size="12" font-weight="400">REST · v2</text>
+                    </g>
+
+                    <g transform="translate(470,40) rotate(-1)">
+                        <rect width="120" height="55" rx="0" fill="#365314" opacity="0.85"/>
+                        <text x="60" y="26" text-anchor="middle" fill="#ecfccb" font-size="15">PostgreSQL</text>
+                        <text x="60" y="44" text-anchor="middle" fill="#bef264" font-size="11" font-weight="400">prod-master</text>
+                    </g>
+
+                    <g transform="translate(640,10) rotate(4)">
+                        <rect width="160" height="68" rx="8" fill="#581c87" opacity="0.85"/>
+                        <text x="80" y="30" text-anchor="middle" fill="#f3e8ff" font-size="17">Kafka Cluster</text>
+                        <text x="80" y="50" text-anchor="middle" fill="#d8b4fe" font-size="12" font-weight="400">3 brokers · 12 topics</text>
+                    </g>
+
+                    <g transform="translate(840,35) rotate(-2)">
+                        <rect width="110" height="60" rx="2" fill="#7c2d12" opacity="0.85"/>
+                        <text x="55" y="28" text-anchor="middle" fill="#fed7aa" font-size="15">Redis</text>
+                        <text x="55" y="46" text-anchor="middle" fill="#fdba74" font-size="11" font-weight="400">cache</text>
+                    </g>
+
+                    <g transform="translate(990,20) rotate(3)">
+                        <rect width="140" height="55" rx="6" fill="#0f766e" opacity="0.85"/>
+                        <text x="70" y="32" text-anchor="middle" fill="#ccfbf1" font-size="15">NGINX LB</text>
+                    </g>
+
+                    <g transform="translate(60,140) rotate(1)">
+                        <rect width="150" height="65" rx="2" fill="#831843" opacity="0.85"/>
+                        <text x="75" y="30" text-anchor="middle" fill="#fce7f3" font-size="16">UserController</text>
+                        <text x="75" y="48" text-anchor="middle" fill="#f9a8d4" font-size="11" font-weight="400">@RestController</text>
+                    </g>
+
+                    <g transform="translate(260,155) rotate(-2)">
+                        <rect width="130" height="55" rx="4" fill="#1f2937" opacity="0.9"/>
+                        <text x="65" y="32" text-anchor="middle" fill="#e2e8f0" font-size="15">Auth Module</text>
+                    </g>
+
+                    <g transform="translate(440,160) rotate(3)">
+                        <rect width="170" height="60" rx="0" fill="#7c2d12" opacity="0.85"/>
+                        <text x="85" y="28" text-anchor="middle" fill="#fed7aa" font-size="16">payment-service</text>
+                        <text x="85" y="46" text-anchor="middle" fill="#fdba74" font-size="11" font-weight="400">Node.js · TS</text>
+                    </g>
+
+                    <g transform="translate(650,150) rotate(-1)">
+                        <rect width="120" height="58" rx="4" fill="#0c4a6e" opacity="0.85"/>
+                        <text x="60" y="26" text-anchor="middle" fill="#e0f2fe" font-size="14">MongoDB</text>
+                        <text x="60" y="44" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="400">replica set</text>
+                    </g>
+
+                    <g transform="translate(800,165) rotate(2)">
+                        <rect width="140" height="55" rx="2" fill="#3f3f46" opacity="0.9"/>
+                        <text x="70" y="32" text-anchor="middle" fill="#fafafa" font-size="15">RabbitMQ</text>
+                    </g>
+
+                    <g transform="translate(970,150) rotate(-3)">
+                        <rect width="160" height="62" rx="6" fill="#14532d" opacity="0.85"/>
+                        <text x="80" y="28" text-anchor="middle" fill="#dcfce7" font-size="15">K8s Cluster</text>
+                        <text x="80" y="48" text-anchor="middle" fill="#86efac" font-size="11" font-weight="400">eks-prod-eu</text>
+                    </g>
+
+                    <g transform="translate(40,265) rotate(-2)">
+                        <rect width="140" height="58" rx="2" fill="#4c1d95" opacity="0.85"/>
+                        <text x="70" y="32" text-anchor="middle" fill="#ede9fe" font-size="15">Lambda fn</text>
+                    </g>
+
+                    <g transform="translate(230,275) rotate(3)">
+                        <rect width="120" height="55" rx="4" fill="#9a3412" opacity="0.85"/>
+                        <text x="60" y="32" text-anchor="middle" fill="#ffedd5" font-size="14">S3 Bucket</text>
+                    </g>
+
+                    <g transform="translate(400,280) rotate(-1)">
+                        <rect width="180" height="62" rx="2" fill="#1e3a8a" opacity="0.85"/>
+                        <text x="90" y="28" text-anchor="middle" fill="#dbeafe" font-size="15">Frontend (SPA)</text>
+                        <text x="90" y="48" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="400">React · Vite · Redux</text>
+                    </g>
+
+                    <g transform="translate(620,290) rotate(2)">
+                        <rect width="130" height="55" rx="6" fill="#374151" opacity="0.9"/>
+                        <text x="65" y="32" text-anchor="middle" fill="#f9fafb" font-size="14">GraphQL GW</text>
+                    </g>
+
+                    <g transform="translate(790,275) rotate(-2)">
+                        <rect width="150" height="58" rx="2" fill="#7f1d1d" opacity="0.85"/>
+                        <text x="75" y="32" text-anchor="middle" fill="#fee2e2" font-size="15">Notification svc</text>
+                    </g>
+
+                    <g transform="translate(980,290) rotate(1)">
+                        <rect width="140" height="55" rx="4" fill="#365314" opacity="0.85"/>
+                        <text x="70" y="32" text-anchor="middle" fill="#ecfccb" font-size="14">Elasticsearch</text>
+                    </g>
+
+                    <g transform="translate(120,375) rotate(2)">
+                        <rect width="130" height="55" rx="2" fill="#581c87" opacity="0.85"/>
+                        <text x="65" y="32" text-anchor="middle" fill="#f3e8ff" font-size="14">Worker pool</text>
+                    </g>
+
+                    <g transform="translate(310,385) rotate(-3)">
+                        <rect width="120" height="50" rx="4" fill="#0f766e" opacity="0.85"/>
+                        <text x="60" y="30" text-anchor="middle" fill="#ccfbf1" font-size="13">AWS SQS</text>
+                    </g>
+
+                    <g transform="translate(480,380) rotate(2)">
+                        <rect width="160" height="55" rx="0" fill="#831843" opacity="0.85"/>
+                        <text x="80" y="32" text-anchor="middle" fill="#fce7f3" font-size="14">CustomerEntity</text>
+                    </g>
+
+                    <g transform="translate(700,395) rotate(-1)">
+                        <rect width="130" height="50" rx="6" fill="#1f2937" opacity="0.9"/>
+                        <text x="65" y="30" text-anchor="middle" fill="#e2e8f0" font-size="13">Cron job</text>
+                    </g>
+
+                    <g transform="translate(870,385) rotate(3)">
+                        <rect width="140" height="52" rx="2" fill="#7c2d12" opacity="0.85"/>
+                        <text x="70" y="30" text-anchor="middle" fill="#fed7aa" font-size="13">Stripe API</text>
+                    </g>
+                </g>
+
+                <g fill="none" stroke-width="1.6" opacity="0.65">
+                    <path d="M 130 100 C 200 130, 280 110, 350 145" stroke="#94a3b8" marker-end="url(#arr)"/>
+                    <path d="M 350 75 C 420 95, 480 100, 530 95" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="6 4"/>
+                    <path d="M 530 95 L 720 78" stroke="#ef4444" marker-end="url(#arr-r)"/>
+                    <path d="M 720 78 C 800 95, 850 70, 895 95" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="3 3"/>
+                    <path d="M 895 65 L 1060 50" stroke="#eab308" marker-end="url(#arr-y)"/>
+                    <path d="M 1060 75 C 1000 130, 900 110, 870 165" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="6 4"/>
+                    <path d="M 870 195 C 750 230, 600 180, 525 220" stroke="#22c55e" marker-end="url(#arr-g)"/>
+                    <path d="M 525 220 C 400 250, 300 180, 210 205" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="2 4"/>
+                    <path d="M 135 205 L 110 265" stroke="#ef4444" marker-end="url(#arr-r)"/>
+                    <path d="M 180 295 C 250 270, 320 320, 290 305" stroke="#94a3b8" marker-end="url(#arr)"/>
+                    <path d="M 350 305 L 490 310" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="4 3"/>
+                    <path d="M 580 310 C 650 280, 700 330, 685 310" stroke="#eab308" marker-end="url(#arr-y)"/>
+                    <path d="M 685 320 L 865 305" stroke="#94a3b8" marker-end="url(#arr)"/>
+                    <path d="M 940 305 L 1050 310" stroke="#22c55e" marker-end="url(#arr-g)" stroke-dasharray="3 3"/>
+                    <path d="M 1050 345 C 950 380, 800 360, 700 410" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="6 4"/>
+                    <path d="M 250 400 L 430 405" stroke="#ef4444" marker-end="url(#arr-r)"/>
+                    <path d="M 430 410 L 640 415" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="2 3"/>
+                    <path d="M 830 410 L 870 405" stroke="#94a3b8" marker-end="url(#arr)"/>
+                    <path d="M 540 220 L 480 380" stroke="#eab308" marker-end="url(#arr-y)" stroke-dasharray="4 4"/>
+                    <path d="M 770 170 C 850 250, 900 290, 940 295" stroke="#94a3b8" marker-end="url(#arr)"/>
+                    <path d="M 175 175 C 50 220, 80 260, 110 270" stroke="#22c55e" marker-end="url(#arr-g)" stroke-dasharray="5 3"/>
+                    <path d="M 595 195 C 700 240, 750 280, 685 290" stroke="#94a3b8" marker-end="url(#arr)" stroke-dasharray="3 3"/>
+                    <path d="M 1130 180 C 1080 260, 1050 290, 1060 290" stroke="#ef4444" marker-end="url(#arr-r)"/>
+                </g>
+
+                <g font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#22d3ee" opacity="0.85">
+                    <text x="225" y="115" transform="rotate(-12, 225, 115)">?</text>
+                    <text x="615" y="245" transform="rotate(8, 615, 245)">?</text>
+                    <text x="945" y="365" transform="rotate(-10, 945, 365)">?</text>
+                    <text x="385" y="355" transform="rotate(5, 385, 355)">?</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <img src="../../../logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+         alt="Architekt Przyszłości" class="slide-logo">
+
+    <div class="camera-box">kamera 480 &times; 270</div>
+</div>
+
+<script>
+    (function () {
+        const stage = document.getElementById('stage');
+        function rescale() {
+            const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+            stage.style.transformOrigin = 'top left';
+            stage.style.transform = 'scale(' + scale + ')';
+            stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+            stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+        }
+        window.addEventListener('resize', rescale);
+        rescale();
+    })();
+</script>
+</body>
+</html>
