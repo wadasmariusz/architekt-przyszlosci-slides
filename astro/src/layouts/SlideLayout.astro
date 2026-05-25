@@ -1,0 +1,71 @@
+---
+interface Props {
+  title: string;
+  bgImage?: string;
+  bgOverlay?: string;
+  showCamera?: boolean;
+  showLogo?: boolean;
+}
+
+const {
+  title,
+  bgImage,
+  bgOverlay,
+  showCamera = true,
+  showLogo = true,
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/template.css" />
+  {bgImage && (
+    <style is:global set:html={`
+      .bg-image {
+        --bg-url: url('${bgImage}');
+        ${bgOverlay ? `background: ${bgOverlay}, var(--bg-url) center / cover no-repeat;` : ''}
+      }
+    `} />
+  )}
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="bg-image"></div>
+
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--br"></div>
+
+    <slot />
+
+    {showLogo && (
+      <img
+        src="/logo/Architekt_Przyszłości_horizontal_gradient_light.png"
+        alt="Architekt Przyszłości"
+        class="slide-logo"
+      />
+    )}
+
+    {showCamera && <div class="camera-box">kamera 480 × 270</div>}
+  </div>
+
+  <script is:inline>
+    (function () {
+      const stage = document.getElementById('stage');
+      function rescale() {
+        const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+        stage.style.transformOrigin = 'top left';
+        stage.style.transform = 'scale(' + scale + ')';
+        stage.style.left = (innerWidth - 1920 * scale) / 2 + 'px';
+        stage.style.top = (innerHeight - 1080 * scale) / 2 + 'px';
+      }
+      window.addEventListener('resize', rescale);
+      rescale();
+    })();
+  </script>
+</body>
+</html>

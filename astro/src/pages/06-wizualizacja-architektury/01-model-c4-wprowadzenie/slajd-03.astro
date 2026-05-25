@@ -1,0 +1,340 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+
+const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie';
+---
+<SlideLayout
+  title="Slide 03 - Model C4 — geneza"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.86))"
+>
+  <div class="content">
+    <h1 class="title">
+      Model C4 - <span class="highlight">GENEZA</span>
+    </h1>
+
+    <div class="row">
+      <div class="panel">
+        <div class="author">
+          <div class="avatar">
+            <img src={`${slidePath}/images/simon-brown.png`} alt="Simon Brown" />
+          </div>
+          <div class="author-meta">
+            <div class="name">Simon Brown</div>
+            <div class="role">Architekt oprogramowania,<br>konsultant, autor</div>
+          </div>
+        </div>
+        <div class="books">
+          <div class="book">
+            <i class="ti ti-sitemap"></i>
+            <em>C4 Model</em>
+            <span>2006-2011</span>
+          </div>
+          <div class="book">
+            <i class="ti ti-book-2"></i>
+            <em>The C4 Model</em>
+            <span>· O'Reilly, 2026</span>
+          </div>
+          <div class="book">
+            <i class="ti ti-book-2"></i>
+            <em>Software Architecture for Developers</em>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="spectrum">
+      <div class="axis-line"></div>
+      <div class="nodes">
+        <div class="node">
+          <div class="dot"></div>
+          <div class="label">UML</div>
+          <div class="desc">Formalny, rozbudowany,<br> ciężki do utrzymania</div>
+        </div>
+        <div class="node center">
+          <div class="dot"></div>
+          <div class="label">C4</div>
+          <div class="desc">Uporządkowane, lekkie, pragmatyczne</div>
+        </div>
+        <div class="node">
+          <div class="dot"></div>
+          <div class="label">Rysunki ad hoc</div>
+          <div class="desc">Szybkie, niespójne, niepowtarzalne</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1640px;
+    padding: 130px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    width: 100%;
+    margin-bottom: 56px;
+  }
+
+  .panel {
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 36px 40px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.8s ease-out 0.4s forwards;
+  }
+
+  .panel.right { animation-delay: 0.55s; }
+
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .avatar {
+    flex: 0 0 auto;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at center, rgba(34,211,238,0.22), rgba(34,211,238,0.05) 70%);
+    box-shadow:
+      0 0 0 3px rgba(34,211,238,0.35),
+      0 0 24px rgba(34,211,238,0.25);
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .author-meta .name {
+    font-size: 34px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
+  }
+
+  .author-meta .role {
+    margin-top: 6px;
+    font-size: 19px;
+    font-weight: 400;
+    color: #cbd5e1;
+    line-height: 1.35;
+  }
+
+  .books {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(148, 163, 184, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .book {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 18px;
+    color: #e2e8f0;
+  }
+
+  .book i {
+    font-size: 22px;
+    color: var(--cyan-400);
+  }
+
+  .book em {
+    font-style: italic;
+    font-weight: 500;
+    color: #f1f5f9;
+  }
+
+  .book span {
+    color: #94a3b8;
+    font-size: 16px;
+  }
+
+  .timeline {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .year {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--cyan-400);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .year-sep {
+    flex: 1 1 auto;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan-500), rgba(34,211,238,0.15));
+    position: relative;
+  }
+
+  .year-sep::after {
+    content: '';
+    position: absolute;
+    right: -2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(34,211,238,0.5);
+  }
+
+  .genesis-text {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+
+  .genesis-text strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .badge-2011 {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 8px 16px;
+    background: rgba(34,211,238,0.12);
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--cyan-400);
+    letter-spacing: 0.5px;
+  }
+
+  .badge-2011 i { font-size: 18px; }
+
+  .spectrum {
+    width: 100%;
+    max-width: 1500px;
+    position: relative;
+    padding: 36px 20px 0;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.9s ease-out 0.85s forwards;
+  }
+
+  .axis-line {
+    position: relative;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg,
+      rgba(148,163,184,0.35) 0%,
+      rgba(34,211,238,0.85) 50%,
+      rgba(148,163,184,0.35) 100%);
+    margin: 0 110px;
+  }
+
+  .nodes {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: -40px;
+  }
+
+  .node {
+    text-align: center;
+    position: relative;
+  }
+
+  .node .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    background: rgba(148,163,184,0.4);
+    box-shadow: 0 0 0 8px rgba(148,163,184,0.10);
+  }
+
+  .node.center .dot {
+    width: 38px;
+    height: 38px;
+    background: var(--cyan-400);
+    box-shadow:
+      0 0 0 10px rgba(34,211,238,0.18),
+      0 0 28px rgba(34,211,238,0.55);
+  }
+
+  .node .label {
+    font-size: 30px;
+    font-weight: 800;
+    color: #e2e8f0;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+
+  .node.center .label {
+    font-size: 36px;
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .node .desc {
+    font-size: 17px;
+    font-weight: 300;
+    color: #94a3b8;
+    line-height: 1.4;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .node.center .desc {
+    color: #cbd5e1;
+    font-weight: 400;
+  }
+</style>

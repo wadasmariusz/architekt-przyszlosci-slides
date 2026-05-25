@@ -1,0 +1,40 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout title="Slajd 0 - Model C4: wprowadzenie" bgImage="/images/background-3.jpg">
+  <div class="content">
+    <p class="eyebrow">Wizualizacja architektury</p>
+    <h1 class="title">Model <span class="highlight">C4</span></h1>
+    <p class="subtitle">Jak rozmawiać o architekturze, żeby się zrozumieć</p>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .eyebrow {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: var(--cyan-400);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .title {
+    font-size: 160px;
+    line-height: 1.02;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.4s forwards;
+  }
+
+  .subtitle {
+    font-size: 44px;
+    font-weight: 400;
+    color: rgba(240, 244, 248, 0.78);
+    letter-spacing: -0.5px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.7s forwards;
+  }
+</style>
