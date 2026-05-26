@@ -86,7 +86,7 @@ const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie
     font-weight: 800;
     letter-spacing: -1px;
     line-height: 1.1;
-    margin-bottom: 64px;
+    margin-bottom: 44px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.15s forwards;
   }
@@ -103,7 +103,7 @@ const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie
     justify-content: center;
     gap: 36px;
     width: 100%;
-    margin-bottom: 56px;
+    margin-bottom: 20px;
   }
 
   .panel {
@@ -267,22 +267,25 @@ const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie
   }
 
   .axis-line {
-    position: relative;
+    position: absolute;
+    top: 53px;
+    left: 130px;
+    right: 130px;
+    z-index: 0;
     height: 4px;
     border-radius: 2px;
     background: linear-gradient(90deg,
       rgba(148,163,184,0.35) 0%,
       rgba(34,211,238,0.85) 50%,
       rgba(148,163,184,0.35) 100%);
-    margin: 0 110px;
   }
 
   .nodes {
     position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 24px;
-    margin-top: -40px;
   }
 
   .node {
@@ -297,6 +300,11 @@ const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie
     margin: 0 auto 24px;
     background: rgba(148,163,184,0.4);
     box-shadow: 0 0 0 8px rgba(148,163,184,0.10);
+  }
+
+  .node:not(.center) .dot {
+    margin-top: 5px;
+    margin-bottom: 19px;
   }
 
   .node.center .dot {

@@ -7,6 +7,8 @@
     "export": "node scripts/export-screenshots.mjs",
     "export:screens": "node scripts/export-screenshots.mjs",
     "export:all": "node scripts/export-screenshots.mjs --all",
+    "export:astro": "node scripts/export-astro-screenshots.mjs",
+    "export:astro:all": "node scripts/export-astro-screenshots.mjs --all",
     "export:videos": "node scripts/export-videos.mjs"
   },
   "repository": {

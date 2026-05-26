@@ -10,7 +10,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     <div class="header">
       <span class="level-chip"><i class="ti ti-scale"></i> Porównanie</span>
       <h1 class="title">
-        C4 a UML — <span class="highlight">nie wojna, lecz uzupełnienie</span>
+        C4 <span class="highlight">VS</span> UML
       </h1>
     </div>
 
@@ -26,13 +26,13 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
             <i class="ti ti-focus-2"></i>
             <span>Fokus</span>
           </div>
-          <p><strong>Struktura systemu</strong> — boxy i strzałki</p>
+          <p><strong>Struktura systemu</strong>: boxy i strzałki</p>
         </div>
 
         <div class="row">
           <div class="label">
             <i class="ti ti-bolt"></i>
-            <span>Siła</span>
+            <span>Zalety</span>
           </div>
           <p>Lekki, pragmatyczny, <strong>szybki start</strong></p>
         </div>
@@ -59,13 +59,13 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
             <i class="ti ti-focus-2"></i>
             <span>Fokus</span>
           </div>
-          <p><strong>Zachowanie</strong> — sekwencje, stany, aktywności</p>
+          <p><strong>Zachowanie</strong>: sekwencje, stany, aktywności</p>
         </div>
 
         <div class="row">
           <div class="label">
             <i class="ti ti-bolt"></i>
-            <span>Siła</span>
+            <span>Zalety</span>
           </div>
           <p>Formalny, precyzyjny, <strong>bogata notacja</strong></p>
         </div>
@@ -79,14 +79,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         </div>
       </article>
     </div>
-
-    <div class="callout">
-      <i class="ti ti-bulb"></i>
-      <span>
-        Jeśli UML w zespole <strong>działa</strong> — nie rezygnuj.
-        Jeśli <strong>nie działa</strong> — C4 jest lżejszym punktem startu.
-      </span>
-    </div>
+    
   </div>
 </SlideLayout>
 
@@ -170,8 +163,11 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   .col.c4 {
     animation-delay: 0.45s;
-    border-color: rgba(34, 211, 238, 0.35);
-    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 4px 30px rgba(34, 211, 238, 0.08);
+    background:
+      radial-gradient(circle at 18% 18%, rgba(34, 211, 238, 0.16), transparent 34%),
+      linear-gradient(145deg, rgba(8, 145, 178, 0.16), rgba(17, 24, 39, 0.58) 52%),
+      rgba(17, 24, 39, 0.55);
+    box-shadow: inset 0 1px 28px rgba(34, 211, 238, 0.08), 0 4px 30px rgba(34, 211, 238, 0.06);
   }
 
   .col.uml {
@@ -197,15 +193,21 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .col.c4 .badge {
-    background: rgba(34, 211, 238, 0.15);
-    color: var(--cyan-400);
-    border: 1px solid rgba(34, 211, 238, 0.4);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.24), rgba(8, 145, 178, 0.16));
+    color: #a5f3fc;
+    box-shadow: inset 0 0 18px rgba(34, 211, 238, 0.08);
   }
 
   .col.uml .badge {
     background: rgba(148, 163, 184, 0.15);
     color: #cbd5e1;
     border: 1px solid rgba(148, 163, 184, 0.35);
+  }
+
+  .col.c4 .row {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: linear-gradient(120deg, rgba(34, 211, 238, 0.10), rgba(14, 116, 144, 0.04));
   }
 
   .col h2 {

@@ -129,15 +129,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     align-items: center;
   }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, var(--cyan-400), transparent);
-    opacity: 0.65;
-  }
-
   .card:nth-child(1) { animation-delay: 0.45s; }
   .card:nth-child(2) { animation-delay: 0.6s; }
   .card:nth-child(3) { animation-delay: 0.75s; }
