@@ -1,0 +1,249 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+
+const points = [
+  {
+    num: '01',
+    icon: 'ti-box',
+    title: 'Czarna skrzynka w centrum',
+    desc: 'System rysujemy jako jeden prostokąt z nazwą i krótkim opisem odpowiedzialności.',
+  },
+  {
+    num: '02',
+    icon: 'ti-users-group',
+    title: 'Aktorzy = role',
+    desc: 'Ikona reprezentuje rolę (klient, operator), nie konkretną osobę.',
+  },
+  {
+    num: '03',
+    icon: 'ti-plug-connected',
+    title: 'Tylko bezpośrednie integracje',
+    desc: 'Systemy zewnętrzne to te, z którymi się komunikujemy.',
+  },
+  {
+    num: '04',
+    icon: 'ti-message-circle-2',
+    title: 'Relacje z intencją biznesową',
+    desc: 'Strzałki opisują, co system robi.',
+  },
+  {
+    num: '05',
+    icon: 'ti-fence',
+    title: 'Świadomie postawiona granica',
+    desc: 'Ustalenei co bierzemy na siebie, a co nie.',
+    accent: true,
+  },
+];
+---
+<SlideLayout
+  title="Slide 14 - Podsumowanie — diagram kontekstowy"
+  bgImage="/images/background-2.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.84), rgba(10,14,23,0.93))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-checks"></i>Context C4 · poziom 1</span>
+      <h1 class="title">
+        Podsumowanie
+      </h1>
+    </div>
+
+    <ol class="recap">
+      {points.map((p, i) => (
+        <li class={`item ${p.accent ? 'item-accent' : ''}`} style={`--delay: ${0.35 + i * 0.12}s`}>
+          <span class="num"></span>
+          <span class="icon"><i class={`ti ${p.icon}`}></i></span>
+          <div class="text">
+            <strong>{p.title}</strong>
+            <span>{p.desc}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 44px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 12px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    font-size: 20px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .recap {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    counter-reset: recap;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 78px 64px 1fr;
+    align-items: center;
+    gap: 22px;
+    padding: 20px 26px;
+    background: rgba(17, 24, 39, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 18px;
+    text-align: left;
+    opacity: 0;
+    transform: translateX(-12px);
+    animation: slideInLeft 0.7s ease-out forwards;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes slideInLeft {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .item-accent {
+    border-color: rgba(34, 211, 238, 0.5);
+    background:
+      linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(8, 145, 178, 0.05)),
+      rgba(17, 24, 39, 0.7);
+    box-shadow: 0 12px 32px rgba(34, 211, 238, 0.08);
+  }
+
+  .num {
+    font-family: 'Inter', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    color: #475569;
+    letter-spacing: -1px;
+    font-feature-settings: 'tnum';
+    line-height: 1;
+  }
+
+  .item-accent .num {
+    color: var(--cyan-400);
+  }
+
+  .icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.08);
+    border: 1.5px solid rgba(34, 211, 238, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+    flex-shrink: 0;
+  }
+
+  .icon i { font-size: 28px; }
+
+  .item-accent .icon {
+    background: rgba(34, 211, 238, 0.18);
+    border-color: rgba(34, 211, 238, 0.55);
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .text strong {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+  }
+
+  .text span {
+    font-size: 16px;
+    font-weight: 300;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+
+  .footnote {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    border-radius: 999px;
+    font-size: 17px;
+    font-weight: 400;
+    color: #cbd5e1;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 1.3s forwards;
+  }
+
+  .footnote strong {
+    color: #f1f5f9;
+    font-weight: 700;
+  }
+
+  .footnote i {
+    font-size: 22px;
+    color: var(--cyan-400);
+  }
+</style>
