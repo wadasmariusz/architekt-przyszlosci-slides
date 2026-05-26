@@ -1,0 +1,325 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+
+const roles = [
+  { icon: 'ti-user', label: 'Klient banku', hint: 'osoba kupująca usługę' },
+  { icon: 'ti-headset', label: 'Pracownik obsługi', hint: 'helpdesk, call center' },
+  { icon: 'ti-shield-lock', label: 'Administrator', hint: 'utrzymuje konfigurację' },
+  { icon: 'ti-building-bank', label: 'Zewnętrzny partner', hint: 'integracja B2B' },
+  { icon: 'ti-device-desktop-cog', label: 'Operator', hint: 'monitoruje i reaguje' },
+];
+
+const dotCount = 36;
+const dots = Array.from({ length: dotCount }, (_, i) => {
+  const cols = 9;
+  const col = i % cols;
+  const row = Math.floor(i / cols);
+  const x = 760 + col * 70 + (row % 2 === 1 ? 35 : 0);
+  const y = 110 + row * 90;
+  return { x, y, delay: 0.9 + i * 0.025 };
+});
+---
+<SlideLayout
+  title="Slide 07 - Aktorzy = role, nie osoby"
+  bgImage="/images/background-2.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-users-group"></i> Aktor · zasada modelowania</span>
+      <h1 class="title">
+        Aktorzy = <span class="highlight">role</span>, nie osoby
+      </h1>
+      <p class="lede">Jedna ikona na diagramie reprezentuje <strong>całą grupę użytkowników</strong> pełniących tę samą rolę.</p>
+    </div>
+
+    <div class="board">
+      <div class="diagram" aria-hidden="true">
+        <svg viewBox="0 0 1380 540" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="actor-grad-7" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0e7490"/>
+              <stop offset="100%" stop-color="#155e75"/>
+            </linearGradient>
+            <radialGradient id="halo-grad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(34,211,238,0.35)"/>
+              <stop offset="100%" stop-color="rgba(34,211,238,0)"/>
+            </radialGradient>
+            <pattern id="grid-7" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(148,163,184,0.05)" stroke-width="1"/>
+            </pattern>
+          </defs>
+
+          <rect x="0" y="0" width="1380" height="540" fill="url(#grid-7)"/>
+
+          <g class="rays">
+            {dots.map((d) => (
+              <line
+                x1="270" y1="240" x2={d.x} y2={d.y}
+                stroke="rgba(34,211,238,0.22)" stroke-width="1.2"
+                stroke-dasharray="3 4"
+                style={`animation-delay:${d.delay}s`}
+              />
+            ))}
+          </g>
+
+          <g class="users">
+            {dots.map((d, i) => (
+              <g style={`animation-delay:${d.delay}s`}>
+                <circle cx={d.x} cy={d.y - 6} r="9" fill="#1e293b" stroke="#22d3ee" stroke-width="1.5"/>
+                <path
+                  d={`M ${d.x - 14} ${d.y + 28} Q ${d.x - 14} ${d.y + 4} ${d.x} ${d.y + 4} Q ${d.x + 14} ${d.y + 4} ${d.x + 14} ${d.y + 28} Z`}
+                  fill="#1e293b" stroke="#22d3ee" stroke-width="1.5"
+                />
+              </g>
+            ))}
+          </g>
+
+          <g class="role-actor">
+            <circle cx="270" cy="240" r="200" fill="url(#halo-grad)"/>
+            <circle cx="270" cy="170" r="62" fill="url(#actor-grad-7)" stroke="#22d3ee" stroke-width="3"/>
+            <path
+              d="M 174 380 Q 174 240, 270 240 Q 366 240, 366 380 Z"
+              fill="url(#actor-grad-7)" stroke="#22d3ee" stroke-width="3"
+            />
+            <text x="270" y="430" text-anchor="middle" fill="#f1f5f9" font-family="Inter, sans-serif" font-size="30" font-weight="800">Klient banku</text>
+            <text x="270" y="464" text-anchor="middle" fill="#94a3b8" font-family="Inter, sans-serif" font-size="15" font-weight="500" letter-spacing="3">[ ROLA · 1 ikona ]</text>
+          </g>
+
+          <g class="count-label">
+            <rect x="1078" y="448" width="248" height="50" rx="25" fill="rgba(10,14,23,0.92)" stroke="rgba(34,211,238,0.5)" stroke-width="1.5"/>
+            <text x="1202" y="480" text-anchor="middle" fill="#dbeafe" font-family="Inter, sans-serif" font-size="18" font-weight="700">~ tysiące użytkowników</text>
+          </g>
+        </svg>
+      </div>
+
+      <aside class="roles">
+        <h3 class="roles-title">Przykładowe role</h3>
+        <ul>
+          {roles.map((r) => (
+            <li>
+              <span class="role-icon"><i class={`ti ${r.icon}`}></i></span>
+              <div>
+                <strong>{r.label}</strong>
+                <span>{r.hint}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+
+    <p class="footnote">
+      <i class="ti ti-circle-arrow-right"></i>
+      Nie rysujemy <em>Jana Kowalskiego</em> — rysujemy <strong>rolę, którą pełni</strong>.
+    </p>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 40px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 60px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 10px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    font-size: 20px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .lede strong {
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: 1.45fr 0.55fr;
+    gap: 32px;
+    width: 100%;
+    align-items: stretch;
+    margin-bottom: 22px;
+  }
+
+  .diagram {
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 22px;
+    padding: 18px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.9s ease-out 0.35s forwards;
+  }
+
+  .diagram svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .diagram .rays line,
+  .diagram .users g {
+    opacity: 0;
+    animation: fadeInDot 0.5s ease-out forwards;
+  }
+
+  .diagram .count-label {
+    opacity: 0;
+    animation: fadeInDot 0.6s ease-out 2.4s forwards;
+  }
+
+  @keyframes fadeInDot {
+    to { opacity: 1; }
+  }
+
+  .roles {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 22px;
+    padding: 24px 26px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.9s ease-out 0.55s forwards;
+  }
+
+  .roles-title {
+    margin: 0 0 18px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--cyan-400);
+  }
+
+  .roles ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .roles li {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .role-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(14, 116, 144, 0.5), rgba(21, 94, 117, 0.5));
+    border: 1.5px solid rgba(34, 211, 238, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #67e8f9;
+    flex-shrink: 0;
+  }
+
+  .role-icon i { font-size: 22px; }
+
+  .roles li > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .roles strong {
+    font-size: 17px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .roles span {
+    font-size: 13px;
+    font-weight: 300;
+    color: #94a3b8;
+    line-height: 1.35;
+  }
+
+  .footnote {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 26px;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    border-radius: 999px;
+    font-size: 17px;
+    font-weight: 400;
+    color: #cbd5e1;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 2.6s forwards;
+  }
+
+  .footnote em {
+    font-style: italic;
+    color: #94a3b8;
+  }
+
+  .footnote strong {
+    color: #f1f5f9;
+    font-weight: 700;
+  }
+
+  .footnote i {
+    font-size: 22px;
+    color: var(--cyan-400);
+  }
+</style>

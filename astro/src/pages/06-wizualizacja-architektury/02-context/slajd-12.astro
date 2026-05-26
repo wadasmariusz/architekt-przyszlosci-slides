@@ -1,0 +1,252 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 12 - Najtrudniejsze: granica systemu"
+  bgImage="/images/background-2.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.85), rgba(10,14,23,0.94))"
+>
+  <div class="content">
+    <div class="header">
+      <h1 class="title"><strong>Granica</strong> systemu</h1>
+    </div>
+
+    <div class="question-stage" aria-hidden="true">
+      <div class="boundary boundary-inside">
+        <span class="boundary-tag">w środku</span>
+      </div>
+      <div class="boundary boundary-outside">
+        <span class="boundary-tag">na zewnątrz</span>
+      </div>
+
+      <h1 class="question">
+        Co jest <span class="hl hl-inside">w środku</span>,
+        <br />
+        a co jest <span class="hl hl-outside">na zewnątrz</span>?
+      </h1>
+    </div>
+
+    <div class="definition">
+      <p class="def-text">
+        <strong>Granica systemu = deklaracja odpowiedzialności.</strong>
+        <span class="def-row">Za to odpowiadamy, to utrzymujemy.</span>
+      </p>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: center;
+  }
+
+  .content {
+    max-width: 1500px;
+    padding: 0 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 56px;
+  }
+
+  .header {
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .hint {
+    font-size: 19px;
+    font-weight: 300;
+    color: #94a3b8;
+    margin: 0;
+    max-width: 720px;
+    line-height: 1.5;
+  }
+
+  .hint strong {
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .question-stage {
+    position: relative;
+    width: 100%;
+    max-width: 1240px;
+    padding: 64px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .boundary {
+    position: absolute;
+    top: 50%;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .boundary-inside {
+    left: 50%;
+    margin-left: -540px;
+    border: 2.5px dashed rgba(34, 211, 238, 0.55);
+    background:
+      radial-gradient(circle at center, rgba(34, 211, 238, 0.08), transparent 70%);
+    animation: pulseIn 4s ease-in-out infinite;
+  }
+
+  .boundary-outside {
+    left: 50%;
+    margin-left: 180px;
+    border: 2.5px dashed rgba(148, 163, 184, 0.4);
+    background:
+      radial-gradient(circle at center, rgba(148, 163, 184, 0.05), transparent 70%);
+    animation: pulseOut 4s ease-in-out infinite;
+  }
+
+  @keyframes pulseIn {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.04); }
+  }
+
+  @keyframes pulseOut {
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(0.97); }
+  }
+
+  .boundary-tag {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: rgba(10, 14, 23, 0.85);
+  }
+
+  .boundary-inside .boundary-tag {
+    color: var(--cyan-400);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+  }
+
+  .boundary-outside .boundary-tag {
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+  }
+
+  .question {
+    position: relative;
+    z-index: 2;
+    font-size: 92px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    margin: 0;
+    color: #f1f5f9;
+    text-shadow: 0 4px 40px rgba(10, 14, 23, 0.9);
+  }
+
+  .question .hl {
+    position: relative;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .question .hl-inside {
+    background-image: linear-gradient(135deg, #67e8f9, #06b6d4);
+  }
+
+  .question .hl-outside {
+    background-image: linear-gradient(135deg, #cbd5e1, #64748b);
+  }
+
+  .definition {
+    width: 100%;
+    max-width: 1100px;
+    padding: 32px 44px;
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.9s ease-out 0.95s forwards;
+  }
+
+  .def-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    color: var(--cyan-400);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .def-badge i { font-size: 16px; }
+
+  .def-text {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: #e2e8f0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .def-text strong {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 4px;
+  }
+
+  .def-row {
+    display: block;
+  }
+
+  .def-muted {
+    color: #94a3b8;
+    font-weight: 400;
+  }
+</style>
