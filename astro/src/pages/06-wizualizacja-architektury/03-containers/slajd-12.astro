@@ -1,0 +1,417 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 12 - Test jednego zdania"
+  bgImage="/images/background-6.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-quote"></i> Zasada praktyczna</span>
+      <h1 class="title">
+        Test <span class="highlight">jednego zdania</span>
+      </h1>
+    </div>
+
+    <div class="rule">
+      <div class="rule-mark">
+        <i class="ti ti-quote"></i>
+      </div>
+      <p>
+        Jeśli nie potrafisz opisać kontenera w <strong>1–2 zdaniach</strong>, to albo
+        <em>nie rozumiesz jeszcze architektury</em>, albo element jest
+        <em>na niewłaściwym poziomie</em>.
+      </p>
+    </div>
+
+    <div class="examples">
+      <article class="example good">
+        <header>
+          <span class="ex-tag good-tag"><i class="ti ti-check"></i> Dobry przykład</span>
+          <span class="ex-meta">≈ 25 słów · 1 zdanie</span>
+        </header>
+        <div class="container-pill">
+          <i class="ti ti-cloud-cog"></i>
+          <div>
+            <strong>Orders API</strong>
+            <span class="tech">[ASP.NET Core]</span>
+          </div>
+        </div>
+        <blockquote>
+          „Orders API — <mark>obsługuje składanie i śledzenie zamówień</mark>,
+          <mark>publikuje zdarzenia domenowe</mark> po zmianie statusu,
+          <mark>zapisuje dane w bazie zamówień</mark>."
+        </blockquote>
+        <div class="ex-check">
+          <span class="check"><i class="ti ti-check"></i> nazwa</span>
+          <span class="check"><i class="ti ti-check"></i> odpowiedzialność</span>
+          <span class="check"><i class="ti ti-check"></i> komunikacja</span>
+          <span class="check"><i class="ti ti-check"></i> dane</span>
+        </div>
+      </article>
+
+      <article class="example bad">
+        <header>
+          <span class="ex-tag bad-tag"><i class="ti ti-x"></i> Niewystarczający</span>
+          <span class="ex-meta">≈ 4 słowa · placeholder</span>
+        </header>
+        <div class="container-pill bad-pill">
+          <i class="ti ti-box"></i>
+          <div>
+            <strong>OrderService</strong>
+            <span class="tech bad-tech">[?]</span>
+          </div>
+        </div>
+        <blockquote class="bad-quote">
+          „OrderService — <mark class="bad-mark">obsługuje zamówienia.</mark>"
+        </blockquote>
+        <div class="diagnosis">
+          <i class="ti ti-stethoscope"></i>
+          <div>
+            <span class="diag-label">Diagnoza:</span>
+            <span class="diag-text">
+              zbyt ogólne — prawdopodobnie to już <strong>poziom komponentów</strong>, nie kontenerów.
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 70px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .rule {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    padding: 36px 56px 36px 100px;
+    background:
+      linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(8, 145, 178, 0.05)),
+      rgba(17, 24, 39, 0.65);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    border-radius: 24px;
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.15), 0 22px 60px rgba(8, 145, 178, 0.2);
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.85s ease-out 0.35s forwards;
+  }
+
+  .rule-mark {
+    position: absolute;
+    top: 24px;
+    left: 32px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.18);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+
+  .rule p {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #f1f5f9;
+    text-align: left;
+    letter-spacing: -0.1px;
+  }
+
+  .rule strong {
+    font-weight: 800;
+    color: var(--cyan-400);
+  }
+
+  .rule em {
+    font-style: normal;
+    font-weight: 600;
+    color: #f8fafc;
+    background: rgba(34, 211, 238, 0.08);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  .examples {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    width: 100%;
+  }
+
+  .example {
+    position: relative;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 22px;
+    padding: 26px 28px 28px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .example.good {
+    animation-delay: 0.6s;
+    border-color: rgba(34, 211, 238, 0.45);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 16px 50px rgba(8, 145, 178, 0.18);
+  }
+
+  .example.bad {
+    animation-delay: 0.8s;
+    border-color: rgba(248, 113, 113, 0.4);
+    border-style: dashed;
+  }
+
+  .example header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .ex-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .ex-tag i { font-size: 15px; }
+
+  .good-tag {
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: var(--cyan-400);
+  }
+
+  .bad-tag {
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    color: #f87171;
+  }
+
+  .ex-meta {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .container-pill {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1.5px solid rgba(34, 211, 238, 0.5);
+    border-radius: 14px;
+  }
+
+  .container-pill i {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex: 0 0 auto;
+  }
+
+  .container-pill strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: -0.2px;
+    line-height: 1.1;
+  }
+
+  .container-pill .tech {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cyan-400);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .container-pill.bad-pill {
+    border-color: rgba(248, 113, 113, 0.5);
+    border-style: dashed;
+  }
+
+  .container-pill.bad-pill i {
+    background: rgba(248, 113, 113, 0.08);
+    border-color: rgba(248, 113, 113, 0.4);
+    color: #f87171;
+  }
+
+  .bad-tech {
+    color: #f87171 !important;
+  }
+
+  blockquote {
+    margin: 0;
+    padding: 18px 22px;
+    background: rgba(15, 23, 42, 0.55);
+    border-left: 4px solid rgba(34, 211, 238, 0.6);
+    border-radius: 6px 14px 14px 6px;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #e2e8f0;
+    font-style: italic;
+  }
+
+  blockquote.bad-quote {
+    border-left-color: rgba(248, 113, 113, 0.6);
+  }
+
+  blockquote mark {
+    background: rgba(34, 211, 238, 0.18);
+    color: #f8fafc;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  blockquote .bad-mark {
+    background: rgba(248, 113, 113, 0.15);
+    color: #fca5a5;
+  }
+
+  .ex-check {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan-400);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .check i { font-size: 14px; }
+
+  .diagnosis {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(248, 113, 113, 0.06);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    border-radius: 12px;
+  }
+
+  .diagnosis i {
+    flex: 0 0 auto;
+    color: #f87171;
+    font-size: 24px;
+  }
+
+  .diag-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: #f87171;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .diag-text {
+    display: block;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #cbd5e1;
+  }
+
+  .diag-text strong {
+    font-weight: 700;
+    color: #f87171;
+  }
+</style>

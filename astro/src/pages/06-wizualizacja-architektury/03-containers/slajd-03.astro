@@ -1,0 +1,319 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 03 - Container w C4 — definicja"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-vocabulary"></i>Container · Level 2</span>
+      <h1 class="title">
+        Container w C4 <span class="highlight">≠ Docker</span>
+      </h1>
+    </div>
+    <div class="examples">
+      <span class="examples-label">Przykłady kontenerów:</span>
+      <div class="example-grid">
+        <div class="example"><i class="ti ti-browser"></i><span>Aplikacja webowa</span></div>
+        <div class="example"><i class="ti ti-device-mobile"></i><span>Aplikacja mobilna</span></div>
+        <div class="example"><i class="ti ti-cloud-cog"></i><span>Backend API</span></div>
+        <div class="example"><i class="ti ti-cpu"></i><span>Worker</span></div>
+        <div class="example"><i class="ti ti-database"></i><span>PostgreSQL</span></div>
+        <div class="example"><i class="ti ti-messages"></i><span>Broker wiadomości</span></div>
+        <div class="example"><i class="ti ti-bolt"></i><span>Cache (Redis)</span></div>
+        <div class="example"><i class="ti ti-plug-connected"></i><span>Adapter integracyjny</span></div>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 60px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: stretch;
+    gap: 28px;
+    width: 100%;
+    margin-bottom: 44px;
+  }
+
+  .def-card {
+    position: relative;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 22px;
+    padding: 32px 36px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.85s ease-out forwards;
+    overflow: hidden;
+  }
+
+  .def-card.negative { animation-delay: 0.35s; }
+  .def-card.positive {
+    animation-delay: 0.6s;
+    border-color: rgba(34, 211, 238, 0.45);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.16), 0 16px 60px rgba(8, 145, 178, 0.18);
+  }
+
+  .def-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+  }
+
+  .def-card.negative::before {
+    background: linear-gradient(90deg, transparent, rgba(248, 113, 113, 0.55), transparent);
+  }
+
+  .def-card.positive::before {
+    background: linear-gradient(90deg, transparent, var(--cyan-400), transparent);
+  }
+
+  .def-card header {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 24px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .badge {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+
+  .badge.bad {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    color: #f87171;
+  }
+
+  .badge.good {
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: var(--cyan-400);
+  }
+
+  .head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .label.highlight-chip {
+    color: var(--cyan-400);
+  }
+
+  .label .symbol {
+    font-size: 20px;
+    font-weight: 800;
+    color: #cbd5e1;
+  }
+
+  .label.highlight-chip .symbol {
+    color: var(--cyan-400);
+  }
+
+  .head-text h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+    line-height: 1.15;
+  }
+
+  .def-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .def-list li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #e2e8f0;
+    line-height: 1.35;
+  }
+
+  .def-list li i {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(148, 163, 184, 0.08);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    color: #cbd5e1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .def-card.positive .def-list li i {
+    background: rgba(34, 211, 238, 0.1);
+    border-color: rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+  }
+
+  .vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.85s forwards;
+  }
+
+  .vs span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: #94a3b8;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .examples {
+    width: 100%;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.0s forwards;
+  }
+
+  .examples-label {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .example-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .example {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 34px 24px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+    min-height: 190px;
+  }
+
+  .example i {
+    font-size: 52px;
+    color: var(--cyan-400);
+  }
+
+  .example span {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e2e8f0;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  @media (max-width: 1500px) {
+    .example-grid {
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+    }
+  }
+</style>

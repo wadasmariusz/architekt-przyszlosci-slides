@@ -1,0 +1,373 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 05 - Co powinien zawierać opis kontenera?"
+  bgImage="/images/background-5.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-vocabulary"></i>Container · Level 2</span>
+      <h1 class="title">
+        Dobry opis kontenera?
+      </h1>
+    </div>
+
+    <div class="anatomy">
+      <div class="good-side">
+        <div class="container-card">
+          <div class="field field-name">
+            <span class="field-tag">1 · Nazwa</span>
+            <div class="field-value">Orders API</div>
+          </div>
+          <div class="field field-tech">
+            <span class="field-tag">2 · Technologia</span>
+            <div class="field-value tech-value">[ASP.NET Core]</div>
+          </div>
+          <div class="field field-resp">
+            <span class="field-tag">3 · Odpowiedzialność</span>
+            <div class="field-value resp-value">
+              Obsługuje proces składania i śledzenia zamówień.
+            </div>
+          </div>
+        </div>
+
+        <div class="annotations">
+          <div class="anno anno-1">
+            <span class="anno-dot">1</span>
+            <div>
+              <h4>Nazwa</h4>
+              <p>Konkretna i jednoznaczna np <em>Orders API</em>.</p>
+            </div>
+          </div>
+          <div class="anno anno-2">
+            <span class="anno-dot">2</span>
+            <div>
+              <h4>Technologia</h4>
+              <p>Stack uruchomieniowy np. <em>ASP.NET Core</em>, <em>PostgreSQL</em>.</p>
+            </div>
+          </div>
+          <div class="anno anno-3">
+            <span class="anno-dot">3</span>
+            <div>
+              <h4>Odpowiedzialność</h4>
+              <p>Jedno zdanie co ten kontener robi w systemie.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="vs-divider" aria-hidden="true">
+        <span class="vs-label">vs</span>
+      </div>
+
+      <div class="bad-side">
+        <span class="bad-banner"><i class="ti ti-alert-triangle-filled"></i> niewystarczająco</span>
+        <div class="container-card bad">
+          <div class="bad-value">Backend</div>
+          <div class="bad-hints">
+            <span><i class="ti ti-help-circle"></i> Jaka technologia?</span>
+            <span><i class="ti ti-help-circle"></i> Za co odpowiada?</span>
+            <span><i class="ti ti-help-circle"></i> Z czym się integruje?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1740px;
+    padding: 70px 2.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 82px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .anatomy {
+    display: grid;
+    grid-template-columns: 1.25fr auto 1fr;
+    align-items: start;
+    gap: 36px;
+    width: 100%;
+  }
+
+  .good-side {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.4s forwards;
+  }
+
+  .container-card {
+    background: rgba(17, 24, 39, 0.78);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(34, 211, 238, 0.55);
+    border-radius: 22px;
+    padding: 30px 32px;
+    text-align: left;
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.18),
+      0 22px 60px rgba(8, 145, 178, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .field {
+    position: relative;
+    padding-left: 0;
+  }
+
+  .field + .field {
+    border-top: 1px dashed rgba(34, 211, 238, 0.2);
+    padding-top: 22px;
+  }
+
+  .field-tag {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 5px 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    border-radius: 999px;
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+  }
+
+  .field-value {
+    color: #f8fafc;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.4px;
+  }
+
+  .tech-value {
+    font-size: 34px;
+    font-weight: 600;
+    color: var(--cyan-400);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .resp-value {
+    font-size: 28px;
+    font-weight: 300;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  .annotations {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .anno {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .anno-dot {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .anno h4 {
+    margin: 0 0 6px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.2px;
+  }
+
+  .anno p {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: #cbd5e1;
+  }
+
+  .anno em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--cyan-400);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 20px;
+  }
+
+  .vs-divider {
+    width: 2px;
+    align-self: stretch;
+    background: linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.35), transparent);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .vs-label {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .bad-side {
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.7s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding-top: 6px;
+  }
+
+  .bad-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    color: #f87171;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+  }
+
+  .bad-banner i { font-size: 22px; }
+
+  .container-card.bad {
+    border: 2px dashed rgba(248, 113, 113, 0.6);
+    background: rgba(15, 23, 42, 0.55);
+    box-shadow: none;
+    padding: 50px 36px;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+  }
+
+  .bad-value {
+    font-size: 72px;
+    font-weight: 800;
+    color: #94a3b8;
+    letter-spacing: -0.5px;
+  }
+
+  .bad-hints {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .bad-hints span {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #94a3b8;
+  }
+
+  .bad-hints i {
+    color: #f87171;
+    font-size: 26px;
+  }
+
+  .bad-note {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #cbd5e1;
+    max-width: 460px;
+  }
+
+  .bad-note strong {
+    color: #f87171;
+    font-weight: 700;
+  }
+</style>

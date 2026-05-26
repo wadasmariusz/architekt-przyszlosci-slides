@@ -1,0 +1,345 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 06 - Ogólny vs. konkretny opis kontenera"
+  bgImage="/images/background-6.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-vocabulary"></i>Container · Level 2</span>
+      <h1 class="title">
+        Ogólny <span class="vs-word">vs</span> <span class="highlight">konkretny</span> opis kontenera
+      </h1>
+    </div>
+
+    <div class="table">
+      <div class="row head">
+        <div class="col-bad">
+          <span class="head-tag bad"><i class="ti ti-x"></i> Ogólnikowo</span>
+        </div>
+        <div class="col-arrow" aria-hidden="true">
+          <i class="ti ti-arrow-narrow-right"></i>
+        </div>
+        <div class="col-good">
+          <span class="head-tag good"><i class="ti ti-check"></i> Konkretnie</span>
+        </div>
+      </div>
+
+      <div class="row" style="--delay: 0.4s;">
+        <div class="col-bad">
+          <div class="cell bad-cell">
+            <i class="ti ti-cloud"></i>
+            <span>Backend</span>
+          </div>
+        </div>
+        <div class="col-arrow" aria-hidden="true"><i class="ti ti-chevron-right"></i></div>
+        <div class="col-good">
+          <div class="cell good-cell">
+            <div class="cell-head">
+              <strong>ASP.NET Core API</strong>
+              <span class="cell-tag">[REST · HTTPS]</span>
+            </div>
+            <p>Obsługuje operacje biznesowe: zamówienia, klienci, katalog.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="--delay: 0.55s;">
+        <div class="col-bad">
+          <div class="cell bad-cell">
+            <i class="ti ti-database"></i>
+            <span>Database</span>
+          </div>
+        </div>
+        <div class="col-arrow" aria-hidden="true"><i class="ti ti-chevron-right"></i></div>
+        <div class="col-good">
+          <div class="cell good-cell">
+            <div class="cell-head">
+              <strong>PostgreSQL</strong>
+              <span class="cell-tag">[relacyjna]</span>
+            </div>
+            <p>Trwałe przechowywanie danych aplikacyjnych.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="--delay: 0.70s;">
+        <div class="col-bad">
+          <div class="cell bad-cell">
+            <i class="ti ti-bolt"></i>
+            <span>Cache</span>
+          </div>
+        </div>
+        <div class="col-arrow" aria-hidden="true"><i class="ti ti-chevron-right"></i></div>
+        <div class="col-good">
+          <div class="cell good-cell">
+            <div class="cell-head">
+              <strong>Redis</strong>
+              <span class="cell-tag">[in-memory]</span>
+            </div>
+            <p>Cache sesji użytkowników i wyników zapytań.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="--delay: 0.85s;">
+        <div class="col-bad">
+          <div class="cell bad-cell">
+            <i class="ti ti-messages"></i>
+            <span>Queue</span>
+          </div>
+        </div>
+        <div class="col-arrow" aria-hidden="true"><i class="ti ti-chevron-right"></i></div>
+        <div class="col-good">
+          <div class="cell good-cell">
+            <div class="cell-head">
+              <strong>RabbitMQ</strong>
+              <span class="cell-tag">[AMQP · pub/sub]</span>
+            </div>
+            <p>Asynchroniczna komunikacja między usługami.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 60px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 74px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 14px;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title .vs-word {
+    color: #64748b;
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 80px 2fr;
+    align-items: stretch;
+    gap: 18px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.7s ease-out forwards;
+    animation-delay: var(--delay, 0.25s);
+  }
+
+  .row.head {
+    --delay: 0.25s;
+  }
+
+  .col-bad, .col-good {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .col-bad > *, .col-good > * {
+    width: 100%;
+  }
+
+  .col-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(148, 163, 184, 0.6);
+    font-size: 32px;
+  }
+
+  .head-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 26px;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    width: 100%;
+  }
+
+  .head-tag.bad {
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    color: #f87171;
+  }
+
+  .head-tag.good {
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: var(--cyan-400);
+  }
+
+  .head-tag i { font-size: 22px; }
+
+  .cell {
+    border-radius: 16px;
+    padding: 22px 28px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .bad-cell {
+    background: rgba(248, 113, 113, 0.06);
+    border: 1px dashed rgba(248, 113, 113, 0.4);
+    color: #94a3b8;
+    gap: 18px;
+    justify-content: flex-start;
+  }
+
+  .bad-cell i {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: #f87171;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex: 0 0 auto;
+  }
+
+  .bad-cell span {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .good-cell {
+    background: rgba(17, 24, 39, 0.68);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 12px 36px rgba(8, 145, 178, 0.18);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .cell-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .cell-head strong {
+    font-size: 26px;
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: -0.3px;
+  }
+
+  .cell-tag {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cyan-400);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.3px;
+  }
+
+  .good-cell p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #cbd5e1;
+  }
+
+  .callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 32px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 999px;
+    font-size: 22px;
+    font-weight: 400;
+    color: #e2e8f0;
+    letter-spacing: 0.2px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.1s forwards;
+  }
+
+  .callout i {
+    font-size: 26px;
+    color: var(--cyan-400);
+  }
+
+  .callout strong {
+    font-weight: 700;
+    color: var(--cyan-400);
+  }
+</style>

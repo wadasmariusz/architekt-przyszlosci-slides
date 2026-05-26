@@ -1,0 +1,396 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 08 - Dla kogo jest Container Diagram?"
+  bgImage="/images/background-2.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-vocabulary"></i>Container · Level 2</span>
+      <h1 class="title">
+        Dla  <span class="highlight">kogo</span> jest Container Diagram?
+      </h1>
+    </div>
+
+    <div class="axis">
+      <div class="axis-line"></div>
+      <div class="axis-points">
+        <div class="point side">
+          <span class="point-tag">Context · L1</span>
+          <div class="dot"></div>
+          <span class="point-desc">Zbyt ogólne dla rozmowy technicznej</span>
+        </div>
+
+        <div class="point center">
+          <div class="point-pill"><i class="ti ti-target"></i> Container · L2</div>
+          <div class="dot center-dot"></div>
+          <span class="point-desc"><strong> </strong></span>
+        </div>
+
+        <div class="point side">
+          <span class="point-tag">Component · L3 / Code · L4</span>
+          <div class="dot"></div>
+          <span class="point-desc">Zbyt szczegółowe dla rozmowy architektonicznej</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="panel audience">
+        <header>
+          <i class="ti ti-users-group"></i>
+          <h3>Odbiorcy?</h3>
+        </header>
+        <ul class="audience-list">
+          <li>
+            <i class="ti ti-code"></i>
+            <span>
+              <strong>Programiści</strong>
+              <small>gdzie piszemy kod</small>
+            </span>
+          </li>
+          <li>
+            <i class="ti ti-building-arch"></i>
+            <span>
+              <strong>Architekci</strong>
+              <small>granice i odpowiedzialności</small>
+            </span>
+          </li>
+          <li>
+            <i class="ti ti-crown"></i>
+            <span>
+              <strong>Tech leadzi</strong>
+              <small>decyzje i kompromisy</small>
+            </span>
+          </li>
+          <li>
+            <i class="ti ti-server-cog"></i>
+            <span>
+              <strong>DevOps</strong>
+              <small>uruchamianie i zależności</small>
+            </span>
+          </li>
+          <li>
+            <i class="ti ti-briefcase"></i>
+            <span>
+              <strong>Techniczny biznes</strong>
+              <small>wpływ zmian na system</small>
+            </span>
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 70px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 70px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .axis {
+    width: 100%;
+    max-width: 1500px;
+    position: relative;
+    padding: 28px 40px 12px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.4s forwards;
+  }
+
+  .axis-line {
+    position: absolute;
+    top: 103px;
+    left: calc(40px + ((100% - 144px) / 6));
+    right: calc(40px + ((100% - 144px) / 6));
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg,
+      rgba(148, 163, 184, 0.4) 0%,
+      rgba(34, 211, 238, 0.9) 50%,
+      rgba(148, 163, 184, 0.4) 100%);
+    z-index: 0;
+  }
+
+  .axis-points {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: start;
+    gap: 32px;
+  }
+
+  .point {
+    display: grid;
+    grid-template-rows: 42px 42px minmax(48px, auto);
+    align-items: center;
+    justify-items: center;
+    row-gap: 12px;
+    text-align: center;
+  }
+
+  .point-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .point-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(8, 145, 178, 0.18));
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    border-radius: 999px;
+    color: var(--cyan-400);
+    font-size: 17px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    box-shadow: 0 0 24px rgba(34, 211, 238, 0.25);
+  }
+
+  .point-pill i { font-size: 20px; }
+
+  .dot {
+    width: 22px;
+    height: 22px;
+    align-self: center;
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.4);
+    box-shadow: 0 0 0 6px rgba(148, 163, 184, 0.1);
+  }
+
+  .center-dot {
+    width: 32px;
+    height: 32px;
+    background: var(--cyan-400);
+    box-shadow:
+      0 0 0 8px rgba(34, 211, 238, 0.18),
+      0 0 28px rgba(34, 211, 238, 0.55);
+  }
+
+  .point-desc {
+    font-size: 16px;
+    font-weight: 300;
+    color: #94a3b8;
+    line-height: 1.4;
+    max-width: 280px;
+  }
+
+  .point.center .point-desc {
+    color: #e2e8f0;
+    font-weight: 400;
+  }
+
+  .point.center .point-desc strong {
+    color: var(--cyan-400);
+    font-weight: 700;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: 1300px;
+  }
+
+  .panel {
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+    padding: 32px 36px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .panel.audience { animation-delay: 0.7s; }
+  .panel.questions {
+    animation-delay: 0.9s;
+    border-color: rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 16px 50px rgba(8, 145, 178, 0.18);
+  }
+
+  .panel header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .panel header i {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+
+  .panel header h3 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.2px;
+  }
+
+  .panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .audience ul {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .panel li {
+    display: grid;
+    grid-template-rows: 54px 1fr;
+    align-items: center;
+    justify-items: center;
+    gap: 12px;
+    min-height: 168px;
+    padding: 20px 18px;
+    background:
+      linear-gradient(180deg, rgba(34, 211, 238, 0.1), rgba(15, 23, 42, 0.56)),
+      rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(34, 211, 238, 0.18);
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #e2e8f0;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .panel li i {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(8, 145, 178, 0.2);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 12px 28px rgba(8, 145, 178, 0.18);
+  }
+
+  .panel li span {
+    display: grid;
+    gap: 8px;
+  }
+
+  .panel li strong {
+    color: #f8fafc;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .panel li small {
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .questions li .q-icon {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .questions li .q-icon i {
+    font-size: 20px;
+    color: var(--cyan-400);
+  }
+
+  .questions li {
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+</style>

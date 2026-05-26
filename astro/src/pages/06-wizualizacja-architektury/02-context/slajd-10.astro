@@ -1,0 +1,329 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+
+const pairs = [
+  {
+    domain: 'Płatności',
+    bad: { name: 'API płatności', tag: 'generyczna nazwa' },
+    good: { name: 'Stripe', tag: 'dostawca płatności' },
+  },
+  {
+    domain: 'Wysyłka SMS',
+    bad: { name: 'endpoint SMS', tag: 'mechanizm' },
+    good: { name: 'Twilio', tag: 'system wysyłki SMS' },
+  },
+  {
+    domain: 'Scoring kredytowy',
+    bad: { name: 'baza danych partnera', tag: 'opis techniczny' },
+    good: { name: 'KRD', tag: 'system scoringowy' },
+  },
+];
+---
+<SlideLayout
+  title="Slide 10 - Nazywaj systemy po imieniu"
+  bgImage="/images/background-2.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
+>
+  <div class="content">
+    <div class="header">
+      <h1 class="title">
+        Zasada<span class="highlight"> nazewnictwa</span>
+      </h1>
+    </div>
+
+    <div class="table">
+      <header class="thead">
+        <span class="th th-domain">Obszar</span>
+        <span class="th th-bad">Źle</span>
+        <span class="th th-arrow"></span>
+        <span class="th th-good">Dobrze</span>
+      </header>
+
+      {pairs.map((p, i) => (
+        <article class="row" style={`--delay: ${0.4 + i * 0.18}s`}>
+          <div class="domain">
+            <i class="ti ti-tag"></i>
+            <span>{p.domain}</span>
+          </div>
+
+          <div class="cell cell-bad">
+            <span class="badge badge-bad"><i class="ti ti-x"></i> źle</span>
+            <div class="sys sys-bad">
+              <strong>{p.bad.name}</strong>
+              <span>{p.bad.tag}</span>
+            </div>
+          </div>
+
+          <div class="arrow" aria-hidden="true">
+            <i class="ti ti-arrow-right"></i>
+          </div>
+
+          <div class="cell cell-good">
+            <span class="badge badge-good"><i class="ti ti-check"></i> dobrze</span>
+            <div class="sys sys-good">
+              <strong>{p.good.name}</strong>
+              <span>{p.good.tag}</span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+    
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 40px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 10px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    font-size: 20px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .lede strong {
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .table {
+    width: 100%;
+    max-width: 1480px;
+    margin-bottom: 30px;
+    background: rgba(17, 24, 39, 0.45);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 22px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .thead {
+    display: grid;
+    grid-template-columns: 0.7fr 1fr 60px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 4px 14px 12px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  }
+
+  .th {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #64748b;
+    text-align: left;
+  }
+
+  .th-bad { color: #fca5a5; }
+  .th-good { color: #86efac; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 0.7fr 1fr 60px 1fr;
+    align-items: stretch;
+    gap: 18px;
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    opacity: 0;
+    transform: translateY(14px);
+    animation: fadeUp 0.7s ease-out forwards;
+    animation-delay: var(--delay);
+  }
+
+  .domain {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-align: left;
+  }
+
+  .domain i {
+    font-size: 22px;
+    color: var(--cyan-400);
+    flex-shrink: 0;
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .cell-bad {
+    background: rgba(60, 17, 22, 0.45);
+    border: 1px solid rgba(239, 68, 68, 0.32);
+  }
+
+  .cell-good {
+    background: rgba(15, 39, 28, 0.5);
+    border: 1px solid rgba(34, 197, 94, 0.42);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    align-self: flex-start;
+  }
+
+  .badge i { font-size: 14px; }
+
+  .badge-bad {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+  }
+
+  .badge-good {
+    color: #86efac;
+    background: rgba(34, 197, 94, 0.14);
+    border: 1px solid rgba(34, 197, 94, 0.42);
+  }
+
+  .sys {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(10, 14, 23, 0.55);
+  }
+
+  .sys-bad {
+    border: 1.5px dashed rgba(148, 163, 184, 0.45);
+  }
+
+  .sys-good {
+    border: 1.5px solid rgba(59, 130, 246, 0.55);
+    background: linear-gradient(180deg, rgba(29, 78, 216, 0.18), rgba(30, 58, 138, 0.18));
+  }
+
+  .sys strong {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+  }
+
+  .sys-bad strong {
+    color: #cbd5e1;
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  .sys span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #94a3b8;
+    letter-spacing: 0.3px;
+  }
+
+  .sys-good span {
+    color: #bfdbfe;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+  }
+
+  .arrow i {
+    font-size: 32px;
+  }
+
+  .footnote {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    border-radius: 999px;
+    font-size: 17px;
+    font-weight: 400;
+    color: #cbd5e1;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 1.2s forwards;
+  }
+
+  .footnote strong {
+    color: #f1f5f9;
+    font-weight: 700;
+  }
+
+  .footnote i {
+    font-size: 22px;
+    color: var(--cyan-400);
+  }
+</style>

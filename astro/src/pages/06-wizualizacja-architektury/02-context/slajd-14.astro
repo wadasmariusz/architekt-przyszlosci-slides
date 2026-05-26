@@ -3,34 +3,29 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
 const points = [
   {
-    num: '01',
     icon: 'ti-box',
     title: 'Czarna skrzynka w centrum',
     desc: 'System rysujemy jako jeden prostokąt z nazwą i krótkim opisem odpowiedzialności.',
   },
   {
-    num: '02',
     icon: 'ti-users-group',
     title: 'Aktorzy = role',
     desc: 'Ikona reprezentuje rolę (klient, operator), nie konkretną osobę.',
   },
   {
-    num: '03',
     icon: 'ti-plug-connected',
     title: 'Tylko bezpośrednie integracje',
     desc: 'Systemy zewnętrzne to te, z którymi się komunikujemy.',
   },
   {
-    num: '04',
     icon: 'ti-message-circle-2',
     title: 'Relacje z intencją biznesową',
     desc: 'Strzałki opisują, co system robi.',
   },
   {
-    num: '05',
     icon: 'ti-fence',
     title: 'Świadomie postawiona granica',
-    desc: 'Ustalenei co bierzemy na siebie, a co nie.',
+    desc: 'Ustalenie co bierzemy na siebie, a co nie.',
     accent: true,
   },
 ];
@@ -42,7 +37,7 @@ const points = [
 >
   <div class="content">
     <div class="header">
-      <span class="level-chip"><i class="ti ti-checks"></i>Context C4 · poziom 1</span>
+      <span class="level-chip"><i class="ti ti-world-search"></i> Context · Level 1</span>
       <h1 class="title">
         Podsumowanie
       </h1>
@@ -51,7 +46,6 @@ const points = [
     <ol class="recap">
       {points.map((p, i) => (
         <li class={`item ${p.accent ? 'item-accent' : ''}`} style={`--delay: ${0.35 + i * 0.12}s`}>
-          <span class="num"></span>
           <span class="icon"><i class={`ti ${p.icon}`}></i></span>
           <div class="text">
             <strong>{p.title}</strong>
@@ -128,19 +122,19 @@ const points = [
     padding: 0;
     margin: 0 0 30px;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1480px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 18px;
     counter-reset: recap;
   }
 
   .item {
     display: grid;
-    grid-template-columns: 78px 64px 1fr;
+    grid-template-columns: 76px minmax(0, 1fr);
     align-items: center;
-    gap: 22px;
-    padding: 20px 26px;
+    gap: 28px;
+    padding: 28px 34px;
     background: rgba(17, 24, 39, 0.65);
     border: 1px solid rgba(148, 163, 184, 0.2);
     border-radius: 18px;
@@ -166,23 +160,9 @@ const points = [
     box-shadow: 0 12px 32px rgba(34, 211, 238, 0.08);
   }
 
-  .num {
-    font-family: 'Inter', sans-serif;
-    font-size: 38px;
-    font-weight: 800;
-    color: #475569;
-    letter-spacing: -1px;
-    font-feature-settings: 'tnum';
-    line-height: 1;
-  }
-
-  .item-accent .num {
-    color: var(--cyan-400);
-  }
-
   .icon {
-    width: 60px;
-    height: 60px;
+    width: 72px;
+    height: 72px;
     border-radius: 14px;
     background: rgba(34, 211, 238, 0.08);
     border: 1.5px solid rgba(34, 211, 238, 0.3);
@@ -193,7 +173,7 @@ const points = [
     flex-shrink: 0;
   }
 
-  .icon i { font-size: 28px; }
+  .icon i { font-size: 34px; }
 
   .item-accent .icon {
     background: rgba(34, 211, 238, 0.18);
@@ -201,24 +181,25 @@ const points = [
   }
 
   .text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.42fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 34px;
     min-width: 0;
   }
 
   .text strong {
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 700;
     color: #f1f5f9;
     letter-spacing: -0.3px;
   }
 
   .text span {
-    font-size: 16px;
+    font-size: 21px;
     font-weight: 300;
     color: #cbd5e1;
-    line-height: 1.45;
+    line-height: 1.35;
   }
 
   .footnote {
