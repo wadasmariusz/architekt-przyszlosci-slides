@@ -1,80 +1,325 @@
 ---
-const slides = [
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-00', label: 'Slajd 0 — Model C4: wprowadzenie' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-01', label: 'Slajd 1 — Problem z diagramami architektury' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-02', label: 'Slajd 2 — Jeden diagram, wiele problemów' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-03', label: 'Slajd 3 — Model C4 — geneza' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-04', label: 'Slajd 4 — Metafora Google Maps' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-05', label: 'Slajd 5 — Trzy zasady C4' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-06', label: 'Slajd 6 — Słownik pojęć C4' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-07', label: 'Slajd 7 — Poziom 1: System Context' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-08', label: 'Slajd 8 — Poziom 2: Containers' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-09', label: 'Slajd 9 — Poziom 3: Components' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-10', label: 'Slajd 10 — Poziom 4: Code (opcjonalny)' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-11', label: 'Slajd 11 — Diagramy uzupełniające' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-12', label: 'Slajd 12 — C4 a UML' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-13', label: 'Slajd 13 — Mity i częste błędy' },
-  { href: '/06-wizualizacja-architektury/01-model-c4-wprowadzenie/slajd-14', label: 'Slajd 14 — Podsumowanie' },
+const slideFiles = import.meta.glob('./06-wizualizacja-architektury/**/slajd-*.astro');
+
+type SectionConfig = {
+  slug: string;
+  number: string;
+  title: string;
+  subtitle: string;
+  labels: Record<string, string>;
+};
+
+const sections: SectionConfig[] = [
+  {
+    slug: '01-model-c4-wprowadzenie',
+    number: '01',
+    title: 'Model C4 — wprowadzenie',
+    subtitle: 'Czym jest C4, jego cztery poziomy, mity i częste błędy.',
+    labels: {
+      '00': 'Model C4: wprowadzenie',
+      '01': 'Problem z diagramami architektury',
+      '02': 'Jeden diagram, wiele problemów',
+      '03': 'Model C4 — geneza',
+      '04': 'Metafora Google Maps',
+      '05': 'Trzy zasady C4',
+      '06': 'Słownik pojęć C4',
+      '07': 'Poziom 1: System Context',
+      '08': 'Poziom 2: Containers',
+      '09': 'Poziom 3: Components',
+      '10': 'Poziom 4: Code (opcjonalny)',
+      '11': 'Diagramy uzupełniające',
+      '12': 'C4 a UML',
+      '13': 'Mity i częste błędy',
+      '14': 'Podsumowanie',
+    },
+  },
+  {
+    slug: '02-context',
+    number: '02',
+    title: 'Diagram kontekstowy (C4, poziom 1)',
+    subtitle: 'System widziany z lotu ptaka — aktorzy, systemy zewnętrzne, granice.',
+    labels: {
+      '01': 'Diagram kontekstowy — poziom 1',
+      '02': 'Metafora: C4 jak Google Maps',
+      '03': 'Czym jest system i jak pasuje do świata?',
+      '04': 'Anatomia diagramu kontekstowego',
+      '05': 'Przykład: Internet Banking System',
+      '06': 'Jak opisywać system na diagramie',
+      '07': 'Aktorzy = role, nie osoby',
+      '08': 'Systemy zewnętrzne',
+      '09': 'Tylko bezpośrednie integracje',
+      '10': 'Nazywaj systemy po imieniu',
+      '11': 'Relacje — intencja, nie implementacja',
+      '12': 'Najtrudniejsze: granica systemu',
+      '13': 'Jedno pytanie, różne odpowiedzi',
+      '14': 'Podsumowanie',
+      '15': 'Następna lekcja',
+    },
+  },
 ];
+
+const grouped = sections.map((section) => {
+  const slides = Object.keys(slideFiles)
+    .filter((path) => path.includes(`/${section.slug}/`))
+    .map((path) => {
+      const match = path.match(/slajd-(\d+[a-z]?)\.astro$/);
+      const num = match ? match[1] : '??';
+      const href = `/06-wizualizacja-architektury/${section.slug}/slajd-${num}`;
+      const numericPart = num.match(/^\d+/)?.[0] ?? num;
+      const label = section.labels[num] ?? section.labels[numericPart] ?? `Slajd ${num}`;
+      return { href, num, label };
+    })
+    .sort((a, b) => a.num.localeCompare(b.num, 'pl', { numeric: true }));
+  return { ...section, slides };
+});
+
+const totalSlides = grouped.reduce((sum, s) => sum + s.slides.length, 0);
 ---
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prezentacja — slajdy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <title>Prezentacja — wizualizacja architektury</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: #0a0e17;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(34, 211, 238, 0.08), transparent 60%),
+        radial-gradient(900px 500px at 90% 110%, rgba(8, 145, 178, 0.10), transparent 60%),
+        #0a0e17;
       color: #f0f4f8;
-      font-family: 'Inter', sans-serif;
-      padding: 60px 40px;
+      font-family: 'Inter', system-ui, sans-serif;
+      padding: 56px 40px 96px;
     }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .module-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      color: #22d3ee;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 18px;
+    }
+
     h1 {
-      font-size: 36px;
+      font-size: 44px;
       font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 32px;
-      background: linear-gradient(135deg, #22d3ee, #0891b2);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin: 0 0 14px;
+      background: linear-gradient(135deg, #f0f4f8 0%, #22d3ee 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      max-width: 800px;
+
+    .lead {
+      font-size: 18px;
+      line-height: 1.55;
+      color: #94a3b8;
+      max-width: 720px;
+      margin: 0 0 12px;
+      font-weight: 300;
+    }
+
+    .stats {
+      font-size: 13px;
+      color: #64748b;
+      letter-spacing: 0.5px;
+      margin-bottom: 36px;
+    }
+
+    .stats strong { color: #cbd5e1; font-weight: 600; }
+
+    .section {
+      margin-bottom: 42px;
+    }
+
+    .section-header {
       display: flex;
-      flex-direction: column;
+      align-items: baseline;
+      gap: 18px;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .section-number {
+      font-size: 13px;
+      font-weight: 700;
+      color: #22d3ee;
+      letter-spacing: 3px;
+      font-feature-settings: 'tnum';
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin: 0;
+      letter-spacing: -0.3px;
+    }
+
+    .section-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      color: #94a3b8;
+      margin: -8px 0 16px;
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .slide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 12px;
     }
-    a {
-      display: block;
-      padding: 18px 24px;
-      background: rgba(17, 24, 39, 0.6);
-      border: 1px solid rgba(34, 211, 238, 0.15);
-      border-radius: 12px;
-      color: #f0f4f8;
+
+    .slide-link {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 66px;
+      padding: 12px 14px;
+      background: rgba(30, 41, 59, 0.92);
+      border: 1px solid rgba(125, 211, 252, 0.38);
+      border-radius: 8px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+      color: #ffffff;
       text-decoration: none;
-      font-size: 18px;
-      transition: border-color 0.2s, transform 0.15s;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
     }
-    a:hover {
-      border-color: rgba(34, 211, 238, 0.5);
-      transform: translateX(4px);
+
+    .slide-link:hover {
+      border-color: rgba(34, 211, 238, 0.9);
+      background: rgba(51, 65, 85, 0.98);
+      box-shadow: 0 18px 44px rgba(34, 211, 238, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .slide-link:focus-visible {
+      outline: 3px solid rgba(34, 211, 238, 0.7);
+      outline-offset: 3px;
+    }
+
+    .slide-link:hover .slide-link-action { border-color: rgba(34, 211, 238, 0.7); color: #ffffff; transform: translateX(2px); }
+    .slide-link:hover .slide-link-num { border-color: rgba(34, 211, 238, 0.8); background: rgba(34, 211, 238, 0.22); }
+
+    .slide-link-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(34, 211, 238, 0.16);
+      border: 1px solid rgba(34, 211, 238, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #67e8f9;
+      font-feature-settings: 'tnum';
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .slide-link-label {
+      font-size: 15px;
+      font-weight: 650;
+      line-height: 1.35;
+      color: #ffffff;
+    }
+
+    .slide-link-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 76px;
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid rgba(148, 163, 184, 0.38);
+      border-radius: 8px;
+      color: #dbeafe;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 36px 20px 64px; }
+      h1 { font-size: 32px; }
+      .section-header { flex-wrap: wrap; gap: 8px; }
+      .section-title { font-size: 20px; }
+      .slide-grid { grid-template-columns: 1fr; }
+      .slide-link {
+        grid-template-columns: 40px minmax(0, 1fr);
+      }
+      .slide-link-action {
+        grid-column: 2;
+        width: max-content;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Prezentacja — slajdy</h1>
-  <ul>
-    {slides.map(({ href, label }) => (
-      <li><a href={href}>{label}</a></li>
+  <div class="container">
+    <span class="module-eyebrow">Moduł 06</span>
+    <h1>Wizualizacja architektury</h1>
+    <p class="lead">Prezentacja w dwóch lekcjach: wprowadzenie do modelu C4 oraz diagram kontekstowy (poziom 1).</p>
+    <p class="stats">
+      <strong>{grouped.length}</strong> lekcje · <strong>{totalSlides}</strong> slajdów
+    </p>
+
+    {grouped.map((section) => (
+      <section class="section">
+        <header class="section-header">
+          <span class="section-number">{section.number}</span>
+          <h2 class="section-title">{section.title}</h2>
+          <span class="section-count">{section.slides.length} slajdów</span>
+        </header>
+        <p class="section-subtitle">{section.subtitle}</p>
+
+        {section.slides.length === 0 ? (
+          <p class="section-subtitle" style="color:#64748b;font-style:italic;">Brak slajdów.</p>
+        ) : (
+          <div class="slide-grid">
+            {section.slides.map(({ href, num, label }) => (
+              <a class="slide-link" href={href}>
+                <span class="slide-link-num">{num}</span>
+                <span class="slide-link-label">{label}</span>
+                <span class="slide-link-action">Otwórz</span>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
     ))}
-  </ul>
+  </div>
 </body>
 </html>

@@ -1,0 +1,270 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 03 - Czym jest ten system i jak pasuje do świata?"
+  bgImage="/images/background-1.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-world-search"></i> Context · Level 1</span>
+      <h1 class="title">
+        Czym jest ten system?
+      </h1>
+      <p class="title-question">Jak wpasowuje się w świat dookoła?</p>
+    </div>
+
+    <div class="board">
+      <article class="question-card card-users">
+        <i class="ti ti-user"></i>
+        <span>Kto korzysta z systemu?</span>
+      </article>
+
+      <article class="question-card card-integrations">
+        <i class="ti ti-plug-connected"></i>
+        <span>Z jakimi systemami się integruje?</span>
+      </article>
+
+      <div class="system-core" aria-hidden="true">
+        <span class="core-label">nasz system</span>
+        <span class="core-dot"></span>
+      </div>
+
+      <article class="question-card card-boundary">
+        <i class="ti ti-fence"></i>
+        <span>Gdzie przebiega granica odpowiedzialności?</span>
+      </article>
+
+      <article class="question-card card-exchange">
+        <i class="ti ti-arrows-exchange"></i>
+        <span>Co system daje światu i czego od niego potrzebuje?</span>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1640px;
+    padding: 58px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+    max-width: 1500px;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 22px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 82px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.02;
+    margin: 0 0 10px;
+    color: #f8fafc;
+  }
+
+  .title-question {
+    display: inline-block;
+    margin: 0;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(6, 88px);
+    gap: 20px;
+    width: 100%;
+    max-width: 1540px;
+    position: relative;
+    align-items: center;
+    padding: 8px 0 0;
+  }
+
+  .board::before {
+    content: "";
+    position: absolute;
+    inset: 78px 190px 86px;
+    border: 1px dashed rgba(34, 211, 238, 0.24);
+    border-radius: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.35s forwards;
+  }
+
+  .question-card {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    align-items: center;
+    gap: 18px;
+    min-height: 124px;
+    padding: 22px 28px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.86), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 20px 70px rgba(2, 6, 23, 0.26);
+    text-align: left;
+    opacity: 0;
+    --shift-x: 0px;
+    --shift-y: 0px;
+    transform: translate(var(--shift-x), var(--shift-y));
+    animation: fadeCard 0.8s ease-out forwards;
+  }
+
+  .question-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 24% 0%, rgba(34, 211, 238, 0.2), transparent 44%);
+    pointer-events: none;
+  }
+
+  .question-card i {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 29px;
+  }
+
+  .question-card span {
+    color: #f1f5f9;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: 0;
+  }
+
+  .card-users {
+    grid-column: 2 / span 4;
+    grid-row: 1 / span 2;
+    align-self: end;
+    animation-delay: 0.45s;
+  }
+
+  .card-integrations {
+    grid-column: 8 / span 4;
+    grid-row: 1 / span 2;
+    align-self: start;
+    --shift-x: 18px;
+    --shift-y: 20px;
+    animation-delay: 0.58s;
+  }
+
+  .card-boundary {
+    grid-column: 1 / span 5;
+    grid-row: 4 / span 2;
+    --shift-x: 26px;
+    --shift-y: -4px;
+    animation-delay: 0.72s;
+  }
+
+  .card-exchange {
+    grid-column: 7 / span 5;
+    grid-row: 4 / span 2;
+    --shift-x: 46px;
+    --shift-y: 24px;
+    animation-delay: 0.86s;
+  }
+
+  .system-core {
+    z-index: 1;
+    grid-column: 5 / span 4;
+    grid-row: 2 / span 3;
+    justify-self: center;
+    align-self: center;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, rgba(34, 211, 238, 0.24) 0 33%, rgba(34, 211, 238, 0.08) 34% 59%, rgba(15, 23, 42, 0.1) 60%),
+      rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 90px rgba(34, 211, 238, 0.16);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.34s forwards;
+  }
+
+  .core-label {
+    width: 126px;
+    height: 126px;
+    border-radius: 28px;
+    background: linear-gradient(160deg, #1d4ed8, #0f766e);
+    border: 1px solid rgba(191, 219, 254, 0.48);
+    color: #f8fafc;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 18px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.08;
+    text-transform: lowercase;
+  }
+
+  .core-dot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    box-shadow: 0 0 28px rgba(34, 211, 238, 0.9);
+  }
+
+  @keyframes fadeCard {
+    from {
+      opacity: 0;
+      transform: translate(var(--shift-x), calc(var(--shift-y) + 24px));
+    }
+    to {
+      opacity: 1;
+      transform: translate(var(--shift-x), var(--shift-y));
+    }
+  }
+</style>
