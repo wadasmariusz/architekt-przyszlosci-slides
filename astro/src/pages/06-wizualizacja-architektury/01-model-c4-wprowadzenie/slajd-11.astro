@@ -1,0 +1,236 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 11 - Diagramy uzupełniające"
+  bgImage="/images/background-5.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.76), rgba(10,14,23,0.88))"
+>
+  <div class="content">
+    <div class="header">
+      <h1 class="title">
+        Diagramy <span class="highlight">uzupełniające</span>
+      </h1>
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <div class="icon-wrap"><i class="ti ti-map-2"></i></div>
+        <h3>System Landscape</h3>
+        <span class="divider"></span>
+        <p>
+          <strong>Wiele systemów</strong> w organizacji i ich powiązania.
+          Przydatny tam, gdzie system <strong>rzadko działa samotnie</strong>.
+        </p>
+        <span class="tag">duże organizacje</span>
+      </article>
+
+      <article class="card">
+        <div class="icon-wrap"><i class="ti ti-cloud-network"></i></div>
+        <h3>Deployment</h3>
+        <span class="divider"></span>
+        <p>
+          Jak elementy logiczne są <strong>uruchomione</strong> w środowisku:
+          load balancery, instancje, regiony chmurowe, klastry.
+        </p>
+        <span class="tag">warstwa infrastruktury</span>
+      </article>
+
+      <article class="card">
+        <div class="icon-wrap"><i class="ti ti-activity"></i></div>
+        <h3>Dynamic</h3>
+        <span class="divider"></span>
+        <p>
+          Zachowanie systemu <strong>w czasie</strong>. Pokazuje jak elementy
+          współpracują w konkretnym scenariuszu.
+        </p>
+        <span class="tag">odpowiednik diagramu sekwencji</span>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1640px;
+    padding: 70px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 36px;
+    width: 100%;
+    margin-bottom: 50px;
+  }
+
+  .card {
+    position: relative;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 22px;
+    padding: 44px 36px 36px;
+    text-align: center;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeUp 0.85s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--cyan-400), transparent);
+    opacity: 0.65;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.45s; }
+  .card:nth-child(2) { animation-delay: 0.6s; }
+  .card:nth-child(3) { animation-delay: 0.75s; }
+
+  .icon-wrap {
+    width: 104px;
+    height: 104px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at center, rgba(34, 211, 238, 0.2), rgba(34, 211, 238, 0.04) 70%);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.18);
+  }
+
+  .icon-wrap i {
+    font-size: 52px;
+    color: var(--cyan-400);
+  }
+
+  .card h3 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f1f5f9;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .divider {
+    display: block;
+    width: 56px;
+    height: 2px;
+    margin: 0 auto 20px;
+    background: linear-gradient(90deg, transparent, var(--cyan-500), transparent);
+    opacity: 0.8;
+  }
+
+  .card p {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #cbd5e1;
+    margin: 0 0 22px;
+  }
+
+  .card p strong {
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  .tag {
+    margin-top: auto;
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    color: var(--cyan-400);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 38px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    border-radius: 18px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #e2e8f0;
+    line-height: 1.35;
+    max-width: 1180px;
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.0s forwards;
+  }
+
+  .callout i {
+    font-size: 32px;
+    color: var(--cyan-400);
+    flex: 0 0 auto;
+  }
+
+  .callout strong {
+    font-weight: 700;
+    color: var(--cyan-400);
+  }
+</style>

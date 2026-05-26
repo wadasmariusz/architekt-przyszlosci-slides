@@ -4,21 +4,23 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie';
 ---
 <SlideLayout
-  title="Slide 07 - Poziom 1: System Context"
-  bgImage="/images/background-1.jpg"
+  title="Slide 10 - Poziom 4: Code (opcjonalny)"
+  bgImage="/images/background-4.jpg"
   bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
 >
   <div class="content">
     <div class="header">
-      <span class="level-chip"><i class="ti ti-zoom-out"></i> Poziom 1</span>
+      <span class="level-chip optional">
+        <i class="ti ti-alert-triangle"></i> Poziom 4 · opcjonalny
+      </span>
       <h1 class="title">
-        System <span class="highlight">Context</span>
+        Code
       </h1>
     </div>
 
     <div class="layout">
       <div class="diagram-wrap">
-        <img class="diagram-img" src={`${slidePath}/images/c4-context.png`} alt="Diagram C4 poziom 1 — System Context" />
+        <img class="diagram-img" src={`${slidePath}/images/c4-code.png`} alt="Diagram C4 poziom 4 — Code" />
       </div>
     </div>
   </div>
@@ -59,6 +61,12 @@ const slidePath = '/slides/06-wizualizacja-architektury/01-model-c4-wprowadzenie
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 16px;
+  }
+
+  .level-chip.optional {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.45);
+    color: #fcd34d;
   }
 
   .level-chip i { font-size: 18px; }

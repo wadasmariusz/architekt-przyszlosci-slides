@@ -1,0 +1,310 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 12 - C4 a UML"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-scale"></i> Porównanie</span>
+      <h1 class="title">
+        C4 a UML — <span class="highlight">nie wojna, lecz uzupełnienie</span>
+      </h1>
+    </div>
+
+    <div class="compare">
+      <article class="col c4">
+        <header>
+          <div class="badge">C4</div>
+          <h2>Lekki, pragmatyczny</h2>
+        </header>
+
+        <div class="row">
+          <div class="label">
+            <i class="ti ti-focus-2"></i>
+            <span>Fokus</span>
+          </div>
+          <p><strong>Struktura systemu</strong> — boxy i strzałki</p>
+        </div>
+
+        <div class="row">
+          <div class="label">
+            <i class="ti ti-bolt"></i>
+            <span>Siła</span>
+          </div>
+          <p>Lekki, pragmatyczny, <strong>szybki start</strong></p>
+        </div>
+
+        <div class="row">
+          <div class="label">
+            <i class="ti ti-clock"></i>
+            <span>Kiedy stosować</span>
+          </div>
+          <p>Codzienne rysowanie <strong>architektury strukturalnej</strong></p>
+        </div>
+      </article>
+
+      <div class="vs"><span>vs</span></div>
+
+      <article class="col uml">
+        <header>
+          <div class="badge">UML</div>
+          <h2>Formalny, precyzyjny</h2>
+        </header>
+
+        <div class="row">
+          <div class="label">
+            <i class="ti ti-focus-2"></i>
+            <span>Fokus</span>
+          </div>
+          <p><strong>Zachowanie</strong> — sekwencje, stany, aktywności</p>
+        </div>
+
+        <div class="row">
+          <div class="label">
+            <i class="ti ti-bolt"></i>
+            <span>Siła</span>
+          </div>
+          <p>Formalny, precyzyjny, <strong>bogata notacja</strong></p>
+        </div>
+
+        <div class="row">
+          <div class="label">
+            <i class="ti ti-clock"></i>
+            <span>Kiedy stosować</span>
+          </div>
+          <p>Maszyny stanów, <strong>diagramy sekwencji</strong>, modelowanie zachowań</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="callout">
+      <i class="ti ti-bulb"></i>
+      <span>
+        Jeśli UML w zespole <strong>działa</strong> — nie rezygnuj.
+        Jeśli <strong>nie działa</strong> — C4 jest lżejszym punktem startu.
+      </span>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1640px;
+    padding: 60px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 60px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 30px;
+    width: 100%;
+    align-items: stretch;
+    margin-bottom: 44px;
+  }
+
+  .col {
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 22px;
+    padding: 30px 34px 34px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .col.c4 {
+    animation-delay: 0.45s;
+    border-color: rgba(34, 211, 238, 0.35);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 4px 30px rgba(34, 211, 238, 0.08);
+  }
+
+  .col.uml {
+    animation-delay: 0.6s;
+    border-color: rgba(148, 163, 184, 0.25);
+  }
+
+  .col header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .badge {
+    align-self: flex-start;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+
+  .col.c4 .badge {
+    background: rgba(34, 211, 238, 0.15);
+    color: var(--cyan-400);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+  }
+
+  .col.uml .badge {
+    background: rgba(148, 163, 184, 0.15);
+    color: #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+  }
+
+  .col h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .row .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .row .label i {
+    font-size: 18px;
+    color: var(--cyan-400);
+  }
+
+  .col.uml .row .label i {
+    color: #cbd5e1;
+  }
+
+  .row p {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #e2e8f0;
+  }
+
+  .row p strong {
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  .vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
+  }
+
+  .vs span {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(10, 14, 23, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 38px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    border-radius: 18px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #e2e8f0;
+    line-height: 1.35;
+    max-width: 1180px;
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.0s forwards;
+  }
+
+  .callout i {
+    font-size: 32px;
+    color: var(--cyan-400);
+    flex: 0 0 auto;
+  }
+
+  .callout strong {
+    font-weight: 700;
+    color: var(--cyan-400);
+  }
+</style>
