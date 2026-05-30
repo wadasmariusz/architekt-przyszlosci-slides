@@ -1,0 +1,254 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import c4ComponentsDarkImg from './images/c4-Components-dark.png';
+---
+<SlideLayout
+  title="Slide 13 - Granica analizowanego kontenera"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="s13-content">
+    <div class="s13-header">
+      <span class="s13-eyebrow"><i class="ti ti-focus-2"></i>Component · Level 3</span>
+      <h1 class="s13-title">
+        Granica analizowanego <span class="s13-highlight">kontenera</span>
+      </h1>
+    </div>
+
+    <div class="s13-main">
+      <section class="s13-diagram-card" style="--delay:0.34s;">
+        <Image
+          class="s13-diagram-img"
+          src={c4ComponentsDarkImg}
+          format="png"
+          alt="Diagram komponentów API Application z granicą kontenera"
+          loading="eager"
+        />
+      </section>
+
+      <aside class="s13-side">
+        <article class="s13-list-card s13-inside-list" style="--delay:0.52s;">
+          <h2><i class="ti ti-check"></i>Wewnątrz API Application</h2>
+          <ul>
+            <li>kontrolery API</li>
+            <li>komponent bezpieczeństwa</li>
+            <li>fasady integracyjne</li>
+            <li>komponenty aplikacyjne</li>
+          </ul>
+        </article>
+
+        <article class="s13-list-card s13-outside-list" style="--delay:0.68s;">
+          <h2><i class="ti ti-world"></i>Poza API Application</h2>
+          <ul>
+            <li>aplikacja webowa i mobilna</li>
+            <li>system mainframe</li>
+            <li>baza danych</li>
+          </ul>
+        </article>
+      </aside>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .s13-content {
+    max-width: 1760px;
+    padding: 38px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .s13-header {
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .s13-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+
+  .s13-eyebrow i {
+    font-size: 18px;
+  }
+
+  .s13-title {
+    margin: 0 0 10px;
+    color: #f8fafc;
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+  }
+
+  .s13-highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s13-subtitle {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .s13-main {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .s13-diagram-card,
+  .s13-list-card {
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    opacity: 0;
+    transform: translateY(14px);
+    animation: fadeUp 0.78s ease-out forwards;
+    animation-delay: var(--delay, 0.34s);
+  }
+
+  .s13-diagram-card {
+    padding: 14px;
+    text-align: left;
+  }
+
+  .s13-diagram-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.46);
+    color: var(--cyan-400);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .s13-diagram-img {
+    width: 100%;
+    max-height: 730px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.78), rgba(15, 23, 42, 0.72));
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    box-shadow: 0 12px 34px rgba(2, 6, 23, 0.32);
+    padding: 10px;
+  }
+
+  .s13-side {
+    display: grid;
+    gap: 14px;
+  }
+
+  .s13-list-card {
+    text-align: left;
+    padding: 18px 16px;
+  }
+
+  .s13-list-card h2 {
+    margin: 0 0 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+    color: #f8fafc;
+    font-weight: 700;
+  }
+
+  .s13-inside-list h2 i {
+    color: var(--cyan-400);
+  }
+
+  .s13-outside-list h2 i {
+    color: #facc15;
+  }
+
+  .s13-list-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .s13-list-card li {
+    border-radius: 10px;
+    padding: 12px 12px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: rgba(17, 24, 39, 0.58);
+    color: #e2e8f0;
+    font-size: 23px;
+    line-height: 1.28;
+    font-weight: 400;
+  }
+
+  .s13-inside-list {
+    border-color: rgba(34, 211, 238, 0.34);
+  }
+
+  .s13-inside-list li {
+    border-color: rgba(34, 211, 238, 0.25);
+    background: rgba(8, 47, 73, 0.3);
+  }
+
+  .s13-outside-list {
+    border-color: rgba(250, 204, 21, 0.32);
+  }
+
+  .s13-outside-list li {
+    border-color: rgba(250, 204, 21, 0.24);
+    background: rgba(69, 41, 12, 0.26);
+  }
+
+  @media (max-width: 1500px) {
+    .s13-title {
+      font-size: 52px;
+    }
+
+    .s13-subtitle {
+      font-size: 18px;
+    }
+
+    .s13-main {
+      grid-template-columns: 1fr;
+    }
+
+    .s13-side {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

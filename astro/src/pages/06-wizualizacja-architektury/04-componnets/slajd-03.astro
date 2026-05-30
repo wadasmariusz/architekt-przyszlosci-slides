@@ -1,0 +1,290 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 03 - Czym jest komponent?"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-puzzle"></i>Component · Level 3</span>
+      <h1 class="title">
+        Czym jest <span class="highlight">komponent?</span>
+      </h1>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon"><i class="ti ti-vector-bezier"></i></div>
+        <h3>Logiczna część aplikacji</h3>
+        <p>Component pokazuje, z jakich głównych części składa się aplikacja, serwis lub inny kontener.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon"><i class="ti ti-target"></i></div>
+        <h3>Konkretna odpowiedzialność</h3>
+        <p>Każdy component ma określoną rolę, np. obsługę logowania, płatności, zamówień albo komunikacji z bazą danych.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon"><i class="ti ti-users-group"></i></div>
+        <h3>Pokazuje zależności i komunikację</h3>
+        <p>Diagram componentów przedstawia, jak poszczególne części współpracują ze sobą i z innymi systemami.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <span class="examples-label">Przykłady</span>
+      <div class="groups">
+        <div class="group">
+          <header><i class="ti ti-briefcase"></i><span>Logika biznesowa</span></header>
+          <ul>
+            <li><i class="ti ti-calendar-event"></i>Moduł rezerwacji</li>
+            <li><i class="ti ti-credit-card"></i>Moduł płatności</li>
+          </ul>
+        </div>
+        <div class="group">
+          <header><i class="ti ti-arrows-exchange"></i><span>Wejście / wyjście</span></header>
+          <ul>
+            <li><i class="ti ti-api"></i>Kontroler API</li>
+            <li><i class="ti ti-bolt"></i>Handler komend</li>
+          </ul>
+        </div>
+        <div class="group">
+          <header><i class="ti ti-plug-connected"></i><span>Integracje &amp; dane</span></header>
+          <ul>
+            <li><i class="ti ti-arrows-right-left"></i>Adapter</li>
+            <li><i class="ti ti-database"></i>Repozytorium</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1700px;
+    padding: 48px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 18px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 16px;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 24px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+
+  .pillar {
+    position: relative;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(34, 211, 238, 0.32);
+    border-radius: 20px;
+    padding: 28px 28px 26px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease-out forwards;
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.08), 0 12px 40px rgba(8, 145, 178, 0.12);
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--cyan-400), transparent);
+  }
+
+  .pillar:nth-child(1) { animation-delay: 0.35s; }
+  .pillar:nth-child(2) { animation-delay: 0.5s; }
+  .pillar:nth-child(3) { animation-delay: 0.65s; }
+
+  .pillar-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 18px;
+  }
+
+  .pillar h3 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+
+  .pillar p {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 300;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+
+  .examples {
+    width: 100%;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.85s forwards;
+  }
+
+  .examples-label {
+    display: inline-block;
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .group {
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+    padding: 20px 22px;
+    text-align: left;
+  }
+
+  .group header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .group header i {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    color: #cbd5e1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex: 0 0 auto;
+  }
+
+  .group header span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+  }
+
+  .group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .group ul li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #e2e8f0;
+    line-height: 1.3;
+  }
+
+  .group ul li i {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  @media (max-width: 1500px) {
+    .pillars { grid-template-columns: 1fr; }
+    .groups { grid-template-columns: 1fr; }
+    .title { font-size: 64px; }
+  }
+</style>

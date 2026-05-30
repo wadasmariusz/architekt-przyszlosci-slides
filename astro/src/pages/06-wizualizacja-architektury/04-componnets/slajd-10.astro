@@ -1,0 +1,234 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 10 - Wartość dla zespołu technicznego"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="s10-content">
+    <div class="s10-header">
+      <span class="s10-eyebrow"><i class="ti ti-users-group"></i>Component · Level 3</span>
+      <h1 class="s10-title">
+        Wartość dla <span class="s10-highlight">zespołu</span>
+      </h1>
+    </div>
+
+    <div class="s10-audience">
+      <span class="s10-audience-label">Dla kogo?</span>
+      <div class="s10-audience-chips">
+        <span class="s10-chip"><i class="ti ti-building-arch"></i> Architekt</span>
+        <span class="s10-chip"><i class="ti ti-crown"></i> Tech Lead</span>
+        <span class="s10-chip"><i class="ti ti-code"></i> Programista</span>
+      </div>
+    </div>
+
+    <section class="s10-grid">
+      <article class="s10-card" style="--delay:0.36s;">
+        <div class="s10-card-icon"><i class="ti ti-target-arrow"></i></div>
+        <h3>Gdzie jest odpowiedzialność?</h3>
+        <p>Który komponent realizuje konkretną część logiki biznesowej.</p>
+      </article>
+
+      <article class="s10-card" style="--delay:0.50s;">
+        <div class="s10-card-icon"><i class="ti ti-git-merge"></i></div>
+        <h3>Kto z kim współpracuje?</h3>
+        <p>Jakie komponenty razem realizują jedną funkcję.</p>
+      </article>
+
+      <article class="s10-card" style="--delay:0.64s;">
+        <div class="s10-card-icon"><i class="ti ti-plug-connected"></i></div>
+        <h3>Gdzie są integracje?</h3>
+        <p>W których miejscach aplikacja komunikuje się z systemami zewnętrznymi.</p>
+      </article>
+
+      <article class="s10-card" style="--delay:0.78s;">
+        <div class="s10-card-icon"><i class="ti ti-network"></i></div>
+        <h3>Które zależności są kluczowe?</h3>
+        <p>Które relacje mają znaczenie architektoniczne i wpływają na zmiany.</p>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .s10-content {
+    max-width: 1760px;
+    padding: 48px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .s10-header {
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .s10-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+
+  .s10-eyebrow i { font-size: 18px; }
+
+  .s10-title {
+    margin: 0 0 12px;
+    color: #f8fafc;
+    font-size: 66px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+  }
+
+  .s10-highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s10-subtitle {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .s10-audience {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .s10-audience-label {
+    color: #94a3b8;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .s10-audience-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .s10-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    color: #cbd5e1;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .s10-chip i {
+    color: var(--cyan-400);
+    font-size: 16px;
+  }
+
+  .s10-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    margin-bottom: 18px;
+    margin-top: 32px;
+  }
+
+  .s10-card {
+    text-align: left;
+    padding: 18px 18px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.75s ease-out forwards;
+    animation-delay: var(--delay, 0.36s);
+  }
+
+  .s10-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(34, 211, 238, 0.13);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .s10-card h3 {
+    margin: 0 0 7px;
+    color: #f8fafc;
+    font-size: 30px;
+    line-height: 1.16;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+  }
+
+  .s10-card p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 19px;
+    line-height: 1.38;
+    font-weight: 300;
+  }
+
+  .s10-note {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(17, 24, 39, 0.58);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    color: #cbd5e1;
+    font-size: 18px;
+    line-height: 1.38;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.92s forwards;
+  }
+
+  @media (max-width: 1500px) {
+    .s10-title { font-size: 54px; }
+    .s10-subtitle { font-size: 19px; }
+    .s10-grid { grid-template-columns: 1fr; }
+  }
+</style>

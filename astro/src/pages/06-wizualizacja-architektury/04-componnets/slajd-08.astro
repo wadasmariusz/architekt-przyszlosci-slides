@@ -1,0 +1,323 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import c4ComponentsDarkZoomImg from './images/c4-Components-dark-zoom.png';
+---
+<SlideLayout
+  title="Slide 08 - Struktura API Application"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="s8-content">
+    <div class="s8-header">
+      <span class="s8-eyebrow"><i class="ti ti-hierarchy-3"></i>Component · Level 3</span>
+      <h1 class="s8-title">
+        Struktura <span class="s8-highlight">API Application</span>
+      </h1>
+    </div>
+
+    <div class="s8-diagram">
+      <Image
+        class="s8-diagram-img"
+        src={c4ComponentsDarkZoomImg}
+        format="png"
+        alt="Diagram komponentów API Application"
+        loading="eager"
+      />
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .s8-content {
+    max-width: 1760px;
+    padding: 40px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .s8-header {
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .s8-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+
+  .s8-eyebrow i { font-size: 18px; }
+
+  .s8-title {
+    margin: 0 0 12px;
+    color: #f8fafc;
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.06;
+  }
+
+  .s8-highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s8-subtitle {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 300;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  .s8-diagram {
+    width: 100%;
+    max-width: 1640px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.4s forwards;
+  }
+
+  .s8-diagram-img {
+    width: 100%;
+    max-height: 860px;
+    object-fit: contain;
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 14px 38px rgba(2, 6, 23, 0.35);
+    padding: 12px;
+  }
+
+  .s8-boundary {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    width: 1210px;
+    height: 500px;
+    background: rgba(17, 24, 39, 0.56);
+    border: 1px dashed rgba(148, 163, 184, 0.45);
+    border-radius: 18px;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .s8-boundary-label {
+    position: absolute;
+    top: 12px;
+    left: 18px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.14);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+  }
+
+  .s8-role-chips {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .s8-chip {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+  }
+
+  .s8-component {
+    position: absolute;
+    text-align: left;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: rgba(15, 23, 42, 0.86);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    box-shadow: 0 10px 28px rgba(2, 6, 23, 0.25);
+  }
+
+  .s8-component h3 {
+    margin: 0 0 4px;
+    color: #f8fafc;
+    font-size: 22px;
+    line-height: 1.15;
+    letter-spacing: -0.3px;
+  }
+
+  .s8-component p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .s8-kind {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+
+  .s8-controller .s8-kind {
+    background: rgba(34, 211, 238, 0.16);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+  }
+
+  .s8-security .s8-kind {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.42);
+    color: #34d399;
+  }
+
+  .s8-integration .s8-kind {
+    background: rgba(250, 204, 21, 0.14);
+    border: 1px solid rgba(250, 204, 21, 0.4);
+    color: #facc15;
+  }
+
+  .s8-controller {
+    width: 320px;
+    border-color: rgba(34, 211, 238, 0.34);
+  }
+
+  .s8-security {
+    width: 260px;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-color: rgba(16, 185, 129, 0.36);
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.14), 0 12px 30px rgba(5, 150, 105, 0.16);
+  }
+
+  .s8-integration {
+    width: 270px;
+    border-color: rgba(250, 204, 21, 0.34);
+  }
+
+  .s8-signin { left: 56px; top: 96px; }
+  .s8-reset { left: 56px; top: 226px; }
+  .s8-accounts { left: 56px; top: 356px; }
+  .s8-security { left: 430px; top: 176px; }
+  .s8-email { left: 752px; top: 146px; }
+  .s8-mainframe { left: 752px; top: 306px; }
+
+  .s8-external {
+    position: absolute;
+    left: 1260px;
+    width: 320px;
+    text-align: left;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: rgba(15, 23, 42, 0.74);
+    border: 1px dashed rgba(148, 163, 184, 0.5);
+    z-index: 2;
+  }
+
+  .s8-mail-system { top: 176px; }
+  .s8-mainframe-system { top: 336px; }
+
+  .s8-external-kind {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.12);
+    border: 1px solid rgba(148, 163, 184, 0.36);
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+  }
+
+  .s8-external h4 {
+    margin: 0;
+    color: #e2e8f0;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.25;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .s8-external h4 i {
+    color: #94a3b8;
+    font-size: 20px;
+  }
+
+  .s8-connections {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .s8-line {
+    fill: none;
+    stroke-width: 2;
+    marker-end: url(#s8-arrow);
+  }
+
+  .s8-line-internal {
+    stroke: rgba(34, 211, 238, 0.84);
+  }
+
+  .s8-line-external {
+    stroke: rgba(148, 163, 184, 0.82);
+  }
+
+  .s8-label {
+    fill: #67e8f9;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 1500px) {
+    .s8-title { font-size: 52px; }
+    .s8-subtitle { font-size: 18px; }
+    .s8-boundary { transform: scale(0.9); transform-origin: top left; }
+    .s8-external { transform: scale(0.9); transform-origin: top left; }
+    .s8-connections { transform: scale(0.9); transform-origin: top left; }
+  }
+</style>

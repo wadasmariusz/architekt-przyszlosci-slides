@@ -1,0 +1,294 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 17 - Wsparcie onboardingu i komunikacji"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-users"></i>Component · Level 3</span>
+      <h1 class="title">
+        Wsparcie <span class="highlight">onboardingu i komunikacji</span>
+      </h1>
+    </div>
+
+    <div class="benefits">
+      <div class="grid">
+        <div class="benefit">
+          <div class="b-icon"><i class="ti ti-user-plus"></i></div>
+          <h4>Onboarding</h4>
+          <p>Nowe osoby w zespole szybciej budują mapę aplikacji.</p>
+        </div>
+        <div class="benefit">
+          <div class="b-icon"><i class="ti ti-messages"></i></div>
+          <h4>Komunikacja</h4>
+          <p>Architekt, tech lead i programiści rozmawiają tym samym językiem.</p>
+        </div>
+        <div class="benefit">
+          <div class="b-icon"><i class="ti ti-affiliate"></i></div>
+          <h4>Analiza wpływu zmian</h4>
+          <p>Widać, którego obszaru dotknie modyfikacja i z czym koliduje.</p>
+        </div>
+        <div class="benefit">
+          <div class="b-icon"><i class="ti ti-list-check"></i></div>
+          <h4>Rozmowa o odpowiedzialnościach</h4>
+          <p>Jasne nazwy i granice porządkują dyskusję o zależnościach.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1760px;
+    padding: 44px 3rem 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 70px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 14px;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 21px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin: 0 auto;
+    line-height: 1.4;
+    max-width: 1300px;
+  }
+
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: stretch;
+    gap: 18px;
+    width: 100%;
+    margin-bottom: 36px;
+  }
+
+  .step {
+    position: relative;
+    padding: 22px 24px;
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    text-align: left;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.8s ease-out forwards;
+    overflow: hidden;
+  }
+
+  .step:nth-child(1) { animation-delay: 0.35s; }
+  .step:nth-child(3) { animation-delay: 0.55s; }
+  .step:nth-child(5) { animation-delay: 0.75s; }
+
+  .step.highlight-step {
+    border-color: rgba(34, 211, 238, 0.5);
+    background: rgba(8, 47, 73, 0.4);
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.14), 0 14px 44px rgba(8, 145, 178, 0.18);
+  }
+
+  .step.highlight-step::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--cyan-400), transparent);
+  }
+
+  .step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    margin-bottom: 14px;
+  }
+
+  .step-label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 8px;
+  }
+
+  .step h3 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+
+  .step p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 300;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.95s forwards;
+  }
+
+  .arrow-line {
+    width: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.35), var(--cyan-400));
+  }
+
+  .arrow i {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .benefits {
+    width: 100%;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.15s forwards;
+  }
+
+  .benefits-label {
+    display: inline-block;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+    gap: 24px;
+  }
+
+  .benefit {
+    padding: 32px 30px;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 16px;
+    text-align: left;
+  }
+
+  .b-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 18px;
+  }
+
+  .benefit h4 {
+    margin: 0 0 12px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.2px;
+    line-height: 1.15;
+  }
+
+  .benefit p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    color: #cbd5e1;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 1500px) {
+    .flow { grid-template-columns: 1fr; }
+    .arrow { transform: rotate(90deg); }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .benefit { padding: 26px 24px; }
+    .benefit h4 { font-size: 26px; }
+    .benefit p { font-size: 19px; }
+    .b-icon {
+      width: 52px;
+      height: 52px;
+      font-size: 24px;
+    }
+    .title { font-size: 58px; }
+  }
+</style>

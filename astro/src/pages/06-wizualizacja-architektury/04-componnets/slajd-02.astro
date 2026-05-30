@@ -1,0 +1,122 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import c4ComponentsZoomImg from './images/c4-componnets-zoom.png';
+---
+<SlideLayout
+  title="Slide 02 - Otwieramy czarną skrzynkę"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="eyebrow"><i class="ti ti-box-off"></i>Component · Level 3</span>
+      <h1 class="title">
+        Otwieramy <span class="highlight">czarną skrzynkę</span>
+      </h1>
+      <p class="subtitle">
+        Wybieramy jeden kontener i zaglądamy do jego środka.
+      </p>
+    </div>
+
+    <div class="diagram">
+      <Image
+        class="diagram-img"
+        src={c4ComponentsZoomImg}
+        format="png"
+        alt="Zoom do komponentów wewnątrz wybranego kontenera"
+        loading="eager"
+      />
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1760px;
+    padding: 48px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 18px;
+  }
+
+  .eyebrow i { font-size: 18px; }
+
+  .title {
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 18px;
+    color: #f8fafc;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 24px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .diagram {
+    position: relative;
+    width: 100%;
+    max-height: 760px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.4s forwards;
+  }
+
+  .diagram-img {
+    width: 100%;
+    height: auto;
+    max-height: 760px;
+    object-fit: contain;
+    border-radius: 16px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 18px 48px rgba(2, 6, 23, 0.45);
+    padding: 18px;
+  }
+
+  @media (max-width: 1500px) {
+    .title { font-size: 64px; }
+  }
+</style>

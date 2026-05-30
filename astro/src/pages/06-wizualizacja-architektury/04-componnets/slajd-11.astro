@@ -1,0 +1,337 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 11 - Relacje między komponentami"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="s11-content">
+    <div class="s11-header">
+      <span class="s11-eyebrow"><i class="ti ti-git-merge"></i>Component · Level 3</span>
+      <h1 class="s11-title">
+        Relacje między <span class="s11-highlight">komponentami</span>
+      </h1>
+    </div>
+
+    <div class="s11-layout">
+      <section class="s11-principles">
+        <h2>Relacje powinny pokazywać:</h2>
+        <ul>
+          <li style="--delay:0.34s;">
+            <span class="s11-icon"><i class="ti ti-player-play"></i></span>
+            <span><strong>Kto inicjuje operację</strong> i od czego zaczyna się przepływ.</span>
+          </li>
+          <li style="--delay:0.46s;">
+            <span class="s11-icon"><i class="ti ti-hand-click"></i></span>
+            <span><strong>Który komponent wykorzystuje inny</strong> i w jakim celu.</span>
+          </li>
+          <li style="--delay:0.58s;">
+            <span class="s11-icon"><i class="ti ti-database-search"></i></span>
+            <span><strong>Gdzie jest odczyt lub zapis danych</strong>.</span>
+          </li>
+          <li style="--delay:0.70s;">
+            <span class="s11-icon"><i class="ti ti-plug-connected"></i></span>
+            <span><strong>Gdzie przebiega integracja z systemem zewnętrznym</strong>.</span>
+          </li>
+          <li style="--delay:0.82s;">
+            <span class="s11-icon"><i class="ti ti-bulb"></i></span>
+            <span><strong>Jaki jest sens biznesowy interakcji</strong>.</span>
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .s11-content {
+    max-width: 1760px;
+    padding: 44px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .s11-header {
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .s11-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+
+  .s11-eyebrow i { font-size: 18px; }
+
+  .s11-title {
+    margin: 0 0 12px;
+    color: #f8fafc;
+    font-size: 66px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+  }
+
+  .s11-highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s11-subtitle {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .s11-layout {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    align-items: stretch;
+    max-width: 1660px;
+  }
+
+  .s11-principles,
+  .s11-example {
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+  }
+
+  .s11-principles {
+    text-align: left;
+    padding: 26px 24px;
+  }
+
+  .s11-principles h2 {
+    margin: 0 0 18px;
+    font-size: 36px;
+    color: #f1f5f9;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    line-height: 1.1;
+    text-align: left;
+  }
+
+  .s11-principles ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .s11-principles li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 18px;
+    border-radius: 14px;
+    background: rgba(17, 24, 39, 0.56);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    opacity: 0;
+    transform: translateY(14px);
+    animation: fadeUp 0.72s ease-out forwards;
+    animation-delay: var(--delay, 0.34s);
+  }
+
+  .s11-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.13);
+    border: 1px solid rgba(34, 211, 238, 0.44);
+    color: var(--cyan-400);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex: 0 0 auto;
+    margin-top: 2px;
+  }
+
+  .s11-principles li span:last-child {
+    color: #cbd5e1;
+    font-size: 25px;
+    line-height: 1.28;
+    font-weight: 350;
+  }
+
+  .s11-principles li strong {
+    color: #f8fafc;
+    font-weight: 700;
+  }
+
+  .s11-example {
+    text-align: left;
+    padding: 18px 16px;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: fadeUp 0.78s ease-out forwards;
+    animation-delay: var(--delay, 0.48s);
+  }
+
+  .s11-flow-label {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.44);
+    color: var(--cyan-400);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .s11-flow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr) 56px minmax(0, 1fr);
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .s11-node {
+    border-radius: 12px;
+    padding: 12px 12px;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    background: rgba(17, 24, 39, 0.58);
+  }
+
+  .s11-internal {
+    border-color: rgba(34, 211, 238, 0.34);
+  }
+
+  .s11-external {
+    border-style: dashed;
+  }
+
+  .s11-focus {
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.18), 0 8px 24px rgba(8, 145, 178, 0.16);
+  }
+
+  .s11-node-kind {
+    display: inline-block;
+    margin-bottom: 7px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    background: rgba(148, 163, 184, 0.12);
+    border: 1px solid rgba(148, 163, 184, 0.34);
+  }
+
+  .s11-internal .s11-node-kind {
+    color: var(--cyan-400);
+    background: rgba(34, 211, 238, 0.12);
+    border-color: rgba(34, 211, 238, 0.42);
+  }
+
+  .s11-node h3 {
+    margin: 0 0 5px;
+    color: #f8fafc;
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .s11-node p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.35;
+    font-weight: 300;
+  }
+
+  .s11-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: var(--cyan-400);
+  }
+
+  .s11-arrow i {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .s11-arrow-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .s11-note {
+    margin: 0;
+    border-radius: 12px;
+    padding: 12px 12px;
+    background: rgba(17, 24, 39, 0.56);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    color: #cbd5e1;
+    font-size: 16px;
+    line-height: 1.36;
+    font-weight: 300;
+  }
+
+  .s11-note strong {
+    color: #f8fafc;
+    font-weight: 700;
+  }
+
+  @media (max-width: 1500px) {
+    .s11-title { font-size: 54px; }
+    .s11-subtitle { font-size: 19px; }
+    .s11-layout { grid-template-columns: 1fr; }
+    .s11-principles h2 { font-size: 30px; }
+    .s11-principles li span:last-child { font-size: 21px; }
+    .s11-flow {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .s11-arrow {
+      flex-direction: row;
+      justify-content: flex-start;
+      padding-left: 4px;
+    }
+    .s11-arrow i {
+      transform: rotate(90deg);
+    }
+  }
+</style>

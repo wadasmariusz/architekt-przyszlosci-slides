@@ -1,0 +1,178 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 07 - Cel diagramu komponentów"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="s7-content">
+    <header class="s7-header">
+      <span class="s7-eyebrow"><i class="ti ti-target-arrow"></i>Component · Level 3</span>
+      <h1 class="s7-title">
+        Cel diagramu <span class="s7-highlight">komponentów</span>
+      </h1>
+      <p class="s7-subtitle">Rozbicie jednego kontenera na komponenty</p>
+    </header>
+
+    <section class="s7-core">
+      <span class="s7-core-label">Diagram komponentów pokazuje</span>
+
+      <div class="s7-grid">
+        <article class="s7-card" style="--delay: 0.34s;">
+          <h3>Komponenty</h3>
+          <p>Komponenty wewnątrz jednego kontenera</p>
+        </article>
+        <article class="s7-card" style="--delay: 0.46s;">
+          <h3>Odpowiedzialności</h3>
+          <p>Jaką odpowiedzialność posiada każdy komponent.</p>
+        </article>
+        <article class="s7-card" style="--delay: 0.58s;">
+          <h3>Relacje</h3>
+          <p>Istotne zależności i punkty integracji.</p>
+        </article>
+        <article class="s7-card" style="--delay: 0.70s;">
+          <h3>Detale techniczne</h3>
+          <p>Wybrane szczegóły technologiczne, jeśli pomagają zrozumieć architekturę.</p>
+        </article>
+      </div>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .s7-content {
+    max-width: 1760px;
+    padding: 46px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .s7-header {
+    margin-bottom: 26px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .s7-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+
+  .s7-eyebrow i { font-size: 18px; }
+
+  .s7-title {
+    margin: 0 0 12px;
+    color: #f8fafc;
+    font-size: 70px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.06;
+  }
+
+  .s7-highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s7-subtitle {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1.35;
+    color: #cbd5e1;
+  }
+
+  .s7-core {
+    width: 100%;
+    max-width: 1680px;
+  }
+
+  .s7-core-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 18px;
+    margin-bottom: 18px;
+    border-radius: 999px;
+    color: var(--cyan-400);
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.44);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .s7-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .s7-card {
+    text-align: left;
+    padding: 24px 24px 22px;
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.75s ease-out forwards;
+    animation-delay: var(--delay, 0.34s);
+    min-height: 180px;
+  }
+
+  .s7-num {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #7dd3fc;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .s7-card h3 {
+    margin: 0 0 10px;
+    font-size: 42px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.06;
+    letter-spacing: -0.8px;
+  }
+
+  .s7-card p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    color: #cbd5e1;
+    line-height: 1.28;
+  }
+
+  @media (max-width: 1500px) {
+    .s7-title { font-size: 58px; }
+    .s7-subtitle { font-size: 20px; }
+    .s7-grid { grid-template-columns: 1fr; }
+    .s7-card h3 { font-size: 36px; }
+    .s7-card p { font-size: 21px; }
+  }
+</style>

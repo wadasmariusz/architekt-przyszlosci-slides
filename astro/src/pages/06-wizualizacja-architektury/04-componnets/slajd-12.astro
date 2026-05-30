@@ -2,72 +2,75 @@
 import SlideLayout from '../../../layouts/SlideLayout.astro';
 ---
 <SlideLayout
-  title="Slide 12 - Test jednego zdania"
-  bgImage="/images/background-6.jpg"
-  bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
+  title="Slide 12 - Opisuj intencję, nie tylko protokół"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
 >
-  <div class="st12">
-    <header class="st12-header">
-      <span class="st12-eyebrow"><i class="ti ti-quote"></i> Heurystyka opisu kontenera</span>
-      <h1 class="st12-title">
-        Test <span class="st12-title-highlight">jednego zdania</span>
+  <div class="s12">
+    <header class="s12-header">
+      <span class="s12-eyebrow"><i class="ti ti-message-2-cog"></i> Component · Level 3</span>
+      <h1 class="s12-title">
+        Opisuj <span class="s12-title-highlight">intencję</span>, nie tylko protokół
       </h1>
+      <p class="s12-subtitle">
+        Protokół wyjaśnia jak, ale to intencja wyjaśnia po co istnieje zależność między komponentami.
+      </p>
     </header>
 
-    <section class="st12-meter" aria-label="Miernik długości opisu">
-      <div class="st12-meter-track">
-        <span class="st12-meter-segment st12-meter-good"><i class="ti ti-check"></i> 1 zdanie</span>
-        <span class="st12-meter-segment st12-meter-ok"><i class="ti ti-alert-triangle"></i> 2 zdania max</span>
-        <span class="st12-meter-segment st12-meter-risk"><i class="ti ti-x"></i> 3+ = ryzyko mieszania poziomów</span>
+    <section class="s12-meter" aria-label="Skala jakości opisu relacji">
+      <div class="s12-meter-track">
+        <span class="s12-meter-segment s12-meter-weak"><i class="ti ti-x"></i> Sam protokół</span>
+        <span class="s12-meter-segment s12-meter-mid"><i class="ti ti-alert-triangle"></i> Protokół + akcja</span>
+        <span class="s12-meter-segment s12-meter-good"><i class="ti ti-check"></i> Intencja biznesowa</span>
       </div>
     </section>
 
-    <section class="st12-flow">
-      <article class="st12-card st12-card-bad">
-        <header class="st12-card-head">
-          <span class="st12-badge st12-badge-bad"><i class="ti ti-x"></i> Słaba etykieta</span>
-          <h2>OrderService</h2>
+    <section class="s12-flow">
+      <article class="s12-card s12-card-weak">
+        <header class="s12-card-head">
+          <span class="s12-badge s12-badge-weak"><i class="ti ti-x"></i> Słabszy opis</span>
+          <h2>REST / JSON</h2>
         </header>
-        <p class="st12-lead">&quot;Obsługuje zamówienia.&quot;</p>
-        <ul class="st12-gaps">
-          <li><i class="ti ti-circle-dashed"></i> Nie wiadomo dla kogo</li>
-          <li><i class="ti ti-circle-dashed"></i> Brak informacji o integracjach</li>
-          <li><i class="ti ti-circle-dashed"></i> Brak informacji o danych</li>
+        <p class="s12-lead">&quot;Controller wywołuje Facade.&quot;</p>
+        <ul class="s12-gaps">
+          <li><i class="ti ti-circle-dashed"></i> Nie wiadomo, jaki cel biznesowy</li>
+          <li><i class="ti ti-circle-dashed"></i> Brak informacji o wyniku operacji</li>
+          <li><i class="ti ti-circle-dashed"></i> Nie wiadomo, kto inicjuje i dlaczego</li>
         </ul>
       </article>
 
-      <div class="st12-refine">
-        <div class="st12-refine-icon"><i class="ti ti-arrow-big-right-lines"></i></div>
-        <p>Doprecyzuj odpowiedzialność</p>
+      <div class="s12-refine">
+        <div class="s12-refine-icon"><i class="ti ti-arrow-big-right-lines"></i></div>
+        <p>Dodaj intencję relacji</p>
       </div>
 
-      <article class="st12-card st12-card-good">
-        <header class="st12-card-head">
-          <span class="st12-badge st12-badge-good"><i class="ti ti-check"></i> Dobra etykieta</span>
-          <h2>Orders API</h2>
+      <article class="s12-card s12-card-good">
+        <header class="s12-card-head">
+          <span class="s12-badge s12-badge-good"><i class="ti ti-check"></i> Lepszy opis</span>
+          <h2>Pobierz podsumowanie rachunków</h2>
         </header>
-        <p class="st12-good-copy">
-          Obsługuje składanie i śledzenie zamówień dla frontu e-commerce,
-          publikuje zdarzenia domenowe i zapisuje dane w bazie zamówień.
+        <p class="s12-good-copy">
+          Accounts Summary Controller pobiera podsumowanie rachunków klienta
+          z Mainframe Facade, aby pokazać saldo i ostatnie operacje w bankowości online.
         </p>
-        <div class="st12-tags">
-          <span><i class="ti ti-users"></i> Dla: Front e-commerce</span>
-          <span><i class="ti ti-plug-connected"></i> Integracje: Event bus</span>
-          <span><i class="ti ti-database"></i> Dane: Orders DB</span>
+        <div class="s12-tags">
+          <span><i class="ti ti-player-play"></i> Kto inicjuje: Controller</span>
+          <span><i class="ti ti-target-arrow"></i> Cel: Widok klienta</span>
+          <span><i class="ti ti-database-search"></i> Wynik: saldo + operacje</span>
         </div>
       </article>
     </section>
 
-    <aside class="st12-template">
-      <div class="st12-template-head">
+    <aside class="s12-template">
+      <div class="s12-template-head">
         <i class="ti ti-template"></i>
-        <h3>Szablon 1-2 zdań</h3>
+        <h3>Szablon opisu relacji</h3>
       </div>
-      <div class="st12-chips">
-        <span><i class="ti ti-bolt"></i> Co robi</span>
-        <span><i class="ti ti-user"></i> Dla kogo</span>
-        <span><i class="ti ti-arrows-exchange"></i> Z czym rozmawia</span>
-        <span><i class="ti ti-stack-2"></i> Gdzie trzyma dane</span>
+      <div class="s12-chips">
+        <span><i class="ti ti-bolt"></i> Czasownik intencji</span>
+        <span><i class="ti ti-user"></i> Kto i dla kogo</span>
+        <span><i class="ti ti-stack-2"></i> Jaki wynik</span>
+        <span><i class="ti ti-plug-connected"></i> Protokół (opcjonalnie)</span>
       </div>
     </aside>
   </div>
@@ -78,23 +81,23 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     justify-content: flex-start;
   }
 
-  .st12 {
+  .s12 {
     width: 100%;
     max-width: 1760px;
-    padding: 46px 2.4rem 0;
+    padding: 44px 2.4rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
   }
 
-  .st12-header {
+  .s12-header {
     text-align: center;
     opacity: 0;
     animation: fadeUp 0.75s ease-out 0.15s forwards;
   }
 
-  .st12-eyebrow {
+  .s12-eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -107,36 +110,44 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 3px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
-  .st12-eyebrow i { font-size: 18px; }
+  .s12-eyebrow i { font-size: 18px; }
 
-  .st12-title {
-    margin: 0;
-    font-size: 76px;
-    font-weight: 800;
-    line-height: 1.04;
-    letter-spacing: -1px;
+  .s12-title {
+    margin: 0 0 10px;
     color: #f8fafc;
+    font-size: 68px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
   }
 
-  .st12-title-highlight {
+  .s12-title-highlight {
     background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .st12-meter {
+  .s12-subtitle {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.38;
+  }
+
+  .s12-meter {
     width: 100%;
     opacity: 0;
     animation: fadeUp 0.75s ease-out 0.3s forwards;
   }
 
-  .st12-meter-track {
+  .s12-meter-track {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.35fr;
+    grid-template-columns: 1fr 1fr 1.1fr;
     border-radius: 14px;
     overflow: hidden;
     border: 1px solid rgba(148, 163, 184, 0.25);
@@ -144,7 +155,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     box-shadow: 0 16px 42px rgba(2, 6, 23, 0.35);
   }
 
-  .st12-meter-segment {
+  .s12-meter-segment {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -156,28 +167,26 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     border-right: 1px solid rgba(148, 163, 184, 0.2);
   }
 
-  .st12-meter-segment i { font-size: 19px; }
+  .s12-meter-segment:last-child { border-right: 0; }
 
-  .st12-meter-segment:last-child {
-    border-right: 0;
-  }
+  .s12-meter-segment i { font-size: 19px; }
 
-  .st12-meter-good {
-    color: #67e8f9;
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(8, 145, 178, 0.06));
-  }
-
-  .st12-meter-ok {
-    color: #fde68a;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(120, 53, 15, 0.08));
-  }
-
-  .st12-meter-risk {
+  .s12-meter-weak {
     color: #fca5a5;
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(127, 29, 29, 0.1));
   }
 
-  .st12-flow {
+  .s12-meter-mid {
+    color: #fde68a;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(120, 53, 15, 0.08));
+  }
+
+  .s12-meter-good {
+    color: #67e8f9;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(8, 145, 178, 0.06));
+  }
+
+  .s12-flow {
     width: 100%;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -185,10 +194,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     gap: 18px;
   }
 
-  .st12-card {
+  .s12-card {
     text-align: left;
     border-radius: 20px;
-    padding: 26px 30px 28px;
+    padding: 24px 28px 26px;
     background: rgba(17, 24, 39, 0.64);
     backdrop-filter: blur(10px);
     opacity: 0;
@@ -196,26 +205,26 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     animation: fadeUp 0.72s ease-out forwards;
   }
 
-  .st12-card-bad {
+  .s12-card-weak {
     border: 1px dashed rgba(248, 113, 113, 0.55);
     box-shadow: 0 16px 40px rgba(127, 29, 29, 0.22);
     animation-delay: 0.45s;
   }
 
-  .st12-card-good {
+  .s12-card-good {
     border: 1px solid rgba(34, 211, 238, 0.48);
     box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.1), 0 16px 40px rgba(8, 145, 178, 0.2);
     animation-delay: 0.62s;
   }
 
-  .st12-card-head {
+  .s12-card-head {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
-  .st12-badge {
+  .s12-badge {
     display: inline-flex;
     align-items: center;
     align-self: flex-start;
@@ -228,42 +237,41 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     font-weight: 700;
   }
 
-  .st12-badge i { font-size: 14px; }
+  .s12-badge i { font-size: 14px; }
 
-  .st12-badge-bad {
+  .s12-badge-weak {
     color: #fca5a5;
     border: 1px solid rgba(248, 113, 113, 0.5);
     background: rgba(248, 113, 113, 0.12);
   }
 
-  .st12-badge-good {
+  .s12-badge-good {
     color: var(--cyan-400);
     border: 1px solid rgba(34, 211, 238, 0.5);
     background: rgba(34, 211, 238, 0.14);
   }
 
-  .st12-card h2 {
+  .s12-card h2 {
     margin: 0;
     font-size: 34px;
     font-weight: 800;
-    letter-spacing: -0.3px;
-    line-height: 1.08;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: -0.4px;
+    line-height: 1.1;
+    color: #f8fafc;
   }
 
-  .st12-card-bad h2 { color: #fca5a5; }
-  .st12-card-good h2 { color: #f8fafc; }
+  .s12-card-weak h2 { color: #fca5a5; }
 
-  .st12-lead {
+  .s12-lead {
     margin: 0 0 14px;
     color: #fecaca;
-    font-size: 27px;
+    font-size: 26px;
     font-style: italic;
     font-weight: 400;
     line-height: 1.3;
   }
 
-  .st12-gaps {
+  .s12-gaps {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -271,7 +279,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     gap: 10px;
   }
 
-  .st12-gaps li {
+  .s12-gaps li {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -280,26 +288,26 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     line-height: 1.3;
   }
 
-  .st12-gaps li i {
+  .s12-gaps li i {
     color: #f87171;
     font-size: 19px;
   }
 
-  .st12-good-copy {
-    margin: 0 0 16px;
+  .s12-good-copy {
+    margin: 0 0 14px;
     color: #e2e8f0;
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 300;
     line-height: 1.4;
   }
 
-  .st12-tags {
+  .s12-tags {
     display: grid;
     grid-template-columns: 1fr;
     gap: 8px;
   }
 
-  .st12-tags span {
+  .s12-tags span {
     display: inline-flex;
     align-items: center;
     gap: 9px;
@@ -312,12 +320,12 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     line-height: 1.2;
   }
 
-  .st12-tags span i {
+  .s12-tags span i {
     color: var(--cyan-400);
     font-size: 18px;
   }
 
-  .st12-refine {
+  .s12-refine {
     width: 182px;
     display: flex;
     flex-direction: column;
@@ -329,7 +337,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     animation: fadeUp 0.72s ease-out 0.54s forwards;
   }
 
-  .st12-refine-icon {
+  .s12-refine-icon {
     width: 84px;
     height: 84px;
     border-radius: 20px;
@@ -342,9 +350,9 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     box-shadow: 0 14px 32px rgba(8, 145, 178, 0.2);
   }
 
-  .st12-refine-icon i { font-size: 38px; }
+  .s12-refine-icon i { font-size: 38px; }
 
-  .st12-refine p {
+  .s12-refine p {
     margin: 0;
     font-size: 19px;
     font-weight: 600;
@@ -352,7 +360,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     line-height: 1.25;
   }
 
-  .st12-template {
+  .s12-template {
     width: calc(100% - 520px);
     align-self: flex-start;
     display: flex;
@@ -367,32 +375,32 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     animation: fadeUp 0.78s ease-out 0.8s forwards;
   }
 
-  .st12-template-head {
+  .s12-template-head {
     display: inline-flex;
     align-items: center;
     gap: 12px;
     color: #f0f9ff;
   }
 
-  .st12-template-head i {
+  .s12-template-head i {
     font-size: 26px;
     color: var(--cyan-400);
   }
 
-  .st12-template-head h3 {
+  .s12-template-head h3 {
     margin: 0;
     font-size: 31px;
     font-weight: 800;
     letter-spacing: -0.3px;
   }
 
-  .st12-chips {
+  .s12-chips {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
   }
 
-  .st12-chips span {
+  .s12-chips span {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -407,33 +415,34 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     line-height: 1.2;
   }
 
-  .st12-chips span i {
+  .s12-chips span i {
     color: var(--cyan-400);
     font-size: 17px;
   }
 
   @media (max-width: 1700px) {
-    .st12-title { font-size: 68px; }
-    .st12-flow { gap: 14px; }
-    .st12-refine { width: 140px; }
-    .st12-template { width: calc(100% - 470px); }
-    .st12-refine-icon {
-      width: 72px;
-      height: 72px;
+    .s12-title { font-size: 62px; }
+    .s12-subtitle { font-size: 19px; }
+    .s12-template { width: calc(100% - 470px); }
+    .s12-refine { width: 146px; }
+    .s12-refine-icon {
+      width: 74px;
+      height: 74px;
     }
 
-    .st12-refine-icon i { font-size: 32px; }
+    .s12-refine-icon i { font-size: 32px; }
   }
 
   @media (max-width: 1460px) {
-    .st12-title { font-size: 58px; }
-    .st12-flow {
+    .s12-title { font-size: 54px; }
+    .s12-subtitle { font-size: 18px; }
+    .s12-flow {
       grid-template-columns: 1fr;
       gap: 12px;
     }
-    .st12-template { width: 100%; }
+    .s12-template { width: 100%; }
 
-    .st12-refine {
+    .s12-refine {
       width: 100%;
       flex-direction: row;
       justify-content: flex-start;
@@ -441,10 +450,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
       padding: 4px 8px;
     }
 
-    .st12-refine p { text-align: left; }
-
-    .st12-chips {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    .s12-refine p { text-align: left; }
+    .s12-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 </style>
