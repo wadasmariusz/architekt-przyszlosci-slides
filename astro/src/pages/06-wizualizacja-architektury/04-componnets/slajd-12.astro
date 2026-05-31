@@ -10,28 +10,17 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     <header class="s12-header">
       <span class="s12-eyebrow"><i class="ti ti-message-2-cog"></i> Component · Level 3</span>
       <h1 class="s12-title">
-        Opisuj <span class="s12-title-highlight">intencję</span>, nie tylko protokół
+        Opisuj <span class="s12-title-highlight">intencję</span>
       </h1>
-      <p class="s12-subtitle">
-        Protokół wyjaśnia jak, ale to intencja wyjaśnia po co istnieje zależność między komponentami.
-      </p>
     </header>
-
-    <section class="s12-meter" aria-label="Skala jakości opisu relacji">
-      <div class="s12-meter-track">
-        <span class="s12-meter-segment s12-meter-weak"><i class="ti ti-x"></i> Sam protokół</span>
-        <span class="s12-meter-segment s12-meter-mid"><i class="ti ti-alert-triangle"></i> Protokół + akcja</span>
-        <span class="s12-meter-segment s12-meter-good"><i class="ti ti-check"></i> Intencja biznesowa</span>
-      </div>
-    </section>
-
+    
     <section class="s12-flow">
       <article class="s12-card s12-card-weak">
         <header class="s12-card-head">
-          <span class="s12-badge s12-badge-weak"><i class="ti ti-x"></i> Słabszy opis</span>
+          <span class="s12-badge s12-badge-weak"><i class="ti ti-x"></i>Sam protokół</span>
           <h2>REST / JSON</h2>
         </header>
-        <p class="s12-lead">&quot;Controller wywołuje Facade.&quot;</p>
+        <p class="s12-lead">Controller wywołuje Facade</p>
         <ul class="s12-gaps">
           <li><i class="ti ti-circle-dashed"></i> Nie wiadomo, jaki cel biznesowy</li>
           <li><i class="ti ti-circle-dashed"></i> Brak informacji o wyniku operacji</li>
@@ -46,7 +35,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
       <article class="s12-card s12-card-good">
         <header class="s12-card-head">
-          <span class="s12-badge s12-badge-good"><i class="ti ti-check"></i> Lepszy opis</span>
+          <span class="s12-badge s12-badge-good"><i class="ti ti-check"></i>Intencja biznesowa</span>
           <h2>Pobierz podsumowanie rachunków</h2>
         </header>
         <p class="s12-good-copy">
@@ -60,19 +49,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         </div>
       </article>
     </section>
-
-    <aside class="s12-template">
-      <div class="s12-template-head">
-        <i class="ti ti-template"></i>
-        <h3>Szablon opisu relacji</h3>
-      </div>
-      <div class="s12-chips">
-        <span><i class="ti ti-bolt"></i> Czasownik intencji</span>
-        <span><i class="ti ti-user"></i> Kto i dla kogo</span>
-        <span><i class="ti ti-stack-2"></i> Jaki wynik</span>
-        <span><i class="ti ti-plug-connected"></i> Protokół (opcjonalnie)</span>
-      </div>
-    </aside>
+    
   </div>
 </SlideLayout>
 
@@ -118,7 +95,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .s12-title {
     margin: 0 0 10px;
     color: #f8fafc;
-    font-size: 68px;
+    font-size: 82px;
     font-weight: 800;
     letter-spacing: -1px;
     line-height: 1.05;
