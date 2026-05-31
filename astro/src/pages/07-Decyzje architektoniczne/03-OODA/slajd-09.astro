@@ -1,0 +1,401 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 09 - Bias architektoniczny"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.91))"
+>
+  <div class="content">
+    <div class="phase-badge">
+      <span class="phase-letter">O</span>
+      <span class="phase-name">Orient</span>
+    </div>
+
+    <h1 class="title">
+      Bias <span class="highlight">architektoniczny</span>
+    </h1>
+
+    <div class="bias-map" aria-label="Dwa filtry interpretacyjne prowadzące od tego samego problemu do różnych decyzji">
+      <article class="problem-card">
+        <div class="problem-icon"><i class="ti ti-alert-triangle"></i></div>
+        <p class="card-label">Ten sam problem</p>
+        <h2>System coraz trudniej rozwijać</h2>
+        <p>Rosną zależności, czas wdrożeń i liczba miejsc, w których zmiana może coś zepsuć.</p>
+      </article>
+
+      <div class="path path--mono">
+        <article class="bias-card">
+          <header>
+            <span class="bias-chip">Bias monolitu</span>
+            <i class="ti ti-building"></i>
+          </header>
+          <blockquote>Pozostajemy przy obecnym modelu</blockquote>
+          <p>Zespół dobrze zna jego ograniczenia i sposoby obchodzenia problemów.</p>
+        </article>
+
+        <div class="path-arrow"><i class="ti ti-arrow-down"></i></div>
+
+        <article class="decision-card">
+          <p class="card-label">Decyzja</p>
+          <h3>Utrzymać obecny model architektoniczny</h3>
+          <p>Ryzyko: Problemy z modularnością, zależnościami i niezależnością wdrożeń pozostają ukryte pod pozorną stabilnością znanego rozwiązania.</p>
+        </article>
+      </div>
+
+      <div class="path path--micro">
+        <article class="bias-card">
+          <header>
+            <span class="bias-chip">Bias mikroserwisów</span>
+            <i class="ti ti-sitemap"></i>
+          </header>
+          <blockquote>Przechodzimy na mikroserwisy</blockquote>
+          <p>Organizacja traktuje je jako domyślną odpowiedź na problemy skalowania i szybkości rozwoju</p>
+        </article>
+
+        <div class="path-arrow"><i class="ti ti-arrow-down"></i></div>
+
+        <article class="decision-card">
+          <p class="card-label">Decyzja</p>
+          <h3>Rozproszyć system</h3>
+          <p>Ryzyko: System może zyskać większą złożoność operacyjną, trudniejsze debugowanie i zależności sieciowe bez rozwiązania pierwotnego problemu projektowego.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="principle">
+      <i class="ti ti-brain"></i>
+      <span>Zła decyzja często zaczyna się nie od braku danych, tylko od <strong>błędnej interpretacji</strong>.</span>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 54px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 22px 10px 14px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .phase-letter {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    color: #0a0e17;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .phase-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    max-width: 1220px;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: rgba(240, 244, 248, 0.78);
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .lede-accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+  }
+
+  .bias-map {
+    width: 100%;
+    max-width: 1420px;
+    display: grid;
+    grid-template-columns: 340px 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+    margin-bottom: 24px;
+  }
+
+  .problem-card,
+  .bias-card,
+  .decision-card {
+    background: rgba(17, 24, 39, 0.58);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 16px;
+    text-align: left;
+    backdrop-filter: blur(10px);
+  }
+
+  .problem-card {
+    min-height: 402px;
+    padding: 34px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.6s forwards;
+  }
+
+  .problem-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 31px;
+  }
+
+  .card-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 10px;
+  }
+
+  .problem-card h2 {
+    font-size: 35px;
+    font-weight: 800;
+    line-height: 1.12;
+    color: #f0f4f8;
+    margin-bottom: 14px;
+  }
+
+  .problem-card > p:last-child {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #aebbd0;
+  }
+
+  .path {
+    display: grid;
+    grid-template-rows: 1fr 46px 138px;
+    gap: 0;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .path--mono {
+    animation-delay: 0.78s;
+  }
+
+  .path--micro {
+    animation-delay: 0.96s;
+  }
+
+  .bias-card {
+    min-height: 218px;
+    padding: 24px 26px 22px;
+  }
+
+  .path--mono .bias-card {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.74), rgba(17, 24, 39, 0.58));
+  }
+
+  .path--micro .bias-card {
+    background: linear-gradient(180deg, rgba(76, 29, 149, 0.20), rgba(17, 24, 39, 0.58));
+    border-color: rgba(167, 139, 250, 0.36);
+  }
+
+  .bias-card header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .bias-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    color: var(--cyan-400);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .path--micro .bias-chip {
+    background: rgba(167, 139, 250, 0.13);
+    border-color: rgba(167, 139, 250, 0.42);
+    color: #c4b5fd;
+  }
+
+  .bias-card header i {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: rgba(34, 211, 238, 0.10);
+    border: 1px solid rgba(34, 211, 238, 0.32);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .path--micro .bias-card header i {
+    background: rgba(167, 139, 250, 0.12);
+    border-color: rgba(167, 139, 250, 0.34);
+    color: #c4b5fd;
+  }
+
+  .bias-card blockquote {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: 0;
+    color: #f0f4f8;
+    margin-bottom: 14px;
+  }
+
+  .bias-card p {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #aebbd0;
+  }
+
+  .path-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+    font-size: 36px;
+  }
+
+  .path--micro .path-arrow {
+    color: #c4b5fd;
+  }
+
+  .decision-card {
+    padding: 20px 24px 18px;
+    background: rgba(2, 6, 23, 0.46);
+    border-style: dashed;
+  }
+
+  .path--mono .decision-card {
+    border-color: rgba(34, 211, 238, 0.36);
+  }
+
+  .path--micro .decision-card {
+    border-color: rgba(167, 139, 250, 0.42);
+  }
+
+  .decision-card h3 {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #f0f4f8;
+    margin-bottom: 8px;
+  }
+
+  .decision-card p:last-child {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.36;
+    color: #aebbd0;
+  }
+
+  .principle {
+    width: min(980px, calc(100% - 560px));
+    align-self: flex-start;
+    margin-left: 62px;
+    min-height: 76px;
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 22px;
+    border-radius: 16px;
+    background: linear-gradient(90deg, rgba(8, 145, 178, 0.22), rgba(15, 23, 42, 0.62));
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: #dbeafe;
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.16s forwards;
+  }
+
+  .principle i {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+    font-size: 28px;
+  }
+
+  .principle span {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.34;
+  }
+
+  .principle strong {
+    color: #f8fafc;
+    font-weight: 700;
+  }
+</style>

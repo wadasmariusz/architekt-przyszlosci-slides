@@ -1,0 +1,329 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 10 - D — Decide"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <div class="content">
+    <div class="phase-badge">
+      <span class="phase-letter">D</span>
+      <span class="phase-name">Decide</span>
+    </div>
+
+    <h1 class="title">
+      Wybór <span class="highlight">kierunku działania</span>
+    </h1>
+
+    <p class="lede">
+      Decide to nie nieodwołalny wyrok architektoniczny.
+      To <span class="lede-accent">hipoteza</span>, którą za chwilę trzeba sprawdzić w praktyce.
+    </p>
+
+    <div class="decision-flow" aria-label="Od zrozumienia sytuacji do planu walidacji">
+      <article class="flow-card flow-card--context">
+        <div class="card-icon"><i class="ti ti-bulb"></i></div>
+        <p class="card-label">Wejście</p>
+        <h2>Zrozumienie sytuacji</h2>
+        <p>Co wiemy po Observe i Orient: dane, kontekst, ograniczenia oraz cel zmiany.</p>
+      </article>
+
+      <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="flow-card flow-card--hypothesis">
+        <div class="card-icon"><i class="ti ti-route-alt-left"></i></div>
+        <p class="card-label">Decyzja</p>
+        <h2>Hipoteza architektoniczna</h2>
+        <div class="choice-list">
+          <span>event-driven dla płatności</span>
+          <span>PostgreSQL z partycjonowaniem</span>
+          <span>circuit breakery między serwisami</span>
+        </div>
+      </article>
+
+      <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="flow-card flow-card--validation">
+        <div class="card-icon"><i class="ti ti-clipboard-check"></i></div>
+        <p class="card-label">Następny krok</p>
+        <h2>Plan walidacji</h2>
+        <p>Jak sprawdzimy, czy decyzja rzeczywiście poprawia system, a nie tylko brzmi dobrze?</p>
+      </article>
+    </div>
+
+    <div class="validation-note">
+      <div class="note-icon"><i class="ti ti-flask"></i></div>
+      <div>
+        <p>Decyzja w OODA jest kierunkiem eksperymentu.</p>
+        <strong>Jej jakość potwierdzają dopiero skutki: metryki, koszty i zdolność zespołu do utrzymania rozwiązania.</strong>
+      </div>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 62px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 22px 10px 14px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .phase-letter {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    color: #0a0e17;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .phase-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    max-width: 1220px;
+    font-size: 25px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: rgba(240, 244, 248, 0.78);
+    margin-bottom: 42px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .lede-accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+  }
+
+  .decision-flow {
+    width: 100%;
+    max-width: 1420px;
+    display: grid;
+    grid-template-columns: 1fr 76px 1.18fr 76px 1fr;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 28px;
+  }
+
+  .flow-card {
+    min-height: 270px;
+    padding: 28px 28px 26px;
+    background: rgba(17, 24, 39, 0.58);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 16px;
+    text-align: left;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .flow-card--context {
+    animation-delay: 0.62s;
+  }
+
+  .flow-card--hypothesis {
+    animation-delay: 0.82s;
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.28), rgba(17, 24, 39, 0.62));
+    border-color: rgba(34, 211, 238, 0.56);
+    box-shadow: 0 20px 60px rgba(8, 145, 178, 0.22);
+  }
+
+  .flow-card--validation {
+    animation-delay: 1.02s;
+    background: linear-gradient(180deg, rgba(76, 29, 149, 0.18), rgba(17, 24, 39, 0.58));
+    border-color: rgba(167, 139, 250, 0.38);
+  }
+
+  .card-icon {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+  }
+
+  .flow-card--validation .card-icon {
+    background: rgba(167, 139, 250, 0.12);
+    border-color: rgba(167, 139, 250, 0.34);
+    color: #c4b5fd;
+  }
+
+  .card-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 10px;
+  }
+
+  .flow-card--validation .card-label {
+    color: #c4b5fd;
+  }
+
+  .flow-card h2 {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.12;
+    color: #f0f4f8;
+    margin-bottom: 14px;
+  }
+
+  .flow-card p {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #aebbd0;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+    font-size: 42px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.88s forwards;
+  }
+
+  .flow-arrow:nth-of-type(2) {
+    animation-delay: 1.08s;
+    color: #c4b5fd;
+  }
+
+  .choice-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .choice-list span {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(2, 6, 23, 0.34);
+    border: 1px solid rgba(34, 211, 238, 0.28);
+    color: #dff9ff;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .choice-list span::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.7);
+  }
+
+  .validation-note {
+    width: min(1010px, calc(100% - 610px));
+    align-self: flex-start;
+    margin-left: 64px;
+    min-height: 106px;
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 18px 24px;
+    border-radius: 16px;
+    background: linear-gradient(90deg, rgba(8, 145, 178, 0.22), rgba(15, 23, 42, 0.64));
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: #dbeafe;
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.24s forwards;
+  }
+
+  .note-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 15px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+    font-size: 32px;
+  }
+
+  .validation-note p {
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.28;
+    color: #f8fafc;
+    margin-bottom: 6px;
+  }
+
+  .validation-note strong {
+    display: block;
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.36;
+    color: #bfdbfe;
+  }
+</style>

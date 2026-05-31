@@ -1,0 +1,349 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 07 - O — Orient: nadaj znaczenie"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <div class="content">
+    <div class="phase-badge">
+      <span class="phase-letter">O</span>
+      <span class="phase-name">Orient</span>
+    </div>
+
+    <h1 class="title">
+      Zrozumineie <span class="highlight">sytuacji</span>
+    </h1>
+
+    <p class="lede">
+      Te same dane mogą prowadzić do różnych wniosków, jeśli 
+      <span class="lede-accent">zmieni się kontekst</span>
+    </p>
+
+    <div class="funnel" aria-label="Lejek interpretacyjny fazy Orient">
+      <article class="input-panel">
+        <div class="panel-icon"><i class="ti ti-list-details"></i></div>
+        <p class="panel-label">Wejście</p>
+        <h2>Obserwacje</h2>
+        <p>Fakty, sygnały i ograniczenia zebrane w pierwszej fazie.</p>
+      </article>
+
+      <div class="filter-stack">
+        <article class="filter-card">
+          <i class="ti ti-map-2"></i>
+          <div>
+            <p>Kontekst</p>
+            <h3>W jakiej sytuacji jesteśmy?</h3>
+          </div>
+        </article>
+
+        <article class="filter-card">
+          <i class="ti ti-target-arrow"></i>
+          <div>
+            <p>Cel</p>
+            <h3>Co próbujemy osiągnąć?</h3>
+          </div>
+        </article>
+
+        <article class="filter-card">
+          <i class="ti ti-lock-square-rounded"></i>
+          <div>
+            <p>Ograniczenia</p>
+            <h3>Czego nie możemy pominąć?</h3>
+          </div>
+        </article>
+
+        <article class="filter-card">
+          <i class="ti ti-brain"></i>
+          <div>
+            <p>Doświadczenie</p>
+            <h3>Przez jakie modele patrzymy na dane?</h3>
+          </div>
+        </article>
+      </div>
+
+      <article class="output-panel">
+        <div class="panel-icon"><i class="ti ti-bulb"></i></div>
+        <p class="panel-label">Wyjście</p>
+        <h2>Zrozumienie sytuacji</h2>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 62px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 22px 10px 14px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .phase-letter {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    color: #0a0e17;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .phase-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    max-width: 1200px;
+    font-size: 25px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: rgba(240, 244, 248, 0.78);
+    margin-bottom: 38px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .lede-accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+  }
+
+  .funnel {
+    width: 100%;
+    max-width: 1420px;
+    display: grid;
+    grid-template-columns: 330px 1fr 330px;
+    gap: 28px;
+    align-items: center;
+    margin-bottom: 34px;
+  }
+
+  .input-panel,
+  .output-panel {
+    min-height: 320px;
+    padding: 30px 28px;
+    border-radius: 16px;
+    background: rgba(17, 24, 39, 0.58);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .input-panel {
+    animation-delay: 0.6s;
+  }
+
+  .output-panel {
+    animation-delay: 1.2s;
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.28), rgba(17, 24, 39, 0.64));
+    border-color: rgba(34, 211, 238, 0.56);
+    box-shadow: 0 20px 60px rgba(8, 145, 178, 0.24);
+  }
+
+  .panel-icon {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+  }
+
+  .panel-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 10px;
+  }
+
+  .input-panel h2,
+  .output-panel h2 {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0;
+    color: #f0f4f8;
+    line-height: 1.12;
+    margin-bottom: 12px;
+  }
+
+  .input-panel > p:last-child,
+  .output-panel > p:last-child {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #aebbd0;
+  }
+
+  .filter-stack {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    padding: 26px 34px;
+    border-radius: 28px;
+    background:
+      linear-gradient(90deg, rgba(34, 211, 238, 0.06), rgba(34, 211, 238, 0.16), rgba(34, 211, 238, 0.06)),
+      rgba(2, 6, 23, 0.24);
+    border: 1px dashed rgba(34, 211, 238, 0.28);
+    opacity: 0;
+    animation: fadeIn 0.9s ease-out 0.72s forwards;
+  }
+
+  .filter-stack::before,
+  .filter-stack::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 46px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan-400));
+  }
+
+  .filter-stack::before {
+    right: 100%;
+    transform: translateY(-50%);
+  }
+
+  .filter-stack::after {
+    left: 100%;
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  .filter-card {
+    min-height: 136px;
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 20px 18px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .filter-card:nth-child(1) { animation-delay: 0.82s; }
+  .filter-card:nth-child(2) { animation-delay: 0.92s; }
+  .filter-card:nth-child(3) { animation-delay: 1.02s; }
+  .filter-card:nth-child(4) { animation-delay: 1.12s; }
+
+  .filter-card i {
+    width: 52px;
+    height: 52px;
+    border-radius: 13px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+  }
+
+  .filter-card p {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 8px;
+  }
+
+  .filter-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: #f0f4f8;
+    line-height: 1.22;
+  }
+
+  .principle {
+    width: 100%;
+    max-width: 1180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 18px 28px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.30);
+    color: #d9f9ff;
+    font-size: 24px;
+    line-height: 1.25;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.35s forwards;
+  }
+
+  .principle i {
+    font-size: 30px;
+    color: var(--cyan-400);
+    flex-shrink: 0;
+  }
+
+  .principle strong {
+    color: #f0f4f8;
+    font-weight: 800;
+  }
+</style>

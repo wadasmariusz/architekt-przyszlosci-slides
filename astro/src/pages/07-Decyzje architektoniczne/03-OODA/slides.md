@@ -134,28 +134,28 @@ Slajd pomaga oddzielić obserwację od interpretacji. Dla programistów i archit
 
 ## Slajd 7
 
-**Wejście slajdu:** Po słowach: „Najważniejsza jest jednak faza ołrient, która często bywa pomijana.”
+Wejście slajdu: Po słowach: „Najważniejsza jest jednak faza ołrient, która często bywa pomijana.”
 
-**Tytuł slajdu:** O — Orient
+Tytuł slajdu: O — Orient: nadaj znaczenie
 
-**Opis slajdu:**
-Slajd powinien mocno zaakcentować, że Orient jest najważniejszą i najczęściej niedocenianą fazą. Główna myśl:
-**Orient zamienia dane w zrozumienie sytuacji.**
+Opis slajdu:
+Slajd powinien pokazać Orient jako etap, w którym surowe obserwacje są przekształcane w zrozumienie sytuacji. Bez przykładów architektonicznych, bardziej ogólnie:
 
-Na slajdzie powinny znaleźć się elementy wpływające na interpretację:
-**SLA**
-**wymagania biznesowe**
-**architektura systemu**
-**doświadczenie zespołu**
-**wcześniejsze decyzje**
-**kultura organizacyjna**
-**mentalne modele i biasy**
+Orient odpowiada na pytanie: co te obserwacje znaczą w naszym kontekście?
 
-Slajd pokazuje, że metryki same z siebie nie mówią, co należy zrobić. Dopiero kontekst systemowy i organizacyjny nadaje im znaczenie.
+Na slajdzie warto pokazać cztery elementy wpływające na interpretację:
 
-**Charakter slajdu:** Wyjaśniający, architektoniczny.
+kontekst — w jakiej sytuacji jesteśmy?
+cel — co próbujemy osiągnąć?
+ograniczenia — czego nie możemy pominąć?
+doświadczenie — przez jakie modele myślenia patrzymy na dane?
 
-**Sugestia wizualna:** Lejek interpretacyjny: „surowe dane” przechodzą przez „kontekst systemu i organizacji”, dając „wniosek architektoniczny”.
+Najważniejszy przekaz: te same dane mogą prowadzić do różnych wniosków, jeśli zmieni się kontekst. Slajd powinien budować zrozumienie, że Orient jest centrum całej pętli OODA, bo decyduje o jakości późniejszej decyzji.
+
+Charakter slajdu: Wyjaśniający, koncepcyjny, pokazujący zależności.
+
+Sugestia wizualna: Lejek interpretacyjny:
+obserwacje → kontekst / cele / ograniczenia / doświadczenie → zrozumienie sytuacji
 
 ---
 
