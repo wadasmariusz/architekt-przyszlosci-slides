@@ -1,0 +1,210 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 03 - Co wyjaśnia ADR"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.88))"
+>
+  <div class="content">
+    <p class="eyebrow">Porównanie</p>
+    <h1 class="title">Co wyjaśnia <span class="highlight">ADR</span> ?</h1>
+
+    <div class="matrix" aria-label="Porównanie roli kodu, dokumentacji, diagramów i ADR">
+      <div class="row row--head">
+        <span>Źródło wiedzy</span>
+        <span>Co wyjaśnia</span>
+        <span>Główne pytanie</span>
+      </div>
+
+      <article class="row row--item row--code">
+        <div class="source">
+          <i class="ti ti-code"></i>
+          <span>Kod</span>
+        </div>
+        <p>Działanie i implementację systemu.</p>
+        <p class="question">„Co działa?”</p>
+      </article>
+
+      <article class="row row--item row--docs">
+        <div class="source">
+          <i class="ti ti-book-2"></i>
+          <span>Dokumentacja techniczna</span>
+        </div>
+        <p>Mechanikę działania, przepływy, konfigurację.</p>
+        <p class="question">„Jak działa?”</p>
+      </article>
+
+      <article class="row row--item row--diag">
+        <div class="source">
+          <i class="ti ti-schema"></i>
+          <span>Diagramy</span>
+        </div>
+        <p>Strukturę systemu i relacje między elementami.</p>
+        <p class="question">„Z czego się składa?”</p>
+      </article>
+
+      <article class="row row--item row--adr">
+        <div class="source">
+          <i class="ti ti-file-certificate"></i>
+          <span>ADR</span>
+        </div>
+        <p>Kontekst, decyzję i jej konsekwencje.</p>
+        <p class="question">„Dlaczego tak zdecydowano?”</p>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1680px;
+    padding: 92px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 23px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--cyan-400);
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.08;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    max-width: 1320px;
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.5s forwards;
+  }
+
+  .lead strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .matrix {
+    width: 100%;
+    max-width: 1640px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 24px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.9s ease-out 0.7s forwards;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr 0.9fr;
+    align-items: stretch;
+  }
+
+  .row--head {
+    background: rgba(30, 41, 59, 0.85);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  }
+
+  .row--head span {
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    text-align: left;
+  }
+
+  .row--item {
+    min-height: 116px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+
+  .row--code { animation-delay: 0.95s; }
+  .row--docs { animation-delay: 1.1s; }
+  .row--diag { animation-delay: 1.25s; }
+  .row--adr { animation-delay: 1.4s; }
+
+  .row--item:last-child {
+    border-bottom: 0;
+  }
+
+  .row--item > * {
+    padding: 14px 20px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    line-height: 1.28;
+    font-size: 23px;
+    font-weight: 300;
+    color: #dbe3ee;
+  }
+
+  .source {
+    gap: 14px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .source i {
+    font-size: 30px;
+    color: var(--cyan-400);
+  }
+
+  .question {
+    font-size: 25px;
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+
+  .row--adr {
+    background: linear-gradient(90deg, rgba(8, 145, 178, 0.18), rgba(15, 23, 42, 0.72));
+  }
+
+  .row--adr .source,
+  .row--adr .question {
+    color: #f8fbff;
+  }
+
+  .row--adr .source i {
+    color: #22d3ee;
+  }
+</style>

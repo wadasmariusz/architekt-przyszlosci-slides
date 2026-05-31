@@ -1,0 +1,257 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+import adrTemplate from './_slajd-05-adr-template.md?raw';
+
+const lines = adrTemplate.trimEnd().split('\n');
+const contextStart = lines.findIndex((line) => line.trim() === '## Context');
+const decisionStart = lines.findIndex((line) => line.trim() === '## Decision');
+const contextEnd = decisionStart === -1 ? lines.length : decisionStart;
+
+function lineClass(line, index) {
+  if (contextStart !== -1 && index >= contextStart && index < contextEnd) {
+    return 'line--context';
+  }
+
+  if (line.startsWith('# ')) {
+    return 'line--title';
+  }
+
+  if (line.startsWith('## ')) {
+    return 'line--heading';
+  }
+
+  if (line.startsWith('+')) {
+    return 'line--plus';
+  }
+
+  if (line.startsWith('-')) {
+    return 'line--minus';
+  }
+
+  return '';
+}
+---
+<SlideLayout
+  title="Slide 05 - Struktura ADR"
+  bgImage="/images/background-5.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.76), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <p class="eyebrow">Klasyczny ADR</p>
+    <h1 class="title">Struktura <span class="highlight">ADR</span></h1>
+
+    <article class="markdown-card" aria-label="Przykladowy plik ADR w markdown">
+      <header class="file-head">
+        <div class="file-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="file-name">docs/adr/0005-struktura-adr.md</p>
+        <span class="file-type">markdown</span>
+      </header>
+
+      <pre class="code"><code>{lines.map((line, index) => (
+        <span class={`line ${lineClass(line, index)}`}>{line || ' '}</span>
+      ))}</code></pre>
+    </article>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    width: 100%;
+    max-width: 1880px;
+    padding: 96px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .eyebrow,
+  .title,
+  .lead,
+  .markdown-card,
+  .context-note {
+    width: min(1320px, calc(100% - 560px));
+  }
+
+  .eyebrow {
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--cyan-400);
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.12s forwards;
+  }
+
+  .title {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.06;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.28s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+    margin-bottom: 44px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.45s forwards;
+  }
+
+  .lead strong {
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  .markdown-card {
+    border-radius: 22px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    overflow: hidden;
+    text-align: left;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34);
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.82s ease-out 0.66s forwards;
+  }
+
+  .file-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 18px;
+    background: rgba(2, 6, 23, 0.68);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .file-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .file-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.55);
+  }
+
+  .file-dots span:nth-child(1) { background: #f87171; }
+  .file-dots span:nth-child(2) { background: #facc15; }
+  .file-dots span:nth-child(3) { background: #4ade80; }
+
+  .file-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: #dbeafe;
+    letter-spacing: 0.2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .file-type {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    background: rgba(34, 211, 238, 0.1);
+  }
+
+  .code {
+    margin: 0;
+    padding: 22px 24px 24px;
+    background: rgba(2, 6, 23, 0.42);
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 22px;
+    line-height: 1.46;
+    color: #cbd5e1;
+    white-space: pre;
+  }
+
+  .line {
+    display: block;
+    padding-left: 12px;
+    border-left: 3px solid transparent;
+  }
+
+  .line--title {
+    color: #f8fafc;
+    font-weight: 700;
+  }
+
+  .line--heading {
+    color: #dbeafe;
+    font-weight: 600;
+  }
+
+  .line--context {
+    color: #e0f2fe;
+    background: rgba(8, 145, 178, 0.2);
+    border-left-color: rgba(103, 232, 249, 0.85);
+  }
+
+  .line--plus {
+    color: #86efac;
+  }
+
+  .line--minus {
+    color: #fca5a5;
+  }
+
+  .context-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    border-radius: 14px;
+    padding: 18px 22px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: #dbeafe;
+    font-size: 23px;
+    font-weight: 300;
+    line-height: 1.4;
+    opacity: 0;
+    animation: fadeUp 0.82s ease-out 0.86s forwards;
+  }
+
+  .context-note i {
+    font-size: 30px;
+    color: var(--cyan-400);
+    flex: 0 0 auto;
+  }
+
+  .context-note strong {
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+</style>

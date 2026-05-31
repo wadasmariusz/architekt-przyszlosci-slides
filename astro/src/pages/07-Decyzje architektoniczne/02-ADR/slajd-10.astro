@@ -1,0 +1,248 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 10 - ADR blisko kodu"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.88))"
+>
+  <div class="content">
+    <h1 class="title">ADR <span class="highlight"> w repozystorium</span></h1>
+    <p class="lead">
+      Repozytorium jest naturalnym miejscem dla ADR-ów np w katalogu <code>docs/adr</code>
+    </p>
+
+    <div class="flow" aria-label="Przepływ ADR w procesie inżynierskim">
+      <article class="step step--pr">
+        <i class="ti ti-git-pull-request"></i>
+        <h2>Pull Request</h2>
+      </article>
+
+      <div class="arrow arrow--1" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="step step--review">
+        <i class="ti ti-eye-check"></i>
+        <h2>Review</h2>
+      </article>
+
+      <div class="arrow arrow--2" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="step step--adr">
+        <i class="ti ti-file-certificate"></i>
+        <h2>ADR</h2>
+      </article>
+
+      <div class="arrow arrow--3" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="step step--code">
+        <i class="ti ti-code"></i>
+        <h2>Kod</h2>
+      </article>
+    </div>
+
+    <div class="benefits" aria-label="Korzyści z trzymania ADR w repozytorium">
+      <span class="pill"><i class="ti ti-git-branch"></i> Wersjonowanie</span>
+      <span class="pill"><i class="ti ti-message-circle-check"></i> Code review</span>
+      <span class="pill"><i class="ti ti-link"></i> Powiązanie ze zmianami</span>
+      <span class="pill"><i class="ti ti-tools"></i> Element procesu, nie formalność</span>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1680px;
+    padding: 90px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 23px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--cyan-400);
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.08;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    max-width: 1280px;
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+    margin-bottom: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.5s forwards;
+  }
+
+  .lead strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .lead code,
+  .step code {
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    font-size: 0.9em;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(34, 211, 238, 0.12);
+    color: #a5f3fc;
+    border: 1px solid rgba(34, 211, 238, 0.28);
+  }
+
+  .flow {
+    width: 100%;
+    max-width: 1340px;
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr) 56px minmax(0, 1fr) 56px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+  }
+
+  .step {
+    position: relative;
+    background: rgba(15, 23, 42, 0.64);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 22px;
+    padding: 28px 22px 24px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.8s ease-out forwards;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 190px;
+  }
+
+  .step--pr { animation-delay: 0.66s; }
+  .step--review { animation-delay: 0.86s; }
+  .step--adr { animation-delay: 1.06s; }
+  .step--code { animation-delay: 1.26s; }
+
+  .step .tag {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: rgba(34, 211, 238, 0.65);
+  }
+
+  .step i {
+    font-size: 50px;
+    color: var(--cyan-400);
+    margin-bottom: 14px;
+    display: inline-block;
+  }
+
+  .step h2 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.16;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+    margin: 0;
+  }
+
+  .step p {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .step--adr {
+    border-color: rgba(34, 211, 238, 0.55);
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.24), rgba(15, 23, 42, 0.74));
+    box-shadow: 0 0 32px rgba(34, 211, 238, 0.18);
+  }
+
+  .step--adr i {
+    color: #22d3ee;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(148, 163, 184, 0.76);
+    font-size: 38px;
+    opacity: 0;
+    animation: fadeIn 0.55s ease-out forwards;
+  }
+
+  .arrow--1 { animation-delay: 0.82s; }
+  .arrow--2 { animation-delay: 1.02s; }
+  .arrow--3 { animation-delay: 1.22s; }
+
+  .benefits {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    max-width: 1280px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 1.45s forwards;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    color: #e2e8f0;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    backdrop-filter: blur(8px);
+  }
+
+  .pill i {
+    font-size: 22px;
+    color: var(--cyan-400);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+</style>

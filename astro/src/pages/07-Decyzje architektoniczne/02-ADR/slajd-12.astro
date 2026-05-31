@@ -1,0 +1,343 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 12 - Decyzje zależą od kontekstu"
+  bgImage="/images/background-4.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.88))"
+>
+  <div class="content">
+    <p class="eyebrow">Ocena ex post</p>
+    <h1 class="title">Decyzje zależą od <span class="highlight">kontekstu</span></h1>
+    <p class="lead">
+      Decyzja, która była dobra dwa lata temu, może być zła dzisiaj —
+      i odwrotnie. <strong>Bez kontekstu</strong> ocena architektoniczna prowadzi do błędnych wniosków.
+    </p>
+
+    <div class="timeline" aria-label="Porównanie kontekstu wtedy i dziś">
+      <article class="col col--past">
+        <header>
+          <span class="chip"><i class="ti ti-history"></i> Wtedy</span>
+          <h2>Kontekst, w którym decyzja powstała</h2>
+        </header>
+
+        <ul class="dims">
+          <li>
+            <div class="dim-label"><i class="ti ti-users"></i><span>Zespół</span></div>
+            <p>Mały, jeden zespół, wspólny kontekst</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-seedling"></i><span>Produkt</span></div>
+            <p>Wczesna faza, szukanie product–market fit</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-activity"></i><span>Ruch</span></div>
+            <p>Niewielki, predykowalny</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-target"></i><span>Priorytet</span></div>
+            <p>Szybkie wypuszczenie MVP</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-gauge"></i><span>Tempo</span></div>
+            <p>Krótkie iteracje, niska formalność</p>
+          </li>
+        </ul>
+      </article>
+
+      <div class="axis" aria-hidden="true">
+        <span class="axis-line"></span>
+        <span class="axis-dot axis-dot--past"></span>
+        <span class="axis-arrow"><i class="ti ti-arrow-right"></i></span>
+        <span class="axis-dot axis-dot--now"></span>
+        <span class="axis-label">Czas i zmiana kontekstu</span>
+      </div>
+
+      <article class="col col--now">
+        <header>
+          <span class="chip chip--now"><i class="ti ti-calendar-event"></i> Dziś</span>
+          <h2>Kontekst, w którym decyzję oceniamy</h2>
+        </header>
+
+        <ul class="dims">
+          <li>
+            <div class="dim-label"><i class="ti ti-users-group"></i><span>Zespół</span></div>
+            <p>Kilka zespołów, podzielona odpowiedzialność</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-tree"></i><span>Produkt</span></div>
+            <p>Dojrzały, z aktywną bazą klientów</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-trending-up"></i><span>Ruch</span></div>
+            <p>Wielokrotnie większy, ze szczytami</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-shield-check"></i><span>Priorytet</span></div>
+            <p>Stabilność, bezpieczeństwo, SLA</p>
+          </li>
+          <li>
+            <div class="dim-label"><i class="ti ti-stack-2"></i><span>Tempo</span></div>
+            <p>Dłuższe cykle, więcej koordynacji</p>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1380px;
+    padding: 50px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--cyan-400);
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 60px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.06;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    max-width: 1160px;
+    font-size: 23px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #cbd5e1;
+    margin-bottom: 26px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.5s forwards;
+  }
+
+  .lead strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .timeline {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 88px 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .col {
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 22px;
+    padding: 22px 26px 24px;
+    backdrop-filter: blur(10px);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .col--past { animation-delay: 0.65s; }
+  .col--now {
+    animation-delay: 0.9s;
+    background:
+      radial-gradient(circle at 82% 18%, rgba(34, 211, 238, 0.16), transparent 38%),
+      linear-gradient(150deg, rgba(8, 145, 178, 0.14), rgba(15, 23, 42, 0.62) 55%);
+    box-shadow: inset 0 1px 26px rgba(34, 211, 238, 0.08), 0 4px 26px rgba(34, 211, 238, 0.06);
+  }
+
+  .col header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(148, 163, 184, 0.22);
+  }
+
+  .chip {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.14);
+    border: 1px solid rgba(148, 163, 184, 0.32);
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+  }
+
+  .chip i { font-size: 16px; }
+
+  .chip--now {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.22), rgba(8, 145, 178, 0.14));
+    border-color: rgba(34, 211, 238, 0.4);
+    color: #a5f3fc;
+  }
+
+  .col h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.2px;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .dims {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dims li {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .col--now .dims li {
+    background: linear-gradient(110deg, rgba(34, 211, 238, 0.10), rgba(14, 116, 144, 0.04));
+    border-color: rgba(34, 211, 238, 0.18);
+  }
+
+  .dim-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .dim-label i {
+    font-size: 22px;
+    color: var(--cyan-400);
+  }
+
+  .col--past .dim-label i {
+    color: #94a3b8;
+  }
+
+  .dims li p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.35;
+    color: #e2e8f0;
+  }
+
+  .axis {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.75s forwards;
+  }
+
+  .axis-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.4), rgba(34, 211, 238, 0.85));
+    transform: translateY(-50%);
+  }
+
+  .axis-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .axis-dot--past {
+    left: 4px;
+    background: #94a3b8;
+    box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.18);
+  }
+
+  .axis-dot--now {
+    right: 4px;
+    background: var(--cyan-400);
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.22);
+  }
+
+  .axis-arrow {
+    position: relative;
+    z-index: 2;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(10, 14, 23, 0.92);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+  }
+
+  .axis-arrow i {
+    font-size: 24px;
+  }
+
+  .axis-label {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    white-space: nowrap;
+  }
+</style>

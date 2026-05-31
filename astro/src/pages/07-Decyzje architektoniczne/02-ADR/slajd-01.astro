@@ -1,0 +1,187 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 01 - Utrata kontekstu decyzji"
+  bgImage="/images/background-4.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.88))"
+>
+  <div class="content">
+    <h1 class="title">Utrata <span class="highlight">kontekstu decyzji</span></h1>
+
+    <div class="flow" aria-label="Schemat utraty kontekstu decyzji">
+      <article class="step step--decision">
+        <i class="ti ti-file-check"></i>
+        <h2>Decyzja techniczna</h2>
+        <p>Na starcie wybór jest jasny i ma konkretne uzasadnienie.</p>
+      </article>
+
+      <div class="arrow arrow--1" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="step step--time">
+        <i class="ti ti-clock-hour-8"></i>
+        <h2>Upływ czasu</h2>
+        <p>Kontekst biznesowy i skład zespołu stopniowo się zmieniają.</p>
+      </article>
+
+      <div class="arrow arrow--2" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="step step--loss">
+        <i class="ti ti-brain"></i>
+        <h2>Utrata uzasadnienia</h2>
+        <ul class="questions">
+          <li>Co wybraliśmy?</li>
+          <li>Dlaczego?</li>
+          <li>Jakie ograniczenia?</li>
+          <li>Jakie konsekwencje?</li>
+        </ul>
+      </article>
+      
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1680px;
+    padding: 118px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 23px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--cyan-400);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.08;
+    margin-bottom: 26px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    max-width: 1200px;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #cbd5e1;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.5s forwards;
+  }
+
+  .lead strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .flow {
+    width: 100%;
+    max-width: 1520px;
+    margin-top: 58px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr) 72px minmax(0, 1fr);
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .step {
+    position: relative;
+    background: rgba(15, 23, 42, 0.64);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 24px;
+    padding: 34px 28px 30px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+
+  .step--decision { animation-delay: 0.66s; }
+  .step--time { animation-delay: 0.9s; }
+  .step--loss { animation-delay: 1.14s; }
+
+  .step i {
+    font-size: 62px;
+    color: var(--cyan-400);
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+
+  .step h2 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.16;
+    color: #f1f5f9;
+    letter-spacing: -0.4px;
+    margin-bottom: 16px;
+  }
+
+  .step p {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .questions {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+    text-align: left;
+  }
+
+  .questions li {
+    font-size: 22px;
+    font-weight: 500;
+    color: #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+  }
+
+  .questions li:nth-child(1) { opacity: 0.96; }
+  .questions li:nth-child(2) { opacity: 0.84; }
+  .questions li:nth-child(3) { opacity: 0.72; }
+  .questions li:nth-child(4) { opacity: 0.6; }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(148, 163, 184, 0.76);
+    font-size: 46px;
+    opacity: 0;
+    animation: fadeIn 0.55s ease-out forwards;
+  }
+
+  .arrow--1 { animation-delay: 0.82s; }
+  .arrow--2 { animation-delay: 1.06s; }
+</style>

@@ -1,0 +1,239 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 06 - Decyzja musi być jednoznaczna"
+  bgImage="/images/background-6.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <p class="eyebrow">Sekcja: Decision</p>
+    <h1 class="title">Decyzja musi być <span class="highlight">jednoznaczna</span></h1>
+
+    <div class="decision-grid" aria-label="Różnica między listą pomysłów a decyzją">
+
+      <article class="card card--strong">
+        <header>
+          <i class="ti ti-circle-check"></i>
+          <h2>ADR</h2>
+        </header>
+        <ul>
+          <li><strong>Użyjemy PostgreSQL</strong> jako głównej bazy danych dla zamówień.</li>
+          <li><strong>Komunikujemy moduły przez RabbitMQ</strong> dla zdarzeń domenowych.</li>
+          <li><strong>Zostajemy przy monolicie modułowym</strong> w bounded context Checkout.</li>
+        </ul>
+      </article>
+    </div>
+
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    width: 100%;
+    max-width: 1880px;
+    padding: 74px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .eyebrow,
+  .title,
+  .lead,
+  .snippet {
+    width: min(1320px, calc(100% - 560px));
+  }
+
+  .decision-grid {
+    width: min(1640px, 100%);
+  }
+
+  .eyebrow {
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.1s forwards;
+  }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.25s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    font-size: 27px;
+    font-weight: 300;
+    line-height: 1.38;
+    color: #cbd5e1;
+    margin-bottom: 26px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.38s forwards;
+  }
+
+  .lead strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .decision-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    margin: 8px auto 20px;
+  }
+
+  .card {
+    background: rgba(15, 23, 42, 0.62);
+    border-radius: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    padding: 36px 44px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.82s ease-out forwards;
+  }
+
+  .card--weak { animation-delay: 0.52s; }
+  .card--strong { animation-delay: 0.64s; }
+
+  .card header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .card header i {
+    font-size: 40px;
+  }
+
+  .card h2 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin: 0;
+    color: #f1f5f9;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: grid;
+    gap: 14px;
+    width: min(100%, 620px);
+  }
+
+  .card li {
+    font-size: 26px;
+    line-height: 1.4;
+    font-weight: 300;
+    color: #e2e8f0;
+    padding: 18px 22px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.58);
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    text-align: center;
+  }
+
+  .card--weak {
+    border-color: rgba(248, 113, 113, 0.4);
+    background: linear-gradient(180deg, rgba(127, 29, 29, 0.2), rgba(15, 23, 42, 0.72));
+  }
+
+  .card--weak header i {
+    color: #f87171;
+  }
+
+  .card--weak li {
+    border: 1px solid rgba(248, 113, 113, 0.5);
+    box-shadow: inset 0 0 0 1px rgba(248, 113, 113, 0.14);
+  }
+
+  .card--strong {
+    border-color: rgba(34, 211, 238, 0.45);
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.24), rgba(15, 23, 42, 0.72));
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12);
+  }
+
+  .card--strong header i {
+    color: var(--cyan-400);
+  }
+
+  .card--strong li {
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.14);
+  }
+
+  .card li strong {
+    color: #f8fbff;
+    font-weight: 700;
+  }
+
+  .snippet {
+    border-radius: 18px;
+    background: rgba(2, 6, 23, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.8s ease-out 0.8s forwards;
+  }
+
+  .snippet-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    background: rgba(15, 23, 42, 0.86);
+  }
+
+  .snippet-head i {
+    font-size: 19px;
+    color: var(--cyan-400);
+  }
+
+  .snippet pre {
+    margin: 0;
+    padding: 14px 18px 16px;
+    font-family: 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #cfe6ff;
+    white-space: pre-wrap;
+  }
+
+  .snippet code {
+    color: inherit;
+  }
+</style>

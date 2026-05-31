@@ -1,0 +1,62 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 00 - Dlaczego system wygląda tak?"
+  bgImage="/images/background-1.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.88))"
+>
+  <div class="content">
+
+    <h1 class="title">
+     Dlaczego nasz system<br>
+      wygląda właśnie tak?
+    </h1>
+    <div class="icon-wrap" aria-hidden="true">
+      <i class="ti ti-help-octagon"></i>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .content {
+    max-width: 1500px;
+    padding: 0 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transform: translateY(-46px);
+  }
+
+  .icon-wrap {
+    width: 172px;
+    height: 172px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 42px;
+    background:
+      radial-gradient(circle at center, rgba(34, 211, 238, 0.2), rgba(34, 211, 238, 0.05) 72%);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    box-shadow: 0 0 36px rgba(34, 211, 238, 0.22);
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.2s forwards;
+  }
+
+  .icon-wrap i {
+    font-size: 92px;
+    color: var(--cyan-400);
+  }
+
+  .title {
+    font-size: 86px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.12;
+    max-width: 1400px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.45s forwards;
+  }
+</style>

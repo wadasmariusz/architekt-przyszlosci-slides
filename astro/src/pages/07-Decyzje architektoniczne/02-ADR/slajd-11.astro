@@ -1,0 +1,319 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slide 11 - Cykl życia ADR"
+  bgImage="/images/background-1.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.76), rgba(10,14,23,0.9))"
+>
+  <div class="content">
+    <h1 class="title">Cykl życia <span class="highlight">ADR</span></h1>
+
+    <div class="diagram" aria-label="Diagram stanów ADR">
+      <article class="node node--proposed">
+        <span class="status-dot"></span>
+        <div class="node-head">
+          <i class="ti ti-pencil-plus"></i>
+          <h3>Proponowana</h3>
+        </div>
+        <p>Szkic decyzji do dyskusji w zespole.</p>
+      </article>
+
+      <div class="link link--to-accepted" aria-hidden="true">
+        <span class="link-label">akceptacja</span>
+        <i class="ti ti-arrow-right"></i>
+      </div>
+
+      <article class="node node--accepted">
+        <span class="status-dot"></span>
+        <div class="node-head">
+          <i class="ti ti-circle-check"></i>
+          <h3>Zaakceptowana</h3>
+        </div>
+        <p>Obowiązująca decyzja — zespół ją stosuje.</p>
+      </article>
+
+      <div class="link link--to-deprecated" aria-hidden="true">
+        <span class="link-label">upływ czasu</span>
+        <i class="ti ti-arrow-right"></i>
+      </div>
+
+      <article class="node node--deprecated">
+        <span class="status-dot"></span>
+        <div class="node-head">
+          <i class="ti ti-clock-pause"></i>
+          <h3>Przestarzała</h3>
+        </div>
+        <p>Nadal w historii, ale już nieaktualna.</p>
+      </article>
+
+      <div class="link link--to-rejected" aria-hidden="true">
+        <i class="ti ti-arrow-down-right"></i>
+        <span class="link-label">odmowa</span>
+      </div>
+
+      <article class="node node--rejected">
+        <span class="status-dot"></span>
+        <div class="node-head">
+          <i class="ti ti-circle-x"></i>
+          <h3>Odrzucona</h3>
+        </div>
+        <p>Świadomie nieprzyjęta — z zachowanym uzasadnieniem.</p>
+      </article>
+
+      <div class="link link--to-superseded" aria-hidden="true">
+        <i class="ti ti-arrow-down-right"></i>
+        <span class="link-label">nowy ADR</span>
+      </div>
+
+      <article class="node node--superseded">
+        <span class="status-dot"></span>
+        <div class="node-head">
+          <i class="ti ti-replace"></i>
+          <h3>Zastąpiona</h3>
+        </div>
+        <p>Zostaje w repo z linkiem do następczyni.</p>
+      </article>
+    </div>
+
+    <div class="trail">
+      <i class="ti ti-history"></i>
+      <p>
+        Każdy poprzedni stan pozostaje częścią<strong>śladu decyzyjnego</strong>
+      </p>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    max-width: 1440px;
+    padding: 56px 3rem 0;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--cyan-400);
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 82px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    max-width: 1180px;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+    margin: 0 auto 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.5s forwards;
+  }
+
+  .lead strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .diagram {
+    width: 100%;
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr) 56px
+      minmax(0, 1fr) 56px
+      minmax(0, 1fr);
+    grid-template-rows: auto 36px auto;
+    align-items: stretch;
+    column-gap: 8px;
+    row-gap: 0;
+  }
+
+  .node {
+    position: relative;
+    background: rgba(15, 23, 42, 0.66);
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    text-align: left;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .node--proposed { grid-column: 1; grid-row: 1; animation-delay: 0.65s; }
+  .node--accepted { grid-column: 3; grid-row: 1; animation-delay: 0.85s; }
+  .node--deprecated { grid-column: 5; grid-row: 1; animation-delay: 1.05s; }
+  .node--rejected { grid-column: 3; grid-row: 3; animation-delay: 1.25s; }
+  .node--superseded { grid-column: 5; grid-row: 3; animation-delay: 1.45s; }
+
+  .status-dot {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.5);
+    box-shadow: 0 0 10px rgba(148, 163, 184, 0.4);
+  }
+
+  .node--proposed .status-dot { background: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.65); }
+  .node--accepted .status-dot { background: #22d3ee; box-shadow: 0 0 12px rgba(34, 211, 238, 0.75); }
+  .node--deprecated .status-dot { background: #a78bfa; box-shadow: 0 0 10px rgba(167, 139, 250, 0.6); }
+  .node--rejected .status-dot { background: #f87171; box-shadow: 0 0 10px rgba(248, 113, 113, 0.65); }
+  .node--superseded .status-dot { background: #fbbf24; box-shadow: 0 0 10px rgba(251, 191, 36, 0.6); }
+
+  .node-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .node-head i {
+    font-size: 30px;
+    color: var(--cyan-400);
+    flex: 0 0 auto;
+  }
+
+  .node--rejected .node-head i { color: #f87171; }
+  .node--deprecated .node-head i { color: #a78bfa; }
+  .node--superseded .node-head i { color: #fbbf24; }
+
+  .node h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.2px;
+    margin: 0;
+  }
+
+  .node p {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .node--accepted {
+    background:
+      radial-gradient(circle at 22% 18%, rgba(34, 211, 238, 0.16), transparent 38%),
+      linear-gradient(145deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.62) 55%),
+      rgba(15, 23, 42, 0.66);
+    border-color: rgba(34, 211, 238, 0.35);
+    box-shadow: 0 12px 36px rgba(34, 211, 238, 0.12);
+  }
+
+  .link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: rgba(148, 163, 184, 0.85);
+    opacity: 0;
+    animation: fadeIn 0.55s ease-out forwards;
+  }
+
+  .link i { font-size: 28px; }
+
+  .link-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  .link--to-accepted { grid-column: 2; grid-row: 1; animation-delay: 0.78s; }
+  .link--to-deprecated { grid-column: 4; grid-row: 1; animation-delay: 0.98s; }
+
+  .link--to-rejected {
+    grid-column: 3;
+    grid-row: 2;
+    flex-direction: row;
+    gap: 10px;
+    color: rgba(248, 113, 113, 0.85);
+    animation-delay: 1.18s;
+  }
+  .link--to-rejected i { color: rgba(248, 113, 113, 0.9); }
+
+  .link--to-superseded {
+    grid-column: 5;
+    grid-row: 2;
+    flex-direction: row;
+    gap: 10px;
+    color: rgba(251, 191, 36, 0.85);
+    animation-delay: 1.38s;
+  }
+  .link--to-superseded i { color: rgba(251, 191, 36, 0.9); }
+
+  .trail {
+    margin-top: 24px;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 22px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 14px;
+    max-width: 880px;
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 1.6s forwards;
+  }
+
+  .trail i {
+    font-size: 26px;
+    color: var(--cyan-400);
+    flex: 0 0 auto;
+  }
+
+  .trail p {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #e2e8f0;
+    margin: 0;
+  }
+
+  .trail strong {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+</style>
