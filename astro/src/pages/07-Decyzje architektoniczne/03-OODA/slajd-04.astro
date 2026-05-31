@@ -1,0 +1,271 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 04 - Dlaczego OODA pasuje do architektury?"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <div class="content">
+    <p class="eyebrow">Realia decyzji</p>
+    <h1 class="title">
+      Dlaczego OODA pasuje do <span class="highlight">architektury?</span>
+    </h1>
+    <p class="lede">
+      Architektura oprogramowania ma taką samą dynamikę jak środowiska, dla których powstał OODA —
+      <span class="lede-accent">rzadko działamy w warunkach pełnej pewności</span>.
+    </p>
+
+    <div class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 1280 540" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35"/>
+            <stop offset="60%" stop-color="#22d3ee" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <circle cx="640" cy="270" r="240" fill="none" stroke="rgba(34,211,238,0.10)" stroke-width="1" stroke-dasharray="4 8"/>
+        <circle cx="640" cy="270" r="180" fill="url(#coreGlow)"/>
+
+        <g stroke="rgba(34,211,238,0.35)" stroke-width="1.5" fill="none" stroke-dasharray="3 6">
+          <line x1="640" y1="270" x2="220" y2="90"/>
+          <line x1="640" y1="270" x2="640" y2="40"/>
+          <line x1="640" y1="270" x2="1060" y2="90"/>
+          <line x1="640" y1="270" x2="220" y2="450"/>
+          <line x1="640" y1="270" x2="640" y2="500"/>
+          <line x1="640" y1="270" x2="1060" y2="450"/>
+        </g>
+      </svg>
+
+      <div class="core">
+        <div class="core-eyebrow">W centrum</div>
+        <div class="core-title">
+          Decyzja architektoniczna<br />
+          pod niepełną informacją
+        </div>
+      </div>
+
+      <article class="node node--tl">
+        <i class="ti ti-coin"></i>
+        <div>
+          <h3>Ograniczony budżet</h3>
+          <p>Trzeba wybrać — wszystkiego nie da się zrobić.</p>
+        </div>
+      </article>
+
+      <article class="node node--tc">
+        <i class="ti ti-trending-up"></i>
+        <div>
+          <h3>Presja biznesowa</h3>
+          <p>Termin, klient, deadline rynkowy.</p>
+        </div>
+      </article>
+
+      <article class="node node--tr">
+        <i class="ti ti-server-2"></i>
+        <div>
+          <h3>Systemy legacy</h3>
+          <p>To, co już działa — i czego nie wyrzucisz.</p>
+        </div>
+      </article>
+
+      <article class="node node--bl">
+        <i class="ti ti-tool"></i>
+        <div>
+          <h3>Dług technologiczny</h3>
+          <p>Decyzje z przeszłości ograniczają dzisiejsze opcje.</p>
+        </div>
+      </article>
+
+      <article class="node node--bc">
+        <i class="ti ti-arrows-shuffle"></i>
+        <div>
+          <h3>Zmieniające się wymagania</h3>
+          <p>To, co dziś jest „must”, jutro może zniknąć.</p>
+        </div>
+      </article>
+
+      <article class="node node--br">
+        <i class="ti ti-users-group"></i>
+        <div>
+          <h3>Różne kompetencje zespołów</h3>
+          <p>Co realnie utrzyma zespół, którym dysponujesz.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 50px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--cyan-400);
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.06;
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    max-width: 1180px;
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: rgba(240, 244, 248, 0.78);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .lede-accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+  }
+
+  .diagram {
+    position: relative;
+    width: 1220px;
+    height: 500px;
+    margin-top: 0;
+  }
+
+  .diagram-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.55s forwards;
+  }
+
+  .core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 380px;
+    padding: 24px 28px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.5), rgba(14, 116, 144, 0.3));
+    border: 2px solid var(--cyan-400);
+    border-radius: 18px;
+    box-shadow:
+      0 0 0 8px rgba(34, 211, 238, 0.08),
+      0 24px 60px rgba(8, 145, 178, 0.35);
+    opacity: 0;
+    animation: fadeCoreUp 0.9s ease-out 0.6s forwards;
+  }
+
+  .core-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 6px;
+  }
+
+  .core-title {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #ecfeff;
+    line-height: 1.22;
+    text-align: center;
+  }
+
+  .node {
+    position: absolute;
+    width: 270px;
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 14px;
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .node i {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--cyan-400);
+  }
+
+  .node h3 {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: #f0f4f8;
+    margin-bottom: 3px;
+    line-height: 1.2;
+  }
+
+  .node p {
+    font-size: 13.5px;
+    font-weight: 300;
+    line-height: 1.35;
+    color: #94a3b8;
+  }
+
+  .node--tl { left: 0;       top: 18px;    animation-delay: 0.75s; }
+  .node--tc { left: 475px;   top: -8px;    animation-delay: 0.85s; }
+  .node--tr { right: 0;      top: 18px;    animation-delay: 0.95s; }
+  .node--bl { left: 0;       bottom: 52px; animation-delay: 1.05s; }
+  .node--bc { left: 475px;   bottom: 24px; animation-delay: 1.15s; }
+  .node--br { right: 0;      bottom: 52px; animation-delay: 1.25s; }
+
+  @keyframes fadeCoreUp {
+    from { opacity: 0; transform: translate(-50%, calc(-50% + 24px)); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
+  }
+</style>

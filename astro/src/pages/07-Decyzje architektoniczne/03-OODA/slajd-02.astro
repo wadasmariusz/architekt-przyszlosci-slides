@@ -1,0 +1,319 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import johnBoydImg from './images/john-boyd.png';
+---
+<SlideLayout
+  title="Slajd 02 - Geneza OODA Loop"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.14"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <g transform="translate(280, 760)" stroke="rgba(34,211,238,0.16)" fill="none" stroke-width="1">
+      <circle r="60"/>
+      <circle r="130"/>
+      <circle r="210"/>
+      <line x1="-210" y1="0" x2="210" y2="0"/>
+      <line x1="0" y1="-210" x2="0" y2="210"/>
+      <line x1="-150" y1="-150" x2="150" y2="150"/>
+      <line x1="-150" y1="150" x2="150" y2="-150"/>
+      <circle r="210" fill="url(#radarGrad)"/>
+    </g>
+
+    <g stroke="rgba(34,211,238,0.08)" stroke-width="1" fill="none">
+      <path d="M 60 980 Q 480 880, 920 940 T 1860 880"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Geneza <span class="highlight">OODA</span> Loop
+    </h1>
+
+    <div class="layout">
+      <aside class="portrait-card">
+        <div class="portrait">
+          <Image
+            class="portrait-img"
+            src={johnBoydImg}
+            alt="John Boyd"
+            loading="eager"
+          />
+        </div>
+        <div class="who">
+          <div class="name">John Boyd</div>
+          <div class="role">pilot myśliwski<br/>strateg wojskowy</div>
+        </div>
+        <div class="era">
+          <span class="era-dot"></span>
+          <span>USAF · lata 50.–80. XX w.</span>
+        </div>
+      </aside>
+
+      <section class="facts">
+        <article class="fact">
+          <div class="ic"><i class="ti ti-plane"></i></div>
+          <div>
+            <h3>Świat wojskowy</h3>
+            <p>Powstało w środowisku ekstremalnej dynamiki: Lotnictwo myśliwskie i strategia.</p>
+          </div>
+        </article>
+
+        <article class="fact">
+          <div class="ic"><i class="ti ti-clock-bolt"></i></div>
+          <div>
+            <h3>Decyzje pod presją czasu</h3>
+            <p>Sekundy między obserwacją a reakcją decydują o wyniku starcia.</p>
+          </div>
+        </article>
+
+        <article class="fact">
+          <div class="ic"><i class="ti ti-eye-search"></i></div>
+          <div>
+            <h3>Niepełne informacje</h3>
+            <p>Działanie z mglistym obrazem sytuacji, nigdy z pełnym zestawem danych.</p>
+          </div>
+        </article>
+
+        <article class="fact highlight-card">
+          <div class="ic"><i class="ti ti-refresh"></i></div>
+          <div>
+            <h3>Przewaga przez szybszy cykl</h3>
+            <p>Wygrywa nie ten, kto ma więcej danych, ale ten, kto szybciej przechodzi pętlę.</p>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <p class="footnote">
+      OODA powstało jako framework działań w <span class="accent">warunkach dużej niepewności</span>.
+    </p>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 96px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--cyan-400);
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.08;
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 40px;
+    align-items: stretch;
+    width: 100%;
+    max-width: 1420px;
+    text-align: left;
+    margin-bottom: 36px;
+  }
+
+  .portrait-card {
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(34, 211, 238, 0.22);
+    border-radius: 18px;
+    padding: 24px 24px 22px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.5s forwards;
+  }
+
+  .portrait {
+    width: 200px;
+    height: 220px;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at center, rgba(34,211,238,0.12), transparent 70%);
+    border: 1px solid rgba(34, 211, 238, 0.28);
+    box-shadow: 0 16px 38px rgba(2, 6, 23, 0.32);
+  }
+
+  .portrait-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .who .name {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #f0f4f8;
+    line-height: 1.05;
+  }
+
+  .who .role {
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  .era {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(148, 163, 184, 0.18);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  .era-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.18);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+  }
+
+  .fact {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 28px 30px;
+    min-height: 0;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 14px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .fact:nth-child(1) { animation-delay: 0.6s; }
+  .fact:nth-child(2) { animation-delay: 0.75s; }
+  .fact:nth-child(3) { animation-delay: 0.9s; }
+  .fact:nth-child(4) { animation-delay: 1.05s; }
+
+  .fact.highlight-card {
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(14, 116, 144, 0.12));
+    border-color: rgba(34, 211, 238, 0.55);
+  }
+
+  .fact .ic {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fact .ic i {
+    font-size: 32px;
+    color: var(--cyan-400);
+  }
+
+  .fact h3 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: #f0f4f8;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .fact p {
+    font-size: 18px;
+    line-height: 1.45;
+    font-weight: 300;
+    color: #cbd5e1;
+  }
+
+  .fact.highlight-card h3 {
+    color: #ecfeff;
+  }
+
+  .footnote {
+    max-width: 1280px;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: rgba(240, 244, 248, 0.82);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.2s forwards;
+  }
+
+  .footnote .accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+  }
+</style>

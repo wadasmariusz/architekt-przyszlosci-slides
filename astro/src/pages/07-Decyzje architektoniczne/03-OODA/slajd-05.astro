@@ -1,0 +1,270 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 05 - Pętla OODA"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <div class="content">
+    <header class="head">
+      <h1 class="title">
+        Pętla <span class="highlight">OODA</span>
+      </h1>
+    </header>
+
+    <div class="loop" aria-label="Pętla OODA">
+      <svg class="loop-arrows" viewBox="0 0 1180 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <marker id="arrowHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 Z" fill="var(--cyan-400)"/>
+          </marker>
+          <marker id="arrowHeadReturn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 Z" fill="rgba(34,211,238,0.85)"/>
+          </marker>
+        </defs>
+
+        <line x1="340" y1="168" x2="785" y2="168"
+              stroke="var(--cyan-400)" stroke-width="3" marker-end="url(#arrowHead)"/>
+        <line x1="970" y1="260" x2="970" y2="330"
+              stroke="var(--cyan-400)" stroke-width="3" marker-end="url(#arrowHead)"/>
+        <line x1="840" y1="448" x2="395" y2="448"
+              stroke="var(--cyan-400)" stroke-width="3" marker-end="url(#arrowHead)"/>
+
+        <path d="M 205 330 C 205 292, 205 270, 205 238"
+              fill="none"
+              stroke="rgba(34,211,238,0.85)"
+              stroke-width="3"
+              marker-end="url(#arrowHeadReturn)"/>
+
+        <circle cx="590" cy="308" r="120"
+                fill="rgba(34,211,238,0.035)"
+                stroke="rgba(34,211,238,0.16)"
+                stroke-width="1.5"
+                stroke-dasharray="4 9"/>
+
+        <text x="590" y="314" text-anchor="middle"
+              fill="rgba(34,211,238,0.85)"
+              font-size="16"
+              font-weight="600"
+              letter-spacing="3">
+          PĘTLA WRACA DO OBSERWACJI
+        </text>
+      </svg>
+
+      <article class="phase phase--1">
+        <div class="phase-letter">O</div>
+        <div class="phase-name">Observe</div>
+        <p class="phase-desc">Zbierz dane o sytuacji — bez interpretacji.</p>
+        <span class="phase-tag">faza 1</span>
+      </article>
+
+      <article class="phase phase--2">
+        <div class="phase-letter">O</div>
+        <div class="phase-name">Orient</div>
+        <p class="phase-desc">Nadaj danym znaczenie w kontekście systemu.</p>
+        <span class="phase-tag">faza 2</span>
+      </article>
+
+      <article class="phase phase--3">
+        <div class="phase-letter">D</div>
+        <div class="phase-name">Decide</div>
+        <p class="phase-desc">Wybierz kierunek działania — jako hipotezę.</p>
+        <span class="phase-tag">faza 3</span>
+      </article>
+
+      <article class="phase phase--4">
+        <div class="phase-letter">A</div>
+        <div class="phase-name">Act</div>
+        <p class="phase-desc">Sprawdź decyzję w praktyce — kontrolowanie.</p>
+        <span class="phase-tag">faza 4</span>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 62px 3rem 0;
+    text-align: center;
+  }
+
+  .head,
+  .loop {
+    width: 100%;
+  }
+
+  .head {
+    margin-bottom: 20px;
+  }
+
+  .eyebrow {
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: var(--cyan-400);
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.02;
+    color: #f0f4f8;
+    margin-bottom: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: rgba(240, 244, 248, 0.78);
+    max-width: 1180px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .lede-accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .loop {
+    position: relative;
+    width: min(1180px, 100%);
+    height: 600px;
+    margin: 0 auto;
+  }
+
+  .loop-arrows {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 0.9s ease-out 1.1s forwards;
+  }
+
+  .phase {
+    position: absolute;
+    z-index: 2;
+    width: 310px;
+    min-height: 220px;
+    padding: 26px 28px 24px;
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.7));
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 14px 40px rgba(8, 145, 178, 0.15);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .phase--1 {
+    left: 48px;
+    top: 58px;
+    animation-delay: 0.55s;
+  }
+
+  .phase--2 {
+    right: 48px;
+    top: 58px;
+    animation-delay: 0.7s;
+  }
+
+  .phase--3 {
+    right: 48px;
+    top: 338px;
+    animation-delay: 0.85s;
+  }
+
+  .phase--4 {
+    left: 48px;
+    top: 338px;
+    animation-delay: 1s;
+  }
+
+  .phase-letter {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    font-weight: 800;
+    color: #ecfeff;
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    border-radius: 14px;
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+    margin: 0 auto 16px;
+    letter-spacing: -1px;
+  }
+
+  .phase-name {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: #f0f4f8;
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+
+  .phase-desc {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.34;
+    color: #cbd5e1;
+    margin-bottom: 18px;
+  }
+
+  .phase-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.10);
+    border: 1px solid rgba(34, 211, 238, 0.30);
+  }
+
+  .closer {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: rgba(240, 244, 248, 0.78);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.25s forwards;
+  }
+
+  .closer-accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+  }
+</style>
