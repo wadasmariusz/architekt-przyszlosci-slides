@@ -7,17 +7,11 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   bgOverlay="linear-gradient(rgba(10,14,23,0.74), rgba(10,14,23,0.88))"
 >
   <div class="content">
-    <p class="eyebrow">Ocena ex post</p>
     <h1 class="title">Decyzje zależą od <span class="highlight">kontekstu</span></h1>
-    <p class="lead">
-      Decyzja, która była dobra dwa lata temu, może być zła dzisiaj —
-      i odwrotnie. <strong>Bez kontekstu</strong> ocena architektoniczna prowadzi do błędnych wniosków.
-    </p>
 
     <div class="timeline" aria-label="Porównanie kontekstu wtedy i dziś">
       <article class="col col--past">
         <header>
-          <span class="chip"><i class="ti ti-history"></i> Wtedy</span>
           <h2>Kontekst, w którym decyzja powstała</h2>
         </header>
 
@@ -50,12 +44,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <span class="axis-dot axis-dot--past"></span>
         <span class="axis-arrow"><i class="ti ti-arrow-right"></i></span>
         <span class="axis-dot axis-dot--now"></span>
-        <span class="axis-label">Czas i zmiana kontekstu</span>
       </div>
 
       <article class="col col--now">
         <header>
-          <span class="chip chip--now"><i class="ti ti-calendar-event"></i> Dziś</span>
           <h2>Kontekst, w którym decyzję oceniamy</h2>
         </header>
 
@@ -209,12 +201,12 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .col h2 {
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 700;
     color: #f1f5f9;
     letter-spacing: -0.2px;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.18;
   }
 
   .dims {
@@ -228,10 +220,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   .dims li {
     display: grid;
-    grid-template-columns: 168px 1fr;
+    grid-template-columns: 188px 1fr;
     align-items: center;
-    gap: 14px;
-    padding: 8px 10px;
+    gap: 16px;
+    padding: 10px 12px;
     border-radius: 12px;
     background: rgba(17, 24, 39, 0.5);
     border: 1px solid rgba(148, 163, 184, 0.12);
@@ -247,14 +239,14 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     align-items: center;
     gap: 10px;
     color: #94a3b8;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1.6px;
     text-transform: uppercase;
   }
 
   .dim-label i {
-    font-size: 22px;
+    font-size: 26px;
     color: var(--cyan-400);
   }
 
@@ -264,9 +256,9 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   .dims li p {
     margin: 0;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 300;
-    line-height: 1.35;
+    line-height: 1.28;
     color: #e2e8f0;
   }
 
