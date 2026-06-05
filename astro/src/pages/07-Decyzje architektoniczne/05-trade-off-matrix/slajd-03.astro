@@ -1,0 +1,265 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 03 - Decyzja zależy od kontekstu"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="contextGrid" width="84" height="84" patternUnits="userSpaceOnUse">
+        <path d="M 84 0 L 0 0 0 84" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="contextGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.19"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#contextGrid)"/>
+    <circle cx="960" cy="560" r="430" fill="url(#contextGlow)"/>
+    <g stroke="rgba(34,211,238,0.12)" stroke-width="1.5" fill="none" stroke-dasharray="7 10">
+      <circle cx="960" cy="600" r="250"/>
+      <circle cx="960" cy="600" r="390"/>
+      <path d="M 250 830 C 520 710, 720 850, 980 760 S 1460 650, 1690 790"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <header class="header">
+      <span class="level-chip"><i class="ti ti-compass"></i>kontekst</span>
+      <h1 class="title">
+        Decyzja zależy od <span class="highlight">kontekstu</span>
+      </h1>
+    </header>
+
+    <section class="context-map" aria-label="Czynniki kontekstu decyzji">
+      <article class="factor factor--limits">
+        <i class="ti ti-adjustments-horizontal"></i>
+        <h2>ograniczenia</h2>
+      </article>
+
+      <article class="factor factor--risks">
+        <i class="ti ti-alert-triangle"></i>
+        <h2>ryzyka</h2>
+      </article>
+
+      <article class="factor factor--skills">
+        <i class="ti ti-users-group"></i>
+        <h2>kompetencje zespołu</h2>
+      </article>
+
+      <article class="factor factor--business">
+        <i class="ti ti-target-arrow"></i>
+        <h2>cele biznesowe</h2>
+      </article>
+
+      <article class="factor factor--stage">
+        <i class="ti ti-rocket"></i>
+        <h2>etap produktu</h2>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1500px, calc(100% - 150px));
+    max-width: none;
+    padding: 62px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    max-width: 1260px;
+    margin: 0 auto 42px;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip i {
+    font-size: 22px;
+  }
+
+  .title {
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .context-map {
+    position: relative;
+    width: min(1420px, 100%);
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: 174px;
+    gap: 36px;
+    margin-bottom: 32px;
+  }
+
+  .context-map::before {
+    content: "";
+    position: absolute;
+    left: 110px;
+    right: 110px;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.45), transparent);
+    opacity: 0;
+    animation: fadeIn 0.9s ease-out 0.7s forwards;
+  }
+
+  .factor {
+    position: relative;
+    min-height: 174px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 28px 30px;
+    border-radius: 16px;
+    background: rgba(17, 24, 39, 0.64);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    box-shadow: 0 18px 46px rgba(2, 6, 23, 0.26);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .factor::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), transparent 58%);
+  }
+
+  .factor i,
+  .factor h2 {
+    position: relative;
+    z-index: 1;
+  }
+
+  .factor i {
+    width: 62px;
+    height: 62px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    font-size: 34px;
+  }
+
+  .factor h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: 0;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .factor--limits {
+    grid-column: 1 / span 2;
+    animation-delay: 0.58s;
+    border-color: rgba(248, 113, 113, 0.38);
+  }
+
+  .factor--limits i {
+    background: rgba(220, 38, 38, 0.16);
+    border-color: rgba(248, 113, 113, 0.42);
+    color: #fca5a5;
+  }
+
+  .factor--risks {
+    grid-column: 3 / span 2;
+    animation-delay: 0.72s;
+    border-color: rgba(248, 113, 113, 0.38);
+  }
+
+  .factor--risks i {
+    background: rgba(220, 38, 38, 0.16);
+    border-color: rgba(248, 113, 113, 0.42);
+    color: #fca5a5;
+  }
+
+  .factor--skills {
+    grid-column: 5 / span 2;
+    animation-delay: 0.86s;
+  }
+
+  .factor--business {
+    grid-column: 2 / span 2;
+    animation-delay: 1s;
+    border-color: rgba(74, 222, 128, 0.46);
+  }
+
+  .factor--business i {
+    background: rgba(22, 163, 74, 0.16);
+    border-color: rgba(74, 222, 128, 0.42);
+    color: #86efac;
+  }
+
+  .factor--stage {
+    grid-column: 4 / span 2;
+    animation-delay: 1.14s;
+  }
+</style>
