@@ -39,7 +39,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <article class="decision-card">
           <p class="card-label">Decyzja</p>
           <h3>Utrzymać obecny model architektoniczny</h3>
-          <p>Ryzyko: Problemy z modularnością, zależnościami i niezależnością wdrożeń pozostają ukryte pod pozorną stabilnością znanego rozwiązania.</p>
         </article>
       </div>
 
@@ -58,7 +57,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <article class="decision-card">
           <p class="card-label">Decyzja</p>
           <h3>Rozproszyć system</h3>
-          <p>Ryzyko: System może zyskać większą złożoność operacyjną, trudniejsze debugowanie i zależności sieciowe bez rozwiązania pierwotnego problemu projektowego.</p>
         </article>
       </div>
     </div>
@@ -224,7 +222,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   .path {
     display: grid;
-    grid-template-rows: 1fr 46px 138px;
+    grid-template-rows: 1fr 46px 150px;
     gap: 0;
     opacity: 0;
     animation: fadeUp 0.9s ease-out forwards;
@@ -328,6 +326,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .decision-card {
+    min-height: 150px;
     padding: 20px 24px 18px;
     background: rgba(2, 6, 23, 0.46);
     border-style: dashed;
@@ -347,13 +346,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     line-height: 1.1;
     color: #f0f4f8;
     margin-bottom: 8px;
-  }
-
-  .decision-card p:last-child {
-    font-size: 17px;
-    font-weight: 300;
-    line-height: 1.36;
-    color: #aebbd0;
   }
 
   .principle {
