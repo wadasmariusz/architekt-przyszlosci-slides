@@ -2,34 +2,29 @@
 import SlideLayout from '../../../layouts/SlideLayout.astro';
 ---
 <SlideLayout
-  title="Slajd 11 - Wagi zmieniają decyzję"
+  title="Slajd 11 - Wagi kryteriów zależą od kontekstu"
   bgImage="/images/background-3.jpg"
   bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.92))"
 >
   <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
-      <pattern id="weightsGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+      <pattern id="criteriaGrid" width="86" height="86" patternUnits="userSpaceOnUse">
         <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
       </pattern>
-      <radialGradient id="weightsGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
-        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.05"/>
-        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="weightsSweep" x1="0%" y1="0%" x2="100%" y2="0%">
+      <linearGradient id="criteriaSweep" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
-        <stop offset="48%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="46%" stop-color="#22d3ee" stop-opacity="0.16"/>
         <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
       </linearGradient>
     </defs>
 
-    <rect width="1920" height="1080" fill="url(#weightsGrid)"/>
-    <circle cx="960" cy="540" r="430" fill="url(#weightsGlow)"/>
-    <path d="M 330 560 C 610 455, 1290 455, 1570 560" fill="none" stroke="url(#weightsSweep)" stroke-width="108" stroke-linecap="round"/>
-    <g stroke="rgba(34,211,238,0.12)" stroke-width="1.5" fill="none">
-      <path d="M 230 220 C 520 150, 720 265, 980 210 S 1420 150, 1700 265"/>
-      <path d="M 250 840 C 560 720, 760 880, 1040 770 S 1460 675, 1710 810"/>
-      <circle cx="960" cy="560" r="328" stroke-dasharray="8 12"/>
+    <rect width="1920" height="1080" fill="url(#criteriaGrid)"/>
+    <path d="M 230 220 C 520 150, 720 265, 980 210 S 1420 150, 1700 265" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 250 840 C 560 720, 760 880, 1040 770 S 1460 675, 1710 810" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 250 560 C 595 450, 1325 450, 1670 560" fill="none" stroke="url(#criteriaSweep)" stroke-width="96" stroke-linecap="round"/>
+    <g stroke="rgba(34,211,238,0.13)" stroke-width="1.5" fill="none" stroke-dasharray="8 12">
+      <path d="M 520 300 C 675 220, 845 220, 960 320 S 1240 440, 1430 325"/>
+      <path d="M 520 760 C 675 840, 845 840, 960 740 S 1240 620, 1430 735"/>
     </g>
   </svg>
 
@@ -37,49 +32,103 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     <header class="header">
       <span class="level-chip">
         <i class="ti ti-adjustments-alt"></i>
-        Kolejnym krokiem jest nadanie wag
+        TRADE-OFF MATRIX
       </span>
       <h1 class="title">
-        Wagi zmieniają <span class="highlight">decyzję</span>
+        Wagi zależą od <span class="highlight">kontekstu</span>
       </h1>
     </header>
 
-    <section class="weight-board" aria-label="Wagi zmieniają decyzję">
-      <article class="context-card context-card--mvp">
-        <div class="context-icon"><i class="ti ti-rocket"></i></div>
-        <h2>MVP</h2>
-        <p>większa waga prostoty i <span class="nowrap">time-to-market</span></p>
+    <section class="criteria-board" aria-label="Dwie małe tabele obok siebie: MVP vs system finansowy">
+      <article class="criteria-card criteria-card--mvp">
+        <header class="card-head">
+          <div class="context-icon"><i class="ti ti-rocket"></i></div>
+          <div>
+            <p class="example-label">Przykład 1</p>
+            <h2>MVP wynajmu pojazdów</h2>
+          </div>
+        </header>
 
-        <div class="weight-list" aria-hidden="true">
-          <span class="weight-pill weight-pill--strong">prostoty</span>
-          <span class="weight-pill weight-pill--strong">time-to-market</span>
+        <div class="criteria-table" role="table" aria-label="MVP platformy wynajmu pojazdów">
+          <div class="table-head" role="row">
+            <span role="columnheader">Kryterium</span>
+            <span role="columnheader">Waga</span>
+          </div>
+
+          <div class="criterion-row is-top" style="--bar: 100%" role="row">
+            <span role="cell">Time-to-market</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>30%</strong></div>
+          </div>
+
+          <div class="criterion-row is-top" style="--bar: 83%" role="row">
+            <span role="cell">Prostota implementacji</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>25%</strong></div>
+          </div>
+
+          <div class="criterion-row" style="--bar: 67%" role="row">
+            <span role="cell">Dopasowanie do kompetencji zespołu</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>20%</strong></div>
+          </div>
+
+          <div class="criterion-row" style="--bar: 50%" role="row">
+            <span role="cell">Koszt operacyjny</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>15%</strong></div>
+          </div>
+
+          <div class="criterion-row" style="--bar: 33%" role="row">
+            <span role="cell">Skalowalność długoterminowa</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>10%</strong></div>
+          </div>
         </div>
+        
       </article>
 
-      <div class="weight-shift" aria-hidden="true">
-        <div class="scale">
-          <span class="scale-pan scale-pan--left"></span>
-          <span class="scale-beam"></span>
-          <span class="scale-pan scale-pan--right"></span>
-          <span class="scale-pivot">
-            <i class="ti ti-scale"></i>
-          </span>
-        </div>
-        <div class="shift-arrow">
-          <i class="ti ti-arrows-exchange"></i>
-        </div>
-      </div>
+      <article class="criteria-card criteria-card--finance">
+        <header class="card-head">
+          <div class="context-icon"><i class="ti ti-shield-lock"></i></div>
+          <div>
+            <p class="example-label">Przykład 2</p>
+            <h2>System finansowy</h2>
+          </div>
+        </header>
 
-      <article class="context-card context-card--finance">
-        <div class="context-icon"><i class="ti ti-shield-lock"></i></div>
-        <h2>system finansowy</h2>
-        <p>większa waga spójności, bezpieczeństwa i niezawodności.</p>
+        <div class="criteria-table" role="table" aria-label="system finansowy">
+          <div class="table-head" role="row">
+            <span role="columnheader">Kryterium</span>
+            <span role="columnheader">Waga</span>
+          </div>
 
-        <div class="weight-list" aria-hidden="true">
-          <span class="weight-pill weight-pill--strong">spójności</span>
-          <span class="weight-pill weight-pill--strong">bezpieczeństwa</span>
-          <span class="weight-pill weight-pill--strong">niezawodności</span>
+          <div class="criterion-row is-top" style="--bar: 100%" role="row">
+            <span role="cell">Spójność danych</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>25%</strong></div>
+          </div>
+
+          <div class="criterion-row is-top" style="--bar: 100%" role="row">
+            <span role="cell">Bezpieczeństwo</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>25%</strong></div>
+          </div>
+
+          <div class="criterion-row" style="--bar: 80%" role="row">
+            <span role="cell">Niezawodność</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>20%</strong></div>
+          </div>
+
+          <div class="criterion-row" style="--bar: 60%" role="row">
+            <span role="cell">Zgodność regulacyjna / audytowalność</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>15%</strong></div>
+          </div>
+
+          <div class="criterion-row" style="--bar: 40%" role="row">
+            <span role="cell">Koszt operacyjny</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>10%</strong></div>
+          </div>
+
+          <div class="criterion-row" style="--bar: 20%" role="row">
+            <span role="cell">Time-to-market</span>
+            <div class="weight-cell" role="cell"><span class="bar"></span><strong>5%</strong></div>
+          </div>
         </div>
+        
       </article>
     </section>
   </div>
@@ -105,9 +154,9 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .content {
     position: relative;
     z-index: 5;
-    width: min(1540px, calc(100% - 150px));
+    width: min(1500px, calc(100% - 170px));
     max-width: none;
-    padding: 58px 0 0;
+    padding: 46px 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -115,8 +164,8 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .header {
-    max-width: 1260px;
-    margin: 0 auto 34px;
+    max-width: 1320px;
+    margin: 0 auto 22px;
   }
 
   .level-chip {
@@ -131,7 +180,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     font-size: 17px;
     font-weight: 700;
     letter-spacing: 0;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.15s forwards;
   }
@@ -141,10 +190,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .title {
-    font-size: 78px;
+    font-size: 82px;
     font-weight: 800;
     letter-spacing: 0;
-    line-height: 1.05;
+    line-height: 1.04;
     margin: 0;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.32s forwards;
@@ -157,41 +206,30 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background-clip: text;
   }
 
-  .weight-board {
-    position: relative;
+  .criteria-board {
     width: min(1480px, 100%);
-    min-height: 500px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 260px minmax(0, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
     align-items: stretch;
   }
 
-  .context-card,
-  .weight-shift {
+  .criteria-card {
     position: relative;
+    min-height: 506px;
+    padding: 24px 26px 22px;
     border-radius: 18px;
     background: rgba(17, 24, 39, 0.62);
     border: 1px solid rgba(148, 163, 184, 0.20);
     box-shadow: 0 24px 68px rgba(2, 6, 23, 0.32);
     backdrop-filter: blur(10px);
     overflow: hidden;
-  }
-
-  .context-card {
-    min-height: 500px;
-    padding: 42px 40px 38px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
     text-align: left;
     opacity: 0;
     animation: fadeUp 0.9s ease-out forwards;
   }
 
-  .context-card::before,
-  .weight-shift::before {
+  .criteria-card::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -199,237 +237,184 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), transparent 58%);
   }
 
-  .context-card--mvp {
-    animation-delay: 0.54s;
+  .criteria-card--mvp {
+    animation-delay: 0.52s;
     border-color: rgba(34, 211, 238, 0.40);
     background:
-      radial-gradient(circle at 18% 14%, rgba(34, 211, 238, 0.16), transparent 42%),
+      radial-gradient(circle at 18% 10%, rgba(34, 211, 238, 0.16), transparent 42%),
       rgba(17, 24, 39, 0.62);
   }
 
-  .context-card--finance {
-    animation-delay: 0.86s;
+  .criteria-card--finance {
+    animation-delay: 0.72s;
     border-color: rgba(74, 222, 128, 0.38);
     background:
-      radial-gradient(circle at 18% 14%, rgba(74, 222, 128, 0.14), transparent 42%),
+      radial-gradient(circle at 18% 10%, rgba(74, 222, 128, 0.14), transparent 42%),
       rgba(17, 24, 39, 0.62);
+  }
+
+  .card-head,
+  .criteria-table,
+  .annotation {
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-head {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
   }
 
   .context-icon {
-    position: relative;
-    z-index: 1;
-    width: 76px;
-    height: 76px;
-    margin-bottom: 26px;
-    border-radius: 18px;
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(34, 211, 238, 0.12);
     border: 1px solid rgba(34, 211, 238, 0.38);
     color: var(--cyan-400);
-    font-size: 40px;
+    font-size: 32px;
   }
 
-  .context-card--finance .context-icon {
+  .criteria-card--finance .context-icon {
     background: rgba(22, 163, 74, 0.16);
     border-color: rgba(74, 222, 128, 0.42);
     color: #86efac;
   }
 
-  .context-card h2,
-  .context-card p,
-  .weight-list {
-    position: relative;
-    z-index: 1;
-  }
-
-  .context-card h2 {
-    margin: 0 0 20px;
-    color: #f8fafc;
-    font-size: 56px;
-    font-weight: 800;
-    line-height: 1.04;
-    letter-spacing: 0;
-  }
-
-  .context-card p {
-    max-width: 540px;
-    color: rgba(240, 244, 248, 0.84);
-    font-size: 33px;
-    font-weight: 300;
-    line-height: 1.24;
-    margin: 0 0 34px;
-  }
-
-  .nowrap {
-    white-space: nowrap;
-  }
-
-  .weight-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .weight-pill {
-    display: inline-flex;
-    align-items: center;
-    min-height: 46px;
-    padding: 10px 18px;
-    border-radius: 999px;
-    background: rgba(15, 23, 42, 0.72);
-    border: 1px solid rgba(34, 211, 238, 0.34);
-    color: #dffbff;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 0;
-  }
-
-  .context-card--finance .weight-pill {
-    border-color: rgba(74, 222, 128, 0.34);
-    color: #dcfce7;
-  }
-
-  .weight-pill--strong::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-    margin-right: 10px;
-    border-radius: 50%;
-    background: var(--cyan-400);
-    box-shadow: 0 0 18px rgba(34, 211, 238, 0.62);
-  }
-
-  .context-card--finance .weight-pill--strong::before {
-    background: #86efac;
-    box-shadow: 0 0 18px rgba(74, 222, 128, 0.56);
-  }
-
-  .weight-shift {
-    min-height: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.70s forwards;
-    border-color: rgba(34, 211, 238, 0.30);
-    background:
-      radial-gradient(circle at 50% 18%, rgba(34, 211, 238, 0.18), transparent 46%),
-      rgba(17, 24, 39, 0.56);
-  }
-
-  .scale {
-    position: relative;
-    z-index: 1;
-    width: 214px;
-    height: 310px;
-  }
-
-  .scale-beam {
-    position: absolute;
-    left: 26px;
-    right: 26px;
-    top: 116px;
-    height: 8px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, rgba(34, 211, 238, 0.46), #e2e8f0, rgba(74, 222, 128, 0.46));
-    box-shadow: 0 0 30px rgba(34, 211, 238, 0.22);
-    transform: rotate(-8deg);
-    transform-origin: 50% 50%;
-  }
-
-  .scale-pivot {
-    position: absolute;
-    left: 50%;
-    top: 96px;
-    width: 82px;
-    height: 82px;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(2, 6, 23, 0.76);
-    border: 1px solid rgba(34, 211, 238, 0.42);
+  .example-label {
+    margin: 0 0 5px;
     color: var(--cyan-400);
-    font-size: 44px;
-    box-shadow: 0 0 34px rgba(34, 211, 238, 0.20);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
   }
 
-  .scale-pivot::after {
-    content: "";
-    position: absolute;
-    top: 82px;
-    left: 50%;
-    width: 4px;
-    height: 150px;
-    transform: translateX(-50%);
-    border-radius: 999px;
-    background: linear-gradient(180deg, rgba(34, 211, 238, 0.65), rgba(34, 211, 238, 0.10));
+  .criteria-card--finance .example-label {
+    color: #86efac;
   }
 
-  .scale-pan {
-    position: absolute;
-    top: 158px;
-    width: 74px;
-    height: 44px;
-    border-radius: 0 0 46px 46px;
-    border: 2px solid rgba(34, 211, 238, 0.42);
-    border-top: 0;
-    background: rgba(15, 23, 42, 0.70);
-    box-shadow: inset 0 -18px 28px rgba(34, 211, 238, 0.08);
+  .card-head h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0;
   }
 
-  .scale-pan::before {
-    content: "";
-    position: absolute;
-    left: 10px;
-    right: 10px;
-    top: -36px;
-    height: 38px;
-    border-left: 2px solid rgba(34, 211, 238, 0.36);
-    border-right: 2px solid rgba(34, 211, 238, 0.36);
-    transform: skewX(-14deg);
+  .criteria-table {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 14px;
   }
 
-  .scale-pan--left {
-    left: 8px;
-    transform: translateY(12px);
-  }
-
-  .scale-pan--right {
-    right: 8px;
-    transform: translateY(-12px);
-    border-color: rgba(74, 222, 128, 0.42);
-    box-shadow: inset 0 -18px 28px rgba(74, 222, 128, 0.08);
-  }
-
-  .scale-pan--right::before {
-    border-color: rgba(74, 222, 128, 0.36);
-  }
-
-  .shift-arrow {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    bottom: 78px;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    display: flex;
+  .table-head,
+  .criterion-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 188px;
+    gap: 32px;
     align-items: center;
-    justify-content: center;
-    background: var(--cyan-400);
-    color: #0a0e17;
-    font-size: 34px;
-    box-shadow: 0 0 0 8px rgba(34, 211, 238, 0.11), 0 0 34px rgba(34, 211, 238, 0.42);
+  }
+
+  .table-head {
+    padding: 0 12px 2px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .table-head span:last-child {
+    text-align: right;
+  }
+
+  .criterion-row {
+    min-height: 34px;
+    padding: 7px 12px;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .criterion-row > span {
+    color: #e2e8f0;
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.12;
+  }
+
+  .criterion-row.is-top {
+    border-color: rgba(34, 211, 238, 0.44);
+    background:
+      linear-gradient(90deg, rgba(34, 211, 238, 0.16), rgba(15, 23, 42, 0.62));
+  }
+
+  .criteria-card--finance .criterion-row.is-top {
+    border-color: rgba(74, 222, 128, 0.44);
+    background:
+      linear-gradient(90deg, rgba(74, 222, 128, 0.14), rgba(15, 23, 42, 0.62));
+  }
+
+  .weight-cell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 48px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .bar {
+    position: relative;
+    height: 9px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.16);
+    overflow: hidden;
+  }
+
+  .bar::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--bar);
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--cyan-400), var(--cyan-600));
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.34);
+  }
+
+  .criteria-card--finance .bar::before {
+    background: linear-gradient(90deg, #86efac, #22c55e);
+    box-shadow: 0 0 18px rgba(74, 222, 128, 0.30);
+  }
+
+  .weight-cell strong {
+    color: #f8fafc;
+    font-size: 17px;
+    font-weight: 800;
+    text-align: right;
+  }
+
+  .annotation {
+    min-height: 88px;
+    padding: 13px 15px;
+    border-radius: 14px;
+    background: rgba(2, 6, 23, 0.34);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    color: rgba(226, 232, 240, 0.84);
+    font-size: 16px;
+    font-weight: 350;
+    line-height: 1.28;
   }
 
   @media (max-width: 1200px) {
     .content {
-      width: min(1540px, calc(100% - 96px));
+      width: min(1500px, calc(100% - 96px));
     }
   }
 </style>

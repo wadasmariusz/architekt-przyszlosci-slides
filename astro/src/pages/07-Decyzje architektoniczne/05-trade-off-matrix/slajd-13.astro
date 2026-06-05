@@ -1,10 +1,12 @@
 ---
 import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import discussionImg from './images/trade-off-matrix-rozmowa.png';
 ---
 <SlideLayout
-  title="Slajd 13 - Najważniejsza jest dyskusja"
+  title="Slajd 13 - Punkty nie zastępują rozmowy"
   bgImage="/images/background-4.jpg"
-  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.92))"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.93))"
 >
   <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
@@ -24,15 +26,15 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     </defs>
 
     <rect width="1920" height="1080" fill="url(#discussionGrid)"/>
-    <circle cx="792" cy="604" r="430" fill="url(#discussionGlow)"/>
-    <path d="M 178 316 C 500 210, 744 332, 1018 270 S 1452 188, 1728 322" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
-    <path d="M 196 826 C 488 712, 726 856, 1026 762 S 1458 660, 1718 802" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
-    <path d="M 312 614 C 582 500, 950 502, 1268 612" fill="none" stroke="url(#discussionSweep)" stroke-width="118" stroke-linecap="round"/>
+    <circle cx="960" cy="560" r="440" fill="url(#discussionGlow)"/>
+    <path d="M 178 286 C 500 190, 744 312, 1018 250 S 1452 168, 1728 302" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 196 824 C 488 710, 726 854, 1026 760 S 1458 658, 1718 800" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 304 604 C 592 482, 1274 486, 1580 602" fill="none" stroke="url(#discussionSweep)" stroke-width="118" stroke-linecap="round"/>
     <g fill="none" stroke="rgba(34,211,238,0.16)" stroke-width="1.5" stroke-dasharray="9 13">
-      <path d="M 350 454 H 1258"/>
-      <path d="M 350 752 H 1258"/>
-      <path d="M 520 374 V 826"/>
-      <path d="M 1088 374 V 826"/>
+      <path d="M 300 420 H 1620"/>
+      <path d="M 300 730 H 1620"/>
+      <path d="M 486 344 V 814"/>
+      <path d="M 1434 344 V 814"/>
     </g>
   </svg>
 
@@ -42,40 +44,21 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <i class="ti ti-messages"></i>
         TRADE-OFF MATRIX
       </span>
+
       <h1 class="title">
-        Największą wartością jest <span class="highlight">dyskusja</span>
+        Macierz porządkuje <span class="highlight">rozmowę</span>
       </h1>
     </header>
 
-    <section class="discussion-board" aria-label="Najważniejsza jest dyskusja">
-      <article class="dialogue-panel">
-        <div class="dialogue-icon"><i class="ti ti-message-circle-2"></i></div>
-        <p>Tabela ma wspierać rozmowę o kosztach, nie tylko punktach.</p>
-      </article>
-
-      <section class="consequence-panel" aria-label="Pokazać przykłady konsekwencji">
-        <div class="panel-heading">
-          <i class="ti ti-route-square-2"></i>
-          <span>Pokazać przykłady konsekwencji:</span>
-        </div>
-
-        <div class="consequence-grid">
-          <article class="consequence-card consequence-card--rest">
-            <i class="ti ti-api"></i>
-            <h2>REST API</h2>
-          </article>
-
-          <article class="consequence-card consequence-card--event">
-            <i class="ti ti-bolt"></i>
-            <h2>event-driven architecture</h2>
-          </article>
-
-          <article class="consequence-card consequence-card--data">
-            <i class="ti ti-database"></i>
-            <h2>wspólna baza danych</h2>
-          </article>
-        </div>
-      </section>
+    <section class="story-board" aria-label="Macierz jako podstawa rozmowy">
+      <figure class="visual-card" aria-label="Zespół omawia trade-off matrix">
+        <Image
+          class="discussion-img"
+          src={discussionImg}
+          alt="Zespół omawia wyniki trade-off matrix i pyta, dlaczego rozwiązania oceniono w taki sposób"
+          loading="eager"
+        />
+      </figure>
     </section>
   </div>
 </SlideLayout>
@@ -100,10 +83,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .content {
     position: relative;
     z-index: 5;
-    width: min(1292px, calc(100% - 180px));
+    width: min(1560px, calc(100% - 150px));
     max-width: none;
     margin: 0 auto;
-    padding: 40px 0 0;
+    padding: 38px 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -111,37 +94,37 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .header {
-    max-width: 1300px;
-    margin: 0 auto 30px;
+    max-width: 1320px;
+    margin: 0 auto 22px;
   }
 
   .level-chip {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 9px 20px;
+    padding: 8px 19px;
     border-radius: 999px;
     background: rgba(8, 145, 178, 0.15);
     border: 1px solid rgba(34, 211, 238, 0.42);
     color: var(--cyan-400);
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: 0;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.15s forwards;
   }
 
   .level-chip i {
-    font-size: 22px;
+    font-size: 21px;
   }
 
   .title {
-    max-width: 1180px;
-    font-size: 76px;
+    max-width: 1320px;
+    font-size: 78px;
     font-weight: 800;
     letter-spacing: 0;
-    line-height: 1.05;
+    line-height: 1.03;
     margin: 0;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.32s forwards;
@@ -154,17 +137,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background-clip: text;
   }
 
-  .discussion-board {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 390px minmax(0, 1fr);
-    gap: 26px;
-    align-items: stretch;
-  }
-
-  .dialogue-panel,
-  .consequence-panel,
-  .consequence-card {
+  .visual-card {
     position: relative;
     border-radius: 18px;
     background: rgba(17, 24, 39, 0.62);
@@ -174,176 +147,42 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     overflow: hidden;
   }
 
-  .dialogue-panel {
-    min-height: 560px;
-    padding: 42px 34px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  .visual-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.11), transparent 62%);
+  }
+
+  .story-board {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .visual-card {
+    width: min(1240px, 100%);
+    padding: 14px;
     background:
-      radial-gradient(circle at 18% 14%, rgba(34, 211, 238, 0.20), transparent 42%),
-      linear-gradient(180deg, rgba(8, 145, 178, 0.20), rgba(17, 24, 39, 0.64));
+      radial-gradient(circle at 18% 12%, rgba(34, 211, 238, 0.18), transparent 38%),
+      linear-gradient(180deg, rgba(8, 145, 178, 0.14), rgba(17, 24, 39, 0.68));
     border-color: rgba(34, 211, 238, 0.40);
     opacity: 0;
     animation: fadeUp 0.9s ease-out 0.54s forwards;
   }
 
-  .dialogue-panel::before,
-  .consequence-panel::before,
-  .consequence-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.11), transparent 60%);
-  }
-
-  .dialogue-icon {
+  .discussion-img {
     position: relative;
     z-index: 1;
-    width: 86px;
-    height: 86px;
-    margin: 0 auto 30px;
-    border-radius: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(34, 211, 238, 0.14);
-    border: 1px solid rgba(34, 211, 238, 0.42);
-    color: var(--cyan-400);
-    font-size: 46px;
-    box-shadow: 0 0 34px rgba(34, 211, 238, 0.18);
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 18px 48px rgba(2, 6, 23, 0.42);
   }
 
-  .dialogue-panel p {
-    position: relative;
-    z-index: 1;
-    color: #f8fafc;
-    font-size: 38px;
-    font-weight: 800;
-    line-height: 1.14;
-    letter-spacing: 0;
-  }
-
-  .consequence-panel {
-    min-height: 560px;
-    padding: 34px;
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.72s forwards;
-  }
-
-  .panel-heading {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 28px;
-    color: #e2e8f0;
-    font-size: 25px;
-    font-weight: 800;
-    line-height: 1.18;
-    letter-spacing: 0;
-  }
-
-  .panel-heading i {
-    width: 58px;
-    height: 58px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 58px;
-    background: rgba(34, 211, 238, 0.12);
-    border: 1px solid rgba(34, 211, 238, 0.36);
-    color: var(--cyan-400);
-    font-size: 31px;
-  }
-
-  .consequence-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .consequence-card {
-    min-height: 392px;
-    padding: 28px 22px 26px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out forwards;
-  }
-
-  .consequence-card:nth-child(1) { animation-delay: 0.94s; }
-  .consequence-card:nth-child(2) { animation-delay: 1.08s; }
-  .consequence-card:nth-child(3) { animation-delay: 1.22s; }
-
-  .consequence-card--rest {
-    border-color: rgba(34, 211, 238, 0.44);
-    background:
-      linear-gradient(180deg, rgba(8, 145, 178, 0.24), rgba(17, 24, 39, 0.64));
-  }
-
-  .consequence-card--event {
-    border-color: rgba(167, 139, 250, 0.42);
-    background:
-      linear-gradient(180deg, rgba(124, 58, 237, 0.18), rgba(17, 24, 39, 0.64));
-  }
-
-  .consequence-card--data {
-    border-color: rgba(245, 158, 11, 0.42);
-    background:
-      linear-gradient(180deg, rgba(245, 158, 11, 0.14), rgba(17, 24, 39, 0.64));
-  }
-
-  .consequence-card i {
-    position: relative;
-    z-index: 1;
-    width: 72px;
-    height: 72px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(34, 211, 238, 0.12);
-    border: 1px solid rgba(34, 211, 238, 0.38);
-    color: var(--cyan-400);
-    font-size: 38px;
-  }
-
-  .consequence-card--event i {
-    background: rgba(124, 58, 237, 0.16);
-    border-color: rgba(167, 139, 250, 0.40);
-    color: #c4b5fd;
-  }
-
-  .consequence-card--data i {
-    background: rgba(245, 158, 11, 0.12);
-    border-color: rgba(245, 158, 11, 0.40);
-    color: #fbbf24;
-  }
-
-  .consequence-card h2 {
-    position: relative;
-    z-index: 1;
-    color: #f8fafc;
-    font-size: 36px;
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: 0;
-    margin: 0;
-  }
-
-  .consequence-card--event h2 {
-    font-size: 31px;
-  }
 </style>

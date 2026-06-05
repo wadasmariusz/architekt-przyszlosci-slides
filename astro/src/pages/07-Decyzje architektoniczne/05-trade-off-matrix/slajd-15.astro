@@ -1,5 +1,7 @@
 ---
 import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import commentsImg from './images/trade-off-matrix-commnets.png';
 ---
 <SlideLayout
   title="Slajd 15 - Komentarze wyjaśniają liczby"
@@ -16,72 +18,34 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <stop offset="48%" stop-color="#22d3ee" stop-opacity="0.16"/>
         <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
       </linearGradient>
-      <linearGradient id="commentColumnSlide15" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.16"/>
-        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.04"/>
-      </linearGradient>
     </defs>
 
     <rect width="1920" height="1080" fill="url(#commentGridSlide15)"/>
     <path d="M 188 244 C 478 166, 722 280, 988 216 S 1444 154, 1720 272" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
     <path d="M 196 836 C 506 708, 756 858, 1036 764 S 1460 662, 1724 804" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
     <path d="M 286 586 H 1470" fill="none" stroke="url(#commentSweepSlide15)" stroke-width="104" stroke-linecap="round"/>
-    <g stroke="rgba(34,211,238,0.15)" stroke-width="1.5" stroke-dasharray="9 13" fill="none">
-      <path d="M 292 386 H 1378"/>
-      <path d="M 292 734 H 1378"/>
-      <path d="M 472 332 V 802"/>
-      <path d="M 1248 332 V 802"/>
-    </g>
-    <rect x="1146" y="350" width="284" height="428" rx="28" fill="url(#commentColumnSlide15)" stroke="rgba(245,158,11,0.14)"/>
   </svg>
 
   <div class="content">
     <header class="header">
       <span class="level-chip">
         <i class="ti ti-message-2-plus"></i>
-        żeby do macierzy dodawać jakościowe komentarze
+        TRADE-OFF MATRIX
       </span>
       <h1 class="title">
-        Komentarze wyjaśniają <span class="highlight">liczby</span>
+        Liczby wymagają <span class="highlight">uzasadnienia</span>
       </h1>
     </header>
 
-    <section class="comment-board" aria-label="Komentarze wyjaśniają liczby">
-      <article class="score-panel">
-        <div class="score-shell" aria-hidden="true">
-          <div class="score-mark">
-            <span>4/5</span>
-          </div>
-          <div class="score-dots">
-            <span class="score-dot score-dot--filled"></span>
-            <span class="score-dot score-dot--filled"></span>
-            <span class="score-dot score-dot--filled"></span>
-            <span class="score-dot score-dot--filled"></span>
-            <span class="score-dot"></span>
-          </div>
-        </div>
-
-        <div class="criterion">
-          <i class="ti ti-shield-check"></i>
-          <h2>Niezawodność</h2>
-        </div>
-      </article>
-
-      <article class="comment-panel">
-        <div class="comment-head">
-          <i class="ti ti-message-2-check"></i>
-          <span>przykład oceny</span>
-        </div>
-
-        <blockquote>
-          „Niezawodność: 4/5 — istnieją retry, zespół zna technologię, infrastruktura już działa.”
-        </blockquote>
-      </article>
-
-      <article class="context-panel">
-        <i class="ti ti-notebook"></i>
-        <p>komentarz utrwala kontekst decyzji.</p>
-      </article>
+    <section class="story-board" aria-label="Komentarze wyjaśniają liczby">
+      <figure class="visual-card" aria-label="Trade-off matrix z komentarzami">
+        <Image
+          class="comments-img"
+          src={commentsImg}
+          alt="Trade-off matrix z komentarzami wyjaśniającymi oceny"
+          loading="eager"
+        />
+      </figure>
     </section>
   </div>
 </SlideLayout>
@@ -106,9 +70,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .content {
     position: relative;
     z-index: 5;
-    width: min(1340px, calc(100% - 580px));
+    width: min(1560px, calc(100% - 150px));
     max-width: none;
-    padding: 54px 0 0 3rem;
+    margin: 0 auto;
+    padding: 38px 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,10 +81,8 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .header {
-    width: 100%;
     max-width: 1320px;
-    margin: 0 auto 30px;
-    text-align: center;
+    margin: 0 auto 22px;
   }
 
   .level-chip {
@@ -144,12 +107,12 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .title {
-    max-width: 1280px;
-    font-size: 72px;
+    max-width: 1320px;
+    font-size: 82px;
     font-weight: 800;
     letter-spacing: 0;
+    margin-bottom: 32px;
     line-height: 1.05;
-    margin: 0 auto;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.32s forwards;
   }
@@ -161,234 +124,46 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background-clip: text;
   }
 
-  .comment-board {
+  .story-board {
     width: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
-    grid-template-rows: minmax(420px, auto) minmax(120px, auto);
-    gap: 24px;
-    align-items: stretch;
-    margin: 0 auto;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
   }
 
-  .score-panel,
-  .comment-panel,
-  .context-panel {
+  .visual-card {
     position: relative;
+    width: min(1240px, 100%);
+    padding: 14px;
     border-radius: 18px;
-    background: rgba(17, 24, 39, 0.62);
-    border: 1px solid rgba(148, 163, 184, 0.20);
+    background:
+      radial-gradient(circle at 18% 12%, rgba(34, 211, 238, 0.18), transparent 38%),
+      linear-gradient(180deg, rgba(8, 145, 178, 0.14), rgba(17, 24, 39, 0.68));
+    border: 1px solid rgba(34, 211, 238, 0.40);
     box-shadow: 0 24px 68px rgba(2, 6, 23, 0.32);
     backdrop-filter: blur(10px);
     overflow: hidden;
-  }
-
-  .score-panel::before,
-  .comment-panel::before,
-  .context-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.11), transparent 58%);
-  }
-
-  .score-panel {
-    min-height: 420px;
-    padding: 34px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background:
-      linear-gradient(180deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.66));
-    border-color: rgba(34, 211, 238, 0.42);
     opacity: 0;
     animation: fadeUp 0.9s ease-out 0.54s forwards;
   }
 
-  .score-shell,
-  .criterion,
-  .comment-head,
-  .comment-panel blockquote,
-  .context-panel i,
-  .context-panel p {
+  .visual-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.11), transparent 62%);
+  }
+
+  .comments-img {
     position: relative;
     z-index: 1;
-  }
-
-  .score-shell {
-    min-height: 242px;
-    padding: 30px 28px;
-    border-radius: 26px;
-    background: rgba(2, 6, 23, 0.30);
-    border: 1px solid rgba(34, 211, 238, 0.24);
-    box-shadow: inset 0 0 42px rgba(34, 211, 238, 0.08);
-  }
-
-  .score-mark {
-    width: 190px;
-    height: 190px;
-    margin: 0 auto;
-    border-radius: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background:
-      linear-gradient(180deg, rgba(8, 145, 178, 0.44), rgba(15, 23, 42, 0.92));
-    border: 1px solid rgba(34, 211, 238, 0.58);
-    box-shadow:
-      0 0 44px rgba(34, 211, 238, 0.20),
-      inset 0 0 34px rgba(34, 211, 238, 0.10);
-  }
-
-  .score-mark span {
-    color: var(--cyan-400);
-    font-size: 68px;
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: 0;
-  }
-
-  .score-dots {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 22px;
-  }
-
-  .score-dot {
-    width: 22px;
-    height: 22px;
-    border-radius: 999px;
-    background: rgba(15, 23, 42, 0.82);
-    border: 1px solid rgba(148, 163, 184, 0.36);
-  }
-
-  .score-dot--filled {
-    background: var(--cyan-400);
-    border-color: rgba(34, 211, 238, 0.74);
-    box-shadow: 0 0 18px rgba(34, 211, 238, 0.30);
-  }
-
-  .criterion {
-    display: grid;
-    grid-template-columns: 64px auto;
-    gap: 18px;
-    align-items: center;
-    justify-content: center;
-    margin-top: 24px;
-  }
-
-  .criterion i {
-    width: 64px;
-    height: 64px;
-    border-radius: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(34, 211, 238, 0.12);
-    border: 1px solid rgba(34, 211, 238, 0.38);
-    color: var(--cyan-400);
-    font-size: 35px;
-  }
-
-  .criterion h2 {
-    color: #f8fafc;
-    font-size: 42px;
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: 0;
-    margin: 0;
-  }
-
-  .comment-panel {
-    min-height: 420px;
-    padding: 42px 44px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background:
-      linear-gradient(180deg, rgba(245, 158, 11, 0.11), rgba(17, 24, 39, 0.66));
-    border-color: rgba(245, 158, 11, 0.34);
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.72s forwards;
-  }
-
-  .comment-panel::before {
-    background:
-      linear-gradient(135deg, rgba(245, 158, 11, 0.12), transparent 56%),
-      linear-gradient(90deg, rgba(34, 211, 238, 0.06), transparent 50%);
-  }
-
-  .comment-head {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    width: fit-content;
-    padding: 12px 18px;
-    border-radius: 999px;
-    background: rgba(245, 158, 11, 0.12);
-    border: 1px solid rgba(245, 158, 11, 0.36);
-    color: #fbbf24;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 0;
-    margin-bottom: 30px;
-  }
-
-  .comment-head i {
-    font-size: 24px;
-  }
-
-  .comment-panel blockquote {
-    margin: 0;
-    color: #f8fafc;
-    font-size: 42px;
-    font-weight: 800;
-    line-height: 1.18;
-    letter-spacing: 0;
-    text-align: center;
-  }
-
-  .context-panel {
-    grid-column: 1 / -1;
-    min-height: 120px;
-    padding: 22px 30px;
-    display: grid;
-    grid-template-columns: 66px auto;
-    gap: 22px;
-    align-items: center;
-    justify-content: center;
-    background:
-      radial-gradient(circle at 7% 50%, rgba(34, 211, 238, 0.14), transparent 36%),
-      rgba(15, 23, 42, 0.64);
-    border-color: rgba(34, 211, 238, 0.34);
-    border-left: 3px solid var(--cyan-400);
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.92s forwards;
-  }
-
-  .context-panel i {
-    width: 66px;
-    height: 66px;
-    border-radius: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(34, 211, 238, 0.12);
-    border: 1px solid rgba(34, 211, 238, 0.34);
-    color: var(--cyan-400);
-    font-size: 36px;
-  }
-
-  .context-panel p {
-    margin: 0;
-    color: #e2e8f0;
-    font-size: 34px;
-    font-weight: 300;
-    line-height: 1.26;
-    letter-spacing: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 18px 48px rgba(2, 6, 23, 0.42);
   }
 </style>
