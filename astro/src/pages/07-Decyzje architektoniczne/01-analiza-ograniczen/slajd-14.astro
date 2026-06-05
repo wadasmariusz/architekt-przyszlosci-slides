@@ -1,0 +1,181 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 14 - Pytania weryfikujące"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="checklistGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="checklistGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#checklistGrid)"/>
+    <circle cx="960" cy="600" r="480" fill="url(#checklistGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Pytania <span class="highlight">weryfikujące</span>
+    </h1>
+
+    <section class="checklist" aria-label="Lista pytań weryfikujących ograniczenia">
+      <article class="q-card">
+        <i class="ti ti-user-question"></i>
+        <p>Kto to mówi?</p>
+      </article>
+
+      <article class="q-card">
+        <i class="ti ti-arrows-split"></i>
+        <p>Z czego to wynika?</p>
+      </article>
+
+      <article class="q-card">
+        <i class="ti ti-source-code"></i>
+        <p>Jakie jest źródło?</p>
+      </article>
+
+      <article class="q-card">
+        <i class="ti ti-alert-triangle"></i>
+        <p>Co się stanie, jeśli tego nie spełnimy?</p>
+      </article>
+
+      <article class="q-card">
+        <i class="ti ti-clock-check"></i>
+        <p>Czy nadal jest aktualne?</p>
+      </article>
+
+      <article class="q-card">
+        <i class="ti ti-messages"></i>
+        <p>Czy można negocjować?</p>
+      </article>
+
+      <article class="q-card q-card--wide">
+        <i class="ti ti-bulb"></i>
+        <p>Czy istnieje inny sposób spełnienia warunku?</p>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 48px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .checklist {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .q-card {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    gap: 26px;
+    align-items: center;
+    padding: 22px 32px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 16px;
+    box-shadow: 0 18px 40px rgba(2, 6, 23, 0.30);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.7s ease-out forwards;
+  }
+
+  .q-card--wide {
+    background:
+      linear-gradient(135deg, rgba(8, 145, 178, 0.26), rgba(14, 116, 144, 0.12));
+    border-color: rgba(34, 211, 238, 0.50);
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.06),
+      0 18px 40px rgba(8, 145, 178, 0.22);
+  }
+
+  .q-card:nth-child(1) { animation-delay: 0.40s; }
+  .q-card:nth-child(2) { animation-delay: 0.50s; }
+  .q-card:nth-child(3) { animation-delay: 0.60s; }
+  .q-card:nth-child(4) { animation-delay: 0.70s; }
+  .q-card:nth-child(5) { animation-delay: 0.80s; }
+  .q-card:nth-child(6) { animation-delay: 0.90s; }
+  .q-card:nth-child(7) { animation-delay: 1.05s; }
+
+  .q-card i {
+    width: 78px;
+    height: 78px;
+    border-radius: 16px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: var(--cyan-400);
+  }
+
+  .q-card p {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    color: #f0f4f8;
+  }
+
+  .q-card--wide p {
+    font-size: 38px;
+    color: #ecfeff;
+  }
+</style>

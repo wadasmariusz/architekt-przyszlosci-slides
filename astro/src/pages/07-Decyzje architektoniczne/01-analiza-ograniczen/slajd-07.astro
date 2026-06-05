@@ -1,0 +1,121 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 07 - Ograniczenia techniczne"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <div class="content">
+    <h1 class="title">
+      <span class="title-main">Ograniczenia </span>
+      <span class="title-sub"><span class="highlight">techniczne</span></span>
+    </h1>
+
+    <section class="reference-image" aria-label="Diagram ograniczeń technicznych">
+      <img src="/images/07-Decyzje architektoniczne/slajd-07-reference.png" alt="Diagram technicznych ograniczeń: legacy ERP, SOAP API, Kubernetes, dostawca chmury, external API i rate limit" />
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 62px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .opening {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.34;
+    color: rgba(240, 244, 248, 0.84);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .title {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 8px 0 34px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.32s forwards;
+  }
+
+  .title {
+    white-space: nowrap;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .reference-image {
+    width: 100%;
+    max-width: 1220px;
+    margin-top: 12px;
+    margin-bottom: 28px;
+    border-radius: 20px;
+    border: 1px solid rgba(34, 211, 238, 0.18);
+    padding: 16px 20px 14px;
+    background: rgba(2, 6, 23, 0.2);
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.58s forwards;
+  }
+
+  .reference-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (max-width: 1200px) {
+    .title {
+      font-size: 62px;
+    }
+
+    .opening {
+      font-size: 24px;
+    }
+
+    .reference-image {
+      padding: 10px 12px 8px;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .content {
+      padding: 56px 1.3rem 0;
+    }
+
+    .title {
+      font-size: 54px;
+    }
+
+    .opening {
+      font-size: 21px;
+    }
+
+    .reference-image {
+      margin-top: 8px;
+    }
+  }
+</style>

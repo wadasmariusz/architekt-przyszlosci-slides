@@ -98,3 +98,35 @@ Na podstawie dostarczonego skryptu.
 **Wejście po słowach:** „W codziennej pracy architekta warto być więc szczególnie wyczulonym…”
 **Tytuł:** Sygnały do doprecyzowania
 **Opis slajdu:** Slajd kończący dostępny fragment. Pokazać cytaty jako „czerwone flagi”: „u nas zawsze tak robimy”, „biznes chce real-time”, „musimy mieć mikroserwisy”, „nie możemy użyć chmury”, „to musi być skalowalne”. Obok adnotacja: „Nie odrzucaj — doprecyzuj”. Slajd powinien wspierać praktyczne przejście od słyszanego hasła do mierzalnego ograniczenia. 
+
+### Slajd 17
+
+**Wejście po słowach:** „Dlatego przed podjęciem ważn…”
+**Tytuł:** Podsumowanie
+**Opis slajdu:** Slajd podsumowujący całą lekcję. Powinien zebrać główne zasady pracy architekta z ograniczeniami, bez powtarzania wszystkich przykładów.
+
+**Teksty na slajdzie:**
+
+**Zanim wybierzesz rozwiązanie:**
+
+1. **Nazwij ograniczenia**
+   Co realnie zawęża przestrzeń decyzji?
+
+2. **Ustal źródło**
+   Czy wynika z regulacji, umowy, systemu, budżetu, terminu albo decyzji biznesowej?
+
+3. **Oddziel fakty od założeń**
+   Czy to twardy warunek, czy tylko przyzwyczajenie, opinia albo skrót myślowy?
+
+4. **Sprawdź negocjowalność**
+   Co jest nienaruszalne, a co można zmienić po rozmowie z interesariuszami?
+
+5. **Zapisz konsekwencje**
+   Jakie trade-offy i ryzyka wynikają z przyjętej decyzji?
+
+**Adnotacja grafika/diagram:**
+bez grafiki
+
+Na końcu slajdu można dodać krótką puentę:
+
+**Dobra architektura nie ignoruje ograniczeń, ale wykorzystuje je do podjęcia świadomej decyzji.**

@@ -1,0 +1,279 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 10 - Ambicja vs zasoby"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="ambitionGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="ambitionGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#ambitionGrid)"/>
+    <circle cx="960" cy="620" r="480" fill="url(#ambitionGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Ograniczenia <span class="highlight">czasowe</span> i <span class="highlight">budżetowe</span>
+    </h1>
+
+    <section class="compare" aria-label="Porównanie kontekstów i adekwatnych architektur">
+      <article class="scenario scenario--left">
+        <header class="scenario-head">
+          <div class="ic"><i class="ti ti-rocket"></i></div>
+        </header>
+
+        <ul class="cond-list">
+          <li><i class="ti ti-bolt"></i><span>MVP</span></li>
+          <li><i class="ti ti-users"></i><span>mały zespół</span></li>
+          <li><i class="ti ti-clock-hour-4"></i><span>krótki termin</span></li>
+        </ul>
+
+        <div class="arrow"><i class="ti ti-arrow-down"></i></div>
+
+        <div class="result">
+          <div class="result-eyebrow">prostsza architektura</div>
+          <div class="result-title">np. modularny monolit</div>
+        </div>
+      </article>
+
+      <div class="divider" aria-hidden="true">
+        <span>vs</span>
+      </div>
+
+      <article class="scenario scenario--right">
+        <header class="scenario-head">
+          <div class="ic"><i class="ti ti-building-skyscraper"></i></div>
+        </header>
+
+        <ul class="cond-list">
+          <li><i class="ti ti-users-group"></i><span>wiele zespołów</span></li>
+          <li><i class="ti ti-chart-arcs"></i><span>duża skala</span></li>
+          <li><i class="ti ti-rocket"></i><span>niezależne wdrożenia</span></li>
+        </ul>
+
+        <div class="arrow"><i class="ti ti-arrow-down"></i></div>
+
+        <div class="result">
+          <div class="result-eyebrow">architektura rozproszona</div>
+          <div class="result-title">np. mikroserwisy</div>
+        </div>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .compare {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 1fr 84px 1fr;
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  .scenario {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 36px 32px 30px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.30);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .scenario--left { animation-delay: 0.5s; }
+  .scenario--right { animation-delay: 0.85s; }
+
+  .scenario-head {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .scenario-head .ic {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scenario-head .ic i {
+    font-size: 32px;
+    color: var(--cyan-400);
+  }
+
+  .scenario-head h2 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: #f0f4f8;
+    margin: 0;
+    line-height: 1.22;
+  }
+
+  .cond-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cond-list li {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 12px;
+  }
+
+  .cond-list li i {
+    font-size: 22px;
+    color: var(--cyan-400);
+    justify-self: center;
+  }
+
+  .cond-list li span {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e2e8f0;
+    line-height: 1.25;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px 0 0;
+  }
+
+  .arrow i {
+    font-size: 34px;
+    color: var(--cyan-400);
+    opacity: 0.8;
+  }
+
+  .result {
+    margin-top: auto;
+    padding: 22px 24px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.30), rgba(14, 116, 144, 0.14));
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.05),
+      0 18px 48px rgba(8, 145, 178, 0.20);
+    text-align: center;
+  }
+
+  .result-eyebrow {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 6px;
+  }
+
+  .result-title {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #ecfeff;
+    line-height: 1.15;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.9s ease-out 0.95s forwards;
+  }
+
+  .divider span {
+    width: 72px;
+    height: 72px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(2, 6, 23, 0.7);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.06);
+  }
+</style>

@@ -1,0 +1,267 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 17 - Podsumowanie"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="summaryGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="summaryGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#summaryGrid)"/>
+    <circle cx="960" cy="560" r="500" fill="url(#summaryGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      <span>Podsumowanie</span>
+    </h1>
+
+    <section class="steps" aria-label="Pięć kroków pracy architekta z ograniczeniami">
+      <article class="step">
+        <span class="step-num"><i class="ti ti-tag"></i></span>
+        <div class="step-body">
+          <h2>Nazwij ograniczenia</h2>
+          <p>Co realnie zawęża przestrzeń decyzji?</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <span class="step-num"><i class="ti ti-source-code"></i></span>
+        <div class="step-body">
+          <h2>Ustal źródło</h2>
+          <p>Czy wynika z regulacji, umowy, systemu, budżetu, terminu albo decyzji biznesowej?</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <span class="step-num"><i class="ti ti-arrows-split"></i></span>
+        <div class="step-body">
+          <h2>Oddziel fakty od założeń</h2>
+          <p>Czy to twardy warunek, czy tylko przyzwyczajenie, opinia albo skrót myślowy?</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <span class="step-num"><i class="ti ti-messages"></i></span>
+        <div class="step-body">
+          <h2>Sprawdź negocjowalność</h2>
+          <p>Co jest nienaruszalne, a co można zmienić po rozmowie z interesariuszami?</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <span class="step-num"><i class="ti ti-notebook"></i></span>
+        <div class="step-body">
+          <h2>Zapisz konsekwencje</h2>
+          <p>Jakie trade-offy i ryzyka wynikają z przyjętej decyzji?</p>
+        </div>
+      </article>
+    </section>
+
+    <aside class="punchline">
+      <i class="ti ti-bulb"></i>
+      <p>
+        Dobra architektura <span class="accent">nie ignoruje</span> ograniczeń,<br>
+        ale <span class="accent">wykorzystuje je</span> do podjęcia świadomej decyzji.
+      </p>
+    </aside>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 50px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 12px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.18s forwards;
+  }
+
+  .title {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .steps {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: stretch;
+    overflow: hidden;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(2, 6, 23, 0.30);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.75s ease-out forwards;
+  }
+
+  .step:nth-child(1) { animation-delay: 0.40s; }
+  .step:nth-child(2) { animation-delay: 0.50s; }
+  .step:nth-child(3) { animation-delay: 0.60s; }
+  .step:nth-child(4) { animation-delay: 0.70s; }
+  .step:nth-child(5) { animation-delay: 0.80s; }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--cyan-400);
+    background: rgba(34, 211, 238, 0.12);
+    border-right: 1px solid rgba(34, 211, 238, 0.32);
+  }
+
+  .step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 26px;
+  }
+
+  .step-body h2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    line-height: 1.15;
+    color: #f0f4f8;
+  }
+
+  .step-body h2 i {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--cyan-400);
+  }
+
+  .step-body p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.35;
+    color: #cbd5e1;
+  }
+
+  .punchline {
+    width: auto;
+    max-width: 1440px;
+    display: inline-flex;
+    gap: 22px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 22px 32px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.30), rgba(14, 116, 144, 0.14));
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.06),
+      0 18px 48px rgba(8, 145, 178, 0.22);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.0s forwards;
+  }
+
+  .punchline i {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--cyan-400);
+    flex-shrink: 0;
+  }
+
+  .punchline p {
+    margin: 0;
+    text-align: left;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+    color: #ecfeff;
+  }
+
+  .punchline p .accent {
+    color: var(--cyan-400);
+    font-weight: 800;
+  }
+</style>

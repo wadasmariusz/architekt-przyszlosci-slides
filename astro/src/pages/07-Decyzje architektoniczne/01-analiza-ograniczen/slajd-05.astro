@@ -1,0 +1,200 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 05 - Typy ograniczeń"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.92), rgba(10,14,23,0.96))"
+>
+  <div class="content">
+    <h1 class="title">
+      Różne perspektywy <span class="highlight">jednej decyzji</span>
+    </h1>
+
+    <ol class="list" aria-label="Typy ograniczeń">
+      <li class="row">
+        <i class="ti ti-target row-icon" aria-hidden="true"></i>
+        <span class="label">Biznesowe</span>
+        <span class="meta">cel</span>
+      </li>
+      <li class="row">
+        <i class="ti ti-cpu row-icon" aria-hidden="true"></i>
+        <span class="label">Techniczne</span>
+        <span class="meta">system</span>
+      </li>
+      <li class="row">
+        <i class="ti ti-scale row-icon" aria-hidden="true"></i>
+        <span class="label">Regulacyjne / prawne</span>
+        <span class="meta">compliance</span>
+      </li>
+      <li class="row">
+        <i class="ti ti-users-group row-icon" aria-hidden="true"></i>
+        <span class="label">Organizacyjne</span>
+        <span class="meta">zdolność organizacji</span>
+      </li>
+      <li class="row">
+        <i class="ti ti-hourglass row-icon" aria-hidden="true"></i>
+        <span class="label">Czasowe i budżetowe</span>
+        <span class="meta">zasoby</span>
+      </li>
+    </ol>
+
+    <p class="footnote">Mapowanie ograniczeń</p>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    width: 100%;
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .list,
+  .footnote {
+    max-width: 1100px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-top: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 28px;
+    padding: 26px 4px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out forwards;
+    transition: padding-left 0.3s ease;
+  }
+
+  .row-icon {
+    font-size: 28px;
+    color: rgba(34, 211, 238, 0.7);
+    justify-self: center;
+  }
+
+  .row:nth-child(1) { animation-delay: 0.5s; }
+  .row:nth-child(2) { animation-delay: 0.62s; }
+  .row:nth-child(3) { animation-delay: 0.74s; }
+  .row:nth-child(4) { animation-delay: 0.86s; }
+  .row:nth-child(5) { animation-delay: 0.98s; }
+
+  .num {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(148, 163, 184, 0.7);
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label {
+    font-size: 36px;
+    font-weight: 500;
+    color: #f0f4f8;
+    letter-spacing: -0.4px;
+    text-transform: lowercase;
+    white-space: nowrap;
+  }
+
+  .meta {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(148, 163, 184, 0.85);
+    letter-spacing: 0.4px;
+    font-style: italic;
+  }
+
+  .footnote {
+    margin: 56px 0 0;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.55);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 1.2s forwards;
+  }
+
+  @media (max-width: 1200px) {
+    .title {
+      font-size: 56px;
+    }
+
+    .label {
+      font-size: 30px;
+    }
+
+    .row {
+      grid-template-columns: 36px 1fr auto;
+      gap: 20px;
+    }
+
+    .row-icon {
+      font-size: 24px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .content {
+      padding: 0 1.4rem;
+    }
+
+    .title {
+      font-size: 42px;
+    }
+
+    .row {
+      grid-template-columns: 30px 1fr auto;
+      gap: 14px;
+      padding: 20px 2px;
+    }
+
+    .row-icon {
+      font-size: 20px;
+    }
+
+    .meta {
+      font-size: 16px;
+    }
+
+    .label {
+      font-size: 26px;
+    }
+  }
+</style>

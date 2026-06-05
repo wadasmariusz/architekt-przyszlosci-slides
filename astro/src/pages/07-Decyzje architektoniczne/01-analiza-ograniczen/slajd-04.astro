@@ -1,0 +1,259 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 04 - Dopasowanie zamiast ideału"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="fitGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="fitGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="65%" stop-color="#22d3ee" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#fitGrid)"/>
+    <circle cx="960" cy="620" r="480" fill="url(#fitGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Jaka jest dobra decyzja <span class="highlight">architektoniczna </span>?
+    </h1>
+
+    <section class="compare" aria-label="Porównanie kontekstów">
+      <article class="ctx-card ctx-card--left">
+        <header class="ctx-head">
+          <div class="ic"><i class="ti ti-building-skyscraper"></i></div>
+          <h2>Duża organizacja</h2>
+        </header>
+        <ul class="ctx-list">
+          <li><i class="ti ti-users-group"></i><span>Wiele zespołów</span></li>
+          <li><i class="ti ti-chart-arcs"></i><span>Wysoka skala</span></li>
+          <li><i class="ti ti-settings-check"></i><span>Dojrzałe operacje</span></li>
+        </ul>
+      </article>
+
+      <article class="formula-card">
+        <div class="formula-eyebrow">Dobra decyzja =</div>
+        <ul class="formula-list">
+          <li>kontekst</li>
+          <li class="plus">+</li>
+          <li>cele</li>
+          <li class="plus">+</li>
+          <li>ograniczenia</li>
+          <li class="plus">+</li>
+          <li>ryzyka</li>
+        </ul>
+      </article>
+
+      <article class="ctx-card ctx-card--right">
+        <header class="ctx-head">
+          <div class="ic"><i class="ti ti-rocket"></i></div>
+          <h2>Mały zespół</h2>
+        </header>
+        <ul class="ctx-list">
+          <li><i class="ti ti-bolt"></i><span>MVP</span></li>
+          <li><i class="ti ti-clock-hour-4"></i><span>Krótki termin</span></li>
+          <li><i class="ti ti-coin"></i><span>Ograniczone zasoby</span></li>
+        </ul>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .compare {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .ctx-card,
+  .formula-card {
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.30);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .ctx-card {
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    text-align: left;
+  }
+
+  .ctx-card--left { animation-delay: 0.5s; }
+  .ctx-card--right { animation-delay: 0.85s; }
+
+  .ctx-head {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .ctx-head .ic {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ctx-head .ic i {
+    font-size: 32px;
+    color: var(--cyan-400);
+  }
+
+  .ctx-head h2 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: #f0f4f8;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .ctx-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ctx-list li {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 12px;
+  }
+
+  .ctx-list li i {
+    font-size: 22px;
+    color: var(--cyan-400);
+    justify-self: center;
+  }
+
+  .ctx-list li span {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e2e8f0;
+    line-height: 1.25;
+  }
+
+  .formula-card {
+    padding: 40px 28px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.30), rgba(14, 116, 144, 0.16));
+    border-color: rgba(34, 211, 238, 0.55);
+    box-shadow:
+      0 0 0 8px rgba(34, 211, 238, 0.06),
+      0 28px 70px rgba(8, 145, 178, 0.30);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    animation-delay: 0.68s;
+  }
+
+  .formula-eyebrow {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 24px;
+  }
+
+  .formula-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .formula-list li {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #ecfeff;
+    line-height: 1.1;
+  }
+
+  .formula-list li.plus {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cyan-400);
+    opacity: 0.85;
+  }
+</style>

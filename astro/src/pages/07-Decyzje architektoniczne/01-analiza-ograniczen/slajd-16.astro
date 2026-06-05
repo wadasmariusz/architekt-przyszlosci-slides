@@ -1,0 +1,221 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 16 - Sygnały do doprecyzowania"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="signalsGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="signalsGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#signalsGrid)"/>
+    <circle cx="960" cy="600" r="480" fill="url(#signalsGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Sygnały do <span class="highlight">doprecyzowania</span>
+    </h1>
+
+    <section class="signals-grid" aria-label="Czerwone flagi do doprecyzowania">
+      <article class="quote-card">
+        <i class="ti ti-flag-3"></i>
+        <blockquote>U nas zawsze tak robimy</blockquote>
+      </article>
+
+      <article class="quote-card">
+        <i class="ti ti-flag-3"></i>
+        <blockquote>System musi działać w czasie rzeczywistym</blockquote>
+      </article>
+
+      <article class="quote-card">
+        <i class="ti ti-flag-3"></i>
+        <blockquote>Musimy mieć mikroserwisy</blockquote>
+      </article>
+
+      <article class="quote-card">
+        <i class="ti ti-flag-3"></i>
+        <blockquote>Nie możemy użyć chmury</blockquote>
+      </article>
+
+      <article class="quote-card">
+        <i class="ti ti-flag-3"></i>
+        <blockquote>To musi być skalowalne</blockquote>
+      </article>
+
+      <article class="quote-card">
+        <i class="ti ti-flag-3"></i>
+        <blockquote>Zawsze robimy backend w tej technologii</blockquote>
+      </article>
+      
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .signals-grid {
+    width: 100%;
+    max-width: 1440px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .quote-card {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 20px;
+    align-items: center;
+    padding: 28px 30px;
+    min-height: 150px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 2px solid #ef4444;
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.30);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .quote-card:nth-child(1) { animation-delay: 0.45s; }
+  .quote-card:nth-child(2) { animation-delay: 0.55s; }
+  .quote-card:nth-child(3) { animation-delay: 0.65s; }
+  .quote-card:nth-child(4) { animation-delay: 0.75s; }
+  .quote-card:nth-child(5) { animation-delay: 0.85s; }
+
+  .quote-card i {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(239, 68, 68, 0.16);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: #f87171;
+  }
+
+  .quote-card blockquote {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.2px;
+    color: #f0f4f8;
+  }
+
+  .verdict-card {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 22px;
+    align-items: center;
+    padding: 26px 30px;
+    min-height: 140px;
+    background:
+      linear-gradient(135deg, rgba(8, 145, 178, 0.30), rgba(14, 116, 144, 0.14));
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    border-radius: 14px;
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.06),
+      0 24px 60px rgba(8, 145, 178, 0.22);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.0s forwards;
+  }
+
+  .verdict-ic {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: var(--cyan-400);
+  }
+
+  .verdict-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .verdict-eyebrow {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .verdict-body p {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    line-height: 1.18;
+    color: #ecfeff;
+  }
+
+  .verdict-body p .accent {
+    color: var(--cyan-400);
+  }
+</style>

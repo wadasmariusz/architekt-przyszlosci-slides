@@ -1,0 +1,278 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 11 - Konflikty ograniczeń"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="conflictGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="conflictGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#conflictGrid)"/>
+    <circle cx="960" cy="560" r="480" fill="url(#conflictGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Konflikty <span class="highlight">ograniczeń</span>
+    </h1>
+
+    <section class="tension-grid" aria-label="Pary napięć między ograniczeniami">
+      <article class="tension-card">
+        <div class="side side--left">
+          <i class="ti ti-clock-hour-4"></i>
+          <span>termin</span>
+        </div>
+        <div class="vs" aria-hidden="true">
+          <span>vs</span>
+        </div>
+        <div class="side side--right">
+          <i class="ti ti-layers-intersect"></i>
+          <span>zakres</span>
+        </div>
+      </article>
+
+      <article class="tension-card">
+        <div class="side side--left">
+          <i class="ti ti-coin"></i>
+          <span>budżet</span>
+        </div>
+        <div class="vs" aria-hidden="true">
+          <span>vs</span>
+        </div>
+        <div class="side side--right">
+          <i class="ti ti-shield-check"></i>
+          <span>niezawodność</span>
+        </div>
+      </article>
+
+      <article class="tension-card">
+        <div class="side side--left">
+          <i class="ti ti-world-pin"></i>
+          <span>region danych</span>
+        </div>
+        <div class="vs" aria-hidden="true">
+          <span>vs</span>
+        </div>
+        <div class="side side--right">
+          <i class="ti ti-cloud-dollar"></i>
+          <span>koszt dostawcy</span>
+        </div>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tension-grid {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-bottom: 48px;
+  }
+
+  .tension-card {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    align-items: stretch;
+    padding: 22px 28px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.30);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .tension-card:nth-child(1) { animation-delay: 0.5s; }
+  .tension-card:nth-child(2) { animation-delay: 0.65s; }
+  .tension-card:nth-child(3) { animation-delay: 0.80s; }
+
+  .side {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 20px 28px;
+    border-radius: 14px;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .side--left {
+    justify-content: center;
+    text-align: center;
+    flex-direction: row-reverse;
+  }
+
+  .side--right {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .side i {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--cyan-400);
+  }
+
+  .side span {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #f0f4f8;
+    line-height: 1.15;
+  }
+
+  .vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .vs::before,
+  .vs::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(34,211,238,0.0), rgba(34,211,238,0.55));
+  }
+
+  .vs::before {
+    left: 0;
+  }
+
+  .vs::after {
+    right: 0;
+    background: linear-gradient(90deg, rgba(34,211,238,0.55), rgba(34,211,238,0.0));
+  }
+
+  .vs span {
+    width: 60px;
+    height: 60px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(2, 6, 23, 0.7);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 6px rgba(34, 211, 238, 0.06);
+  }
+
+  .note {
+    width: auto;
+    max-width: 1280px;
+    display: inline-flex;
+    gap: 22px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 26px 34px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(14, 116, 144, 0.10));
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    border-radius: 16px;
+    box-shadow: 0 18px 48px rgba(8, 145, 178, 0.18);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.0s forwards;
+  }
+
+  .note i {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--cyan-400);
+    flex-shrink: 0;
+  }
+
+  .note p {
+    margin: 0;
+    text-align: left;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #ecfeff;
+  }
+
+  .note p .accent {
+    color: var(--cyan-400);
+    font-weight: 700;
+  }
+</style>
