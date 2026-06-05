@@ -1,0 +1,351 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 13 - Zamknięcie pętli"
+  bgImage="/images/background-4.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.91))"
+>
+  <div class="content">
+    <div class="phase-badge">
+      <span class="phase-letter">A</span>
+      <span class="phase-name">Act → Observe</span>
+    </div>
+
+    <h1 class="title">
+      Zamknięcie <span class="highlight">pętli</span>
+    </h1>
+
+    <p class="lede">
+      Po wykonaniu decyzji wracamy do obserwacji i sprawdzamy,
+      <span class="lede-accent">co naprawdę zmieniło się w systemie</span>.
+    </p>
+
+    <div class="loop-stage" aria-label="Pętla walidacji decyzji architektonicznej">
+      <article class="loop-panel loop-panel--act">
+        <div class="panel-icon"><i class="ti ti-rocket"></i></div>
+        <p class="panel-label">Act</p>
+        <h2>Wdrażamy decyzję</h2>
+        <p>Spike, PoC, canary albo kontrolowany eksperyment na realnym fragmencie systemu.</p>
+      </article>
+
+      <div class="loop-connector" aria-hidden="true">
+        <span class="connector-line"></span>
+        <span class="connector-node"><i class="ti ti-arrow-right"></i></span>
+      </div>
+
+      <article class="loop-panel loop-panel--observe">
+        <div class="panel-icon"><i class="ti ti-radar-2"></i></div>
+        <p class="panel-label">Observe</p>
+        <h2>Mierzymy skutki</h2>
+        <p>Decyzja jest dobra dopiero wtedy, gdy jej konsekwencje widać w danych i pracy zespołu.</p>
+      </article>
+    </div>
+
+    <div class="questions" aria-label="Pytania kontrolne po działaniu">
+      <article class="question-card question-card--1">
+        <i class="ti ti-clock-down"></i>
+        <span>Czy latency spadło?</span>
+      </article>
+
+      <article class="question-card question-card--2">
+        <i class="ti ti-alert-circle"></i>
+        <span>Czy error rate się zmniejszył?</span>
+      </article>
+
+      <article class="question-card question-card--3">
+        <i class="ti ti-coins"></i>
+        <span>Czy koszty są akceptowalne?</span>
+      </article>
+
+      <article class="question-card question-card--4">
+        <i class="ti ti-users-group"></i>
+        <span>Czy zespół potrafi utrzymać rozwiązanie?</span>
+      </article>
+    </div>
+
+    <blockquote class="closing-note">
+      <i class="ti ti-repeat"></i>
+      <p>Architektura rozwija się przez krótkie cykle: decyzja, działanie, obserwacja, korekta.</p>
+    </blockquote>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: calc(100% - 560px);
+    max-width: 1320px;
+    padding: 58px 0 0 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 22px 10px 14px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .phase-letter {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    color: #0a0e17;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .phase-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .title {
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lede {
+    max-width: 1180px;
+    font-size: 25px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: rgba(240, 244, 248, 0.78);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .lede-accent {
+    color: var(--cyan-400);
+    font-weight: 600;
+  }
+
+  .loop-stage {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 118px 1fr;
+    gap: 0;
+    align-items: stretch;
+    margin-bottom: 26px;
+  }
+
+  .loop-panel {
+    min-height: 250px;
+    padding: 28px 30px 26px;
+    background: rgba(17, 24, 39, 0.60);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .loop-panel--act {
+    animation-delay: 0.62s;
+  }
+
+  .loop-panel--observe {
+    animation-delay: 0.86s;
+    background:
+      radial-gradient(circle at 82% 18%, rgba(34, 211, 238, 0.20), transparent 38%),
+      linear-gradient(180deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.62));
+    border-color: rgba(34, 211, 238, 0.48);
+    box-shadow: 0 18px 50px rgba(8, 145, 178, 0.16);
+  }
+
+  .panel-icon {
+    width: 62px;
+    height: 62px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+
+  .panel-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 10px;
+  }
+
+  .loop-panel h2 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.12;
+    color: #f8fafc;
+    margin-bottom: 14px;
+  }
+
+  .loop-panel p:last-child {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #b6c4d8;
+  }
+
+  .loop-connector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.78s forwards;
+  }
+
+  .connector-line {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.2), var(--cyan-400), rgba(34, 211, 238, 0.2));
+  }
+
+  .connector-node {
+    position: relative;
+    z-index: 1;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(2, 6, 23, 0.78);
+    border: 1px solid rgba(34, 211, 238, 0.48);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    box-shadow: 0 0 34px rgba(34, 211, 238, 0.18);
+  }
+
+  .questions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .question-card {
+    min-height: 94px;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 18px 22px;
+    border-radius: 15px;
+    background: rgba(17, 24, 39, 0.58);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .question-card--1 { animation-delay: 1.05s; }
+  .question-card--2 { animation-delay: 1.18s; }
+  .question-card--3 { animation-delay: 1.31s; }
+  .question-card--4 { animation-delay: 1.44s; }
+
+  .question-card i {
+    width: 56px;
+    height: 56px;
+    border-radius: 13px;
+    background: rgba(34, 211, 238, 0.11);
+    border: 1px solid rgba(34, 211, 238, 0.32);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+  }
+
+  .question-card span {
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.22;
+    color: #e2e8f0;
+  }
+
+  .closing-note {
+    width: 100%;
+    min-height: 92px;
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: 18px;
+    align-items: center;
+    margin: 0;
+    padding: 18px 24px;
+    background:
+      radial-gradient(circle at 8% 50%, rgba(34, 211, 238, 0.14), transparent 38%),
+      rgba(15, 23, 42, 0.64);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    border-left: 3px solid var(--cyan-400);
+    border-radius: 14px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 1.62s forwards;
+  }
+
+  .closing-note i {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 31px;
+  }
+
+  .closing-note p {
+    font-size: 24px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.36;
+    color: #e2e8f0;
+  }
+</style>

@@ -1,0 +1,342 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 12 - A — Act"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.92))"
+>
+  <div class="content">
+    <div class="phase-badge">
+      <span class="phase-letter">A</span>
+      <span class="phase-name">Act</span>
+    </div>
+
+    <h1 class="title">
+      Kontrolowane <span class="highlight">sprawdzenie decyzji</span>
+    </h1>
+
+    <div class="act-board" aria-label="Skala ryzyka i kosztu dzialania">
+      <section class="act-intro">
+        <p class="intro-label">Główna myśl</p>
+        <h2>Act to nie musi być pełna migracja systemu.</h2>
+        <p>
+          Najczęściej zaczynamy od małego eksperymentu, który pozwala sprawdzić
+          hipotezę architektoniczną bez przepalania budżetu i zaufania zespołu.
+        </p>
+      </section>
+
+      <section class="risk-scale" aria-label="Od niskiego do wysokiego ryzyka">
+        <div class="scale-axis" aria-hidden="true">
+          <span>Niski koszt / szybka nauka</span>
+          <span>Realny ruch / większe ryzyko</span>
+        </div>
+
+        <div class="scale-items">
+          <article class="action-card action-card--low">
+            <div class="action-icon"><i class="ti ti-sparkles"></i></div>
+            <p class="action-step">01</p>
+            <h2>Spike</h2>
+            <p>Krótka próba techniczna: czy kierunek w ogóle ma sens?</p>
+          </article>
+
+          <article class="action-card">
+            <div class="action-icon"><i class="ti ti-flask"></i></div>
+            <p class="action-step">02</p>
+            <h2>Proof of concept</h2>
+            <p>Minimalna wersja rozwiązania z konkretnym kryterium sukcesu.</p>
+          </article>
+
+          <article class="action-card">
+            <div class="action-icon"><i class="ti ti-activity-heartbeat"></i></div>
+            <p class="action-step">03</p>
+            <h2>Kontrolowane obciążenie</h2>
+            <p>Eksperyment na realistycznych danych, ale pod nadzorem.</p>
+          </article>
+
+          <article class="action-card action-card--high">
+            <div class="action-icon"><i class="ti ti-traffic-lights"></i></div>
+            <p class="action-step">04</p>
+            <h2>Canary / A/B</h2>
+            <p>Ograniczony realny ruch, szybki rollback i metryki skutków.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <div class="takeaway">
+      <i class="ti ti-shield-check"></i>
+      <span>Najlepszy Act często oznacza: <strong>najpierw mały, kontrolowany eksperyment</strong>.</span>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1360px, calc(100% - 560px));
+    max-width: none;
+    margin-right: auto;
+    padding: 58px 0 0 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 22px 10px 14px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .phase-letter {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    color: #0a0e17;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .phase-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .title {
+    max-width: 1220px;
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .act-board {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    align-items: stretch;
+    margin-bottom: 24px;
+  }
+
+  .act-intro,
+  .action-card,
+  .takeaway {
+    background: rgba(17, 24, 39, 0.60);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 46px rgba(0, 0, 0, 0.24);
+  }
+
+  .act-intro {
+    min-height: 436px;
+    padding: 32px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.5s forwards;
+    background:
+      radial-gradient(circle at 20% 18%, rgba(34, 211, 238, 0.16), transparent 36%),
+      linear-gradient(180deg, rgba(8, 145, 178, 0.16), rgba(17, 24, 39, 0.62));
+    border-color: rgba(34, 211, 238, 0.34);
+  }
+
+  .intro-label,
+  .action-step {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 12px;
+  }
+
+  .act-intro h2 {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.12;
+    color: #f8fafc;
+    margin-bottom: 18px;
+  }
+
+  .act-intro p:last-child {
+    font-size: 23px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+  }
+
+  .risk-scale {
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.68s forwards;
+  }
+
+  .scale-axis {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 0 8px 18px;
+    margin-bottom: 18px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .scale-axis::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 0;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--cyan-400), #a78bfa, #f59e0b);
+    box-shadow: 0 0 24px rgba(34, 211, 238, 0.22);
+  }
+
+  .scale-items {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .action-card {
+    min-height: 346px;
+    padding: 24px 20px 22px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(17, 24, 39, 0.58);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .action-card:nth-child(1) { animation-delay: 0.82s; }
+  .action-card:nth-child(2) { animation-delay: 0.96s; }
+  .action-card:nth-child(3) { animation-delay: 1.10s; }
+  .action-card:nth-child(4) { animation-delay: 1.24s; }
+
+  .action-card--low {
+    border-color: rgba(34, 211, 238, 0.42);
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.58));
+  }
+
+  .action-card--high {
+    border-color: rgba(245, 158, 11, 0.44);
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.16), rgba(17, 24, 39, 0.58));
+  }
+
+  .action-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 18px;
+  }
+
+  .action-card--high .action-icon {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.34);
+    color: #fbbf24;
+  }
+
+  .action-step {
+    margin-bottom: 8px;
+  }
+
+  .action-card h2 {
+    min-height: 76px;
+    font-size: 29px;
+    font-weight: 800;
+    line-height: 1.14;
+    color: #f8fafc;
+    margin-bottom: 16px;
+  }
+
+  .action-card p:last-child {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.36;
+    color: #b6c4d8;
+  }
+
+  .takeaway {
+    width: min(920px, 100%);
+    min-height: 100px;
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(8, 145, 178, 0.22), rgba(15, 23, 42, 0.64));
+    border-color: rgba(34, 211, 238, 0.42);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.36s forwards;
+  }
+
+  .takeaway i {
+    width: 62px;
+    height: 62px;
+    border-radius: 15px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-400);
+    font-size: 32px;
+  }
+
+  .takeaway span {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.36;
+    color: #dbeafe;
+  }
+
+  .takeaway strong {
+    font-weight: 800;
+    color: #f8fafc;
+  }
+</style>

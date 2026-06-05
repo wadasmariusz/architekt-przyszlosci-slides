@@ -1,0 +1,343 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 15 - Decyzje odwracalne i nieodwracalne"
+  bgImage="/images/background-5.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.92))"
+>
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-arrows-exchange"></i> Tempo decyzji</span>
+      <h1 class="title">
+        Decyzje <span class="highlight">odwracalne</span> i nieodwracalne
+      </h1>
+    </div>
+
+    <div class="compare" aria-label="Porownanie decyzji Type 1 i Type 2">
+      <article class="decision decision--type1">
+        <header class="decision-head">
+          <div class="decision-icon"><i class="ti ti-lock"></i></div>
+          <div>
+            <p class="decision-kicker">Type 1</p>
+            <h2>Trudne do odwrócenia</h2>
+          </div>
+        </header>
+
+        <ul class="traits">
+          <li>
+            <i class="ti ti-alert-triangle"></i>
+            <span>Kosztowny rollback albo migracja danych</span>
+          </li>
+          <li>
+            <i class="ti ti-affiliate"></i>
+            <span>Duży wpływ na wiele zespołów i komponentów</span>
+          </li>
+          <li>
+            <i class="ti ti-search"></i>
+            <span>Wymagają głębszej analizy i jawnego ADR</span>
+          </li>
+        </ul>
+      </article>
+
+      <div class="vs" aria-hidden="true">
+        <span>vs</span>
+      </div>
+
+      <article class="decision decision--type2">
+        <header class="decision-head">
+          <div class="decision-icon"><i class="ti ti-rotate-clockwise"></i></div>
+          <div>
+            <p class="decision-kicker">Type 2</p>
+            <h2>Odwracalne</h2>
+          </div>
+        </header>
+
+        <ul class="traits">
+          <li>
+            <i class="ti ti-flask"></i>
+            <span>Możliwe do sprawdzenia małym eksperymentem</span>
+          </li>
+          <li>
+            <i class="ti ti-clock-bolt"></i>
+            <span>Warto skracać pętlę OODA i szybciej działać</span>
+          </li>
+          <li>
+            <i class="ti ti-arrow-back-up"></i>
+            <span>Rollback jest elementem planu</span>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1460px, calc(100% - 128px));
+    max-width: none;
+    padding: 58px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .header {
+    max-width: 1160px;
+    margin: 0 auto 34px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+  }
+
+  .level-chip i {
+    font-size: 20px;
+  }
+
+  .title {
+    max-width: 1180px;
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    max-width: 1120px;
+    font-size: 25px;
+    font-weight: 300;
+    line-height: 1.42;
+    color: #cbd5e1;
+  }
+
+  .compare {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 86px 1fr;
+    gap: 18px;
+    align-items: stretch;
+    margin: 0 auto;
+  }
+
+  .decision {
+    min-height: 438px;
+    padding: 30px 28px;
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .decision--type1 {
+    animation-delay: 0.48s;
+  }
+
+  .decision--type2 {
+    animation-delay: 0.64s;
+    background:
+      radial-gradient(circle at 86% 16%, rgba(34, 211, 238, 0.18), transparent 36%),
+      linear-gradient(180deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.62));
+    border-color: rgba(34, 211, 238, 0.42);
+  }
+
+  .decision-head {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 20px;
+    align-items: center;
+    text-align: left;
+    padding-bottom: 22px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .decision-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.11);
+    border: 1px solid rgba(34, 211, 238, 0.32);
+    color: var(--cyan-400);
+    font-size: 40px;
+  }
+
+  .decision--type1 .decision-icon {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.34);
+    color: #fbbf24;
+  }
+
+  .decision-kicker {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+    margin-bottom: 8px;
+  }
+
+  .decision--type1 .decision-kicker {
+    color: #fbbf24;
+  }
+
+  .decision h2 {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #f8fafc;
+  }
+
+  .traits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .traits li {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 16px;
+    align-items: center;
+    text-align: left;
+    min-height: 76px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .traits i {
+    width: 54px;
+    height: 54px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.26);
+    color: var(--cyan-400);
+    font-size: 28px;
+  }
+
+  .decision--type1 .traits i {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.24);
+    color: #fbbf24;
+  }
+
+  .traits span {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.28;
+    color: #e2e8f0;
+  }
+
+  .vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.56s forwards;
+  }
+
+  .vs span {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(2, 6, 23, 0.78);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    box-shadow: 0 0 34px rgba(34, 211, 238, 0.18);
+  }
+
+  .takeaway {
+    width: calc(100% - 360px);
+    min-height: 98px;
+    margin-left: 360px;
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 18px 24px;
+    background:
+      radial-gradient(circle at 8% 50%, rgba(34, 211, 238, 0.14), transparent 38%),
+      rgba(15, 23, 42, 0.64);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    border-left: 3px solid var(--cyan-400);
+    border-radius: 14px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.84s forwards;
+  }
+
+  .takeaway i {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    color: var(--cyan-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 31px;
+  }
+
+  .takeaway p {
+    font-size: 23px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.36;
+    color: #e2e8f0;
+  }
+
+  .takeaway strong {
+    color: #f8fafc;
+    font-weight: 700;
+  }
+</style>

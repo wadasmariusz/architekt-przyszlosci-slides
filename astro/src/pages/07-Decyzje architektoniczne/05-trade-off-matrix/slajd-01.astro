@@ -1,0 +1,341 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 01 - Trade-off matrix"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.78), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-grid" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="matrixGrid" width="72" height="72" patternUnits="userSpaceOnUse">
+        <path d="M 72 0 L 0 0 0 72" fill="none" stroke="rgba(34,211,238,0.08)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="matrixGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="65%" stop-color="#22d3ee" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="1920" height="1080" fill="url(#matrixGrid)"/>
+    <circle cx="1320" cy="520" r="360" fill="url(#matrixGlow)"/>
+    <path d="M 110 880 C 420 760, 610 930, 920 820 S 1460 690, 1810 820" fill="none" stroke="rgba(34,211,238,0.10)" stroke-width="2"/>
+  </svg>
+
+  <div class="content">
+    <section class="hero">
+      <span class="eyebrow"><i class="ti ti-scale"></i> dziś porozmawiamy o kompromisach</span>
+      <h1 class="title">
+        <span class="title-main">Trade-off</span>
+        <span class="title-sub">matrix</span>
+      </h1>
+    </section>
+
+    <section class="scale-scene" aria-label="prosta waga: korzyść vs koszt">
+      <div class="scale-wrap">
+        <div class="beam" aria-hidden="true"></div>
+        <div class="pivot" aria-hidden="true">
+          <div class="pivot-head"></div>
+          <div class="pivot-stem"></div>
+          <div class="pivot-base"></div>
+        </div>
+
+        <div class="pan pan--benefit">
+          <div class="chain chain--left"></div>
+          <div class="chain chain--right"></div>
+          <div class="pan-bowl">
+            <i class="ti ti-trending-up"></i>
+            <span>korzyść</span>
+          </div>
+        </div>
+
+        <div class="pan pan--cost">
+          <div class="chain chain--left"></div>
+          <div class="chain chain--right"></div>
+          <div class="pan-bowl">
+            <i class="ti ti-receipt-2"></i>
+            <span>koszt</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1620px, calc(100% - 160px));
+    max-width: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 76px;
+    align-items: center;
+    text-align: left;
+  }
+
+  .hero {
+    padding-bottom: 48px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 34px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .eyebrow i {
+    font-size: 22px;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .title-main {
+    display: block;
+    font-size: 132px;
+    font-weight: 800;
+    line-height: 0.94;
+    letter-spacing: 0;
+    background: linear-gradient(135deg, var(--cyan-400) 0%, var(--cyan-600) 60%, #f0f4f8 112%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.35s forwards;
+  }
+
+  .title-sub {
+    display: block;
+    color: rgba(240, 244, 248, 0.88);
+    font-size: 108px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 0;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.58s forwards;
+  }
+
+  .scale-scene {
+    position: relative;
+    height: 620px;
+    opacity: 0;
+    animation: fadeUp 0.95s ease-out 0.78s forwards;
+  }
+
+  .scale-scene::before {
+    content: "";
+    position: absolute;
+    inset: 42px 12px 74px;
+    border: 1px solid rgba(34, 211, 238, 0.18);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 50% 18%, rgba(34, 211, 238, 0.16), transparent 42%),
+      linear-gradient(180deg, rgba(17, 24, 39, 0.52), rgba(17, 24, 39, 0.20));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 26px 72px rgba(2, 6, 23, 0.34);
+  }
+
+  .scale-wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 760px;
+    height: 460px;
+    transform: translate(-50%, -50%);
+  }
+
+  .beam {
+    position: absolute;
+    left: 84px;
+    right: 84px;
+    top: 154px;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.52), #e2e8f0, rgba(34, 211, 238, 0.52));
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.28),
+      0 0 34px rgba(34, 211, 238, 0.22);
+    transform: rotate(-4deg);
+    transform-origin: 50% 50%;
+  }
+
+  .beam::before,
+  .beam::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--cyan-400);
+    box-shadow: 0 0 22px rgba(34, 211, 238, 0.7);
+    transform: translateY(-50%);
+  }
+
+  .beam::before {
+    left: 2px;
+  }
+
+  .beam::after {
+    right: 2px;
+  }
+
+  .pivot {
+    position: absolute;
+    left: 50%;
+    top: 142px;
+    width: 210px;
+    height: 300px;
+    transform: translateX(-50%);
+  }
+
+  .pivot-head {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f8fafc, var(--cyan-400) 42%, var(--cyan-700));
+    border: 1px solid rgba(240, 244, 248, 0.42);
+    box-shadow: 0 0 36px rgba(34, 211, 238, 0.42);
+    transform: translateX(-50%);
+  }
+
+  .pivot-stem {
+    position: absolute;
+    left: 50%;
+    top: 58px;
+    width: 16px;
+    height: 236px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #e2e8f0, rgba(34, 211, 238, 0.38), rgba(148, 163, 184, 0.34));
+    transform: translateX(-50%);
+  }
+
+  .pivot-base {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 210px;
+    height: 26px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(226, 232, 240, 0.72), transparent);
+    box-shadow: 0 0 28px rgba(34, 211, 238, 0.16);
+    transform: translateX(-50%);
+  }
+
+  .pan {
+    position: absolute;
+    width: 250px;
+    height: 210px;
+  }
+
+  .pan--benefit {
+    left: 18px;
+    top: 178px;
+  }
+
+  .pan--cost {
+    right: 18px;
+    top: 124px;
+  }
+
+  .chain {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 86px;
+    background: linear-gradient(180deg, rgba(226, 232, 240, 0.82), rgba(34, 211, 238, 0.26));
+    transform-origin: top center;
+  }
+
+  .chain--left {
+    left: 75px;
+    transform: rotate(14deg);
+  }
+
+  .chain--right {
+    right: 75px;
+    transform: rotate(-14deg);
+  }
+
+  .pan-bowl {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 250px;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 22px 24px;
+    border-radius: 18px 18px 42px 42px;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(34, 211, 238, 0.22), transparent 62%),
+      rgba(15, 23, 42, 0.78);
+    border: 1px solid rgba(34, 211, 238, 0.44);
+    box-shadow: 0 22px 52px rgba(2, 6, 23, 0.34);
+    color: #f8fafc;
+    transform: translateX(-50%);
+  }
+
+  .pan-bowl::before {
+    content: "";
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--cyan-400), transparent);
+  }
+
+  .pan-bowl i {
+    color: var(--cyan-400);
+    font-size: 34px;
+  }
+
+  .pan-bowl span {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+</style>
