@@ -1,0 +1,346 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 12 - Ocena to nie prawda absolutna"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="scoreGridSlide12" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <linearGradient id="scoreSweepSlide12" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#scoreGridSlide12)"/>
+    <path d="M 210 242 C 510 162, 720 268, 990 218 S 1428 152, 1716 274" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 226 826 C 540 704, 778 848, 1052 760 S 1480 658, 1718 806" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 184 604 H 1500" fill="none" stroke="url(#scoreSweepSlide12)" stroke-width="84" stroke-linecap="round"/>
+    <g stroke="rgba(34,211,238,0.16)" stroke-width="1.5" stroke-dasharray="9 13" fill="none">
+      <path d="M 310 438 H 1370"/>
+      <path d="M 310 770 H 1370"/>
+      <path d="M 418 372 V 830"/>
+      <path d="M 1246 372 V 830"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <header class="header">
+      <span class="level-chip">
+        <i class="ti ti-list-numbers"></i>
+        TRADE-OFF MATRIX
+      </span>
+      <h1 class="title">
+        Ocena moze być w <span class="highlight">prostej skali</span>
+      </h1>
+    </header>
+
+    <section class="assessment-board" aria-label="Ocena to nie prawda absolutna">
+      <article class="scale-panel">
+        <div class="scale-heading">
+          <i class="ti ti-adjustments-horizontal"></i>
+          <span>Skala 1 – 5</span>
+        </div>
+
+        <div class="score-scale" aria-label="skala 1–5">
+          <div class="score-track" aria-hidden="true"></div>
+          <span class="score-step score-step--1">1</span>
+          <span class="score-step score-step--2">2</span>
+          <span class="score-step score-step--3">3</span>
+          <span class="score-step score-step--4">4</span>
+          <span class="score-step score-step--5">5</span>
+        </div>
+      </article>
+
+      <article class="warning-panel">
+        <i class="ti ti-alert-triangle"></i>
+        <div>
+          <p>OSTRZEŻENIE</p>
+          <h2>Wynik liczbowy strukturyzuje rozmowę,<br> ale nie powinien automatycznie rozstrzygać decyzji.</h2>
+        </div>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1500px, calc(100% - 140px));
+    max-width: none;
+    padding: 54px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    max-width: 1300px;
+    margin: 0 auto 30px;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip i {
+    font-size: 22px;
+  }
+
+  .title {
+    max-width: 1280px;
+    font-size: 82px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .assessment-board {
+    width: min(1280px, 100%);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .scale-panel,
+  .warning-panel {
+    position: relative;
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    box-shadow: 0 24px 68px rgba(2, 6, 23, 0.32);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+
+  .scale-panel {
+    min-height: 360px;
+    padding: 28px 34px 30px;
+    background:
+      linear-gradient(180deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.64));
+    border-color: rgba(34, 211, 238, 0.36);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.54s forwards;
+  }
+
+  .scale-panel::before,
+  .warning-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.10), transparent 58%);
+  }
+
+  .scale-heading {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #f8fafc;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .scale-heading i {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 64px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    font-size: 34px;
+  }
+
+  .score-scale {
+    position: relative;
+    z-index: 1;
+    height: 220px;
+    margin-top: 28px;
+    border-radius: 24px;
+    background: rgba(2, 6, 23, 0.30);
+    border: 1px solid rgba(34, 211, 238, 0.24);
+    box-shadow: inset 0 0 38px rgba(34, 211, 238, 0.08);
+  }
+
+  .score-track {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    top: 50%;
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(248, 113, 113, 0.72), rgba(250, 204, 21, 0.58), rgba(34, 211, 238, 0.78));
+    transform: translateY(-50%);
+    box-shadow: 0 0 28px rgba(34, 211, 238, 0.18);
+  }
+
+  .score-step {
+    position: absolute;
+    top: 50%;
+    width: 90px;
+    height: 90px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: #f8fafc;
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 34px rgba(34, 211, 238, 0.14);
+  }
+
+  .score-step--1 {
+    left: 12%;
+    border-color: rgba(248, 113, 113, 0.44);
+    color: #fecaca;
+    animation: scorePulse 3.6s ease-in-out 0.9s infinite;
+  }
+
+  .score-step--2 {
+    left: 31%;
+  }
+
+  .score-step--3 {
+    left: 50%;
+    width: 106px;
+    height: 106px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(8, 145, 178, 0.34), rgba(15, 23, 42, 0.88));
+    border-color: rgba(34, 211, 238, 0.58);
+    color: var(--cyan-400);
+  }
+
+  .score-step--4 {
+    left: 69%;
+  }
+
+  .score-step--5 {
+    left: 88%;
+    border-color: rgba(34, 211, 238, 0.56);
+    color: var(--cyan-400);
+    animation: scorePulse 3.6s ease-in-out 1.18s infinite;
+  }
+
+  .warning-panel {
+    min-height: 154px;
+    padding: 24px 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    background:
+      linear-gradient(180deg, rgba(245, 158, 11, 0.12), rgba(17, 24, 39, 0.66));
+    border-color: rgba(245, 158, 11, 0.36);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.74s forwards;
+  }
+
+  .warning-panel > i {
+    position: relative;
+    z-index: 1;
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 72px;
+    background: rgba(245, 158, 11, 0.14);
+    border: 1px solid rgba(245, 158, 11, 0.44);
+    color: #fbbf24;
+    font-size: 40px;
+    box-shadow: 0 0 34px rgba(245, 158, 11, 0.16);
+  }
+
+  .warning-panel div {
+    position: relative;
+    z-index: 1;
+  }
+
+  .warning-panel p {
+    margin: 0 0 8px;
+    color: #fbbf24;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .warning-panel h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.14;
+    letter-spacing: 0;
+  }
+
+  @keyframes scorePulse {
+    0%, 100% {
+      box-shadow: 0 0 28px rgba(34, 211, 238, 0.12);
+    }
+    50% {
+      box-shadow: 0 0 42px rgba(34, 211, 238, 0.28);
+    }
+  }
+</style>

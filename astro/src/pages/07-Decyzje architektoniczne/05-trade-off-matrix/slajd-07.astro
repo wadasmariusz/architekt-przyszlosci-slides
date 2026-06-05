@@ -29,58 +29,42 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   <div class="content">
     <header class="header">
-      <span class="level-chip"><i class="ti ti-sitemap"></i>Ktoś inny proponuje mikroserwisy</span>
+      <span class="level-chip"><i class="ti ti-sitemap"></i>Opcja 2</span>
       <h1 class="title">
-        Opcja 2: <span class="highlight">mikroserwisy</span>
+        Mikroserwisy<span class="highlight"></span>
       </h1>
     </header>
 
-    <section class="option-board" aria-label="Opcja 2: mikroserwisy">
-      <article class="diagram-card">
-        <div class="network" aria-hidden="true">
-          <span class="service service--1"><i class="ti ti-calendar-event"></i></span>
-          <span class="service service--2"><i class="ti ti-credit-card"></i></span>
-          <span class="service service--3"><i class="ti ti-car"></i></span>
-          <span class="service service--4"><i class="ti ti-user"></i></span>
-          <span class="service service--5"><i class="ti ti-bell"></i></span>
-          <span class="network-line network-line--1"></span>
-          <span class="network-line network-line--2"></span>
-          <span class="network-line network-line--3"></span>
-          <span class="network-line network-line--4"></span>
-        </div>
+    <section class="services-board" aria-label="mikroserwisy">
+      <div class="network" aria-hidden="true">
+        <span class="service service--1"><i class="ti ti-calendar-event"></i></span>
+        <span class="service service--2"><i class="ti ti-credit-card"></i></span>
+        <span class="service service--3"><i class="ti ti-car"></i></span>
+        <span class="service service--4"><i class="ti ti-user"></i></span>
+        <span class="service service--5"><i class="ti ti-bell"></i></span>
+        <span class="network-line network-line--1"></span>
+        <span class="network-line network-line--2"></span>
+        <span class="network-line network-line--3"></span>
+        <span class="network-line network-line--4"></span>
+      </div>
+
+      <article class="panel panel--gain">
+        <h2>Zalety</h2>
+        <ul>
+          <li><i class="ti ti-rocket"></i><span>Niezależne wdrażanie</span></li>
+          <li><i class="ti ti-chart-arrows-vertical"></i><span>Osobne skalowanie</span></li>
+          <li><i class="ti ti-building-community"></i><span>Autonomiczne obszary biznesowe</span></li>
+        </ul>
       </article>
 
-      <section class="benefit-grid" aria-label="zalety">
-        <article class="benefit-card">
-          <i class="ti ti-rocket"></i>
-          <p>zalety</p>
-          <h2>niezależne wdrażanie</h2>
-        </article>
-
-        <article class="benefit-card">
-          <i class="ti ti-chart-arrows-vertical"></i>
-          <p>zalety</p>
-          <h2>osobne skalowanie</h2>
-        </article>
-
-        <article class="benefit-card benefit-card--wide">
-          <i class="ti ti-building-community"></i>
-          <p>zalety</p>
-          <h2>autonomiczne obszary biznesowe</h2>
-        </article>
-      </section>
-
-      <article class="cost-card">
-        <i class="ti ti-alert-triangle"></i>
-        <div>
-          <p>koszt</p>
-          <ul>
-            <li>złożoność operacyjna</li>
-            <li>debugowanie</li>
-            <li>komunikacja sieciowa</li>
-            <li>obserwowalność</li>
-          </ul>
-        </div>
+      <article class="panel panel--cost">
+        <h2>Koszt</h2>
+        <ul>
+          <li><i class="ti ti-settings-cog"></i><span>Złożoność operacyjna</span></li>
+          <li><i class="ti ti-bug"></i><span>Debugowanie</span></li>
+          <li><i class="ti ti-arrows-transfer-down"></i><span>Komunikacja sieciowa</span></li>
+          <li><i class="ti ti-activity"></i><span>Obserwowalność</span></li>
+        </ul>
       </article>
     </section>
   </div>
@@ -89,7 +73,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 <style is:global>
   .stage {
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .bg-deco {
@@ -106,18 +90,18 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .content {
     position: relative;
     z-index: 5;
-    width: min(1340px, calc(100% - 580px));
+    width: min(1500px, calc(100% - 150px));
     max-width: none;
-    padding: 54px 0 0 3rem;
+    padding: 58px 0 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
   }
 
   .header {
-    max-width: 1320px;
-    margin: 0 0 24px;
+    max-width: 1260px;
+    margin: 0 auto 32px;
   }
 
   .level-chip {
@@ -129,10 +113,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background: rgba(8, 145, 178, 0.15);
     border: 1px solid rgba(34, 211, 238, 0.42);
     color: var(--cyan-400);
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: 0;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.15s forwards;
   }
@@ -142,8 +126,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .title {
-    max-width: 1300px;
-    font-size: 72px;
+    font-size: 82px;
     font-weight: 800;
     letter-spacing: 0;
     line-height: 1.05;
@@ -159,48 +142,33 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background-clip: text;
   }
 
-  .option-board {
-    width: 100%;
+  .services-board {
+    width: min(1360px, 100%);
     display: grid;
-    grid-template-columns: 420px minmax(0, 1fr);
-    grid-template-rows: 430px 154px;
-    gap: 22px;
+    grid-template-columns: 1fr 390px 1fr;
+    gap: 26px;
+    align-items: stretch;
   }
 
-  .diagram-card,
-  .benefit-card,
-  .cost-card {
+  .network,
+  .panel {
+    min-height: 500px;
     border-radius: 18px;
-    background: rgba(17, 24, 39, 0.62);
-    border: 1px solid rgba(148, 163, 184, 0.20);
-    box-shadow: 0 18px 46px rgba(2, 6, 23, 0.26);
-    backdrop-filter: blur(10px);
-    overflow: hidden;
-  }
-
-  .diagram-card {
-    position: relative;
-    padding: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background:
-      radial-gradient(circle at 50% 18%, rgba(34, 211, 238, 0.20), transparent 48%),
-      linear-gradient(180deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.64));
-    border-color: rgba(34, 211, 238, 0.40);
+      radial-gradient(circle at 50% 12%, rgba(34, 211, 238, 0.17), transparent 42%),
+      rgba(17, 24, 39, 0.62);
+    border: 1px solid rgba(34, 211, 238, 0.30);
+    box-shadow: 0 24px 68px rgba(2, 6, 23, 0.32);
+    backdrop-filter: blur(10px);
     opacity: 0;
-    animation: fadeUp 0.85s ease-out 0.52s forwards;
+    animation: fadeUp 0.9s ease-out forwards;
   }
 
   .network {
     position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 340px;
-    border-radius: 22px;
-    border: 1px solid rgba(34, 211, 238, 0.24);
-    background: rgba(2, 6, 23, 0.24);
-    box-shadow: inset 0 0 36px rgba(34, 211, 238, 0.08);
+    order: 2;
+    overflow: hidden;
+    animation-delay: 0.62s;
   }
 
   .network::before {
@@ -213,29 +181,29 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .service {
     position: absolute;
     z-index: 2;
-    width: 78px;
-    height: 78px;
-    border-radius: 18px;
+    width: 88px;
+    height: 88px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(15, 23, 42, 0.84);
     border: 1px solid rgba(34, 211, 238, 0.48);
     color: var(--cyan-400);
-    font-size: 38px;
+    font-size: 44px;
     box-shadow: 0 0 34px rgba(34, 211, 238, 0.18);
   }
 
-  .service--1 { left: 50%; top: 38px; transform: translateX(-50%); }
-  .service--2 { right: 38px; top: 148px; }
-  .service--3 { left: 50%; bottom: 38px; transform: translateX(-50%); }
-  .service--4 { left: 38px; top: 148px; }
+  .service--1 { left: 50%; top: 54px; transform: translateX(-50%); }
+  .service--2 { right: 54px; top: 180px; }
+  .service--3 { left: 50%; bottom: 54px; transform: translateX(-50%); }
+  .service--4 { left: 54px; top: 180px; }
   .service--5 {
     left: 50%;
     top: 50%;
-    width: 96px;
-    height: 96px;
-    border-radius: 22px;
+    width: 104px;
+    height: 104px;
+    border-radius: 24px;
     background: linear-gradient(180deg, rgba(8, 145, 178, 0.35), rgba(15, 23, 42, 0.84));
     transform: translate(-50%, -50%);
   }
@@ -244,7 +212,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 170px;
+    width: 210px;
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.58), transparent);
     transform-origin: left center;
@@ -255,134 +223,112 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .network-line--3 { transform: rotate(92deg); }
   .network-line--4 { transform: rotate(208deg); }
 
-  .benefit-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-  }
-
-  .benefit-card {
+  .panel {
     position: relative;
-    min-height: 206px;
-    padding: 22px 24px 20px;
-    border-color: rgba(74, 222, 128, 0.36);
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out forwards;
+    padding: 34px 32px 36px;
+    text-align: left;
+    overflow: hidden;
   }
 
-  .benefit-card::before {
+  .panel::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(135deg, rgba(22, 163, 74, 0.14), transparent 58%);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.10), transparent 58%);
   }
 
-  .benefit-card:nth-child(1) { animation-delay: 0.66s; }
-  .benefit-card:nth-child(2) { animation-delay: 0.78s; }
-  .benefit-card:nth-child(3) { animation-delay: 0.90s; }
-
-  .benefit-card--wide {
-    grid-column: 1 / -1;
+  .panel--gain {
+    order: 1;
+    animation-delay: 0.76s;
+    border-color: rgba(74, 222, 128, 0.34);
   }
 
-  .benefit-card i {
+  .panel--cost {
+    order: 3;
+    animation-delay: 0.90s;
+    border-color: rgba(248, 113, 113, 0.34);
+  }
+
+  .panel h2 {
     position: relative;
     z-index: 1;
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    background: rgba(22, 163, 74, 0.16);
-    border: 1px solid rgba(74, 222, 128, 0.42);
-    color: #86efac;
-    font-size: 28px;
-  }
-
-  .benefit-card p,
-  .cost-card p {
-    position: relative;
-    z-index: 1;
-    margin: 0 0 8px;
-    color: #86efac;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-  }
-
-  .benefit-card h2 {
-    position: relative;
-    z-index: 1;
-    margin: 0;
+    margin: 0 0 26px;
     color: #f8fafc;
-    font-size: 27px;
+    font-size: 42px;
     font-weight: 800;
-    line-height: 1.12;
+    line-height: 1.06;
     letter-spacing: 0;
   }
 
-  .benefit-card--wide h2 {
-    font-size: 31px;
+  .panel--gain h2 {
+    color: #dcfce7;
   }
 
-  .cost-card {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 72px minmax(0, 1fr);
-    gap: 20px;
-    align-items: center;
-    padding: 22px 28px;
-    background:
-      linear-gradient(90deg, rgba(220, 38, 38, 0.18), rgba(17, 24, 39, 0.68));
-    border-color: rgba(248, 113, 113, 0.44);
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 1.04s forwards;
+  .panel--cost h2 {
+    color: #fee2e2;
   }
 
-  .cost-card > i {
-    width: 72px;
-    height: 72px;
-    border-radius: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(220, 38, 38, 0.16);
-    border: 1px solid rgba(248, 113, 113, 0.44);
-    color: #fca5a5;
-    font-size: 38px;
-  }
-
-  .cost-card p {
-    color: #fca5a5;
-  }
-
-  .cost-card ul {
+  .panel ul {
     position: relative;
     z-index: 1;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    gap: 16px;
   }
 
-  .cost-card li {
-    min-height: 52px;
+  .panel li {
+    min-height: 78px;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    padding: 15px 18px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.70);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+  }
+
+  .panel--gain li {
+    background: rgba(22, 163, 74, 0.12);
+    border-color: rgba(74, 222, 128, 0.30);
+  }
+
+  .panel--cost li {
+    background: rgba(220, 38, 38, 0.10);
+    border-color: rgba(248, 113, 113, 0.30);
+  }
+
+  .panel li i {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 14px;
-    border-radius: 13px;
-    background: rgba(220, 38, 38, 0.14);
-    border: 1px solid rgba(248, 113, 113, 0.34);
-    color: #fee2e2;
-    font-size: 21px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    color: var(--cyan-400);
+    font-size: 28px;
+  }
+
+  .panel--gain li i {
+    background: rgba(22, 163, 74, 0.18);
+    border-color: rgba(74, 222, 128, 0.38);
+    color: #86efac;
+  }
+
+  .panel--cost li i {
+    background: rgba(220, 38, 38, 0.16);
+    border-color: rgba(248, 113, 113, 0.38);
+    color: #fca5a5;
+  }
+
+  .panel li span {
+    color: #f8fafc;
+    font-size: 24px;
     font-weight: 700;
-    line-height: 1.12;
+    line-height: 1.15;
     letter-spacing: 0;
-    text-align: center;
   }
 </style>

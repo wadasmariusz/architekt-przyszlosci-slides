@@ -1,0 +1,417 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 14 - Mniej opinii, więcej kryteriów"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="criteriaDiscussionGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="criteriaDiscussionGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="criteriaDiscussionSweep" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+        <stop offset="48%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#criteriaDiscussionGrid)"/>
+    <circle cx="820" cy="580" r="430" fill="url(#criteriaDiscussionGlow)"/>
+    <path d="M 156 250 C 450 170, 710 278, 982 220 S 1434 154, 1742 278" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 174 812 C 492 704, 724 850, 1010 754 S 1476 654, 1740 806" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 314 586 C 604 486, 1030 486, 1342 586" fill="none" stroke="url(#criteriaDiscussionSweep)" stroke-width="106" stroke-linecap="round"/>
+    <g fill="none" stroke="rgba(34,211,238,0.16)" stroke-width="1.5" stroke-dasharray="9 13">
+      <path d="M 376 396 C 650 300, 1016 300, 1330 396"/>
+      <path d="M 376 760 C 662 858, 1024 858, 1330 760"/>
+      <path d="M 336 580 H 1370"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <header class="header">
+      <span class="level-chip">
+        <i class="ti ti-message-2-question"></i>
+        Trade-off matrix
+      </span>
+      <h1 class="title">
+        Mniej opinii, <span class="highlight">więcej kryteriów</span>
+      </h1>
+    </header>
+
+    <section class="discussion-board" aria-label="Mniej opinii, więcej kryteriów">
+      <article class="opinion-panel" aria-hidden="true">
+        <span class="bubble bubble--1"><i class="ti ti-message-circle"></i></span>
+        <span class="bubble bubble--2"><i class="ti ti-message-circle"></i></span>
+        <span class="bubble bubble--3"><i class="ti ti-message-circle"></i></span>
+        <span class="bubble-dot bubble-dot--1"></span>
+        <span class="bubble-dot bubble-dot--2"></span>
+        <span class="bubble-dot bubble-dot--3"></span>
+      </article>
+
+      <article class="rule-card">
+        <div class="rule-icon"><i class="ti ti-filter-search"></i></div>
+        <blockquote>
+          „Względem jakich kryteriów rozwiązanie jest najlepsze?”
+        </blockquote>
+      </article>
+
+      <article class="criteria-panel" aria-hidden="true">
+        <div class="matrix-shell">
+          <span class="matrix-cell matrix-cell--head"></span>
+          <span class="matrix-cell matrix-cell--head"></span>
+          <span class="matrix-cell matrix-cell--head"></span>
+          <span class="matrix-cell matrix-cell--side"></span>
+          <span class="matrix-cell matrix-cell--soft"></span>
+          <span class="matrix-cell matrix-cell--strong"><i class="ti ti-check"></i></span>
+          <span class="matrix-cell matrix-cell--side"></span>
+          <span class="matrix-cell matrix-cell--strong"><i class="ti ti-check"></i></span>
+          <span class="matrix-cell matrix-cell--soft"></span>
+          <span class="matrix-cell matrix-cell--side"></span>
+          <span class="matrix-cell matrix-cell--soft"></span>
+          <span class="matrix-cell matrix-cell--strong"><i class="ti ti-check"></i></span>
+        </div>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1320px, calc(100% - 160px));
+    max-width: none;
+    padding: 54px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto 30px;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip i {
+    font-size: 22px;
+  }
+
+  .title {
+    max-width: 1260px;
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .discussion-board {
+    position: relative;
+    width: min(1260px, 100%);
+    min-height: 500px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr) 240px;
+    gap: 22px;
+    align-items: stretch;
+  }
+
+  .discussion-board::before {
+    content: "";
+    position: absolute;
+    left: 126px;
+    right: 126px;
+    top: 50%;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.12), rgba(34, 211, 238, 0.62), rgba(34, 211, 238, 0.12));
+    box-shadow: 0 0 34px rgba(34, 211, 238, 0.16);
+    transform: translateY(-50%);
+  }
+
+  .opinion-panel,
+  .criteria-panel,
+  .rule-card {
+    position: relative;
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    box-shadow: 0 24px 68px rgba(2, 6, 23, 0.32);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .opinion-panel::before,
+  .criteria-panel::before,
+  .rule-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.10), transparent 62%);
+  }
+
+  .opinion-panel {
+    animation-delay: 0.54s;
+  }
+
+  .rule-card {
+    z-index: 1;
+    min-height: 500px;
+    padding: 40px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background:
+      radial-gradient(circle at 50% 18%, rgba(34, 211, 238, 0.23), transparent 46%),
+      linear-gradient(180deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.66));
+    border-color: rgba(34, 211, 238, 0.44);
+    animation-delay: 0.72s;
+  }
+
+  .criteria-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 50% 22%, rgba(74, 222, 128, 0.14), transparent 44%),
+      rgba(17, 24, 39, 0.62);
+    border-color: rgba(74, 222, 128, 0.34);
+    animation-delay: 0.90s;
+  }
+
+  .bubble {
+    position: absolute;
+    z-index: 1;
+    width: 96px;
+    height: 96px;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.86);
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    color: rgba(240, 244, 248, 0.76);
+    font-size: 48px;
+    box-shadow: 0 18px 42px rgba(2, 6, 23, 0.26);
+  }
+
+  .bubble--1 {
+    left: 42px;
+    top: 94px;
+    transform: rotate(-7deg);
+  }
+
+  .bubble--2 {
+    right: 38px;
+    top: 238px;
+    width: 108px;
+    height: 108px;
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.36);
+    background: rgba(41, 28, 13, 0.54);
+    transform: rotate(5deg);
+  }
+
+  .bubble--3 {
+    left: 66px;
+    bottom: 98px;
+    color: rgba(240, 244, 248, 0.66);
+    transform: rotate(8deg);
+  }
+
+  .bubble-dot {
+    position: absolute;
+    z-index: 1;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.36);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.28);
+  }
+
+  .bubble-dot--1 {
+    width: 18px;
+    height: 18px;
+    left: 154px;
+    top: 198px;
+  }
+
+  .bubble-dot--2 {
+    width: 12px;
+    height: 12px;
+    right: 72px;
+    bottom: 168px;
+  }
+
+  .bubble-dot--3 {
+    width: 24px;
+    height: 24px;
+    left: 44px;
+    bottom: 250px;
+    background: rgba(245, 158, 11, 0.34);
+    box-shadow: 0 0 28px rgba(245, 158, 11, 0.18);
+  }
+
+  .rule-icon {
+    position: relative;
+    z-index: 1;
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 30px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.13);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 44px;
+    box-shadow: 0 0 38px rgba(34, 211, 238, 0.16);
+  }
+
+  .rule-card blockquote,
+  .rule-card p {
+    position: relative;
+    z-index: 1;
+  }
+
+  .rule-card blockquote {
+    max-width: 690px;
+    margin: 0 0 28px;
+    color: #f8fafc;
+    font-size: 45px;
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: 0;
+  }
+
+  .rule-card p {
+    max-width: 620px;
+    margin: 0 auto;
+    color: rgba(240, 244, 248, 0.78);
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1.34;
+  }
+
+  .matrix-shell {
+    position: relative;
+    z-index: 1;
+    width: 204px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding: 20px;
+    border-radius: 24px;
+    background: rgba(2, 6, 23, 0.34);
+    border: 1px solid rgba(34, 211, 238, 0.24);
+    box-shadow: inset 0 0 38px rgba(34, 211, 238, 0.09);
+  }
+
+  .matrix-shell::before,
+  .matrix-shell::after {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    pointer-events: none;
+    border: 1px dashed rgba(34, 211, 238, 0.22);
+    border-radius: 18px;
+  }
+
+  .matrix-shell::after {
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    border: 0;
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.16), transparent 70%);
+    transform: translate(-50%, -50%);
+  }
+
+  .matrix-cell {
+    position: relative;
+    z-index: 1;
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.80);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .matrix-cell--head,
+  .matrix-cell--side {
+    background: rgba(34, 211, 238, 0.12);
+    border-color: rgba(34, 211, 238, 0.30);
+  }
+
+  .matrix-cell--soft {
+    background: rgba(15, 23, 42, 0.72);
+  }
+
+  .matrix-cell--strong {
+    background: rgba(34, 211, 238, 0.18);
+    border-color: rgba(34, 211, 238, 0.50);
+    color: var(--cyan-400);
+    font-size: 30px;
+    box-shadow: 0 0 26px rgba(34, 211, 238, 0.13);
+  }
+</style>

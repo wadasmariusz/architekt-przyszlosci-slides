@@ -1,0 +1,355 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 18 - Świadoma decyzja"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.93))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="consciousDecisionGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <linearGradient id="consciousDecisionSweep" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+        <stop offset="48%" stop-color="#22d3ee" stop-opacity="0.17"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="consciousDecisionPath" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.10"/>
+        <stop offset="50%" stop-color="#22d3ee" stop-opacity="0.48"/>
+        <stop offset="100%" stop-color="#4ade80" stop-opacity="0.28"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#consciousDecisionGrid)"/>
+    <path d="M 184 260 C 482 168, 722 284, 1000 220 S 1452 160, 1742 286" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 196 806 C 500 700, 748 850, 1038 754 S 1480 660, 1728 804" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 286 584 H 1528" fill="none" stroke="url(#consciousDecisionSweep)" stroke-width="112" stroke-linecap="round"/>
+    <path d="M 302 586 C 520 426, 762 426, 960 586 S 1390 746, 1608 586" fill="none" stroke="url(#consciousDecisionPath)" stroke-width="2.5"/>
+    <g stroke="rgba(34,211,238,0.15)" stroke-width="1.5" stroke-dasharray="9 13" fill="none">
+      <path d="M 326 420 H 1514"/>
+      <path d="M 326 748 H 1514"/>
+      <path d="M 502 354 V 812"/>
+      <path d="M 1418 354 V 812"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <header class="header">
+      <span class="level-chip">
+        <i class="ti ti-tool"></i>
+        Ostatecznie trade-off matrix jest narzędziem
+      </span>
+      <h1 class="title">
+        Świadoma <span class="highlight">decyzja</span>
+      </h1>
+    </header>
+
+    <section class="process-flow" aria-label="kontekst → kryteria → opcje → wagi → ryzyka → decyzja → powrót do założeń">
+      <article class="process-step process-step--context">
+        <span class="step-number">01</span>
+        <i class="ti ti-compass"></i>
+        <p>kontekst</p>
+      </article>
+
+      <article class="process-step process-step--criteria">
+        <span class="step-number">02</span>
+        <i class="ti ti-list-check"></i>
+        <p>kryteria</p>
+      </article>
+
+      <article class="process-step process-step--options">
+        <span class="step-number">03</span>
+        <i class="ti ti-layout-grid"></i>
+        <p>opcje</p>
+      </article>
+
+      <article class="process-step process-step--weights">
+        <span class="step-number">04</span>
+        <i class="ti ti-adjustments-horizontal"></i>
+        <p>wagi</p>
+      </article>
+
+      <article class="process-step process-step--risk">
+        <span class="step-number">05</span>
+        <i class="ti ti-alert-triangle"></i>
+        <p>ryzyka</p>
+      </article>
+
+      <article class="process-step process-step--decision">
+        <span class="step-number">06</span>
+        <i class="ti ti-circle-check"></i>
+        <p>decyzja</p>
+      </article>
+
+      <article class="process-step process-step--return">
+        <span class="step-number">07</span>
+        <i class="ti ti-refresh"></i>
+        <p>powrót do założeń</p>
+      </article>
+    </section>
+
+    <section class="takeaway" aria-label="architektura to transparentne decyzje, nie szukanie ideału.">
+      <i class="ti ti-eye-check"></i>
+      <p>architektura to <span>transparentne decyzje</span>, nie szukanie ideału.</p>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1500px, calc(100% - 160px));
+    max-width: none;
+    margin-bottom: 148px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .header {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto 38px;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip i {
+    font-size: 22px;
+  }
+
+  .title {
+    max-width: 1260px;
+    font-size: 86px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.04;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .process-flow {
+    position: relative;
+    width: min(1450px, 100%);
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+    margin: 0 auto 34px;
+  }
+
+  .process-flow::before {
+    content: "";
+    position: absolute;
+    left: 68px;
+    right: 68px;
+    top: 50%;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.12), rgba(34, 211, 238, 0.70), rgba(74, 222, 128, 0.36));
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.18);
+    transform: translateY(-50%);
+  }
+
+  .process-step {
+    position: relative;
+    min-height: 168px;
+    padding: 22px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.66);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 22px 58px rgba(2, 6, 23, 0.31);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.84s ease-out forwards;
+  }
+
+  .process-step::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.11), transparent 60%);
+  }
+
+  .process-step--context { animation-delay: 0.52s; border-color: rgba(34, 211, 238, 0.38); }
+  .process-step--criteria { animation-delay: 0.64s; }
+  .process-step--options { animation-delay: 0.76s; }
+  .process-step--weights { animation-delay: 0.88s; }
+  .process-step--risk { animation-delay: 1.00s; border-color: rgba(245, 158, 11, 0.38); }
+  .process-step--decision {
+    animation-delay: 1.12s;
+    background:
+      linear-gradient(180deg, rgba(8, 145, 178, 0.24), rgba(17, 24, 39, 0.68));
+    border-color: rgba(34, 211, 238, 0.52);
+    box-shadow: 0 24px 68px rgba(8, 145, 178, 0.18);
+  }
+  .process-step--return { animation-delay: 1.24s; border-color: rgba(74, 222, 128, 0.34); }
+
+  .step-number {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    color: rgba(148, 163, 184, 0.42);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-feature-settings: "tnum";
+  }
+
+  .process-step i {
+    position: relative;
+    z-index: 1;
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.13);
+    border: 1px solid rgba(34, 211, 238, 0.36);
+    color: var(--cyan-400);
+    font-size: 31px;
+  }
+
+  .process-step--risk i {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.34);
+    color: #fbbf24;
+  }
+
+  .process-step--return i {
+    background: rgba(74, 222, 128, 0.12);
+    border-color: rgba(74, 222, 128, 0.32);
+    color: #86efac;
+  }
+
+  .process-step p {
+    position: relative;
+    z-index: 1;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f8fafc;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  .takeaway {
+    position: relative;
+    width: min(860px, 100%);
+    min-height: 126px;
+    padding: 24px 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(8, 145, 178, 0.24), rgba(17, 24, 39, 0.70));
+    border: 1px solid rgba(34, 211, 238, 0.46);
+    box-shadow:
+      0 24px 68px rgba(2, 6, 23, 0.34),
+      0 0 42px rgba(34, 211, 238, 0.14);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.42s forwards;
+  }
+
+  .takeaway::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.13), transparent 62%);
+  }
+
+  .takeaway i {
+    position: relative;
+    z-index: 1;
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 38px;
+  }
+
+  .takeaway p {
+    position: relative;
+    z-index: 1;
+    color: #f8fafc;
+    font-size: 35px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  .takeaway span {
+    color: var(--cyan-400);
+  }
+</style>

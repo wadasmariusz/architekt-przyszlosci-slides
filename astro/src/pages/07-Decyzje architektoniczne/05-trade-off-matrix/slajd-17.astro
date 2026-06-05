@@ -1,0 +1,372 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 17 - Decyzja zespołowa"
+  bgImage="/images/background-5.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="teamDecisionGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="teamDecisionGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.22"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.06"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="teamDecisionSweep" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#teamDecisionGrid)"/>
+    <circle cx="960" cy="580" r="470" fill="url(#teamDecisionGlow)"/>
+    <path d="M 170 278 C 490 176, 736 310, 1014 236 S 1456 166, 1738 300" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 204 810 C 502 708, 742 858, 1030 758 S 1468 654, 1728 796" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 356 592 C 656 492, 1282 492, 1584 592" fill="none" stroke="url(#teamDecisionSweep)" stroke-width="124" stroke-linecap="round"/>
+    <g fill="none" stroke="rgba(34,211,238,0.15)" stroke-width="1.5" stroke-dasharray="9 13">
+      <path d="M 424 402 H 1496"/>
+      <path d="M 424 756 H 1496"/>
+      <path d="M 612 346 V 812"/>
+      <path d="M 1328 346 V 812"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <header class="header">
+      <span class="level-chip">
+        <i class="ti ti-users-group"></i>
+        trade-off matrix najlepiej działa jako narzędzie zespołowe
+      </span>
+      <h1 class="title">
+        Decyzja <span class="highlight">zespołowa</span>
+      </h1>
+    </header>
+
+    <section class="team-board" aria-label="role i perspektywy: developerzy, DevOps/SRE, product owner, security engineer">
+      <svg class="team-lines" viewBox="0 0 1320 536" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="teamLineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.08"/>
+            <stop offset="50%" stop-color="#22d3ee" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.08"/>
+          </linearGradient>
+        </defs>
+        <path d="M 660 268 L 278 120" />
+        <path d="M 660 268 L 1042 120" />
+        <path d="M 660 268 L 278 416" />
+        <path d="M 660 268 L 1042 416" />
+      </svg>
+
+      <article class="role-card role-card--developers">
+        <div class="role-icon"><i class="ti ti-code"></i></div>
+        <h2>developerzy</h2>
+      </article>
+
+      <article class="role-card role-card--sre">
+        <div class="role-icon"><i class="ti ti-server-2"></i></div>
+        <h2>DevOps/SRE</h2>
+      </article>
+
+      <article class="decision-card">
+        <div class="decision-icon"><i class="ti ti-scale"></i></div>
+        <p>Każda rola wnosi inne ryzyka i kryteria.</p>
+      </article>
+
+      <article class="role-card role-card--product">
+        <div class="role-icon"><i class="ti ti-briefcase"></i></div>
+        <h2>product owner</h2>
+      </article>
+
+      <article class="role-card role-card--security">
+        <div class="role-icon"><i class="ti ti-shield-lock"></i></div>
+        <h2>security engineer</h2>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1380px, calc(100% - 160px));
+    max-width: none;
+    margin: 0 auto;
+    padding: 54px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto 26px;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip i {
+    font-size: 22px;
+  }
+
+  .title {
+    max-width: 1260px;
+    margin: 0 auto;
+    font-size: 76px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .team-board {
+    position: relative;
+    width: min(1320px, 100%);
+    height: 536px;
+    margin: 0 auto;
+  }
+
+  .team-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 0.9s ease-out 0.72s forwards;
+  }
+
+  .team-lines path {
+    fill: none;
+    stroke: url(#teamLineGradient);
+    stroke-width: 2;
+    stroke-dasharray: 12 14;
+  }
+
+  .role-card,
+  .decision-card {
+    position: absolute;
+    z-index: 2;
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.64);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    box-shadow: 0 24px 68px rgba(2, 6, 23, 0.32);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .role-card::before,
+  .decision-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), transparent 60%);
+  }
+
+  .role-card {
+    width: 344px;
+    height: 154px;
+    padding: 24px 26px;
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr);
+    gap: 20px;
+    align-items: center;
+    text-align: left;
+  }
+
+  .role-card--developers {
+    left: 0;
+    top: 12px;
+    animation-delay: 0.54s;
+  }
+
+  .role-card--sre {
+    right: 0;
+    top: 12px;
+    animation-delay: 0.66s;
+  }
+
+  .role-card--product {
+    left: 0;
+    bottom: 12px;
+    animation-delay: 0.78s;
+  }
+
+  .role-card--security {
+    right: 0;
+    bottom: 12px;
+    animation-delay: 0.90s;
+  }
+
+  .role-icon,
+  .decision-icon {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    color: var(--cyan-400);
+    box-shadow: 0 0 34px rgba(34, 211, 238, 0.14);
+  }
+
+  .role-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    font-size: 38px;
+  }
+
+  .role-card h2 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: #f8fafc;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  .role-card--sre {
+    background:
+      radial-gradient(circle at 16% 18%, rgba(34, 211, 238, 0.14), transparent 42%),
+      rgba(17, 24, 39, 0.64);
+    border-color: rgba(34, 211, 238, 0.32);
+  }
+
+  .role-card--product .role-icon {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.36);
+    color: #fbbf24;
+  }
+
+  .role-card--product::before {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), transparent 62%);
+  }
+
+  .role-card--security .role-icon {
+    background: rgba(167, 139, 250, 0.12);
+    border-color: rgba(167, 139, 250, 0.36);
+    color: #c4b5fd;
+  }
+
+  .role-card--security::before {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.12), transparent 62%);
+  }
+
+  .decision-card {
+    left: 50%;
+    top: 50%;
+    width: 520px;
+    min-height: 286px;
+    padding: 38px 46px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background:
+      radial-gradient(circle at 50% 18%, rgba(34, 211, 238, 0.24), transparent 46%),
+      linear-gradient(180deg, rgba(8, 145, 178, 0.24), rgba(17, 24, 39, 0.68));
+    border-color: rgba(34, 211, 238, 0.48);
+    box-shadow:
+      0 24px 76px rgba(8, 145, 178, 0.20),
+      inset 0 0 0 1px rgba(34, 211, 238, 0.09);
+    transform: translate(-50%, calc(-50% + 24px));
+    animation-name: fadeCenter;
+    animation-delay: 1.02s;
+  }
+
+  .decision-card::after {
+    content: "";
+    position: absolute;
+    inset: 18px;
+    border: 1px dashed rgba(34, 211, 238, 0.24);
+    border-radius: 14px;
+    pointer-events: none;
+  }
+
+  .decision-icon {
+    width: 88px;
+    height: 88px;
+    margin-bottom: 26px;
+    border-radius: 24px;
+    font-size: 48px;
+  }
+
+  .decision-card p {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    margin: 0;
+    color: #f8fafc;
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: 0;
+  }
+
+  @keyframes fadeCenter {
+    from {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 24px));
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+</style>

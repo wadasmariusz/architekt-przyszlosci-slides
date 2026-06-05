@@ -19,72 +19,54 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     </defs>
 
     <rect width="1920" height="1080" fill="url(#modularGrid)"/>
-    <circle cx="760" cy="570" r="430" fill="url(#modularGlow)"/>
+    <circle cx="960" cy="560" r="430" fill="url(#modularGlow)"/>
     <g stroke="rgba(34,211,238,0.12)" stroke-width="1.5" fill="none">
-      <path d="M 150 240 C 430 170, 690 270, 960 220 S 1430 150, 1740 270"/>
-      <path d="M 160 790 C 470 690, 690 850, 980 740 S 1440 660, 1730 800"/>
-      <circle cx="760" cy="570" r="302" stroke-dasharray="8 12"/>
+      <path d="M 220 250 C 520 160, 760 260, 1030 210 S 1460 150, 1710 270"/>
+      <path d="M 240 830 C 540 710, 760 850, 1030 760 S 1470 660, 1720 800"/>
+      <circle cx="960" cy="560" r="330" stroke-dasharray="8 12"/>
     </g>
   </svg>
 
   <div class="content">
     <header class="header">
-      <span class="level-chip">
-        <i class="ti ti-message-circle"></i>
-        Jedna osoba w zespole proponuje modularny monolit
-      </span>
+      <span class="level-chip"><i class="ti ti-message-circle"></i>Opcja 1</span>
       <h1 class="title">
-        Opcja 1: <span class="highlight">modularny monolit</span>
+        <span class="highlight">Modularny </span>Monolit
       </h1>
     </header>
 
-    <section class="option-board" aria-label="Opcja 1: modularny monolit">
-      <article class="monolith-card">
+    <section class="services-board" aria-label="Opcja 1: modularny monolit">
+      <div class="monolith-diagram" aria-hidden="true">
         <div class="monolith-heading">
           <i class="ti ti-box"></i>
-          <span>modularny monolit</span>
+          <span>Modularny Monolit</span>
         </div>
 
-        <div class="module-shell" aria-hidden="true">
+        <div class="module-shell">
           <div class="module-tile module-tile--primary"><i class="ti ti-calendar-event"></i></div>
           <div class="module-tile"><i class="ti ti-credit-card"></i></div>
           <div class="module-tile"><i class="ti ti-car"></i></div>
           <div class="module-tile"><i class="ti ti-users"></i></div>
         </div>
+      </div>
+
+      <article class="panel panel--gain">
+        <h2>Zalety</h2>
+        <ul>
+          <li><i class="ti ti-rocket"></i><span>Szybsze dostarczanie</span></li>
+          <li><i class="ti ti-flask"></i><span>Prostsze testy lokalne</span></li>
+          <li><i class="ti ti-database"></i><span>Łatwiejsze transakcje</span></li>
+          <li><i class="ti ti-network-off"></i><span>Brak komunikacji sieciowej między usługami</span></li>
+        </ul>
       </article>
 
-      <section class="benefit-grid" aria-label="zalety">
-        <article class="benefit-card">
-          <i class="ti ti-rocket"></i>
-          <p>zalety</p>
-          <h2>szybsze dostarczanie</h2>
-        </article>
-
-        <article class="benefit-card">
-          <i class="ti ti-flask"></i>
-          <p>zalety</p>
-          <h2>prostsze testy lokalne</h2>
-        </article>
-
-        <article class="benefit-card">
-          <i class="ti ti-database"></i>
-          <p>zalety</p>
-          <h2>łatwiejsze transakcje</h2>
-        </article>
-
-        <article class="benefit-card">
-          <i class="ti ti-network-off"></i>
-          <p>zalety</p>
-          <h2>brak komunikacji sieciowej między usługami</h2>
-        </article>
-      </section>
-
-      <article class="cost-card">
-        <i class="ti ti-alert-triangle"></i>
-        <div>
-          <p>koszt</p>
-          <h2>ryzyko sprzężenia i trudniejsze skalowanie organizacyjne w przyszłości.</h2>
-        </div>
+      <article class="panel panel--cost">
+        <h2>Koszt</h2>
+        <ul>
+          <li><i class="ti ti-alert-triangle"></i><span>Ryzyko sprzężenia</span></li>
+          <li><i class="ti ti-alert-triangle"></i><span>Trudniejsze skalowanie</span></li>
+          <li><i class="ti ti-alert-triangle"></i><span>Wspólny deployment</span></li>
+        </ul>
       </article>
     </section>
   </div>
@@ -93,7 +75,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 <style is:global>
   .stage {
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .bg-deco {
@@ -110,18 +92,18 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .content {
     position: relative;
     z-index: 5;
-    width: min(1340px, calc(100% - 580px));
+    width: min(1500px, calc(100% - 150px));
     max-width: none;
-    padding: 54px 0 0 3rem;
+    padding: 58px 0 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
   }
 
   .header {
-    max-width: 1320px;
-    margin: 0 0 24px;
+    max-width: 1260px;
+    margin: 0 auto 32px;
   }
 
   .level-chip {
@@ -133,10 +115,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background: rgba(8, 145, 178, 0.15);
     border: 1px solid rgba(34, 211, 238, 0.42);
     color: var(--cyan-400);
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: 0;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.15s forwards;
   }
@@ -146,8 +128,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .title {
-    max-width: 1300px;
-    font-size: 72px;
+    font-size: 82px;
     font-weight: 800;
     letter-spacing: 0;
     line-height: 1.05;
@@ -163,46 +144,44 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background-clip: text;
   }
 
-  .option-board {
-    width: 100%;
+  .services-board {
+    width: min(1360px, 100%);
     display: grid;
-    grid-template-columns: 420px minmax(0, 1fr);
-    grid-template-rows: 430px 124px;
-    gap: 22px;
+    grid-template-columns: 1fr 390px 1fr;
+    gap: 26px;
+    align-items: stretch;
   }
 
-  .monolith-card,
-  .benefit-card,
-  .cost-card {
-    border-radius: 16px;
-    background: rgba(17, 24, 39, 0.62);
-    border: 1px solid rgba(148, 163, 184, 0.20);
-    box-shadow: 0 18px 46px rgba(2, 6, 23, 0.26);
+  .monolith-diagram,
+  .panel {
+    min-height: 500px;
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at 50% 12%, rgba(34, 211, 238, 0.17), transparent 42%),
+      rgba(17, 24, 39, 0.62);
+    border: 1px solid rgba(34, 211, 238, 0.30);
+    box-shadow: 0 24px 68px rgba(2, 6, 23, 0.32);
     backdrop-filter: blur(10px);
-    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
   }
 
-  .monolith-card {
+  .monolith-diagram {
     position: relative;
-    padding: 28px;
+    order: 2;
+    padding: 32px 28px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background:
-      radial-gradient(circle at 50% 18%, rgba(34, 211, 238, 0.20), transparent 48%),
-      linear-gradient(180deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.64));
-    border-color: rgba(34, 211, 238, 0.40);
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 0.52s forwards;
+    overflow: hidden;
+    animation-delay: 0.62s;
   }
 
-  .monolith-card::before {
+  .monolith-diagram::before {
     content: "";
     position: absolute;
-    inset: 24px;
-    border-radius: 22px;
-    border: 1px solid rgba(34, 211, 238, 0.22);
-    pointer-events: none;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.10), transparent 58%);
   }
 
   .monolith-heading {
@@ -210,17 +189,19 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     z-index: 1;
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 28px;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 30px;
     color: #f8fafc;
-    font-size: 32px;
+    font-size: 31px;
     font-weight: 800;
-    line-height: 1.1;
+    line-height: 1.08;
+    text-align: left;
   }
 
   .monolith-heading i {
-    width: 62px;
-    height: 62px;
+    width: 60px;
+    height: 60px;
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -228,8 +209,8 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background: rgba(34, 211, 238, 0.14);
     border: 1px solid rgba(34, 211, 238, 0.38);
     color: var(--cyan-400);
-    font-size: 34px;
-    flex: 0 0 62px;
+    font-size: 33px;
+    flex: 0 0 60px;
   }
 
   .module-shell {
@@ -237,7 +218,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     z-index: 1;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 14px;
     padding: 22px;
     border-radius: 20px;
     background: rgba(2, 6, 23, 0.32);
@@ -270,7 +251,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .module-tile {
-    min-height: 98px;
+    min-height: 108px;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -278,7 +259,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background: rgba(15, 23, 42, 0.78);
     border: 1px solid rgba(148, 163, 184, 0.20);
     color: #cbd5e1;
-    font-size: 34px;
+    font-size: 36px;
   }
 
   .module-tile--primary {
@@ -288,118 +269,113 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     box-shadow: 0 0 32px rgba(34, 211, 238, 0.16);
   }
 
-  .benefit-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-  }
-
-  .benefit-card {
+  .panel {
     position: relative;
-    min-height: 206px;
-    padding: 22px 24px 20px;
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out forwards;
+    padding: 34px 32px 36px;
+    text-align: left;
+    overflow: hidden;
   }
 
-  .benefit-card::before {
+  .panel::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(135deg, rgba(22, 163, 74, 0.14), transparent 58%);
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.10), transparent 58%);
   }
 
-  .benefit-card:nth-child(1) { animation-delay: 0.66s; }
-  .benefit-card:nth-child(2) { animation-delay: 0.78s; }
-  .benefit-card:nth-child(3) { animation-delay: 0.90s; }
-  .benefit-card:nth-child(4) { animation-delay: 1.02s; }
+  .panel--gain {
+    order: 1;
+    animation-delay: 0.76s;
+    border-color: rgba(74, 222, 128, 0.34);
+  }
 
-  .benefit-card i {
+  .panel--cost {
+    order: 3;
+    animation-delay: 0.90s;
+    border-color: rgba(248, 113, 113, 0.34);
+  }
+
+  .panel h2 {
     position: relative;
     z-index: 1;
-    width: 50px;
-    height: 50px;
+    margin: 0 0 26px;
+    color: #f8fafc;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: 0;
+  }
+
+  .panel--gain h2 {
+    color: #dcfce7;
+  }
+
+  .panel--cost h2 {
+    color: #fee2e2;
+  }
+
+  .panel ul {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    display: grid;
+    gap: 16px;
+  }
+
+  .panel li {
+    min-height: 78px;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    padding: 15px 18px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.70);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+  }
+
+  .panel--gain li {
+    background: rgba(22, 163, 74, 0.12);
+    border-color: rgba(74, 222, 128, 0.30);
+  }
+
+  .panel--cost li {
+    background: rgba(220, 38, 38, 0.10);
+    border-color: rgba(248, 113, 113, 0.30);
+  }
+
+  .panel li i {
+    width: 52px;
+    height: 52px;
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
-    background: rgba(22, 163, 74, 0.16);
-    border: 1px solid rgba(74, 222, 128, 0.42);
-    color: #86efac;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    color: var(--cyan-400);
     font-size: 28px;
   }
 
-  .benefit-card p,
-  .cost-card p {
-    position: relative;
-    z-index: 1;
-    margin: 0 0 8px;
+  .panel--gain li i {
+    background: rgba(22, 163, 74, 0.18);
+    border-color: rgba(74, 222, 128, 0.38);
     color: #86efac;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
   }
 
-  .benefit-card h2 {
-    position: relative;
-    z-index: 1;
-    margin: 0;
-    color: #f8fafc;
-    font-size: 27px;
-    font-weight: 800;
-    line-height: 1.12;
-    letter-spacing: 0;
-  }
-
-  .benefit-card {
-    border-color: rgba(74, 222, 128, 0.36);
-  }
-
-  .benefit-card:nth-child(4) h2 {
-    font-size: 24px;
-    line-height: 1.14;
-  }
-
-  .cost-card {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 72px minmax(0, 1fr);
-    gap: 20px;
-    align-items: center;
-    padding: 22px 28px;
-    background:
-      linear-gradient(90deg, rgba(220, 38, 38, 0.18), rgba(17, 24, 39, 0.68));
-    border-color: rgba(248, 113, 113, 0.44);
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 1.16s forwards;
-  }
-
-  .cost-card > i {
-    width: 72px;
-    height: 72px;
-    border-radius: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .panel--cost li i {
     background: rgba(220, 38, 38, 0.16);
-    border: 1px solid rgba(248, 113, 113, 0.44);
-    color: #fca5a5;
-    font-size: 38px;
-  }
-
-  .cost-card p {
+    border-color: rgba(248, 113, 113, 0.38);
     color: #fca5a5;
   }
 
-  .cost-card h2 {
-    margin: 0;
+  .panel li span {
     color: #f8fafc;
-    font-size: 31px;
-    font-weight: 800;
-    line-height: 1.18;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.15;
     letter-spacing: 0;
   }
+
 </style>

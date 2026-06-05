@@ -1,0 +1,254 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 10 - Kryteria z driverów"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="criteriaGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <linearGradient id="criteriaSweep" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+        <stop offset="48%" stop-color="#22d3ee" stop-opacity="0.14"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#criteriaGrid)"/>
+    <path d="M 160 244 C 450 168, 710 276, 980 218 S 1430 154, 1738 276" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 160 812 C 480 704, 716 850, 1000 754 S 1470 656, 1740 804" fill="none" stroke="rgba(34,211,238,0.12)" stroke-width="1.5"/>
+    <path d="M 430 570 C 700 470, 1030 470, 1320 570" fill="none" stroke="url(#criteriaSweep)" stroke-width="110" stroke-linecap="round"/>
+    <g fill="none" stroke="rgba(34,211,238,0.16)" stroke-width="1.5" stroke-dasharray="9 13">
+      <path d="M 380 380 C 640 284, 1020 284, 1370 380"/>
+      <path d="M 380 742 C 650 842, 1030 842, 1370 742"/>
+      <path d="M 338 560 H 1420"/>
+    </g>
+  </svg>
+
+  <div class="content">
+    <header class="header">
+      <h1 class="title">
+        Kryteria z <span class="highlight">driverów</span>
+      </h1>
+    </header>
+
+    <section class="criteria-board" aria-label="Kryteria z driverów">
+      <div class="criteria-grid">
+        <article class="criterion-card criterion-card--primary">
+          <i class="ti ti-rocket"></i>
+          <h2>Time-to-market</h2>
+        </article>
+
+        <article class="criterion-card">
+          <i class="ti ti-adjustments-horizontal"></i>
+          <h2>Prostota</h2>
+        </article>
+
+        <article class="criterion-card">
+          <i class="ti ti-chart-arrows-vertical"></i>
+          <h2>Skalowalność</h2>
+        </article>
+
+        <article class="criterion-card">
+          <i class="ti ti-shield-check"></i>
+          <h2>Niezawodność</h2>
+        </article>
+
+        <article class="criterion-card">
+          <i class="ti ti-database"></i>
+          <h2>Spójność danych</h2>
+        </article>
+
+        <article class="criterion-card">
+          <i class="ti ti-receipt-2"></i>
+          <h2>Koszt operacyjny</h2>
+        </article>
+
+        <article class="criterion-card criterion-card--wide">
+          <i class="ti ti-users-group"></i>
+          <h2>Kompetencje zespołu</h2>
+        </article>
+      </div>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: min(1460px, calc(100% - 180px));
+    max-width: none;
+    padding: 48px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    max-width: 1320px;
+    margin: 0 auto 26px;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.15s forwards;
+  }
+
+  .level-chip i {
+    font-size: 22px;
+  }
+
+  .title {
+    max-width: 1240px;
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.32s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .criteria-board {
+    width: min(1120px, 100%);
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .criterion-card {
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    box-shadow: 0 18px 46px rgba(2, 6, 23, 0.26);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+
+  .criteria-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 160px;
+    gap: 16px;
+  }
+
+  .criterion-card {
+    position: relative;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .criterion-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.10), transparent 62%);
+  }
+
+  .criterion-card:nth-child(1) { animation-delay: 0.64s; }
+  .criterion-card:nth-child(2) { animation-delay: 0.72s; }
+  .criterion-card:nth-child(3) { animation-delay: 0.80s; }
+  .criterion-card:nth-child(4) { animation-delay: 0.88s; }
+  .criterion-card:nth-child(5) { animation-delay: 0.96s; }
+  .criterion-card:nth-child(6) { animation-delay: 1.04s; }
+  .criterion-card:nth-child(7) { animation-delay: 1.12s; }
+
+  .criterion-card--primary {
+    background:
+      linear-gradient(180deg, rgba(8, 145, 178, 0.28), rgba(17, 24, 39, 0.66));
+    border-color: rgba(34, 211, 238, 0.52);
+  }
+
+  .criterion-card--wide {
+    grid-column: span 3;
+    min-height: 160px;
+    background:
+      linear-gradient(90deg, rgba(8, 145, 178, 0.24), rgba(17, 24, 39, 0.66));
+    border-color: rgba(34, 211, 238, 0.42);
+  }
+
+  .criterion-card i {
+    position: relative;
+    z-index: 1;
+    width: 54px;
+    height: 54px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.36);
+    color: var(--cyan-400);
+    font-size: 30px;
+  }
+
+  .criterion-card h2 {
+    position: relative;
+    z-index: 1;
+    color: #f8fafc;
+    font-size: 29px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  .criterion-card--wide {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .criterion-card--wide h2 {
+    font-size: 38px;
+  }
+</style>

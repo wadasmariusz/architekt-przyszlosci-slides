@@ -70,7 +70,7 @@
 
 **Wejście po słowach:** „Możemy użyć prostej skali, na przykład od jednego do pięciu”
 **Tytuł:** Ocena to nie prawda absolutna
-**Opis slajdu:** Pokazać skalę 1–5 i ostrzeżenie: wynik liczbowy strukturyzuje rozmowę, ale nie powinien automatycznie rozstrzygać decyzji.
+**Opis slajdu:** Pokazać skalę 1–5 i ostrzeżenie: Wynik liczbowy strukturyzuje rozmowę, ale nie powinien automatycznie rozstrzygać decyzji.
 
 ### Slajd 13
 
