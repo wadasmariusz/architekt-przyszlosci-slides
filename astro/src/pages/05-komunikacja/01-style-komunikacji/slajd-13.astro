@@ -12,77 +12,130 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
       </pattern>
       <radialGradient id="orderGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.20"/>
-        <stop offset="65%" stop-color="#22d3ee" stop-opacity="0.05"/>
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="66%" stop-color="#22d3ee" stop-opacity="0.04"/>
         <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
       </radialGradient>
     </defs>
 
     <rect width="1920" height="1080" fill="url(#orderGrid)"/>
-    <circle cx="960" cy="540" r="560" fill="url(#orderGlow)"/>
+    <circle cx="960" cy="520" r="560" fill="url(#orderGlow)"/>
   </svg>
 
   <div class="content">
-    <p class="eyebrow">
-      <span class="eyebrow-num">Część 2</span>
-      <span class="eyebrow-sep" aria-hidden="true">·</span>
-      <span>Nowy segment</span>
-    </p>
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-arrows-shuffle"></i>Drugie Wyzwanie</span>
+      <h1 class="title">Kolejność zdarzeń</h1>
+      <p class="claim">
+        <span>Delivery order</span>
+        <strong>≠</strong>
+        <span>processing order</span>
+      </p>
+    </div>
 
-    <h1 class="title">
-      <span class="title-main">Drugie wyzwanie:</span>
-      <span class="title-sub"><span class="highlight">kolejność</span></span>
-    </h1>
+    <section class="storyboard" aria-label="Kolejność zdarzeń płatności i równoległe przetwarzanie">
+      <article class="lane lane--domain">
+        <header class="lane-head">
+          <i class="ti ti-credit-card"></i>
+          <div>
+            <span>Biznes</span>
+            <h2>Logiczna sekwencja</h2>
+          </div>
+        </header>
 
-    <section class="manifesto" aria-label="Główna teza">
-      <div class="queue-vis" aria-hidden="true">
-        <div class="queue-box">
-          <i class="ti ti-list-numbers"></i>
+        <ol class="event-track event-track--domain">
+          <li>
+            <span class="step">1</span>
+            <code>PaymentInitialized</code>
+          </li>
+          <li>
+            <span class="step">2</span>
+            <code>PaymentPaid</code>
+          </li>
+          <li>
+            <span class="step">3</span>
+            <code>PaymentRefunded</code>
+          </li>
+        </ol>
+
+      </article>
+
+      <article class="consumer-panel" aria-label="Skąd bierze się zmiana kolejności">
+        <header class="lane-head lane-head--center">
+          <i class="ti ti-stack-2"></i>
+          <div>
+            <span>System asynchroniczny</span>
+            <h2>Broker + consumer pool</h2>
+          </div>
+        </header>
+
+        <div class="dispatch" aria-hidden="true">
+          <span class="message message--one">M1</span>
+          <span class="message message--two">M2</span>
+          <span class="message message--three">M3</span>
+          <div class="broker">
+            <i class="ti ti-route"></i>
+            <span>topic / queue</span>
+          </div>
         </div>
-        <div class="queue-tickets">
-          <span class="ticket">M3</span>
-          <span class="ticket">M1</span>
-          <span class="ticket">M2</span>
-        </div>
-      </div>
 
-      <div class="equation">
-        <span class="eq-side eq-side--left">
-          <span class="eq-label">Delivery</span>
-          <span class="eq-value">order</span>
-        </span>
-        <span class="eq-symbol">≠</span>
-        <span class="eq-side eq-side--right">
-          <span class="eq-label">Processing</span>
-          <span class="eq-value">order</span>
-        </span>
-      </div>
+        <div class="consumer-stack">
+          <div class="consumer-row consumer-row--slow">
+            <span class="msg">M1</span>
+            <span class="worker">Consumer A</span>
+            <span class="delay">retry</span>
+          </div>
+          <div class="consumer-row consumer-row--mid">
+            <span class="msg">M2</span>
+            <span class="worker">Consumer B</span>
+            <span class="delay">wolna zależność</span>
+          </div>
+          <div class="consumer-row consumer-row--fast">
+            <span class="msg">M3</span>
+            <span class="worker">Consumer C</span>
+            <span class="delay">fast path</span>
+          </div>
+        </div>
+
+        <ul class="factors" aria-label="Przyczyny zmiany kolejności">
+          <li>równoległość</li>
+          <li>retry</li>
+          <li>opóźnienia</li>
+        </ul>
+      </article>
+
+      <article class="lane lane--processing">
+        <header class="lane-head">
+          <i class="ti ti-clock-bolt"></i>
+          <div>
+            <span>Efekt</span>
+            <h2>Kolejność obsługi</h2>
+          </div>
+        </header>
+
+        <ol class="event-track event-track--processing">
+          <li class="danger">
+            <span class="step">1</span>
+            <code>PaymentRefunded</code>
+          </li>
+          <li class="warn">
+            <span class="step">2</span>
+            <code>PaymentPaid</code>
+          </li>
+          <li class="danger">
+            <span class="step">3</span>
+            <code>PaymentInitialized</code>
+          </li>
+        </ol>
+
+      </article>
     </section>
-
-    <ul class="points" aria-label="Tezy slajdu">
-      <li>
-        <i class="ti ti-arrows-shuffle"></i>
-        <span>Broker nie musi gwarantować <strong>globalnej kolejności</strong> przetwarzania</span>
-      </li>
-      <li>
-        <i class="ti ti-arrow-bounce"></i>
-        <span>Kolejność publikacji nie zawsze oznacza kolejność obsługi</span>
-      </li>
-      <li>
-        <i class="ti ti-alert-triangle"></i>
-        <span>Problem ujawnia się szczególnie przy <strong>wielu consumerach, retry i opóźnieniach</strong></span>
-      </li>
-      <li class="points-rule">
-        <i class="ti ti-compass"></i>
-        <span><strong>Architekt</strong> musi określić, gdzie kolejność jest wymagana biznesowo</span>
-      </li>
-    </ul>
   </div>
 </SlideLayout>
 
 <style is:global>
   .stage {
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .bg-deco {
@@ -100,334 +153,494 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     position: relative;
     z-index: 5;
     width: 100%;
-    max-width: 1640px;
-    padding: 40px 3rem;
+    max-width: 1660px;
+    padding: 34px 3rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
   }
 
-  .eyebrow {
-    margin: 0 0 18px;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 6px;
-    color: rgba(34, 211, 238, 0.78);
+  .header {
+    margin-bottom: 20px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.2s forwards;
   }
 
-  .eyebrow-num {
-    padding: 6px 14px;
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
     border-radius: 999px;
-    background: rgba(34, 211, 238, 0.14);
-    border: 1px solid rgba(34, 211, 238, 0.45);
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
     color: var(--cyan-400);
-    font-weight: 800;
-    letter-spacing: 3px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
   }
 
-  .eyebrow-sep {
-    color: rgba(148, 163, 184, 0.55);
+  .level-chip i {
+    font-size: 18px;
   }
 
   .title {
-    font-size: 92px;
+    font-size: 82px;
     font-weight: 800;
-    letter-spacing: -1px;
+    letter-spacing: 0;
     line-height: 1.05;
-    margin: 0 0 52px;
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 0.35s forwards;
+    margin: 0 0 40px;
   }
 
-  .title-main,
-  .title-sub {
-    display: block;
-  }
-
-  .title-sub {
-    margin-top: 4px;
-  }
-
-  .title .highlight {
-    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .manifesto {
-    width: 100%;
-    max-width: 1500px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 36px;
-    margin-bottom: 56px;
-    padding: 36px 40px;
-    background: rgba(17, 24, 39, 0.6);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(34, 211, 238, 0.40);
-    border-radius: 22px;
-    box-shadow: 0 28px 70px rgba(8, 145, 178, 0.20);
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.6s forwards;
-  }
-
-  .queue-vis {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .queue-box {
-    width: 110px;
-    height: 110px;
-    border-radius: 22px;
-    background: rgba(34, 211, 238, 0.14);
-    border: 1px solid rgba(34, 211, 238, 0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 32px rgba(34, 211, 238, 0.25);
-  }
-
-  .queue-box i {
-    font-size: 56px;
-    color: var(--cyan-400);
-  }
-
-  .queue-tickets {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .ticket {
-    padding: 8px 16px;
-    border-radius: 10px;
-    background: rgba(10, 14, 23, 0.75);
-    border: 1px solid rgba(148, 163, 184, 0.45);
-    color: #e2e8f0;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    min-width: 60px;
-    text-align: center;
-  }
-
-  .ticket:nth-child(1) {
-    transform: translateX(-6px);
-    opacity: 0.85;
-  }
-
-  .ticket:nth-child(2) {
-    transform: translateX(8px);
-    border-color: rgba(34, 211, 238, 0.55);
-    color: var(--cyan-400);
-  }
-
-  .ticket:nth-child(3) {
-    transform: translateX(-4px);
-    opacity: 0.85;
-  }
-
-  .equation {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 28px;
-    flex-wrap: wrap;
-  }
-
-  .eq-side {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 18px 30px;
-    border-radius: 16px;
-    background: rgba(17, 24, 39, 0.55);
-    border: 1px solid rgba(148, 163, 184, 0.25);
-  }
-
-  .eq-side--left {
-    border-color: rgba(34, 197, 94, 0.40);
-    background: linear-gradient(135deg, rgba(20, 83, 45, 0.22), rgba(17, 24, 39, 0.55));
-  }
-
-  .eq-side--right {
-    border-color: rgba(248, 113, 113, 0.45);
-    background: linear-gradient(135deg, rgba(127, 29, 29, 0.20), rgba(17, 24, 39, 0.55));
-  }
-
-  .eq-label {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.85);
-  }
-
-  .eq-side--left .eq-label {
-    color: rgba(74, 222, 128, 0.85);
-  }
-
-  .eq-side--right .eq-label {
-    color: rgba(248, 113, 113, 0.85);
-  }
-
-  .eq-value {
-    font-size: 44px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: #f0f4f8;
-    line-height: 1;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-  }
-
-  .eq-side--left .eq-value {
-    color: #d1fae5;
-  }
-
-  .eq-side--right .eq-value {
-    color: #fecaca;
-  }
-
-  .eq-symbol {
-    font-size: 80px;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--cyan-400);
-    text-shadow:
-      0 0 28px rgba(34, 211, 238, 0.55),
-      0 0 56px rgba(34, 211, 238, 0.25);
-    animation: pulseSymbol 2.2s ease-in-out infinite;
-  }
-
-  .points {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    max-width: 1400px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px 22px;
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.95s forwards;
-  }
-
-  .points li {
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    align-items: center;
-    gap: 18px;
-    padding: 18px 22px;
-    background: rgba(17, 24, 39, 0.6);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(148, 163, 184, 0.20);
-    border-radius: 14px;
-    text-align: left;
-  }
-
-  .points li i {
-    width: 46px;
-    height: 46px;
+  .claim {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    gap: 16px;
+    margin: 0 0 20px;
+    padding: 9px 22px;
+    border: 1px solid rgba(34, 211, 238, 0.34);
+    border-radius: 14px;
+    background: rgba(17, 24, 39, 0.62);
+    box-shadow: 0 18px 44px rgba(8, 145, 178, 0.16);
+    color: rgba(226, 232, 240, 0.92);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .claim strong {
+    color: var(--cyan-400);
+    font-size: 34px;
+    line-height: 0.8;
+    text-shadow: 0 0 24px rgba(34, 211, 238, 0.6);
+  }
+
+  .storyboard {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.02fr 1.18fr 1.02fr;
+    gap: 18px 20px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.55s forwards;
+  }
+
+  .lane,
+  .consumer-panel {
+    min-height: 392px;
+    padding: 20px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(10, 14, 23, 0.64));
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    text-align: left;
+  }
+
+  .lane--domain {
+    border-color: rgba(34, 197, 94, 0.34);
+  }
+
+  .lane--processing {
+    border-color: rgba(248, 113, 113, 0.38);
+  }
+
+  .consumer-panel {
+    border-color: rgba(34, 211, 238, 0.38);
+    background:
+      linear-gradient(180deg, rgba(8, 145, 178, 0.14), rgba(10, 14, 23, 0.68));
+  }
+
+  .lane-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .lane-head i {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 13px;
     background: rgba(34, 211, 238, 0.12);
-    border: 1px solid rgba(34, 211, 238, 0.42);
+    border: 1px solid rgba(34, 211, 238, 0.38);
     color: var(--cyan-400);
-    font-size: 24px;
+    font-size: 26px;
   }
 
-  .points li span {
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 1.3;
+  .lane--domain .lane-head i {
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.42);
+    background: rgba(34, 197, 94, 0.12);
+  }
+
+  .lane--processing .lane-head i {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.46);
+    background: rgba(248, 113, 113, 0.11);
+  }
+
+  .lane-head span {
+    display: block;
+    margin-bottom: 3px;
+    color: rgba(148, 163, 184, 0.9);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .lane-head h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+  }
+
+  .event-track {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .event-track::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    bottom: 24px;
+    left: 23px;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.75), rgba(34, 211, 238, 0.2));
+  }
+
+  .event-track--processing::before {
+    background: linear-gradient(180deg, rgba(248, 113, 113, 0.76), rgba(251, 191, 36, 0.42));
+  }
+
+  .event-track li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    align-items: center;
+    gap: 14px;
+    min-height: 62px;
+    padding: 9px 12px 9px 0;
+    border-radius: 14px;
     color: #e2e8f0;
-    letter-spacing: -0.2px;
   }
 
-  .points li strong {
+  .step {
+    position: relative;
+    z-index: 1;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.94);
+    border: 1px solid rgba(74, 222, 128, 0.55);
+    color: #bbf7d0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .event-track--processing .step {
+    border-color: rgba(248, 113, 113, 0.58);
+    color: #fecaca;
+  }
+
+  .event-track code {
+    display: block;
+    min-width: 0;
+    padding: 13px 14px;
+    overflow-wrap: anywhere;
+    border-radius: 12px;
+    background: rgba(2, 6, 23, 0.42);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 18px;
+    font-weight: 800;
+    color: #e5e7eb;
+  }
+
+  .event-track--domain code {
+    border-color: rgba(74, 222, 128, 0.26);
+    background: rgba(20, 83, 45, 0.16);
+  }
+
+  .event-track--processing .danger code {
+    border-color: rgba(248, 113, 113, 0.34);
+    background: rgba(127, 29, 29, 0.22);
+    color: #fecaca;
+  }
+
+  .event-track--processing .warn code {
+    border-color: rgba(251, 191, 36, 0.34);
+    background: rgba(120, 53, 15, 0.2);
+    color: #fde68a;
+  }
+
+  .lane-note {
+    margin: 18px 0 0;
+    color: rgba(226, 232, 240, 0.84);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.28;
+  }
+
+  .lane-note--danger {
+    color: #fecaca;
+  }
+
+  .dispatch {
+    position: relative;
+    min-height: 84px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .broker {
+    width: 210px;
+    height: 68px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 16px;
+    background: rgba(8, 145, 178, 0.2);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: #cffafe;
+    box-shadow: 0 0 34px rgba(34, 211, 238, 0.18);
+  }
+
+  .broker i {
+    font-size: 28px;
     color: var(--cyan-400);
+  }
+
+  .broker span {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 16px;
     font-weight: 800;
   }
 
-  .points-rule {
-    grid-column: 1 / -1;
-    border-color: rgba(34, 211, 238, 0.55);
-    background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.62));
+  .message {
+    position: absolute;
+    top: 2px;
+    width: 42px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(2, 6, 23, 0.74);
+    border: 1px solid rgba(148, 163, 184, 0.34);
+    color: #f8fafc;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  .message--one {
+    left: 78px;
+  }
+
+  .message--two {
+    left: calc(50% - 21px);
+    border-color: rgba(34, 211, 238, 0.42);
+    color: #a5f3fc;
+  }
+
+  .message--three {
+    right: 78px;
+  }
+
+  .consumer-stack {
+    display: grid;
+    gap: 11px;
+    margin-bottom: 15px;
+  }
+
+  .consumer-row {
+    display: grid;
+    grid-template-columns: 46px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 8px 10px;
+    border-radius: 13px;
+    background: rgba(2, 6, 23, 0.38);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .consumer-row--fast {
+    border-color: rgba(34, 197, 94, 0.35);
+  }
+
+  .consumer-row--mid {
+    border-color: rgba(251, 191, 36, 0.3);
+  }
+
+  .consumer-row--slow {
+    border-color: rgba(248, 113, 113, 0.34);
+  }
+
+  .msg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(34, 211, 238, 0.32);
+    color: #a5f3fc;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  .worker {
+    color: #f8fafc;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .delay {
+    justify-self: end;
+    max-width: 130px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.82);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    color: rgba(226, 232, 240, 0.9);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .consumer-row--fast .delay {
+    color: #bbf7d0;
+    border-color: rgba(74, 222, 128, 0.38);
+  }
+
+  .consumer-row--mid .delay {
+    color: #fde68a;
+    border-color: rgba(251, 191, 36, 0.34);
+  }
+
+  .consumer-row--slow .delay {
+    color: #fecaca;
+    border-color: rgba(248, 113, 113, 0.36);
+  }
+
+  .factors {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .factors li {
+    min-width: 0;
+    padding: 9px 8px;
+    border-radius: 10px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.24);
+    color: #cffafe;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .architect-rule {
+    grid-column: 1 / 3;
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 22px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.72));
+    border: 1px solid rgba(34, 211, 238, 0.46);
+    text-align: left;
     box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.05);
   }
 
-  .points-rule i {
-    background: rgba(34, 211, 238, 0.18);
-    border-color: rgba(34, 211, 238, 0.55);
+  .architect-rule i {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 25px;
   }
 
-  .points-rule span {
+  .architect-rule p {
+    margin: 0;
     color: #e2f6ff;
-    font-size: 24px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0;
   }
 
-  @keyframes pulseSymbol {
-    0%, 100% {
-      text-shadow:
-        0 0 28px rgba(34, 211, 238, 0.55),
-        0 0 56px rgba(34, 211, 238, 0.25);
-    }
-    50% {
-      text-shadow:
-        0 0 42px rgba(34, 211, 238, 0.80),
-        0 0 78px rgba(34, 211, 238, 0.35);
-    }
+  .architect-rule strong {
+    color: var(--cyan-400);
+    font-weight: 900;
   }
 
   @media (max-width: 1300px) {
+    .content {
+      padding-top: 28px;
+    }
+
     .title {
-      font-size: 60px;
+      font-size: 52px;
     }
 
-    .manifesto {
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 24px 22px;
+    .claim {
+      font-size: 18px;
     }
 
-    .equation {
-      gap: 18px;
-    }
-
-    .eq-value {
-      font-size: 32px;
-    }
-
-    .eq-symbol {
-      font-size: 56px;
-    }
-
-    .points {
+    .storyboard {
       grid-template-columns: 1fr;
     }
 
-    .points li span {
-      font-size: 20px;
+    .lane,
+    .consumer-panel {
+      min-height: auto;
     }
 
-    .points-rule span {
-      font-size: 22px;
+    .architect-rule p {
+      font-size: 19px;
     }
   }
 
@@ -438,45 +651,47 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     }
 
     .title {
-      font-size: 40px;
+      font-size: 38px;
     }
 
-    .eyebrow {
-      font-size: 14px;
-      letter-spacing: 3px;
+    .claim {
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 14px;
+      font-size: 15px;
     }
 
-    .queue-box {
-      width: 80px;
-      height: 80px;
+    .claim strong {
+      font-size: 28px;
     }
 
-    .queue-box i {
-      font-size: 42px;
+    .storyboard {
+      padding: 14px;
     }
 
-    .eq-value {
-      font-size: 26px;
-    }
-
-    .eq-symbol {
-      font-size: 44px;
-    }
-
-    .points li {
-      grid-template-columns: 40px 1fr;
-      gap: 14px;
-      padding: 14px 16px;
-    }
-
-    .points li i {
-      width: 40px;
-      height: 40px;
+    .lane-head h2 {
       font-size: 22px;
     }
 
-    .points li span {
-      font-size: 18px;
+    .event-track code {
+      font-size: 16px;
+    }
+
+    .consumer-row {
+      grid-template-columns: 42px 1fr;
+    }
+
+    .delay {
+      grid-column: 2;
+      justify-self: start;
+    }
+
+    .factors {
+      grid-template-columns: 1fr;
+    }
+
+    .architect-rule {
+      grid-template-columns: 1fr;
     }
   }
 </style>

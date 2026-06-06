@@ -23,11 +23,12 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   </svg>
 
   <div class="content">
-    <p class="eyebrow">Wzorzec #3</p>
-
-    <h1 class="title">
-      Idempotentna <span class="highlight">logika biznesowa</span>
-    </h1>
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-code-circle"></i>Wzorzec #3</span>
+      <h1 class="title">
+        Idempotentna <span class="highlight">logika biznesowa</span>
+      </h1>
+    </div>
 
     <section class="compare" aria-label="Porównanie podejść">
       <article class="row row--bad">
@@ -90,16 +91,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         </ul>
       </article>
     </div>
-
-    <aside class="goal" aria-label="Cel">
-      <i class="ti ti-target"></i>
-      <div class="goal-body">
-        <p class="goal-eyebrow">Cel</p>
-        <p class="goal-main">
-          Brak <span class="accent">dodatkowych skutków ubocznych</span> przy duplikacie
-        </p>
-      </div>
-    </aside>
+    
   </div>
 </SlideLayout>
 
@@ -131,25 +123,36 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     text-align: center;
   }
 
-  .eyebrow {
-    margin: 0 0 14px;
-    font-size: 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 6px;
-    color: rgba(34, 211, 238, 0.78);
+  .header {
+    margin-bottom: 28px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.2s forwards;
   }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .level-chip i { font-size: 18px; }
 
   .title {
     font-size: 74px;
     font-weight: 800;
     letter-spacing: -1px;
     line-height: 1.05;
-    margin: 0 0 36px;
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 0.35s forwards;
+    margin: 0 0 8px;
   }
 
   .title .highlight {
@@ -170,7 +173,8 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   .row {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: auto auto;
+    justify-content: center;
     align-items: center;
     gap: 24px;
     padding: 22px 28px;
@@ -179,7 +183,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     border: 1px solid rgba(148, 163, 184, 0.22);
     border-radius: 18px;
     box-shadow: 0 24px 60px rgba(2, 6, 23, 0.30);
-    text-align: left;
+    text-align: center;
     opacity: 0;
     animation: fadeUp 0.85s ease-out forwards;
   }
@@ -248,9 +252,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .equation {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 30px auto 30px minmax(280px, auto);
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: center;
     gap: 14px;
     font-size: 28px;
     line-height: 1;
@@ -271,6 +276,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     font-size: 28px;
     font-weight: 800;
     color: rgba(148, 163, 184, 0.85);
+    justify-self: center;
   }
 
   .equation .op--eq {

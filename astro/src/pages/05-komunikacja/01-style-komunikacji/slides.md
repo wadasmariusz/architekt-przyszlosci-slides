@@ -353,84 +353,356 @@ Slajd przejściowy, może zawierać prostą ikonę kolejki i komunikat:
 
 ### Slajd 14
 
-**Po jakich słowach wejście slajdu:**
-„Payment Initialize Payment Paid payment Refound”
+---
 
-**Tytuł slajdu:**
-Kolejność zdarzeń płatności
+## Slajd 15
 
-**Opis slajdu:**
-Slajd pokazuje konkretny przykład domenowy, w którym kolejność zdarzeń ma znaczenie.
+**Wejście po słowach:**
+„**Drugie wyzwanie, której gwarancji nie daje Ci broker to globalna kolejność wiadomości.**”
 
-Tekst na slajdzie:
+**Tytuł:**
+**Brak globalnej kolejności**
 
-* PaymentInitialized
-* PaymentPaid
-* PaymentRefunded
+**Tekst na slajdzie:**
 
-Adnotacja:
+* Broker nie gwarantuje globalnej kolejności przetwarzania wiadomości
+* Eventy mogą zostać opublikowane w jednej kolejności, ale obsłużone w innej
+* Przyczyny: wielu consumerów, retry, opóźnienia, różne instancje
 
-* To sekwencja logiczna z punktu widzenia domeny
-* System asynchroniczny nie gwarantuje automatycznie, że tak zostanie przetworzona
+**Opis / rola slajdu:**
+Slajd otwiera temat głównego problemu: w komunikacji asynchronicznej kolejność wysłania nie oznacza kolejności przetworzenia. Ma ustawić kontekst przed przykładami `PaymentInitialized → PaymentPaid → PaymentRefunded` oraz `OrderConfirmed` przed `OrderPlaced`.
 
-**Grafika/diagram/animacja:**
-Oś czasu z poprawną kolejnością zdarzeń:
-`Initialized → Paid → Refunded`
-Obok warto pokazać alternatywny, błędny scenariusz przetwarzania:
-`Refunded → Paid → Initialized`
+**Grafika / diagram / animacja:**
+Prosty diagram:
+`Publisher → Queue → Consumer A / Consumer B`
+Z trzema eventami, które wychodzą w kolejności `1, 2, 3`, ale do consumerów trafiają jako `2, 1, 3`.
 
 ---
 
-### Slajd 15
+## Slajd 16
 
-**Po jakich słowach wejście slajdu:**
-„Może podebrać jedną wiadomość wcześniej, inny consumer”
+**Wejście po słowach:**
+„**Konsument zobaczy Order Confirm, zanim dotrze do niego Order Places.**”
 
-**Tytuł slajdu:**
-Skąd bierze się zmiana kolejności
+**Tytuł:**
+**Out-of-order w praktyce**
 
-**Opis slajdu:**
-Slajd wyjaśnia mechanizmy techniczne prowadzące do przetwarzania out-of-order.
+**Tekst na slajdzie:**
 
-Tekst na slajdzie:
+* `OrderConfirmed` przychodzi przed `OrderPlaced`
+* Consumer nie zna jeszcze zamówienia
+* Efekt: błąd, retry, opóźnienie, przypadkowa naprawa po czasie
+* Problem techniczny staje się problemem procesu biznesowego
 
-* Równoległe instancje consumerów
-* Różne czasy przetwarzania wiadomości
-* Retry pojedynczej wiadomości
-* Opóźnienia sieciowe lub infrastrukturalne
-* Czasowa niedostępność zależności
+**Opis / rola slajdu:**
+Ten slajd pokazuje praktyczny skutek braku kolejności. Nie chodzi już tylko o mechanikę brokera, ale o konsekwencję domenową: system próbuje wykonać operację na stanie, którego jeszcze nie ma.
 
-**Grafika/diagram/animacja:**
-Diagram z trzema wiadomościami trafiającymi do różnych consumerów:
-`M1 → Consumer A`, `M2 → Consumer B`, `M3 → Consumer C`
-Każdy consumer kończy w innym czasie, co zmienia kolejność efektów.
+**Grafika / diagram / animacja:**
+Mała oś czasu z dwoma wariantami:
+
+Oczekiwane:
+`OrderPlaced → OrderConfirmed`
+
+Rzeczywiste:
+`OrderConfirmed → error/retry → OrderPlaced → retry OK`
 
 ---
 
-### Slajd 16
+## Slajd 17
 
-**Po jakich słowach wejście slajdu:**
-„To jest jedna z największych wyzwań jeśli chodzi o komunikacja asynchroniczną”
+**Wejście po słowach:**
+„**Gwarancją kolejnosci jest tylko to, tylko to co jest w obrębie danej partycji.**”
 
-**Tytuł slajdu:**
-Konsekwencje out-of-order
+**Tytuł:**
+**Kolejność w partycji**
 
-**Opis slajdu:**
-Slajd podsumowuje drugi problem w sposób architektoniczny: wiadomości mogą przychodzić w dowolnej kolejności i na różnych instancjach consumerów.
+**Tekst na slajdzie:**
 
-Tekst na slajdzie:
+* Gwarancja kolejności działa tylko w obrębie tej samej partycji
+* Eventy dla jednej encji powinny mieć ten sam `partition key`
+* Dla zamówień naturalnym kandydatem bywa `OrderId`
 
-* Zdarzenia mogą dotrzeć później niż zdarzenia od nich zależne
-* Różne instancje consumerów mogą widzieć różne fragmenty procesu
-* Retry może przesunąć starsze zdarzenie na koniec
-* Model domenowy musi uwzględniać brak globalnej kolejności
+**Opis / rola slajdu:**
+Slajd przeprowadza odbiorcę od problemu do pierwszego rozwiązania architektonicznego: partycjonowania. Ma jasno pokazać, że broker może dawać pewne gwarancje, ale tylko lokalnie — w ramach partycji, nie globalnie.
 
-Adnotacja końcowa:
+**Grafika / diagram / animacja:**
+Diagram z trzema partycjami:
 
-* Asynchroniczność wymaga projektowania pod duplikaty i nieuporządkowane dostarczenie
+* Partition 1: `OrderId=123`: `Placed → Paid → Confirmed`
+* Partition 2: `OrderId=456`: inne eventy
+* Partition 3: `OrderId=789`: inne eventy
 
-**Grafika/diagram/animacja:**
-Slajd podsumowujący z dwoma filarami:
+---
 
-* At-least-once → duplikaty
-* Brak globalnej kolejności → out-of-order
+## Slajd 18
+
+**Wejście po słowach:**
+„**W przypadku zamówień wybór partition key to architektoniczna decyzja.**”
+
+**Tytuł:**
+**Partition key: trade-off**
+
+**Tekst na slajdzie:**
+
+* Zbyt szeroki klucz: hot partition, słabe skalowanie
+* Zbyt wąski klucz: brak gwarancji kolejności tam, gdzie jest potrzebna
+* Dobór klucza musi wynikać z reguł biznesowych
+* To decyzja, która często zostaje z systemem na lata
+
+**Opis / rola slajdu:**
+Slajd ma podkreślić wagę decyzji architektonicznej. Nie pokazuje partycjonowania jako prostego ustawienia technicznego, tylko jako wybór wpływający na skalowanie, poprawność biznesową i koszty utrzymania.
+
+**Grafika / diagram / animacja:**
+Tabela porównawcza:
+
+| Wybór klucza   | Skutek                     |
+| -------------- | -------------------------- |
+| Region / temat | Ryzyko hot partition       |
+| GUID per event | Brak kolejności biznesowej |
+| `OrderId`      | Kolejność per zamówienie   |
+
+---
+
+## Slajd 19
+
+**Wejście po słowach:**
+„**Druga droga jeśli partycjonowanie nie wchodzi w grę, nie pasuje do danego problemu...**”
+
+**Tytuł:**
+**Consumer odporny na kolejność**
+
+**Tekst na slajdzie:**
+
+* Consumer może obsługiwać eventy w dowolnej kolejności
+* Potrzebne mechanizmy:
+
+  * wersja stanu
+  * sprawdzenie poprzednika
+  * kolejka oczekujących
+* Większa elastyczność, ale wyższy koszt utrzymania
+
+**Opis / rola slajdu:**
+Slajd pokazuje alternatywę dla partycjonowania. Ważne, żeby odbiorca zrozumiał trade-off: można przenieść odpowiedzialność za kolejność do consumera, ale wtedy rośnie złożoność implementacji i testowania.
+
+**Grafika / diagram / animacja:**
+Prosty schemat:
+
+`Event arrives → Czy poprzedni stan istnieje? → TAK: przetwarzaj / NIE: odłóż do pending`
+
+---
+
+## Slajd 20
+
+**Wejście po słowach:**
+„**Klasyczny problem. Chcesz coś zapisać w Chandler do bazy danych i opublikować event?**”
+
+**Tytuł:**
+**Problem dwóch zapisów**
+
+**Tekst na slajdzie:**
+
+* Zapis stanu w bazie danych
+* Publikacja eventu do brokera
+* Awaria jednego z kroków = niespójność
+* Ryzyko: proces biznesowy utknie albo pójdzie błędną ścieżką
+
+**Opis / rola slajdu:**
+Ten slajd wprowadza problem, który prowadzi do Outbox Pattern. Ma pokazać, że zapis do bazy i wysłanie eventu to dwa osobne efekty uboczne, których nie da się traktować naiwnie jako jednej bezpiecznej operacji.
+
+**Grafika / diagram / animacja:**
+Diagram z dwoma gałęziami:
+
+`Handler → Database`
+`Handler → Broker`
+
+Z oznaczonymi punktami awarii:
+
+* DB zapisany, event niewysłany
+* Event wysłany, DB niezaktualizowana
+
+---
+
+## Slajd 21
+
+**Wejście po słowach:**
+„**Jakie jest na to rozwiązanie? Nie publikujesz bezpośrednio do brokera.**”
+
+**Tytuł:**
+**Outbox Pattern**
+
+**Tekst na slajdzie:**
+
+* Event zapisywany do tabeli `Outbox`
+* W tej samej transakcji co zmiana biznesowa
+* Osobny proces publikuje eventy do brokera
+* Publikacja jest ponawiana aż do skutku
+
+**Opis / rola slajdu:**
+Slajd wyjaśnia wzorzec Outbox jako rozwiązanie problemu dwóch zapisów. Powinien wspierać narrację o tym, że zmiana biznesowa i informacja o evencie commitują się razem, a publikacja do brokera może być wykonana później.
+
+**Grafika / diagram / animacja:**
+Diagram sekwencji:
+
+`Handler`
+→ transakcja: `Business table + Outbox table`
+→ `Outbox Publisher`
+→ `Broker`
+
+Można zaznaczyć:
+`commit razem` oraz `retry publikacji`.
+
+---
+
+## Slajd 22
+
+**Wejście po słowach:**
+„**Inbox Pattern to to samo, ale po drugiej stronie odbierasz wiadomość...**”
+
+**Tytuł:**
+**Inbox Pattern**
+
+**Tekst na slajdzie:**
+
+* Odbierana wiadomość trafia najpierw do `Inbox`
+* `MessageId` jako unikalny identyfikator
+* Duplikat zostaje odrzucony przez constraint
+* Handler wykonuje logikę domenową tylko raz
+
+**Opis / rola slajdu:**
+Slajd pokazuje Inbox jako mechanizm idempotentności po stronie consumera. Ma podkreślić, że odporność na duplikaty nie powinna zależeć wyłącznie od dyscypliny programisty, ale być częścią protokołu przetwarzania wiadomości.
+
+**Grafika / diagram / animacja:**
+Schemat:
+
+`Message → Inbox(MessageId unique) → Handler → Domain change`
+
+Dodatkowo obok:
+`Duplicate MessageId → rejected / ignored`
+
+---
+
+## Slajd 23
+
+**Wejście po słowach:**
+„**Trzeci wzorzec i też technologia, która jest wbudowana w kolejki to Deadletter.**”
+
+**Tytuł:**
+**Dead Letter Queue**
+
+**Tekst na slajdzie:**
+
+* Zatruta wiadomość nie blokuje głównej kolejki
+* Po kilku nieudanych próbach trafia do DLQ
+* Główny pipeline działa dalej
+* DLQ wymaga triage’u: alert, dashboard, retry albo drop
+
+**Opis / rola slajdu:**
+Slajd ma pokazać Dead Letter Queue jako mechanizm izolacji problematycznych wiadomości. Ważne jest też podkreślenie pułapki ze skryptu: sama DLQ nie rozwiązuje problemu, jeśli nikt jej nie monitoruje.
+
+**Grafika / diagram / animacja:**
+Diagram:
+
+`Main Queue → Consumer → fail/retry → DLQ`
+
+Obok DLQ trzy akcje operacyjne:
+
+* sprawdź
+* napraw
+* retry/drop
+
+---
+
+## Slajd 24
+
+**Wejście po słowach:**
+„**Teraz najtrudniejsza część. Debugowanie.**”
+
+**Tytuł:**
+**Debugowanie asynchroniczne**
+
+**Tekst na slajdzie:**
+
+* Wiadomość żyje poza jednym procesem
+* Może być w brokerze, retry, consumerze albo DLQ
+* Stan systemów może być chwilowo niespójny
+* Potrzebne standardy troubleshootingu
+
+**Opis / rola slajdu:**
+Slajd zmienia perspektywę z projektowania na utrzymanie systemu. Ma pokazać, że debugowanie asynchronicznego flow jest trudniejsze niż klasyczny stack trace w komunikacji synchronicznej.
+
+**Grafika / diagram / animacja:**
+Mapa przepływu:
+
+`Publisher → Broker → Retry → Consumer → DLQ`
+
+Z ikonami miejsc, w których trzeba szukać informacji:
+
+* logi
+* metryki
+* trace
+* stan bazy
+* wiadomość w kolejce
+
+---
+
+## Slajd 25
+
+**Wejście po słowach:**
+„**Jedną z takich istotnych rzeczy, które warto mieć z tyłu głowy projektując takie flow zdarzeniowe, to to, ażeby zapewnić im poprawną obserwowalność.**”
+
+**Tytuł:**
+**TraceId w eventach**
+
+**Tekst na slajdzie:**
+
+* Propaguj `TraceId` i `ParentId` w metadanych wiadomości
+* Łącz HTTP, kolejki i handlery w jeden trace
+* Loguj `TraceId` podczas przetwarzania eventu
+* Cel: widoczna pełna ścieżka procesu biznesowego
+
+**Opis / rola slajdu:**
+Slajd wspiera fragment o observability. Powinien pokazać, że kolejki nie mogą być „czarną dziurą” między requestem HTTP a dalszymi handlerami. Trace powinien przechodzić przez eventy tak samo jak przez komunikację synchroniczną.
+
+**Grafika / diagram / animacja:**
+Diagram rozproszonego trace’a:
+
+`HTTP request`
+→ `Publish event`
+→ `Queue`
+→ `Consumer A`
+→ `Publish next event`
+→ `Consumer B`
+
+Nad całością wspólny:
+`TraceId = abc-123`
+
+---
+
+## Slajd 26
+
+**Wejście po słowach:**
+„**Jeszcze jedna tutaj istotna sprawa, jeśli chodzi o komunikację asynchroniczną.**”
+
+**Tytuł:**
+**Backlog i alerting**
+
+**Tekst na slajdzie:**
+
+* Consumer może nie nadążać z przetwarzaniem
+* Kluczowa metryka: liczba aktywnych wiadomości
+* Spike jest akceptowalny, stały przyrost jest problemem
+* Alerty powinny obejmować główną kolejkę i DLQ
+
+**Opis / rola slajdu:**
+Slajd zamyka część operacyjną. Ma podkreślić, że poprawnie zaprojektowana komunikacja asynchroniczna wymaga monitorowania pojemności i tempa przetwarzania, a nie tylko poprawnego kodu handlera.
+
+**Grafika / diagram / animacja:**
+Wykres liniowy:
+
+* krótki spike, który wraca do zera
+* drugi wykres / druga linia: backlog stale rośnie i przekracza próg alertu
+
+Na slajdzie można dodać prosty próg:
+`Queue depth > threshold → alert`
+
+---

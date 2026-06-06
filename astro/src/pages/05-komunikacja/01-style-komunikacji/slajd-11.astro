@@ -23,11 +23,12 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   </svg>
 
   <div class="content">
-    <p class="eyebrow">Wzorzec #2</p>
-
-    <h1 class="title">
-      Idempotency <span class="highlight">key</span>
-    </h1>
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-key"></i>Wzorzec #2</span>
+      <h1 class="title">
+        Idempotency <span class="highlight">key</span>
+      </h1>
+    </div>
 
     <section class="flow" aria-label="Diagram przepływu z idempotency key">
       <article class="node node--worker">
@@ -57,15 +58,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <h3>Payment Provider</h3>
       </article>
     </section>
-
-    <div class="formula" aria-label="Reguła idempotency key">
-      <span class="formula-part">same <code>key</code></span>
-      <span class="formula-eq">=</span>
-      <span class="formula-part">same operation</span>
-      <span class="formula-divider">,</span>
-      <span class="formula-part formula-part--neg">not a new charge</span>
-    </div>
-
     <ul class="points" aria-label="Punkty kluczowe">
       <li>
         <i class="ti ti-key"></i>
@@ -115,25 +107,36 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     text-align: center;
   }
 
-  .eyebrow {
-    margin: 0 0 14px;
-    font-size: 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 6px;
-    color: rgba(34, 211, 238, 0.78);
+  .header {
+    margin-bottom: 28px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.2s forwards;
   }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .level-chip i { font-size: 18px; }
 
   .title {
     font-size: 80px;
     font-weight: 800;
     letter-spacing: -1px;
     line-height: 1.05;
-    margin: 0 0 40px;
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 0.35s forwards;
+    margin: 0 0 12px;
   }
 
   .title .highlight {

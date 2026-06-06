@@ -1,0 +1,486 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 18 - Partition key: trade-off"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="tradeGrid18" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="tradeGlow18" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="66%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#tradeGrid18)"/>
+    <circle cx="960" cy="540" r="540" fill="url(#tradeGlow18)"/>
+  </svg>
+
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-scale"></i>Rozwiązanie #1 · trade-off</span>
+      <h1 class="title">
+        Partition key: <span class="highlight">trade-off</span>
+      </h1>
+    </div>
+
+    <section class="compare" aria-label="Porównanie wyborów partition key">
+      <header class="compare-head">
+        <span class="col-label">Wybór klucza</span>
+        <span class="col-label">Skutek</span>
+      </header>
+
+      <article class="row row--bad">
+        <div class="row-key">
+          <i class="ti ti-flame"></i>
+          <div>
+            <span class="row-eyebrow">Zbyt szeroki</span>
+            <code>Region / temat</code>
+          </div>
+        </div>
+        <div class="row-effect row-effect--bad">
+          <i class="ti ti-temperature-sun"></i>
+          <span>Ryzyko <strong>hot partition</strong></span>
+        </div>
+      </article>
+
+      <article class="row row--warn">
+        <div class="row-key">
+          <i class="ti ti-fingerprint"></i>
+          <div>
+            <span class="row-eyebrow">Zbyt wąski</span>
+            <code>GUID per event</code>
+          </div>
+        </div>
+        <div class="row-effect row-effect--warn">
+          <i class="ti ti-arrows-shuffle"></i>
+          <span><strong>Brak kolejności</strong> biznesowej</span>
+        </div>
+      </article>
+
+      <article class="row row--good">
+        <div class="row-key">
+          <i class="ti ti-target-arrow"></i>
+          <div>
+            <span class="row-eyebrow">Dopasowany</span>
+            <code>OrderId</code>
+          </div>
+        </div>
+        <div class="row-effect row-effect--good">
+          <i class="ti ti-check"></i>
+          <span><strong>Kolejność</strong> per zamówienie</span>
+        </div>
+      </article>
+    </section>
+
+    <ul class="points" aria-label="Zasady doboru partition key">
+      <li>
+        <i class="ti ti-briefcase"></i>
+        <span>Dobór klucza musi wynikać z <strong>reguł biznesowych</strong></span>
+      </li>
+      <li class="points-impact">
+        <i class="ti ti-hourglass"></i>
+        <span>To decyzja, która często <strong>zostaje z systemem na lata</strong></span>
+      </li>
+    </ul>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1660px;
+    padding: 38px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 26px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .compare {
+    width: 100%;
+    max-width: 1500px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding: 22px 24px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
+  }
+
+  .compare-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    padding: 6px 20px 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  }
+
+  .col-label {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.95);
+    text-align: left;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    gap: 22px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: rgba(2, 6, 23, 0.32);
+  }
+
+  .row--bad {
+    border-color: rgba(248, 113, 113, 0.45);
+    background: linear-gradient(90deg, rgba(127, 29, 29, 0.18), rgba(17, 24, 39, 0.55));
+  }
+
+  .row--warn {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: linear-gradient(90deg, rgba(120, 53, 15, 0.20), rgba(17, 24, 39, 0.55));
+  }
+
+  .row--good {
+    border-color: rgba(34, 197, 94, 0.5);
+    background: linear-gradient(90deg, rgba(20, 83, 45, 0.22), rgba(17, 24, 39, 0.55));
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.06);
+  }
+
+  .row-key {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    align-items: center;
+    gap: 18px;
+    text-align: left;
+  }
+
+  .row-key > i {
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 26px;
+  }
+
+  .row--bad .row-key > i {
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #f87171;
+  }
+
+  .row--warn .row-key > i {
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+  }
+
+  .row--good .row-key > i {
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #4ade80;
+  }
+
+  .row-eyebrow {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.9);
+    margin-bottom: 5px;
+  }
+
+  .row--bad .row-eyebrow { color: rgba(252, 165, 165, 0.95); }
+  .row--warn .row-eyebrow { color: rgba(253, 230, 138, 0.95); }
+  .row--good .row-eyebrow { color: rgba(187, 247, 208, 0.95); }
+
+  .row-key code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 24px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: rgba(2, 6, 23, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    color: #e5e7eb;
+    letter-spacing: 0.3px;
+    display: inline-block;
+  }
+
+  .row--bad .row-key code {
+    border-color: rgba(248, 113, 113, 0.4);
+    color: #fecaca;
+  }
+
+  .row--warn .row-key code {
+    border-color: rgba(251, 191, 36, 0.4);
+    color: #fde68a;
+  }
+
+  .row--good .row-key code {
+    border-color: rgba(74, 222, 128, 0.5);
+    color: #d1fae5;
+  }
+
+  .row-effect {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 0;
+    text-align: left;
+  }
+
+  .row-effect i {
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 26px;
+  }
+
+  .row-effect span {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+  }
+
+  .row-effect strong {
+    font-weight: 900;
+  }
+
+  .row-effect--bad i {
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #f87171;
+  }
+  .row-effect--bad span { color: #fff5f5; }
+  .row-effect--bad strong { color: #fecaca; }
+
+  .row-effect--warn i {
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+  }
+  .row-effect--warn span { color: #fff7ed; }
+  .row-effect--warn strong { color: #fde68a; }
+
+  .row-effect--good i {
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #4ade80;
+  }
+  .row-effect--good span { color: #f0fdf4; }
+  .row-effect--good strong { color: #d1fae5; }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.05s forwards;
+  }
+
+  .points li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .points li > i {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 24px;
+  }
+
+  .points li span {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .points li strong {
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .points-impact {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .points-impact > i {
+    background: rgba(251, 191, 36, 0.16);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+  }
+
+  .points-impact span {
+    color: #fff7ed;
+  }
+
+  .points-impact strong {
+    color: #fbbf24;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 54px;
+    }
+
+    .compare-head,
+    .row {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .row-effect span {
+      font-size: 20px;
+    }
+
+    .points {
+      grid-template-columns: 1fr;
+    }
+
+    .points li span {
+      font-size: 19px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 40px;
+    }
+
+    .row-key code {
+      font-size: 18px;
+    }
+
+    .row-effect span {
+      font-size: 18px;
+    }
+
+    .points li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .points li > i {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+
+    .points li span {
+      font-size: 17px;
+    }
+  }
+</style>
+</content>
+</invoke>

@@ -2,87 +2,98 @@
 import SlideLayout from '../../../layouts/SlideLayout.astro';
 ---
 <SlideLayout
-  title="Slajd 16 - Konsekwencje out-of-order"
+  title="Slajd 16 - Out-of-order w praktyce"
   bgImage="/images/background-3.jpg"
   bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
 >
   <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
-      <pattern id="ooGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+      <pattern id="oooGrid16" width="86" height="86" patternUnits="userSpaceOnUse">
         <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
       </pattern>
-      <radialGradient id="ooGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
-        <stop offset="65%" stop-color="#22d3ee" stop-opacity="0.04"/>
+      <radialGradient id="oooGlow16" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="66%" stop-color="#22d3ee" stop-opacity="0.04"/>
         <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
       </radialGradient>
     </defs>
 
-    <rect width="1920" height="1080" fill="url(#ooGrid)"/>
-    <circle cx="960" cy="540" r="560" fill="url(#ooGlow)"/>
+    <rect width="1920" height="1080" fill="url(#oooGrid16)"/>
+    <circle cx="960" cy="540" r="540" fill="url(#oooGlow16)"/>
   </svg>
 
   <div class="content">
-    <p class="eyebrow">Podsumowanie</p>
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-timeline"></i>Problem #1 · w praktyce</span>
+      <h1 class="title">
+        Out-of-order <span class="highlight">w praktyce</span>
+      </h1>
+    </div>
 
-    <h1 class="title">
-      Konsekwencje <span class="highlight">out-of-order</span>
-    </h1>
+    <section class="timelines" aria-label="Dwa warianty osi czasu">
+      <article class="track track--expected">
+        <header class="track-head">
+          <span class="track-tag track-tag--good">
+            <i class="ti ti-circle-check"></i>Oczekiwane
+          </span>
+        </header>
+        <ol class="line line--good" aria-label="Oczekiwana kolejność">
+          <li class="step step--good">
+            <span class="dot"></span>
+            <code>OrderPlaced</code>
+          </li>
+          <li class="step step--good">
+            <span class="dot"></span>
+            <code>OrderConfirmed</code>
+          </li>
+        </ol>
+      </article>
 
-    <ul class="consequences" aria-label="Konsekwencje out-of-order">
-      <li>
-        <i class="ti ti-clock-pause"></i>
-        <span>Zdarzenia mogą dotrzeć <strong>później</strong> niż zdarzenia od nich zależne</span>
-      </li>
-      <li>
-        <i class="ti ti-eye-off"></i>
-        <span>Różne instancje consumerów mogą widzieć <strong>różne fragmenty procesu</strong></span>
-      </li>
-      <li>
-        <i class="ti ti-arrow-bear-right"></i>
-        <span>Retry może <strong>przesunąć starsze zdarzenie</strong> na koniec</span>
-      </li>
-      <li>
-        <i class="ti ti-affiliate"></i>
-        <span>Model domenowy musi uwzględniać <strong>brak globalnej kolejności</strong></span>
-      </li>
-    </ul>
-
-    <section class="pillars" aria-label="Dwa filary lekcji">
-      <header class="pillars-head">
-        <span class="pillars-eyebrow">Dwa filary asynchroniczności</span>
-      </header>
-
-      <div class="pillars-grid">
-        <article class="pillar pillar--dup">
-          <div class="pillar-ic"><i class="ti ti-copy"></i></div>
-          <div class="pillar-body">
-            <span class="pillar-cause">At-least-once</span>
-            <span class="pillar-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></span>
-            <span class="pillar-effect">duplikaty</span>
-          </div>
-        </article>
-
-        <article class="pillar pillar--ooo">
-          <div class="pillar-ic"><i class="ti ti-arrows-shuffle"></i></div>
-          <div class="pillar-body">
-            <span class="pillar-cause">Brak globalnej kolejności</span>
-            <span class="pillar-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></span>
-            <span class="pillar-effect">out-of-order</span>
-          </div>
-        </article>
-      </div>
+      <article class="track track--actual">
+        <header class="track-head">
+          <span class="track-tag track-tag--bad">
+            <i class="ti ti-alert-triangle"></i>Rzeczywiste
+          </span>
+        </header>
+        <ol class="line line--bad" aria-label="Rzeczywista sekwencja zdarzeń">
+          <li class="step step--bad">
+            <span class="dot"></span>
+            <code>OrderConfirmed</code>
+          </li>
+          <li class="step step--warn">
+            <span class="dot dot--warn"></span>
+            <code>error / retry</code>
+          </li>
+          <li class="step step--bad">
+            <span class="dot"></span>
+            <code>OrderPlaced</code>
+          </li>
+          <li class="step step--ok">
+            <span class="dot dot--ok"></span>
+            <code>retry OK</code>
+          </li>
+        </ol>
+      </article>
     </section>
 
-    <aside class="closing" aria-label="Adnotacja końcowa">
-      <i class="ti ti-blockquote"></i>
-      <div class="closing-body">
-        <p class="closing-eyebrow">Adnotacja końcowa</p>
-        <p class="closing-main">
-          Asynchroniczność wymaga projektowania pod <span class="accent">duplikaty</span> i <span class="accent">nieuporządkowane dostarczenie</span>
-        </p>
-      </div>
-    </aside>
+    <ul class="points" aria-label="Konsekwencje out-of-order">
+      <li>
+        <i class="ti ti-arrow-bear-left-2"></i>
+        <span><code>OrderConfirmed</code> przychodzi <strong>przed</strong> <code>OrderPlaced</code></span>
+      </li>
+      <li>
+        <i class="ti ti-question-mark"></i>
+        <span>Consumer <strong>nie zna jeszcze zamówienia</strong></span>
+      </li>
+      <li>
+        <i class="ti ti-refresh-alert"></i>
+        <span>Efekt: <strong>błąd, retry, opóźnienie</strong>, przypadkowa naprawa po czasie</span>
+      </li>
+      <li class="points-impact">
+        <i class="ti ti-briefcase"></i>
+        <span>Problem techniczny staje się <strong>problemem procesu biznesowego</strong></span>
+      </li>
+    </ul>
   </div>
 </SlideLayout>
 
@@ -106,7 +117,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     position: relative;
     z-index: 5;
     width: 100%;
-    max-width: 1640px;
+    max-width: 1660px;
     padding: 36px 3rem 0;
     display: flex;
     flex-direction: column;
@@ -114,25 +125,36 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     text-align: center;
   }
 
-  .eyebrow {
-    margin: 0 0 14px;
-    font-size: 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 6px;
-    color: rgba(34, 211, 238, 0.78);
+  .header {
+    margin-bottom: 26px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.2s forwards;
   }
 
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
   .title {
-    font-size: 76px;
+    font-size: 74px;
     font-weight: 800;
     letter-spacing: -1px;
     line-height: 1.05;
-    margin: 0 0 36px;
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 0.35s forwards;
+    margin: 0 0 8px;
   }
 
   .title .highlight {
@@ -142,25 +164,204 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background-clip: text;
   }
 
-  .consequences {
-    list-style: none;
-    margin: 0 0 36px;
-    padding: 0;
+  .timelines {
     width: 100%;
-    max-width: 1500px;
+    max-width: 1560px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px 22px;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 28px;
+    padding: 22px 26px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
     opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.55s forwards;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
   }
 
-  .consequences li {
+  .track {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+    gap: 22px;
+    padding: 18px 18px;
+    border-radius: 16px;
+    background: rgba(2, 6, 23, 0.32);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .track--expected {
+    background: linear-gradient(135deg, rgba(20, 83, 45, 0.22), rgba(17, 24, 39, 0.55));
+    border-color: rgba(34, 197, 94, 0.42);
+  }
+
+  .track--actual {
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.20), rgba(17, 24, 39, 0.55));
+    border-color: rgba(248, 113, 113, 0.42);
+  }
+
+  .track-head {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .track-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .track-tag i { font-size: 18px; }
+
+  .track-tag--good {
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #d1fae5;
+  }
+
+  .track-tag--bad {
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #fecaca;
+  }
+
+  .line {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .line::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    z-index: 0;
+    border-radius: 2px;
+  }
+
+  .line--good::before {
+    background: linear-gradient(90deg, rgba(34, 197, 94, 0.75), rgba(34, 197, 94, 0.35));
+  }
+
+  .line--bad::before {
+    background: linear-gradient(90deg, rgba(248, 113, 113, 0.75), rgba(251, 191, 36, 0.55), rgba(248, 113, 113, 0.75), rgba(34, 197, 94, 0.55));
+  }
+
+  .step {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    background: rgba(2, 6, 23, 0.78);
+    border: 1px solid rgba(148, 163, 184, 0.28);
+  }
+
+  .step code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 19px;
+    font-weight: 800;
+    color: #e5e7eb;
+    letter-spacing: 0.2px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.9);
+  }
+
+  .step--good {
+    border-color: rgba(74, 222, 128, 0.55);
+    background: rgba(20, 83, 45, 0.4);
+  }
+
+  .step--good .dot {
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.9), 0 0 12px rgba(74, 222, 128, 0.55);
+  }
+
+  .step--good code { color: #d1fae5; }
+
+  .step--bad {
+    border-color: rgba(248, 113, 113, 0.55);
+    background: rgba(127, 29, 29, 0.45);
+  }
+
+  .step--bad .dot {
+    background: #f87171;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.9), 0 0 12px rgba(248, 113, 113, 0.55);
+  }
+
+  .step--bad code { color: #fecaca; }
+
+  .step--warn {
+    border-color: rgba(251, 191, 36, 0.55);
+    background: rgba(120, 53, 15, 0.45);
+    border-style: dashed;
+  }
+
+  .step--warn .dot {
+    background: #fbbf24;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.9), 0 0 12px rgba(251, 191, 36, 0.55);
+  }
+
+  .step--warn code { color: #fde68a; }
+
+  .step--ok {
+    border-color: rgba(74, 222, 128, 0.55);
+    background: rgba(20, 83, 45, 0.45);
+  }
+
+  .step--ok .dot {
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.9), 0 0 12px rgba(74, 222, 128, 0.55);
+  }
+
+  .step--ok code { color: #d1fae5; }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1560px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 18px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.05s forwards;
+  }
+
+  .points li {
     display: grid;
     grid-template-columns: 52px 1fr;
     align-items: center;
     gap: 18px;
-    padding: 18px 22px;
+    padding: 16px 22px;
     background: rgba(17, 24, 39, 0.6);
     backdrop-filter: blur(6px);
     border: 1px solid rgba(148, 163, 184, 0.20);
@@ -168,7 +369,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     text-align: left;
   }
 
-  .consequences li i {
+  .points li i {
     width: 46px;
     height: 46px;
     display: inline-flex;
@@ -181,229 +382,69 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     font-size: 24px;
   }
 
-  .consequences li span {
-    font-size: 22px;
+  .points li span {
+    font-size: 20px;
     font-weight: 500;
     line-height: 1.3;
     color: #e2e8f0;
     letter-spacing: -0.2px;
   }
 
-  .consequences li strong {
+  .points li code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
     color: var(--cyan-400);
+  }
+
+  .points li strong {
+    color: #fff;
     font-weight: 800;
   }
 
-  .pillars {
-    width: 100%;
-    max-width: 1500px;
-    margin-bottom: 28px;
-    padding: 24px 28px 28px;
-    background: linear-gradient(135deg, rgba(8, 145, 178, 0.16), rgba(17, 24, 39, 0.65));
-    border: 1px solid rgba(34, 211, 238, 0.45);
-    border-radius: 20px;
-    box-shadow: 0 24px 60px rgba(8, 145, 178, 0.22);
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 0.9s forwards;
-  }
-
-  .pillars-head {
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 1px dashed rgba(34, 211, 238, 0.35);
-  }
-
-  .pillars-eyebrow {
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: rgba(34, 211, 238, 0.85);
-  }
-
-  .pillars-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px;
-  }
-
-  .pillar {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    align-items: center;
-    gap: 22px;
-    padding: 22px 26px;
-    border-radius: 16px;
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid rgba(148, 163, 184, 0.22);
-    text-align: left;
-  }
-
-  .pillar--dup {
+  .points-impact {
     border-color: rgba(251, 191, 36, 0.45);
     background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.6));
   }
 
-  .pillar--ooo {
-    border-color: rgba(248, 113, 113, 0.45);
-    background: linear-gradient(135deg, rgba(127, 29, 29, 0.22), rgba(17, 24, 39, 0.6));
-  }
-
-  .pillar-ic {
-    width: 72px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 18px;
-  }
-
-  .pillar-ic i {
-    font-size: 36px;
-  }
-
-  .pillar--dup .pillar-ic {
+  .points-impact i {
     background: rgba(251, 191, 36, 0.16);
-    border: 1px solid rgba(251, 191, 36, 0.55);
-  }
-
-  .pillar--dup .pillar-ic i {
+    border-color: rgba(251, 191, 36, 0.55);
     color: #fbbf24;
   }
 
-  .pillar--ooo .pillar-ic {
-    background: rgba(248, 113, 113, 0.16);
-    border: 1px solid rgba(248, 113, 113, 0.55);
-  }
-
-  .pillar--ooo .pillar-ic i {
-    color: #f87171;
-  }
-
-  .pillar-body {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .pillar-cause {
-    font-size: 22px;
-    font-weight: 700;
-    color: rgba(226, 232, 240, 0.95);
-    letter-spacing: -0.2px;
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-  }
-
-  .pillar-arrow {
-    color: rgba(148, 163, 184, 0.65);
-    line-height: 1;
-  }
-
-  .pillar-arrow i {
-    font-size: 24px;
-    transform: rotate(90deg);
-    display: inline-block;
-  }
-
-  .pillar-effect {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
-    line-height: 1.05;
-  }
-
-  .pillar--dup .pillar-effect {
+  .points-impact span {
     color: #fff7ed;
   }
 
-  .pillar--ooo .pillar-effect {
-    color: #fecaca;
-  }
-
-  .closing {
-    width: auto;
-    max-width: 1500px;
-    display: inline-flex;
-    gap: 22px;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 0 auto;
-    padding: 24px 32px;
-    background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.65));
-    border: 1px solid rgba(34, 211, 238, 0.55);
-    border-radius: 16px;
-    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.06), 0 20px 52px rgba(8, 145, 178, 0.24);
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 1.2s forwards;
-  }
-
-  .closing > i {
-    width: 64px;
-    height: 64px;
-    border-radius: 14px;
-    background: rgba(34, 211, 238, 0.16);
-    border: 1px solid rgba(34, 211, 238, 0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    color: var(--cyan-400);
-    flex-shrink: 0;
-  }
-
-  .closing-body {
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .closing-eyebrow {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(34, 211, 238, 0.85);
-  }
-
-  .closing-main {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: #e2f6ff;
-    letter-spacing: -0.2px;
-  }
-
-  .closing-main .accent {
-    color: var(--cyan-400);
-    font-weight: 800;
+  .points-impact strong {
+    color: #fbbf24;
   }
 
   @media (max-width: 1300px) {
     .title {
-      font-size: 56px;
+      font-size: 54px;
     }
 
-    .consequences {
+    .track {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .line {
+      justify-content: center;
+    }
+
+    .points {
       grid-template-columns: 1fr;
     }
 
-    .consequences li span {
-      font-size: 20px;
-    }
-
-    .pillars-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .pillar-effect {
-      font-size: 26px;
-    }
-
-    .closing-main {
-      font-size: 22px;
+    .points li span {
+      font-size: 18px;
     }
   }
 
@@ -417,58 +458,26 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
       font-size: 40px;
     }
 
-    .eyebrow {
+    .step code {
       font-size: 16px;
-      letter-spacing: 4px;
     }
 
-    .consequences li {
+    .points li {
       grid-template-columns: 40px 1fr;
       gap: 14px;
       padding: 14px 16px;
     }
 
-    .consequences li i {
+    .points li i {
       width: 40px;
       height: 40px;
       font-size: 22px;
     }
 
-    .consequences li span {
-      font-size: 18px;
-    }
-
-    .pillar {
-      grid-template-columns: 60px 1fr;
-      gap: 14px;
-      padding: 18px 20px;
-    }
-
-    .pillar-ic {
-      width: 56px;
-      height: 56px;
-    }
-
-    .pillar-ic i {
-      font-size: 28px;
-    }
-
-    .pillar-cause {
-      font-size: 18px;
-    }
-
-    .pillar-effect {
-      font-size: 22px;
-    }
-
-    .closing > i {
-      width: 50px;
-      height: 50px;
-      font-size: 26px;
-    }
-
-    .closing-main {
-      font-size: 18px;
+    .points li span {
+      font-size: 17px;
     }
   }
 </style>
+</content>
+</invoke>

@@ -1,0 +1,489 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 24 - Debugowanie asynchroniczne"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.84), rgba(10,14,23,0.94))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="dbgGrid24" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(251,191,36,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="dbgGlow24" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.14"/>
+        <stop offset="66%" stop-color="#fbbf24" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#dbgGrid24)"/>
+    <circle cx="960" cy="540" r="540" fill="url(#dbgGlow24)"/>
+  </svg>
+
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-bug"></i>Czwarte Wyzwanie</span>
+      <h1 class="title">
+        Debugowanie <span class="highlight">asynchroniczne</span>
+      </h1>
+    </div>
+
+    <section class="pipeline" aria-label="Mapa przepływu wiadomości: gdzie szukać">
+      <article class="hop">
+        <div class="hop-ic"><i class="ti ti-broadcast"></i></div>
+        <h3>Publisher</h3>
+      </article>
+
+      <div class="hop-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="hop">
+        <div class="hop-ic"><i class="ti ti-stack-2"></i></div>
+        <h3>Broker</h3>
+      </article>
+
+      <div class="hop-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="hop">
+        <div class="hop-ic"><i class="ti ti-refresh"></i></div>
+        <h3>Retry</h3>
+      </article>
+
+      <div class="hop-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="hop">
+        <div class="hop-ic"><i class="ti ti-cpu"></i></div>
+        <h3>Consumer</h3>
+      </article>
+
+      <div class="hop-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="hop hop--dlq">
+        <div class="hop-ic"><i class="ti ti-skull"></i></div>
+        <h3>DLQ</h3>
+      </article>
+    </section>
+
+    <section class="sources" aria-label="Miejsca, w których szukać informacji">
+      <header class="sources-head">
+        <i class="ti ti-search"></i>
+        <h2>Gdzie szukać informacji</h2>
+      </header>
+      <ul class="sources-list">
+        <li>
+          <span class="src-ic"><i class="ti ti-file-text"></i></span>
+          <span class="src-text">logi</span>
+        </li>
+        <li>
+          <span class="src-ic"><i class="ti ti-chart-line"></i></span>
+          <span class="src-text">metryki</span>
+        </li>
+        <li>
+          <span class="src-ic"><i class="ti ti-route"></i></span>
+          <span class="src-text">trace</span>
+        </li>
+        <li>
+          <span class="src-ic"><i class="ti ti-database"></i></span>
+          <span class="src-text">stan bazy</span>
+        </li>
+        <li>
+          <span class="src-ic"><i class="ti ti-mail"></i></span>
+          <span class="src-text">wiadomość w kolejce</span>
+        </li>
+      </ul>
+    </section>
+
+    <ul class="points" aria-label="Charakterystyka debugowania asynchronicznego">
+      <li>
+        <i class="ti ti-ghost"></i>
+        <span>Wiadomość żyje <strong>poza jednym procesem</strong></span>
+      </li>
+      <li>
+        <i class="ti ti-map-pin-question"></i>
+        <span>Może być w <strong>brokerze, retry, consumerze albo DLQ</strong></span>
+      </li>
+      <li>
+        <i class="ti ti-zoom-question"></i>
+        <span>Stan systemów może być <strong>chwilowo niespójny</strong></span>
+      </li>
+      <li class="points-impact">
+        <i class="ti ti-book"></i>
+        <span>Potrzebne <strong>standardy troubleshootingu</strong></span>
+      </li>
+    </ul>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1700px;
+    padding: 32px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.42);
+    color: #fde68a;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 70px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .pipeline {
+    width: 100%;
+    max-width: 1640px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 20px 22px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
+  }
+
+  .hop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 10px;
+    min-height: 140px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.55));
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    border-radius: 14px;
+  }
+
+  .hop-ic {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hop-ic i {
+    font-size: 28px;
+    color: var(--cyan-400);
+  }
+
+  .hop h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #f0f4f8;
+    text-align: center;
+  }
+
+  .hop--dlq {
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.22), rgba(17, 24, 39, 0.62));
+    border-color: rgba(248, 113, 113, 0.5);
+  }
+
+  .hop--dlq .hop-ic {
+    background: rgba(248, 113, 113, 0.16);
+    border-color: rgba(248, 113, 113, 0.55);
+  }
+
+  .hop--dlq .hop-ic i { color: #f87171; }
+
+  .hop-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+  }
+
+  .hop-arrow i {
+    font-size: 24px;
+    color: rgba(34, 211, 238, 0.7);
+  }
+
+  .sources {
+    width: 100%;
+    max-width: 1640px;
+    padding: 16px 22px;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.18), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    border-radius: 16px;
+    box-shadow: 0 14px 36px rgba(180, 83, 9, 0.18);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.85s forwards;
+  }
+
+  .sources-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(251, 191, 36, 0.28);
+  }
+
+  .sources-head i {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+    font-size: 22px;
+  }
+
+  .sources-head h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff7ed;
+    letter-spacing: -0.3px;
+  }
+
+  .sources-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  .sources-list li {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(251, 191, 36, 0.32);
+  }
+
+  .src-ic {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(251, 191, 36, 0.14);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    color: #fbbf24;
+  }
+
+  .src-ic i { font-size: 20px; }
+
+  .src-text {
+    font-size: 17px;
+    font-weight: 800;
+    color: #fff7ed;
+    letter-spacing: -0.2px;
+  }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1640px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 16px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.15s forwards;
+  }
+
+  .points li {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .points li > i {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 22px;
+  }
+
+  .points li span {
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .points li strong {
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .points-impact {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .points-impact > i {
+    background: rgba(251, 191, 36, 0.16);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+  }
+
+  .points-impact span {
+    color: #fff7ed;
+  }
+
+  .points-impact strong {
+    color: #fbbf24;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 50px;
+    }
+
+    .pipeline {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .hop-arrow {
+      width: 100%;
+      transform: rotate(90deg);
+    }
+
+    .sources-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .points {
+      grid-template-columns: 1fr;
+    }
+
+    .points li span {
+      font-size: 17px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 38px;
+    }
+
+    .hop h3 {
+      font-size: 16px;
+    }
+
+    .sources-list {
+      grid-template-columns: 1fr;
+    }
+
+    .src-text {
+      font-size: 16px;
+    }
+
+    .points li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 12px 16px;
+    }
+
+    .points li > i {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+
+    .points li span {
+      font-size: 16px;
+    }
+  }
+</style>
+</content>
+</invoke>

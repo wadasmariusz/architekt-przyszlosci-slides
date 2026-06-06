@@ -1,0 +1,577 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 23 - Dead Letter Queue"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="dlqGrid23" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="dlqGlow23" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="66%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#dlqGrid23)"/>
+    <circle cx="960" cy="540" r="540" fill="url(#dlqGlow23)"/>
+  </svg>
+
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-skull"></i>Rozwiązanie #3 · DLQ</span>
+      <h1 class="title">
+        Dead Letter <span class="highlight">Queue</span>
+      </h1>
+    </div>
+
+    <section class="dlq-board" aria-label="Diagram głównej kolejki i Dead Letter Queue">
+      <div class="dlq-flow">
+        <article class="node node--main">
+          <div class="node-ic"><i class="ti ti-stack-2"></i></div>
+          <h3>Main Queue</h3>
+          <span class="node-meta">działa dalej</span>
+        </article>
+
+        <div class="conn" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+        <article class="node node--consumer">
+          <div class="node-ic"><i class="ti ti-cpu"></i></div>
+          <h3>Consumer</h3>
+        </article>
+
+        <div class="conn conn--fail" aria-hidden="true">
+          <span class="conn-label">fail / retry</span>
+          <i class="ti ti-arrow-right"></i>
+        </div>
+
+        <article class="node node--dlq">
+          <div class="node-ic"><i class="ti ti-skull"></i></div>
+          <h3>DLQ</h3>
+          <span class="dlq-meta">zatruta wiadomość</span>
+        </article>
+      </div>
+
+      <aside class="triage" aria-label="Akcje operacyjne dla DLQ">
+        <header class="triage-head">
+          <i class="ti ti-stethoscope"></i>
+          <div>
+            <span class="triage-eyebrow">Triage</span>
+            <h2>Akcje operacyjne</h2>
+          </div>
+        </header>
+        <ul class="triage-list">
+          <li>
+            <span class="triage-ic"><i class="ti ti-eye"></i></span>
+            <span class="triage-text">sprawdź</span>
+          </li>
+          <li>
+            <span class="triage-ic"><i class="ti ti-tool"></i></span>
+            <span class="triage-text">napraw</span>
+          </li>
+          <li>
+            <span class="triage-ic"><i class="ti ti-refresh"></i></span>
+            <span class="triage-text">retry / drop</span>
+          </li>
+        </ul>
+        <footer class="triage-foot">
+          <i class="ti ti-bell-ringing"></i>
+          <span>wymaga <strong>alertu i dashboardu</strong></span>
+        </footer>
+      </aside>
+    </section>
+
+    <ul class="points" aria-label="Cechy Dead Letter Queue">
+      <li>
+        <i class="ti ti-shield-check"></i>
+        <span>Zatruta wiadomość <strong>nie blokuje</strong> głównej kolejki</span>
+      </li>
+      <li>
+        <i class="ti ti-rotate-clockwise"></i>
+        <span>Po <strong>kilku nieudanych próbach</strong> trafia do DLQ</span>
+      </li>
+      <li>
+        <i class="ti ti-player-play"></i>
+        <span>Główny pipeline <strong>działa dalej</strong></span>
+      </li>
+      <li class="points-impact">
+        <i class="ti ti-stethoscope"></i>
+        <span>DLQ wymaga <strong>triage'u:</strong> alert, dashboard, retry albo drop</span>
+      </li>
+    </ul>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1700px;
+    padding: 34px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dlq-board {
+    width: 100%;
+    max-width: 1640px;
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 18px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
+  }
+
+  .dlq-flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 20px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+  }
+
+  .node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 14px;
+    min-height: 232px;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 16px;
+  }
+
+  .node-ic {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .node-ic i {
+    font-size: 36px;
+    color: var(--cyan-400);
+  }
+
+  .node h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
+    color: #f0f4f8;
+    text-align: center;
+  }
+
+  .node-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(148, 163, 184, 0.95);
+    letter-spacing: 0.5px;
+  }
+
+  .node--main {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(17, 24, 39, 0.55));
+    border-color: rgba(34, 197, 94, 0.45);
+  }
+
+  .node--main .node-ic {
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(74, 222, 128, 0.55);
+  }
+
+  .node--main .node-ic i { color: #4ade80; }
+
+  .node--consumer {
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.55));
+    border-color: rgba(34, 211, 238, 0.42);
+  }
+
+  .node--dlq {
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.22), rgba(17, 24, 39, 0.62));
+    border-color: rgba(248, 113, 113, 0.55);
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.05), 0 18px 48px rgba(127, 29, 29, 0.22);
+  }
+
+  .node--dlq .node-ic {
+    background: rgba(248, 113, 113, 0.16);
+    border-color: rgba(248, 113, 113, 0.55);
+  }
+
+  .node--dlq .node-ic i { color: #f87171; }
+
+  .dlq-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(252, 165, 165, 0.95);
+    letter-spacing: 0.5px;
+  }
+
+  .conn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+  }
+
+  .conn i {
+    font-size: 30px;
+    color: rgba(34, 211, 238, 0.7);
+  }
+
+  .conn--fail {
+    flex-direction: column;
+    gap: 6px;
+    width: 100px;
+  }
+
+  .conn--fail .conn-label {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fecaca;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(127, 29, 29, 0.32);
+    border: 1px dashed rgba(248, 113, 113, 0.5);
+  }
+
+  .conn--fail i {
+    color: rgba(248, 113, 113, 0.85);
+  }
+
+  .triage {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px 22px;
+    background: linear-gradient(180deg, rgba(127, 29, 29, 0.18), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+    text-align: left;
+  }
+
+  .triage-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(248, 113, 113, 0.28);
+  }
+
+  .triage-head i {
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #f87171;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+
+  .triage-eyebrow {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(252, 165, 165, 0.95);
+    margin-bottom: 3px;
+  }
+
+  .triage-head h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff5f5;
+    letter-spacing: -0.3px;
+  }
+
+  .triage-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .triage-list li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(248, 113, 113, 0.32);
+  }
+
+  .triage-ic {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: rgba(248, 113, 113, 0.14);
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    color: #f87171;
+  }
+
+  .triage-ic i { font-size: 22px; }
+
+  .triage-text {
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff5f5;
+    letter-spacing: -0.2px;
+  }
+
+  .triage-foot {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    color: #fde68a;
+    font-size: 14px;
+    font-weight: 700;
+    align-self: flex-start;
+  }
+
+  .triage-foot i {
+    font-size: 18px;
+    color: #fbbf24;
+  }
+
+  .triage-foot strong {
+    color: #fbbf24;
+    font-weight: 900;
+  }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1640px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 18px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.05s forwards;
+  }
+
+  .points li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 22px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .points li > i {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 24px;
+  }
+
+  .points li span {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .points li strong {
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .points-impact {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .points-impact > i {
+    background: rgba(251, 191, 36, 0.16);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+  }
+
+  .points-impact span {
+    color: #fff7ed;
+  }
+
+  .points-impact strong {
+    color: #fbbf24;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 54px;
+    }
+
+    .dlq-board {
+      grid-template-columns: 1fr;
+    }
+
+    .dlq-flow {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .conn {
+      width: 100%;
+      transform: rotate(90deg);
+    }
+
+    .conn--fail {
+      flex-direction: row;
+    }
+
+    .points {
+      grid-template-columns: 1fr;
+    }
+
+    .points li span {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 40px;
+    }
+
+    .node h3 {
+      font-size: 20px;
+    }
+
+    .triage-text {
+      font-size: 17px;
+    }
+
+    .points li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .points li > i {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+
+    .points li span {
+      font-size: 17px;
+    }
+  }
+</style>
+</content>
+</invoke>
