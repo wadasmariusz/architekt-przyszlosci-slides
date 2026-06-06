@@ -1,0 +1,376 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 06 - Wybór najmniej szkodliwej opcji"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="leastGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="leastGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#leastGrid)"/>
+    <circle cx="960" cy="580" r="480" fill="url(#leastGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Wybór najmniej <span class="highlight">szkodliwej opcji</span>
+    </h1>
+
+    <section class="compare" aria-label="Porównanie ciężaru ryzyk między opcjami">
+      <article class="option">
+        <header class="option-head">
+          <span class="option-tag">Opcja A</span>
+        </header>
+        <div class="risks" aria-label="Sześć ryzyk">
+          <span class="risk risk--high"></span>
+          <span class="risk risk--high"></span>
+          <span class="risk risk--high"></span>
+          <span class="risk risk--med"></span>
+          <span class="risk risk--med"></span>
+          <span class="risk risk--low"></span>
+        </div>
+      </article>
+
+      <article class="option">
+        <header class="option-head">
+          <span class="option-tag">Opcja B</span>
+        </header>
+        <div class="risks" aria-label="Cztery ryzyka">
+          <span class="risk risk--high"></span>
+          <span class="risk risk--med"></span>
+          <span class="risk risk--med"></span>
+          <span class="risk risk--low"></span>
+        </div>
+      </article>
+
+      <article class="option option--winner">
+        <span class="winner-badge"><i class="ti ti-check"></i> wybór</span>
+        <header class="option-head">
+          <span class="option-tag">Opcja C</span>
+        </header>
+        <div class="risks" aria-label="Dwa ryzyka">
+          <span class="risk risk--med"></span>
+          <span class="risk risk--low"></span>
+        </div>
+      </article>
+    </section>
+
+    <div class="flow" aria-label="Ścieżka decyzji">
+      <span class="flow-step">Ryzyka</span>
+      <i class="ti ti-arrow-narrow-right flow-arrow" aria-hidden="true"></i>
+      <span class="flow-step">trade-offy</span>
+      <i class="ti ti-arrow-narrow-right flow-arrow" aria-hidden="true"></i>
+      <span class="flow-step flow-step--final">decyzja</span>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 64px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 44px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .claims {
+    width: 100%;
+    max-width: 1440px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 44px;
+  }
+
+  .claim {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    align-items: center;
+    gap: 22px;
+    padding: 22px 26px;
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: rgba(17, 24, 39, 0.62);
+    backdrop-filter: blur(8px);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .claim--neg {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.32), rgba(17, 24, 39, 0.7));
+    animation-delay: 0.5s;
+  }
+
+  .claim--pos {
+    border-color: rgba(34, 211, 238, 0.5);
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.28), rgba(17, 24, 39, 0.7));
+    animation-delay: 0.65s;
+  }
+
+  .claim-ic {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+  }
+
+  .claim--neg .claim-ic {
+    background: rgba(239, 68, 68, 0.16);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+  }
+
+  .claim--pos .claim-ic {
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: var(--cyan-400);
+  }
+
+  .claim p {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #f0f4f8;
+    letter-spacing: -0.2px;
+  }
+
+  .claim .strike {
+    text-decoration: line-through;
+    text-decoration-color: rgba(252, 165, 165, 0.85);
+    text-decoration-thickness: 2px;
+    color: rgba(254, 226, 226, 0.7);
+  }
+
+  .claim .accent {
+    color: #67e8f9;
+    font-weight: 800;
+  }
+
+  .compare {
+    width: 100%;
+    max-width: 1440px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+    margin-bottom: 44px;
+  }
+
+  .option {
+    position: relative;
+    padding: 26px 22px;
+    background: rgba(17, 24, 39, 0.62);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.30);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    min-height: 230px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .option:nth-of-type(1) { animation-delay: 0.85s; }
+  .option:nth-of-type(2) { animation-delay: 1.0s; }
+  .option:nth-of-type(3) { animation-delay: 1.15s; }
+
+  .option--winner {
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.36), rgba(14, 116, 144, 0.16));
+    border-color: rgba(34, 211, 238, 0.6);
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.08),
+      0 28px 70px rgba(8, 145, 178, 0.34);
+  }
+
+  .option-head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .option-tag {
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: #e2f6ff;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+  }
+
+  .winner-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #15803d);
+    border: 2px solid rgba(187, 247, 208, 0.85);
+    color: #f0fdf4;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow:
+      0 8px 22px rgba(22, 163, 74, 0.45),
+      0 0 0 4px rgba(34, 197, 94, 0.12);
+    z-index: 2;
+    white-space: nowrap;
+  }
+
+  .winner-badge i {
+    font-size: 18px;
+  }
+
+  .risks {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 8px;
+  }
+
+  .risk {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .risk--high { background: linear-gradient(145deg, #ef4444, #b91c1c); }
+  .risk--med  { background: linear-gradient(145deg, #f59e0b, #b45309); }
+  .risk--low  { background: linear-gradient(145deg, #22d3ee, #0891b2); }
+
+  .option-weight {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(226, 246, 255, 0.7);
+  }
+
+  .option--winner .option-weight {
+    color: #67e8f9;
+  }
+
+  .flow {
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    padding: 18px 32px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.6));
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    box-shadow: 0 14px 36px rgba(8, 145, 178, 0.18);
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 1.35s forwards;
+  }
+
+  .flow-step {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: #ecfeff;
+  }
+
+  .flow-step--final {
+    padding: 6px 18px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.22);
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    color: #f0f4f8;
+  }
+
+  .flow-arrow {
+    font-size: 36px;
+    color: rgba(34, 211, 238, 0.7);
+  }
+
+  @media (max-width: 1200px) {
+    .title {
+      font-size: 56px;
+    }
+
+    .claims {
+      grid-template-columns: 1fr;
+    }
+
+    .claim p {
+      font-size: 22px;
+    }
+
+    .compare {
+      grid-template-columns: 1fr;
+    }
+
+    .flow-step {
+      font-size: 22px;
+    }
+  }
+</style>

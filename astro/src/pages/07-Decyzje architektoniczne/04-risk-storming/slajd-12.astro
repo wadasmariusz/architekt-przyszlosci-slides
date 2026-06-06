@@ -1,0 +1,192 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import shiftImg from './images/zaangazowanie-zespolu.png';
+---
+<SlideLayout
+  title="Slajd 12 - Zaangażowanie przez współtworzenie"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="engageGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="engageGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#engageGrid)"/>
+    <circle cx="960" cy="500" r="500" fill="url(#engageGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Zaangażowanie przez <span class="highlight">współtworzenie</span>
+    </h1>
+
+    <figure class="shift-figure" aria-label="Przejście od „architekt prezentuje” do „zespół współanalizuje”">
+      <Image
+        class="shift-img"
+        src={shiftImg}
+        alt="Przejście od architekta prezentującego diagram do zespołu współanalizującego ryzyka"
+        loading="eager"
+      />
+    </figure>
+    
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 56px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shift-figure {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 0 44px;
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(34, 211, 238, 0.32);
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.06),
+      0 28px 70px rgba(8, 145, 178, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.5s forwards;
+  }
+
+  .shift-img {
+    width: 100%;
+    height: auto;
+    max-height: 660px;
+    object-fit: contain;
+    border-radius: 12px;
+    display: block;
+  }
+
+  .benefits {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .benefit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 28px 18px;
+    min-height: 200px;
+    background: rgba(17, 24, 39, 0.62);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 22px 50px rgba(2, 6, 23, 0.28);
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .benefit:nth-child(1) { animation-delay: 1.1s; }
+  .benefit:nth-child(2) { animation-delay: 1.22s; }
+  .benefit:nth-child(3) { animation-delay: 1.34s; }
+  .benefit:nth-child(4) { animation-delay: 1.46s; }
+
+  .benefit-ic {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .benefit-ic i {
+    font-size: 36px;
+    color: var(--cyan-400);
+  }
+
+  .benefit h3 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    color: #f0f4f8;
+    margin: 0;
+  }
+
+  @media (max-width: 1200px) {
+    .title {
+      font-size: 52px;
+    }
+
+    .shift-img {
+      max-height: 320px;
+    }
+
+    .benefits {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 700px) {
+    .benefits {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

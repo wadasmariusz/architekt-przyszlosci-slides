@@ -1,0 +1,275 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 03 - Cicha identyfikacja ryzyk"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="silentGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="silentGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#silentGrid)"/>
+    <circle cx="960" cy="620" r="480" fill="url(#silentGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Cicha identyfikacja <span class="highlight">ryzyk</span>
+    </h1>
+
+    <section class="mechanic" aria-label="Mechanika cichej identyfikacji ryzyk">
+      <article class="timer-card">
+        <span class="timer-eyebrow">Timebox</span>
+        <div class="timer-display" aria-hidden="true">
+          <span class="timer-digits">10:00</span>
+          <div class="timer-ring"></div>
+        </div>
+        <p class="timer-label">Timebox: 10 minut</p>
+      </article>
+
+      <ul class="rules" aria-label="Zasady rundy">
+        <li class="rule-card">
+          <div class="rule-ic"><i class="ti ti-user"></i></div>
+          <span class="rule-label">Każdy pracuje samodzielnie</span>
+        </li>
+        <li class="rule-card">
+          <div class="rule-ic"><i class="ti ti-sticker"></i></div>
+          <span class="rule-label">Ryzyka trafiają na diagram</span>
+        </li>
+        <li class="rule-card">
+          <div class="rule-ic"><i class="ti ti-messages"></i></div>
+          <span class="rule-label">Dyskusja dopiero po zakończeniu rundy</span>
+        </li>
+      </ul>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 64px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .mechanic {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 44px;
+    align-items: stretch;
+  }
+
+  .timer-card {
+    padding: 40px 32px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.32), rgba(14, 116, 144, 0.14));
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    border-radius: 22px;
+    box-shadow:
+      0 0 0 8px rgba(34, 211, 238, 0.06),
+      0 28px 70px rgba(8, 145, 178, 0.30);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.55s forwards;
+  }
+
+  .timer-eyebrow {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .timer-display {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timer-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 6px solid rgba(34, 211, 238, 0.25);
+    box-shadow:
+      inset 0 0 60px rgba(8, 145, 178, 0.35),
+      0 0 50px rgba(34, 211, 238, 0.18);
+  }
+
+  .timer-ring::before {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border-radius: 50%;
+    border: 2px dashed rgba(34, 211, 238, 0.35);
+  }
+
+  .timer-digits {
+    position: relative;
+    font-size: 112px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    color: #ecfeff;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 4px 24px rgba(8, 145, 178, 0.55);
+  }
+
+  .timer-label {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #f0f4f8;
+  }
+
+  .rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .rule-card {
+    flex: 1 1 0;
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    align-items: center;
+    gap: 26px;
+    padding: 28px 30px;
+    background: rgba(17, 24, 39, 0.62);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(2, 6, 23, 0.28);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .rule-card:nth-child(1) { animation-delay: 0.75s; }
+  .rule-card:nth-child(2) { animation-delay: 0.92s; }
+  .rule-card:nth-child(3) { animation-delay: 1.09s; }
+
+  .rule-ic {
+    width: 92px;
+    height: 92px;
+    border-radius: 20px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rule-ic i {
+    font-size: 46px;
+    color: var(--cyan-400);
+  }
+
+  .rule-label {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    color: #f0f4f8;
+  }
+
+  @media (max-width: 1200px) {
+    .title {
+      font-size: 64px;
+      margin-bottom: 40px;
+    }
+
+    .mechanic {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .timer-display {
+      width: 240px;
+      height: 240px;
+    }
+
+    .timer-digits {
+      font-size: 84px;
+    }
+
+    .rule-card {
+      grid-template-columns: 72px minmax(0, 1fr);
+      padding: 20px 22px;
+    }
+
+    .rule-ic {
+      width: 72px;
+      height: 72px;
+    }
+
+    .rule-ic i {
+      font-size: 36px;
+    }
+
+    .rule-label {
+      font-size: 24px;
+    }
+  }
+</style>

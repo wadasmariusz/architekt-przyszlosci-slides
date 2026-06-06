@@ -1,0 +1,224 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 10 - Odkrycie kart"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="revealGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="revealGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#revealGrid)"/>
+    <circle cx="960" cy="600" r="500" fill="url(#revealGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Odkrycie <span class="highlight">kart</span>
+    </h1>
+    
+    <section class="cards" aria-label="Cztery pytania walidujące ryzyko">
+      <article class="card card--1">
+        <div class="card-pin" aria-hidden="true"></div>
+        <div class="card-mark" aria-hidden="true">?</div>
+        <p class="card-q">Realne Ryzyko?</p>
+      </article>
+
+      <article class="card card--2">
+        <div class="card-pin" aria-hidden="true"></div>
+        <div class="card-mark" aria-hidden="true">?</div>
+        <p class="card-q">Ryzyko z poprzedniego kontekstu?</p>
+      </article>
+
+      <article class="card card--3">
+        <div class="card-pin" aria-hidden="true"></div>
+        <div class="card-mark" aria-hidden="true">?</div>
+        <p class="card-q">Założenie do sprawdzenia?</p>
+      </article>
+
+      <article class="card card--4">
+        <div class="card-pin" aria-hidden="true"></div>
+        <div class="card-mark" aria-hidden="true">?</div>
+        <p class="card-q">Trade-off do zaakceptowania?</p>
+      </article>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 64px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 68px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lead {
+    font-size: 28px;
+    color: rgba(226, 246, 255, 0.78);
+    margin: 0 0 56px;
+    font-weight: 500;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.5s forwards;
+  }
+
+  .cards {
+    width: 100%;
+    max-width: 1520px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .card {
+    position: relative;
+    min-height: 320px;
+    padding: 60px 26px 40px;
+    border-radius: 14px;
+    background: linear-gradient(155deg, #fff8dc 0%, #fde68a 100%);
+    border: 1px solid rgba(180, 83, 9, 0.25);
+    box-shadow:
+      0 22px 50px rgba(2, 6, 23, 0.45),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px) rotate(0deg);
+    animation: flipReveal 0.85s ease-out forwards;
+  }
+
+  .card--1 { animation-delay: 0.8s;  --tilt: -3deg; }
+  .card--2 { animation-delay: 1.0s;  --tilt: 2deg;  }
+  .card--3 { animation-delay: 1.2s;  --tilt: -2deg; }
+  .card--4 { animation-delay: 1.4s;  --tilt: 3deg;  }
+
+  @keyframes flipReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) rotate(0deg) scale(0.9);
+    }
+    60% {
+      opacity: 1;
+      transform: translateY(-6px) rotate(var(--tilt)) scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotate(var(--tilt)) scale(1);
+    }
+  }
+
+  .card-pin {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ef4444 0%, #991b1b 80%);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.35),
+      inset -2px -2px 4px rgba(0, 0, 0, 0.25),
+      inset 2px 2px 3px rgba(255, 255, 255, 0.35);
+  }
+
+  .card-mark {
+    margin-top: 12px;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: rgba(180, 83, 9, 0.12);
+    border: 2px solid rgba(180, 83, 9, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    font-weight: 800;
+    color: #b45309;
+    line-height: 1;
+  }
+
+  .card-q {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    color: #1f2937;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 64px;
+    }
+
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      min-height: 260px;
+    }
+
+    .card-q {
+      font-size: 24px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

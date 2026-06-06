@@ -1,0 +1,471 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 22 - Ryzyka chowają się w happy path"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="happyGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="happyGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#happyGrid)"/>
+    <circle cx="960" cy="540" r="500" fill="url(#happyGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Ryzyka chowają się w <span class="highlight">happy path</span>
+    </h1>
+
+    <section class="scene" aria-label="Happy path otoczony ukrytymi zagrożeniami">
+      <div class="threat threat--nw" aria-hidden="true">
+        <i class="ti ti-wifi-off"></i>
+        <span>sieć</span>
+      </div>
+      <div class="threat threat--ne" aria-hidden="true">
+        <i class="ti ti-plug-connected-x"></i>
+        <span>API</span>
+      </div>
+      <div class="threat threat--w" aria-hidden="true">
+        <i class="ti ti-users"></i>
+        <span>ludzie</span>
+      </div>
+      <div class="threat threat--e" aria-hidden="true">
+        <i class="ti ti-link-off"></i>
+        <span>zależności</span>
+      </div>
+      <div class="threat threat--s" aria-hidden="true">
+        <i class="ti ti-activity"></i>
+        <span>ruch</span>
+      </div>
+
+      <div class="happy-path" aria-label="Happy path requestu">
+        <span class="path-eyebrow">Happy path</span>
+        <div class="path-row">
+          <article class="path-node">
+            <div class="node-ic"><i class="ti ti-click"></i></div>
+            <span class="node-label">Użytkownik klika</span>
+          </article>
+
+          <i class="ti ti-arrow-narrow-right path-arrow" aria-hidden="true"></i>
+
+          <article class="path-node">
+            <div class="node-ic"><i class="ti ti-transfer-in"></i></div>
+            <span class="node-label">Request przechodzi</span>
+          </article>
+
+          <i class="ti ti-arrow-narrow-right path-arrow" aria-hidden="true"></i>
+
+          <article class="path-node">
+            <div class="node-ic"><i class="ti ti-database"></i></div>
+            <span class="node-label">Dane się zapisują</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <aside class="punch">
+      <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+      <p>System nie żyje w <span class="accent">próżni</span></p>
+    </aside>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1680px;
+    padding: 54px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 34px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .scene {
+    position: relative;
+    width: 100%;
+    max-width: 1540px;
+    height: 570px;
+    margin-bottom: 24px;
+    isolation: isolate;
+  }
+
+  .scene::before {
+    content: '';
+    position: absolute;
+    inset: 42px 126px 66px;
+    z-index: 0;
+    border-radius: 34px;
+    background:
+      radial-gradient(ellipse at center, rgba(34, 211, 238, 0.18), transparent 62%),
+      linear-gradient(90deg, rgba(239, 68, 68, 0.04), rgba(34, 211, 238, 0.09), rgba(239, 68, 68, 0.04));
+    border: 1px solid rgba(34, 211, 238, 0.16);
+    box-shadow: inset 0 0 80px rgba(34, 211, 238, 0.08);
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.55s forwards;
+  }
+
+  .scene::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    width: 1060px;
+    height: 340px;
+    border-radius: 36px;
+    border: 1px dashed rgba(248, 113, 113, 0.26);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 1.05s forwards;
+  }
+
+  .threat {
+    position: absolute;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 144px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(45, 12, 18, 0.78), rgba(15, 23, 42, 0.72));
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(248, 113, 113, 0.38);
+    color: rgba(254, 202, 202, 0.92);
+    box-shadow:
+      0 16px 34px rgba(2, 6, 23, 0.44),
+      inset 0 0 24px rgba(248, 113, 113, 0.05);
+    opacity: 0;
+    animation: threatIn 0.72s ease-out forwards;
+  }
+
+  .threat::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fb7185;
+    box-shadow: 0 0 18px rgba(248, 113, 113, 0.75);
+  }
+
+  .threat i {
+    font-size: 32px;
+    color: rgba(254, 202, 202, 0.9);
+  }
+
+  .threat span {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @keyframes threatIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .threat--nw,
+  .threat--ne,
+  .threat--s {
+    flex-direction: row;
+  }
+
+  .threat--w,
+  .threat--e {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .threat--nw { top: 16px;   left: 54px;          animation-delay: 1.05s; }
+  .threat--ne { top: 16px;   right: 54px;         animation-delay: 1.18s; }
+  .threat--w  { top: 50%;   left: 28px;          animation-delay: 1.31s; }
+  .threat--e  { top: 50%;   right: 28px;         animation-delay: 1.44s; }
+  .threat--s  { bottom: 18px; left: 50%;          animation-delay: 1.57s; }
+
+  .threat--w,
+  .threat--e {
+    transform: translateY(-50%);
+  }
+
+  .threat--s {
+    transform: translateX(-50%);
+  }
+
+  .threat--w.threat,
+  .threat--e.threat {
+    animation-name: threatSideIn;
+  }
+
+  .threat--s.threat {
+    animation-name: threatBottomIn;
+  }
+
+  @keyframes threatSideIn {
+    from {
+      opacity: 0;
+      transform: translateY(calc(-50% + 16px)) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  @keyframes threatBottomIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 16px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+  }
+
+  .happy-path {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 1000px;
+    padding: 34px 38px 36px;
+    border-radius: 28px;
+    background:
+      linear-gradient(135deg, rgba(8, 145, 178, 0.34), rgba(14, 116, 144, 0.16)),
+      rgba(17, 24, 39, 0.62);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(34, 211, 238, 0.68);
+    box-shadow:
+      0 0 0 8px rgba(34, 211, 238, 0.08),
+      0 30px 80px rgba(8, 145, 178, 0.34),
+      inset 0 0 70px rgba(34, 211, 238, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    opacity: 0;
+    animation: happyPathIn 0.95s ease-out 0.55s forwards;
+  }
+
+  @keyframes happyPathIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 24px));
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .path-eyebrow {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #67e8f9;
+  }
+
+  .path-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+  }
+
+  .path-node {
+    width: 224px;
+    padding: 22px 18px;
+    border-radius: 16px;
+    background: rgba(17, 24, 39, 0.76);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 16px 40px rgba(2, 6, 23, 0.32);
+  }
+
+  .node-ic {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .node-ic i {
+    font-size: 42px;
+    color: var(--cyan-400);
+  }
+
+  .node-label {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    line-height: 1.15;
+    color: #f0f4f8;
+    text-align: center;
+  }
+
+  .path-arrow {
+    font-size: 46px;
+    color: rgba(34, 211, 238, 0.76);
+    filter: drop-shadow(0 0 14px rgba(34, 211, 238, 0.35));
+  }
+
+  .punch {
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    padding: 24px 38px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.24), rgba(127, 29, 29, 0.18));
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    box-shadow: 0 20px 50px rgba(180, 83, 9, 0.22);
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 1.75s forwards;
+  }
+
+  .punch i {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    color: #fbbf24;
+    flex-shrink: 0;
+  }
+
+  .punch p {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    color: #ffedd5;
+  }
+
+  .punch .accent {
+    color: #fde68a;
+    text-decoration: underline;
+    text-decoration-color: rgba(251, 191, 36, 0.6);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 6px;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 54px;
+    }
+
+    .scene {
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .scene::before,
+    .scene::after {
+      display: none;
+    }
+
+    .threat,
+    .happy-path {
+      position: static;
+      width: auto;
+      transform: none;
+    }
+
+    .threat,
+    .threat--w.threat,
+    .threat--e.threat,
+    .threat--s.threat {
+      animation-name: fadeIn;
+    }
+
+    .happy-path {
+      max-width: 760px;
+      animation: fadeUp 0.95s ease-out 0.55s forwards;
+    }
+
+    .path-row {
+      flex-direction: column;
+    }
+
+    .path-arrow {
+      transform: rotate(90deg);
+    }
+
+    .punch p {
+      font-size: 24px;
+    }
+  }
+</style>

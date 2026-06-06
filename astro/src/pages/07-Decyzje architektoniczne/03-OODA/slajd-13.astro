@@ -26,7 +26,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <div class="panel-icon"><i class="ti ti-rocket"></i></div>
         <p class="panel-label">Act</p>
         <h2>Wdrażamy decyzję</h2>
-        <p>Spike, PoC, canary albo kontrolowany eksperyment na realnym fragmencie systemu.</p>
       </article>
 
       <div class="loop-connector" aria-hidden="true">
@@ -38,7 +37,6 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <div class="panel-icon"><i class="ti ti-radar-2"></i></div>
         <p class="panel-label">Observe</p>
         <h2>Mierzymy skutki</h2>
-        <p>Decyzja jest dobra dopiero wtedy, gdy jej konsekwencje widać w danych i pracy zespołu.</p>
       </article>
     </div>
 
@@ -63,30 +61,26 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
         <span>Czy zespół potrafi utrzymać rozwiązanie?</span>
       </article>
     </div>
-
-    <blockquote class="closing-note">
-      <i class="ti ti-repeat"></i>
-      <p>Architektura rozwija się przez krótkie cykle: decyzja, działanie, obserwacja, korekta.</p>
-    </blockquote>
   </div>
 </SlideLayout>
 
 <style is:global>
   .stage {
     justify-content: flex-start;
-    align-items: flex-start;
   }
 
   .content {
     position: relative;
     z-index: 5;
-    width: calc(100% - 560px);
-    max-width: 1320px;
-    padding: 58px 0 0 64px;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    padding: 58px 160px 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
   }
 
   .phase-badge {
@@ -174,6 +168,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     backdrop-filter: blur(10px);
     opacity: 0;
     animation: fadeUp 0.9s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .loop-panel--act {

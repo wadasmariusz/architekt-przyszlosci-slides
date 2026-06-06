@@ -1,0 +1,349 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 02 - Porównanie opcji"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="optionsGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="optionsGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#optionsGrid)"/>
+    <circle cx="960" cy="640" r="480" fill="url(#optionsGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Porównanie <span class="highlight">opcji</span>
+    </h1>
+
+    <section class="options" aria-label="Trzy warianty architektoniczne">
+      <article class="option-card option-card--a">
+        <header class="option-head">
+          <span class="option-tag">Opcja A</span>
+        </header>
+        <div class="option-arch" aria-hidden="true">
+          <div class="arch-block arch-block--mono"></div>
+          <div class="arch-block arch-block--db"></div>
+        </div>
+      </article>
+
+      <article class="option-card option-card--b">
+        <header class="option-head">
+          <span class="option-tag">Opcja B</span>
+        </header>
+        <div class="option-arch arch-grid" aria-hidden="true">
+          <div class="arch-block"></div>
+          <div class="arch-block"></div>
+          <div class="arch-block"></div>
+          <div class="arch-block"></div>
+          <div class="arch-link arch-link--h1"></div>
+          <div class="arch-link arch-link--h2"></div>
+          <div class="arch-link arch-link--v1"></div>
+          <div class="arch-link arch-link--v2"></div>
+        </div>
+      </article>
+
+      <article class="option-card option-card--c">
+        <header class="option-head">
+          <span class="option-tag">Opcja C</span>
+        </header>
+        <div class="option-arch arch-stack" aria-hidden="true">
+          <div class="arch-block arch-block--core"></div>
+          <div class="arch-satellite arch-satellite--1"></div>
+          <div class="arch-satellite arch-satellite--2"></div>
+          <div class="arch-satellite arch-satellite--3"></div>
+        </div>
+      </article>
+    </section>
+
+    <p class="question">
+      <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+      <span>Jakie ryzyka niesie każda z nich?</span>
+    </p>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 64px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .options {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 36px;
+    margin-bottom: 60px;
+  }
+
+  .option-card {
+    padding: 36px 28px;
+    background: rgba(17, 24, 39, 0.62);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .option-card--a { animation-delay: 0.55s; }
+  .option-card--b { animation-delay: 0.75s; }
+  .option-card--c { animation-delay: 0.95s; }
+
+  .option-head {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .option-tag {
+    padding: 10px 24px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: #e2f6ff;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+  }
+
+  .option-arch {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(8, 145, 178, 0.06);
+    border: 1px dashed rgba(34, 211, 238, 0.22);
+    padding: 24px;
+  }
+
+  .arch-block {
+    background: linear-gradient(145deg, rgba(14, 116, 144, 0.42), rgba(8, 145, 178, 0.18));
+    border: 1.5px solid rgba(34, 211, 238, 0.55);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(8, 145, 178, 0.22);
+  }
+
+  /* Opcja A — monolit + baza */
+  .option-card--a .option-arch {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .arch-block--mono {
+    width: 220px;
+    height: 130px;
+  }
+
+  .arch-block--db {
+    width: 140px;
+    height: 56px;
+    border-radius: 999px;
+    background: linear-gradient(145deg, rgba(34, 211, 238, 0.22), rgba(8, 145, 178, 0.08));
+  }
+
+  /* Opcja B — siatka 2x2 z linkami */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 92px);
+    grid-template-rows: repeat(2, 92px);
+    gap: 36px;
+    justify-content: center;
+    align-content: center;
+  }
+
+  .arch-grid .arch-block {
+    width: 92px;
+    height: 92px;
+  }
+
+  .arch-link {
+    position: absolute;
+    background: rgba(34, 211, 238, 0.45);
+  }
+
+  .arch-link--h1,
+  .arch-link--h2 {
+    width: 36px;
+    height: 2px;
+  }
+
+  .arch-link--v1,
+  .arch-link--v2 {
+    width: 2px;
+    height: 36px;
+  }
+
+  .arch-link--h1 {
+    top: calc(50% - 46px - 1px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .arch-link--h2 {
+    top: calc(50% + 46px - 1px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .arch-link--v1 {
+    left: calc(50% - 46px - 1px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .arch-link--v2 {
+    left: calc(50% + 46px - 1px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Opcja C — rdzeń + satelity */
+  .arch-stack {
+    position: relative;
+  }
+
+  .arch-block--core {
+    width: 130px;
+    height: 130px;
+    border-radius: 16px;
+  }
+
+  .arch-satellite {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, rgba(34, 211, 238, 0.32), rgba(8, 145, 178, 0.12));
+    border: 1.5px solid rgba(34, 211, 238, 0.55);
+    box-shadow: 0 8px 18px rgba(8, 145, 178, 0.25);
+  }
+
+  .arch-satellite--1 {
+    top: 32px;
+    left: 36px;
+  }
+
+  .arch-satellite--2 {
+    top: 32px;
+    right: 36px;
+  }
+
+  .arch-satellite--3 {
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .question {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 36px;
+    border-radius: 16px;
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.22), rgba(217, 119, 6, 0.08));
+    color: #ffedd5;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.15;
+    margin: 0;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 1.2s forwards;
+  }
+
+  .question i {
+    font-size: 38px;
+    color: #fbbf24;
+  }
+
+  @media (max-width: 1200px) {
+    .title {
+      font-size: 64px;
+    }
+
+    .options {
+      gap: 22px;
+    }
+
+    .option-card {
+      padding: 26px 18px;
+    }
+
+    .option-arch {
+      height: 220px;
+    }
+
+    .question {
+      font-size: 28px;
+      padding: 18px 24px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .options {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

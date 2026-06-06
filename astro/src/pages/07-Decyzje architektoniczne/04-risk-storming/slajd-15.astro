@@ -1,0 +1,309 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 15 - Zacznij od siebie"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="solo15Grid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="solo15Glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#solo15Grid)"/>
+    <circle cx="960" cy="560" r="500" fill="url(#solo15Glow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Praca własna <span class="highlight">architekta</span>
+    </h1>
+
+    <section class="checklist-wrap" aria-label="Mini-checklista pracy własnej">
+      <header class="cl-header">
+        <i class="ti ti-clipboard-check" aria-hidden="true"></i>
+        <span></span>
+      </header>
+
+      <ol class="checklist">
+        <li class="cl-item">
+          <span class="cl-box"><i class="ti ti-check"></i></span>
+          <span class="cl-text">Skopiuj swój diagram</span>
+        </li>
+        <li class="cl-item">
+          <span class="cl-box"><i class="ti ti-check"></i></span>
+          <span class="cl-text">Zrób dump ryzyk</span>
+        </li>
+        <li class="cl-item">
+          <span class="cl-box"><i class="ti ti-check"></i></span>
+          <span class="cl-text">Oceń severity</span>
+        </li>
+        <li class="cl-item">
+          <span class="cl-box"><i class="ti ti-check"></i></span>
+          <span class="cl-text">Sprawdź, gdzie są największe niewiadome</span>
+        </li>
+      </ol>
+
+      <div class="cl-divider" aria-hidden="true">
+        <span class="cl-divider-text">dopiero potem</span>
+      </div>
+
+      <aside class="cl-final">
+        <div class="cl-final-ic"><i class="ti ti-users-group"></i></div>
+        <div class="cl-final-text">
+          <p>Zaproś zespół</p>
+        </div>
+      </aside>
+    </section>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 60px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .checklist-wrap {
+    width: 100%;
+    max-width: 1080px;
+    padding: 36px 44px 36px;
+    border-radius: 24px;
+    background: rgba(17, 24, 39, 0.66);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 28px 70px rgba(2, 6, 23, 0.36);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.45s forwards;
+  }
+
+  .cl-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    color: rgba(226, 246, 255, 0.85);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .cl-header i {
+    font-size: 46px;
+    color: var(--cyan-400);
+  }
+
+  .checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .cl-item {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: 20px;
+    padding: 16px 22px;
+    border-radius: 14px;
+    background: rgba(8, 145, 178, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.22);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.7s ease-out forwards;
+  }
+
+  .cl-item:nth-child(1) { animation-delay: 0.7s; }
+  .cl-item:nth-child(2) { animation-delay: 0.82s; }
+  .cl-item:nth-child(3) { animation-delay: 0.94s; }
+  .cl-item:nth-child(4) { animation-delay: 1.06s; }
+
+  .cl-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1.5px solid rgba(34, 211, 238, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cl-box i {
+    font-size: 24px;
+    color: var(--cyan-400);
+  }
+
+  .cl-text {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+    color: #f0f4f8;
+  }
+
+  .cl-divider {
+    position: relative;
+    margin: 26px 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 1.2s forwards;
+  }
+
+  .cl-divider::before,
+  .cl-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(
+      to right,
+      rgba(34, 211, 238, 0.45) 0 8px,
+      transparent 8px 14px
+    );
+  }
+
+  .cl-divider-text {
+    padding: 6px 18px;
+    border-radius: 999px;
+    background: rgba(8, 145, 178, 0.18);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0 18px;
+  }
+
+  .cl-final {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    align-items: center;
+    gap: 24px;
+    padding: 24px 30px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.36), rgba(14, 116, 144, 0.14));
+    border: 2px solid rgba(34, 211, 238, 0.6);
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.06),
+      0 24px 60px rgba(8, 145, 178, 0.30);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 1.35s forwards;
+  }
+
+  .cl-final-ic {
+    width: 96px;
+    height: 96px;
+    border-radius: 22px;
+    background: rgba(34, 211, 238, 0.22);
+    border: 1px solid rgba(34, 211, 238, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cl-final-ic i {
+    font-size: 50px;
+    color: #ecfeff;
+  }
+
+  .cl-final-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cl-final-eyebrow {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #67e8f9;
+  }
+
+  .cl-final-text p {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    line-height: 1.05;
+    color: #f0f4f8;
+  }
+
+  @media (max-width: 1100px) {
+    .title {
+      font-size: 60px;
+    }
+
+    .cl-item {
+      grid-template-columns: 40px minmax(0, 1fr);
+      padding: 14px 16px;
+      gap: 14px;
+    }
+
+    .cl-text {
+      font-size: 22px;
+    }
+
+    .cl-final-text p {
+      font-size: 30px;
+    }
+  }
+</style>

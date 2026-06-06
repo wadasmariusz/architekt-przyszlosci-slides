@@ -13,61 +13,45 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     </div>
 
     <h1 class="title">
-      Kontrolowane <span class="highlight">sprawdzenie decyzji</span>
+      Wykonanie  <span class="highlight">decyzji</span>
     </h1>
 
     <div class="act-board" aria-label="Skala ryzyka i kosztu dzialania">
-      <section class="act-intro">
-        <p class="intro-label">Główna myśl</p>
-        <h2>Act to nie musi być pełna migracja systemu.</h2>
-        <p>
-          Najczęściej zaczynamy od małego eksperymentu, który pozwala sprawdzić
-          hipotezę architektoniczną bez przepalania budżetu i zaufania zespołu.
-        </p>
-      </section>
 
       <section class="risk-scale" aria-label="Od niskiego do wysokiego ryzyka">
         <div class="scale-axis" aria-hidden="true">
-          <span>Niski koszt / szybka nauka</span>
-          <span>Realny ruch / większe ryzyko</span>
+          <span>Niski koszt </span>
+          <span>Większe ryzyko</span>
         </div>
 
         <div class="scale-items">
           <article class="action-card action-card--low">
             <div class="action-icon"><i class="ti ti-sparkles"></i></div>
-            <p class="action-step">01</p>
             <h2>Spike</h2>
             <p>Krótka próba techniczna: czy kierunek w ogóle ma sens?</p>
           </article>
 
           <article class="action-card">
             <div class="action-icon"><i class="ti ti-flask"></i></div>
-            <p class="action-step">02</p>
             <h2>Proof of concept</h2>
             <p>Minimalna wersja rozwiązania z konkretnym kryterium sukcesu.</p>
           </article>
 
           <article class="action-card">
             <div class="action-icon"><i class="ti ti-activity-heartbeat"></i></div>
-            <p class="action-step">03</p>
             <h2>Kontrolowane obciążenie</h2>
             <p>Eksperyment na realistycznych danych, ale pod nadzorem.</p>
           </article>
 
           <article class="action-card action-card--high">
             <div class="action-icon"><i class="ti ti-traffic-lights"></i></div>
-            <p class="action-step">04</p>
-            <h2>Canary / A/B</h2>
+            <h2>Canary  <br>Testy A/B</h2>
             <p>Ograniczony realny ruch, szybki rollback i metryki skutków.</p>
           </article>
         </div>
       </section>
     </div>
-
-    <div class="takeaway">
-      <i class="ti ti-shield-check"></i>
-      <span>Najlepszy Act często oznacza: <strong>najpierw mały, kontrolowany eksperyment</strong>.</span>
-    </div>
+    
   </div>
 </SlideLayout>
 
@@ -79,44 +63,45 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .content {
     position: relative;
     z-index: 5;
-    width: min(1360px, calc(100% - 560px));
+    width: 100%;
     max-width: none;
-    margin-right: auto;
-    padding: 58px 0 0 3rem;
+    margin: 0 auto;
+    padding: 58px 160px 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
   }
 
   .phase-badge {
     display: inline-flex;
     align-items: center;
-    gap: 14px;
-    padding: 10px 22px 10px 14px;
+    gap: 18px;
+    padding: 12px 28px 12px 16px;
     border-radius: 999px;
     background: rgba(8, 145, 178, 0.15);
     border: 1px solid rgba(34, 211, 238, 0.45);
-    margin-bottom: 18px;
+    margin-bottom: 24px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.15s forwards;
   }
 
   .phase-letter {
-    width: 38px;
-    height: 38px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: var(--cyan-400);
     color: #0a0e17;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 800;
   }
 
   .phase-name {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -124,12 +109,13 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .title {
-    max-width: 1220px;
-    font-size: 76px;
+    max-width: 1500px;
+    font-size: 92px;
     font-weight: 800;
     letter-spacing: 0;
     line-height: 1.05;
-    margin-bottom: 24px;
+    margin: 0 auto 44px;
+    text-align: center;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.3s forwards;
   }
@@ -143,10 +129,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   .act-board {
     width: 100%;
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 24px;
-    align-items: stretch;
+    display: block;
     margin-bottom: 24px;
   }
 
@@ -176,12 +159,12 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
 
   .intro-label,
   .action-step {
-    font-size: 13px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--cyan-400);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
 
   .act-intro h2 {
@@ -200,6 +183,8 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .risk-scale {
+    width: 100%;
+    text-align: left;
     opacity: 0;
     animation: fadeUp 0.9s ease-out 0.68s forwards;
   }
@@ -209,10 +194,10 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     display: flex;
     justify-content: space-between;
     gap: 24px;
-    padding: 0 8px 18px;
-    margin-bottom: 18px;
+    padding: 0 8px 22px;
+    margin-bottom: 24px;
     color: #94a3b8;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -233,14 +218,16 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   .scale-items {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
+    gap: 24px;
   }
 
   .action-card {
-    min-height: 346px;
-    padding: 24px 20px 22px;
+    min-height: 420px;
+    padding: 32px 28px 28px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     background: rgba(17, 24, 39, 0.58);
     opacity: 0;
     animation: fadeUp 0.9s ease-out forwards;
@@ -262,17 +249,17 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .action-icon {
-    width: 58px;
-    height: 58px;
-    border-radius: 14px;
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
     background: rgba(34, 211, 238, 0.12);
     border: 1px solid rgba(34, 211, 238, 0.34);
     color: var(--cyan-400);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
-    margin-bottom: 18px;
+    font-size: 38px;
+    margin-bottom: 22px;
   }
 
   .action-card--high .action-icon {
@@ -286,16 +273,16 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
   }
 
   .action-card h2 {
-    min-height: 76px;
-    font-size: 29px;
+    min-height: 88px;
+    font-size: 40px;
     font-weight: 800;
     line-height: 1.14;
     color: #f8fafc;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .action-card p:last-child {
-    font-size: 19px;
+    font-size: 28px;
     font-weight: 300;
     line-height: 1.36;
     color: #b6c4d8;

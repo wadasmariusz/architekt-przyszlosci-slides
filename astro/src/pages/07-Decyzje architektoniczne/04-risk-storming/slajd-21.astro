@@ -1,0 +1,126 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+import { Image } from 'astro:assets';
+import passiveImg from './images/zespol-pytania.png';
+---
+<SlideLayout
+  title="Slajd 21 - Bierne uczestnictwo zespołu"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="passiveGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="passiveGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#passiveGrid)"/>
+    <circle cx="960" cy="560" r="500" fill="url(#passiveGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+      Bierne uczestnicto <span class="highlight">zespołu</span>
+    </h1>
+
+    <figure class="passive-figure" aria-label="Zespół biernie akceptujący design architekta">
+      <Image
+        class="passive-img"
+        src={passiveImg}
+        alt="Architekt prezentuje design, zespół kiwa głowami i nie zadaje pytań"
+        loading="eager"
+      />
+    </figure>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 56px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 44px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .passive-figure {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0;
+    padding: 24px;
+    border-radius: 24px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(34, 211, 238, 0.32);
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.06),
+      0 30px 80px rgba(8, 145, 178, 0.24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.95s ease-out 0.55s forwards;
+  }
+
+  .passive-img {
+    width: 100%;
+    height: auto;
+    max-height: 720px;
+    object-fit: contain;
+    border-radius: 14px;
+    display: block;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 56px;
+      margin-bottom: 32px;
+    }
+
+    .passive-img {
+      max-height: 480px;
+    }
+  }
+</style>

@@ -1,0 +1,344 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 07 - Rozjazd ocen to sygnał"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="signalGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="signalGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#signalGrid)"/>
+    <circle cx="960" cy="540" r="480" fill="url(#signalGlow)"/>
+  </svg>
+
+  <div class="content">
+    <h1 class="title">
+       <span class="highlight">Rozjazd</span> ocen
+    </h1>
+
+    <section class="diverge" aria-label="Rozjazd ocen tego samego ryzyka">
+      <article class="rater rater--high">
+        <div class="rater-avatar"><i class="ti ti-user"></i></div>
+        <div class="rater-score">
+          <span class="score-num">9</span>
+          <span class="score-denom">/10</span>
+        </div>
+        <span class="rater-tag">wysokie ryzyko</span>
+      </article>
+
+      <div class="middle">
+        <div class="middle-card">
+          <i class="ti ti-alert-octagon" aria-hidden="true"></i>
+          <span class="middle-label">to samo ryzyko</span>
+        </div>
+        <span class="middle-vs">vs</span>
+      </div>
+
+      <article class="rater rater--low">
+        <div class="rater-avatar"><i class="ti ti-user"></i></div>
+        <div class="rater-score">
+          <span class="score-num">2</span>
+          <span class="score-denom">/10</span>
+        </div>
+        <span class="rater-tag">niskie ryzyko</span>
+      </article>
+    </section>
+
+    <div class="chain" aria-label="Co stoi za rozjazdem ocen">
+      <span class="chain-step">Różne oceny ryzyka</span>
+      <i class="ti ti-arrow-narrow-right chain-arrow" aria-hidden="true"></i>
+      <span class="chain-step">Różne doświadczenia</span>
+      <i class="ti ti-arrow-narrow-right chain-arrow" aria-hidden="true"></i>
+      <span class="chain-step chain-step--final">Ukryte założenia</span>
+    </div>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 72px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 64px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.3s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .diverge {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 36px;
+    margin-bottom: 60px;
+  }
+
+  .rater {
+    padding: 36px 24px;
+    border-radius: 22px;
+    background: rgba(17, 24, 39, 0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out forwards;
+  }
+
+  .rater--high {
+    border-color: rgba(239, 68, 68, 0.55);
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.34), rgba(17, 24, 39, 0.7));
+    box-shadow:
+      0 0 0 6px rgba(239, 68, 68, 0.06),
+      0 28px 70px rgba(239, 68, 68, 0.18);
+    animation-delay: 0.55s;
+  }
+
+  .rater--low {
+    border-color: rgba(34, 211, 238, 0.55);
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.30), rgba(17, 24, 39, 0.7));
+    box-shadow:
+      0 0 0 6px rgba(34, 211, 238, 0.06),
+      0 28px 70px rgba(8, 145, 178, 0.24);
+    animation-delay: 0.85s;
+  }
+
+  .rater-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rater--high .rater-avatar {
+    background: rgba(239, 68, 68, 0.16);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+  }
+
+  .rater--low .rater-avatar {
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    color: var(--cyan-400);
+  }
+
+  .rater-avatar i {
+    font-size: 52px;
+  }
+
+  .rater-score {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    line-height: 1;
+  }
+
+  .score-num {
+    font-size: 108px;
+    font-weight: 800;
+    letter-spacing: -6px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .score-denom {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+
+  .rater--high .score-num,
+  .rater--high .score-denom {
+    color: #fecaca;
+    text-shadow: 0 6px 24px rgba(239, 68, 68, 0.45);
+  }
+
+  .rater--low .score-num,
+  .rater--low .score-denom {
+    color: #ecfeff;
+    text-shadow: 0 6px 24px rgba(8, 145, 178, 0.45);
+  }
+
+  .rater-tag {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .rater--high .rater-tag {
+    color: #fca5a5;
+  }
+
+  .rater--low .rater-tag {
+    color: #67e8f9;
+  }
+
+  .middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    opacity: 0;
+    animation: fadeIn 0.85s ease-out 1.0s forwards;
+  }
+
+  .middle-eyebrow {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan-400);
+  }
+
+  .middle-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 22px;
+    border-radius: 14px;
+    background: rgba(8, 145, 178, 0.14);
+    border: 1px dashed rgba(34, 211, 238, 0.55);
+  }
+
+  .middle-card i {
+    font-size: 38px;
+    color: var(--cyan-400);
+  }
+
+  .middle-label {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ecfeff;
+    letter-spacing: -0.2px;
+    text-transform: lowercase;
+  }
+
+  .middle-vs {
+    font-size: 22px;
+    font-weight: 800;
+    color: rgba(148, 163, 184, 0.7);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .chain {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 36px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.18), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    box-shadow: 0 16px 40px rgba(8, 145, 178, 0.20);
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 1.2s forwards;
+  }
+
+  .chain-step {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: #ecfeff;
+  }
+
+  .chain-step--final {
+    padding: 8px 18px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.22);
+    border: 1px solid rgba(34, 211, 238, 0.6);
+    color: #f0f4f8;
+    font-weight: 800;
+  }
+
+  .chain-arrow {
+    font-size: 36px;
+    color: rgba(34, 211, 238, 0.7);
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 60px;
+    }
+
+    .score-num {
+      font-size: 120px;
+    }
+
+    .score-denom {
+      font-size: 40px;
+    }
+
+    .diverge {
+      gap: 22px;
+    }
+
+    .chain {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .chain-step {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .diverge {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
