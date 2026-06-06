@@ -706,3 +706,36 @@ Na slajdzie można dodać prosty próg:
 `Queue depth > threshold → alert`
 
 ---
+
+## Slajd 27
+
+**Wejście po słowach:**
+„**Jestem ciekawy, czy Ty spotkałeś się z podobnymi problemami w swoich projektach?**”
+
+**Tytuł:**
+**A jak to wygląda u Ciebie?**
+
+**Tekst na slajdzie:**
+
+* Stosujesz komunikację asynchroniczną w swoich projektach?
+* Co działa dobrze?
+* Co sprawia najwięcej problemów?
+* Jakie wyzwania Cię zaskoczyły?
+
+**Opis / rola slajdu:**
+Slajd zamykający lekcję. Ma przenieść uwagę z wykładu na doświadczenie odbiorcy i zachęcić do komentarza, bez powtarzania całego outro słowo w słowo.
+
+**Grafika / diagram / animacja:**
+Centralne pytanie i trzy krótkie karty-prompt:
+
+* działa dobrze
+* największy problem
+* zaskoczenie
+
+Na dole CTA:
+`Daj znać w komentarzu`
+
+Końcowy akcent:
+`Asynchroniczność nie usuwa złożoności. Ona zmienia miejsce, w którym trzeba ją świadomie obsłużyć.`
+
+---

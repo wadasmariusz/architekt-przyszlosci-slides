@@ -1,0 +1,498 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 26 - Backlog i alerting"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="alertGrid26" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="alertGlow26" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="66%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#alertGrid26)"/>
+    <circle cx="960" cy="540" r="540" fill="url(#alertGlow26)"/>
+  </svg>
+
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-bell-ringing"></i>Observability</span>
+      <h1 class="title">
+        Backlog <span class="highlight">i alerting</span>
+      </h1>
+    </div>
+
+    <section class="charts" aria-label="Dwa scenariusze: spike vs stały przyrost">
+      <article class="chart chart--good">
+        <header class="chart-head">
+          <span class="chart-tag chart-tag--good">
+            <i class="ti ti-check"></i>Akceptowalne
+          </span>
+          <h2>Krótki spike</h2>
+        </header>
+        <svg class="chart-svg" viewBox="0 0 600 260" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="goodFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4ade80" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#4ade80" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <line x1="0" y1="80" x2="600" y2="80"
+                stroke="rgba(251,191,36,0.55)" stroke-width="1.5" stroke-dasharray="6 6"/>
+          <text x="588" y="72" text-anchor="end"
+                fill="#fde68a" font-size="13" font-weight="800"
+                font-family="JetBrains Mono, ui-monospace, monospace">
+            threshold
+          </text>
+
+          <path d="M0,200 L80,200 L150,200 L200,180 L240,80 L280,180 L340,200 L600,200"
+                fill="url(#goodFill)" stroke="none"/>
+          <path d="M0,200 L80,200 L150,200 L200,180 L240,80 L280,180 L340,200 L600,200"
+                fill="none" stroke="#4ade80" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round"/>
+
+          <line x1="0" y1="225" x2="600" y2="225" stroke="rgba(148,163,184,0.3)" stroke-width="1"/>
+        </svg>
+        <footer class="chart-foot chart-foot--good">
+          <i class="ti ti-arrow-narrow-down"></i>
+          <span>wraca do <strong>zera</strong></span>
+        </footer>
+      </article>
+
+      <article class="chart chart--bad">
+        <header class="chart-head">
+          <span class="chart-tag chart-tag--bad">
+            <i class="ti ti-alert-triangle"></i>Problem
+          </span>
+          <h2>Stały przyrost</h2>
+        </header>
+        <svg class="chart-svg" viewBox="0 0 600 260" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="badFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f87171" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#f87171" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <line x1="0" y1="80" x2="600" y2="80"
+                stroke="rgba(251,191,36,0.65)" stroke-width="1.5" stroke-dasharray="6 6"/>
+          <text x="588" y="72" text-anchor="end"
+                fill="#fde68a" font-size="13" font-weight="800"
+                font-family="JetBrains Mono, ui-monospace, monospace">
+            threshold
+          </text>
+
+          <path d="M0,200 L60,195 L130,180 L200,160 L270,135 L340,105 L420,75 L500,50 L600,30 L600,225 L0,225 Z"
+                fill="url(#badFill)" stroke="none"/>
+          <path d="M0,200 L60,195 L130,180 L200,160 L270,135 L340,105 L420,75 L500,50 L600,30"
+                fill="none" stroke="#f87171" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round"/>
+
+          <circle cx="420" cy="75" r="9" fill="#fbbf24" stroke="#0a0e17" stroke-width="3"/>
+          <circle cx="420" cy="75" r="14" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.5"/>
+
+          <line x1="0" y1="225" x2="600" y2="225" stroke="rgba(148,163,184,0.3)" stroke-width="1"/>
+        </svg>
+        <footer class="chart-foot chart-foot--bad">
+          <i class="ti ti-bell-ringing"></i>
+          <span>przekracza <strong>próg alertu</strong></span>
+        </footer>
+      </article>
+    </section>
+
+    <div class="threshold-rule" role="note">
+      <i class="ti ti-bolt"></i>
+      <code><span class="th-key">Queue depth</span> <span class="th-op">&gt;</span> <span class="th-key">threshold</span> <span class="th-arrow">→</span> <span class="th-val">alert</span></code>
+    </div>
+
+    <ul class="points" aria-label="Zasady monitorowania backlogu">
+      <li>
+        <i class="ti ti-clock-pause"></i>
+        <span>Consumer może <strong>nie nadążać</strong> z przetwarzaniem</span>
+      </li>
+      <li>
+        <i class="ti ti-chart-bar"></i>
+        <span>Kluczowa metryka: <strong>liczba aktywnych wiadomości</strong></span>
+      </li>
+      <li class="points-impact">
+        <i class="ti ti-bell-ringing"></i>
+        <span>Alerty powinny obejmować <strong>główną kolejkę i DLQ</strong></span>
+      </li>
+    </ul>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1700px;
+    padding: 32px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .level-chip i { font-size: 20px; }
+
+  .title {
+    font-size: 84px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .charts {
+    width: 100%;
+    max-width: 1640px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
+  }
+
+  .chart {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 18px;
+    box-shadow: 0 18px 44px rgba(2, 6, 23, 0.28);
+  }
+
+  .chart--good {
+    border-color: rgba(34, 197, 94, 0.42);
+    background: linear-gradient(180deg, rgba(20, 83, 45, 0.18), rgba(17, 24, 39, 0.55));
+  }
+
+  .chart--bad {
+    border-color: rgba(248, 113, 113, 0.45);
+    background: linear-gradient(180deg, rgba(127, 29, 29, 0.20), rgba(17, 24, 39, 0.55));
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.05), 0 18px 48px rgba(127, 29, 29, 0.22);
+  }
+
+  .chart-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+
+  .chart-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .chart-tag i { font-size: 16px; }
+
+  .chart-tag--good {
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #d1fae5;
+  }
+
+  .chart-tag--bad {
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #fecaca;
+  }
+
+  .chart-head h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0;
+    color: #f0f4f8;
+  }
+
+  .chart-svg {
+    width: 100%;
+    height: 220px;
+    display: block;
+  }
+
+  .chart-foot {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+  }
+
+  .chart-foot i { font-size: 20px; }
+
+  .chart-foot--good {
+    background: rgba(34, 197, 94, 0.14);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+    color: #d1fae5;
+  }
+
+  .chart-foot--good i { color: #4ade80; }
+  .chart-foot--good strong { color: #4ade80; font-weight: 900; }
+
+  .chart-foot--bad {
+    background: rgba(248, 113, 113, 0.14);
+    border: 1px solid rgba(248, 113, 113, 0.5);
+    color: #fecaca;
+  }
+
+  .chart-foot--bad i { color: #f87171; }
+  .chart-foot--bad strong { color: #fecaca; font-weight: 900; }
+
+  .threshold-rule {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 22px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    box-shadow: 0 12px 32px rgba(180, 83, 9, 0.18);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.85s forwards;
+  }
+
+  .threshold-rule > i {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .threshold-rule code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .th-key { color: #e2e8f0; }
+  .th-op { color: rgba(148, 163, 184, 0.95); }
+  .th-arrow { color: var(--cyan-400); font-size: 28px; }
+  .th-val {
+    color: #fbbf24;
+    text-shadow: 0 0 14px rgba(251, 191, 36, 0.4);
+  }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1640px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 18px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.05s forwards;
+  }
+
+  .points li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .points li > i {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 24px;
+  }
+
+  .points li span {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: 0;
+  }
+
+  .points li strong {
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .points-impact {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .points-impact > i {
+    background: rgba(251, 191, 36, 0.16);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+  }
+
+  .points-impact span {
+    color: #fff7ed;
+  }
+
+  .points-impact strong {
+    color: #fbbf24;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 56px;
+    }
+
+    .charts {
+      grid-template-columns: 1fr;
+    }
+
+    .threshold-rule code {
+      font-size: 18px;
+    }
+
+    .points {
+      grid-template-columns: 1fr;
+    }
+
+    .points li span {
+      font-size: 19px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 42px;
+    }
+
+    .chart-head h2 {
+      font-size: 20px;
+    }
+
+    .threshold-rule {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .threshold-rule code {
+      font-size: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .points li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .points li > i {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+
+    .points li span {
+      font-size: 17px;
+    }
+  }
+</style>
+</content>
+</invoke>

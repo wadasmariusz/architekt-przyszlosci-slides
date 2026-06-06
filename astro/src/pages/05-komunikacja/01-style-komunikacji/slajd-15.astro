@@ -2,117 +2,94 @@
 import SlideLayout from '../../../layouts/SlideLayout.astro';
 ---
 <SlideLayout
-  title="Slajd 15 - Skąd bierze się zmiana kolejności"
+  title="Slajd 15 - Brak globalnej kolejności"
   bgImage="/images/background-3.jpg"
-  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
 >
   <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
-      <pattern id="srcGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+      <pattern id="orderGrid15" width="86" height="86" patternUnits="userSpaceOnUse">
         <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
       </pattern>
-      <radialGradient id="srcGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
-        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+      <radialGradient id="orderGlow15" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="66%" stop-color="#22d3ee" stop-opacity="0.04"/>
         <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
       </radialGradient>
     </defs>
 
-    <rect width="1920" height="1080" fill="url(#srcGrid)"/>
-    <circle cx="960" cy="540" r="520" fill="url(#srcGlow)"/>
+    <rect width="1920" height="1080" fill="url(#orderGrid15)"/>
+    <circle cx="960" cy="540" r="540" fill="url(#orderGlow15)"/>
   </svg>
 
   <div class="content">
-    <p class="eyebrow">Mechanizmy techniczne</p>
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-arrows-shuffle"></i>Problem #1</span>
+      <h1 class="title">
+        Brak <span class="highlight">globalnej kolejności</span>
+      </h1>
+    </div>
 
-    <h1 class="title">
-      Skąd bierze się <span class="highlight">zmiana kolejności</span>
-    </h1>
-
-    <section class="lanes" aria-label="Diagram wiadomości i consumerów">
-      <header class="lanes-head">
-        <span class="lanes-axis-label lanes-axis-label--start">publikacja</span>
-        <span class="lanes-axis-arrow" aria-hidden="true">———————————— czas ————————————</span>
-        <span class="lanes-axis-label lanes-axis-label--end">zakończenie</span>
-      </header>
-
-      <article class="lane">
-        <div class="lane-msg">
-          <span class="msg-tag">M1</span>
+    <section class="flow" aria-label="Diagram: Publisher, Queue, Consumer A i Consumer B">
+      <article class="node node--publisher">
+        <div class="node-ic"><i class="ti ti-broadcast"></i></div>
+        <h3>Publisher</h3>
+        <div class="msg-row msg-row--out" aria-label="Eventy wychodzące w kolejności 1, 2, 3">
+          <span class="msg msg--one">1</span>
+          <span class="msg msg--two">2</span>
+          <span class="msg msg--three">3</span>
         </div>
-        <div class="lane-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
-        <div class="lane-consumer">
-          <i class="ti ti-cpu"></i>
-          <span>Consumer A</span>
-        </div>
-        <div class="lane-track">
-          <div class="lane-bar lane-bar--long"></div>
-          <span class="lane-finish lane-finish--3">finish 3</span>
-        </div>
+        <span class="msg-caption">wysłane <strong>1 → 2 → 3</strong></span>
       </article>
 
-      <article class="lane">
-        <div class="lane-msg">
-          <span class="msg-tag">M2</span>
-        </div>
-        <div class="lane-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
-        <div class="lane-consumer">
-          <i class="ti ti-cpu"></i>
-          <span>Consumer B</span>
-        </div>
-        <div class="lane-track">
-          <div class="lane-bar lane-bar--short"></div>
-          <span class="lane-finish lane-finish--1">finish 1</span>
-        </div>
+      <div class="conn" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="node node--queue">
+        <div class="node-ic"><i class="ti ti-stack-2"></i></div>
+        <h3>Queue</h3>
+        <span class="node-meta">broker / topic</span>
       </article>
 
-      <article class="lane">
-        <div class="lane-msg">
-          <span class="msg-tag">M3</span>
-        </div>
-        <div class="lane-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
-        <div class="lane-consumer">
-          <i class="ti ti-cpu"></i>
-          <span>Consumer C</span>
-        </div>
-        <div class="lane-track">
-          <div class="lane-bar lane-bar--medium"></div>
-          <span class="lane-finish lane-finish--2">finish 2</span>
-        </div>
-      </article>
+      <div class="conn conn--split" aria-hidden="true">
+        <i class="ti ti-arrow-up-right"></i>
+        <i class="ti ti-arrow-down-right"></i>
+      </div>
 
-      <footer class="lanes-footer">
-        <span class="footer-label">Kolejność efektów:</span>
-        <span class="footer-seq">
-          <code>M2</code>
-          <i class="ti ti-arrow-right"></i>
-          <code>M3</code>
-          <i class="ti ti-arrow-right"></i>
-          <code>M1</code>
-        </span>
-      </footer>
+      <div class="consumers">
+        <article class="node node--consumer node--consumer-a">
+          <div class="node-ic"><i class="ti ti-cpu"></i></div>
+          <h3>Consumer A</h3>
+          <div class="msg-row msg-row--in">
+            <span class="msg msg--two">2</span>
+            <span class="msg-arrow"><i class="ti ti-arrow-right"></i></span>
+            <span class="msg msg--one">1</span>
+          </div>
+          <span class="msg-caption msg-caption--bad">odebrane <strong>2 → 1</strong></span>
+        </article>
+
+        <article class="node node--consumer node--consumer-b">
+          <div class="node-ic"><i class="ti ti-cpu"></i></div>
+          <h3>Consumer B</h3>
+          <div class="msg-row msg-row--in">
+            <span class="msg msg--three">3</span>
+          </div>
+          <span class="msg-caption msg-caption--bad">odebrane <strong>3</strong></span>
+        </article>
+      </div>
     </section>
 
-    <ul class="causes" aria-label="Przyczyny zmiany kolejności">
+    <ul class="points" aria-label="Punkty kluczowe">
       <li>
-        <i class="ti ti-stack-2"></i>
-        <span>Równoległe instancje consumerów</span>
+        <i class="ti ti-circle-x"></i>
+        <span>Broker <strong>nie gwarantuje globalnej kolejności</strong> przetwarzania wiadomości</span>
       </li>
       <li>
-        <i class="ti ti-clock-hour-4"></i>
-        <span>Różne czasy przetwarzania wiadomości</span>
+        <i class="ti ti-arrows-shuffle"></i>
+        <span>Eventy mogą zostać opublikowane w jednej kolejności, ale <strong>obsłużone w innej</strong></span>
       </li>
-      <li>
-        <i class="ti ti-refresh"></i>
-        <span>Retry pojedynczej wiadomości</span>
-      </li>
-      <li>
-        <i class="ti ti-network"></i>
-        <span>Opóźnienia sieciowe lub infrastrukturalne</span>
-      </li>
-      <li>
-        <i class="ti ti-plug-off"></i>
-        <span>Czasowa niedostępność zależności</span>
+      <li class="points-impact">
+        <i class="ti ti-alert-triangle"></i>
+        <span><strong>Przyczyny:</strong> wielu consumerów, retry, opóźnienia, różne instancje</span>
       </li>
     </ul>
   </div>
@@ -138,7 +115,7 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     position: relative;
     z-index: 5;
     width: 100%;
-    max-width: 1640px;
+    max-width: 1660px;
     padding: 36px 3rem 0;
     display: flex;
     flex-direction: column;
@@ -146,25 +123,36 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     text-align: center;
   }
 
-  .eyebrow {
-    margin: 0 0 14px;
-    font-size: 20px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 6px;
-    color: rgba(34, 211, 238, 0.78);
+  .header {
+    margin-bottom: 24px;
     opacity: 0;
     animation: fadeUp 0.8s ease-out 0.2s forwards;
   }
 
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
   .title {
-    font-size: 72px;
+    font-size: 82px;
     font-weight: 800;
     letter-spacing: -1px;
     line-height: 1.05;
-    margin: 0 0 32px;
-    opacity: 0;
-    animation: fadeUp 0.85s ease-out 0.35s forwards;
+    margin: 0 0 8px;
   }
 
   .title .highlight {
@@ -174,267 +162,307 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     background-clip: text;
   }
 
-  .lanes {
+  .flow {
     width: 100%;
-    max-width: 1500px;
-    padding: 24px 28px;
+    max-width: 1560px;
+    display: grid;
+    grid-template-columns: 1.05fr auto 0.85fr auto 1.25fr;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding: 26px 22px;
     background: rgba(17, 24, 39, 0.55);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(148, 163, 184, 0.22);
     border-radius: 20px;
     box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
-    margin-bottom: 28px;
     opacity: 0;
     animation: fadeUp 0.85s ease-out 0.55s forwards;
   }
 
-  .lanes-head {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 16px;
-    padding: 0 8px 14px;
-    border-bottom: 1px dashed rgba(148, 163, 184, 0.28);
-    margin-bottom: 12px;
-  }
-
-  .lanes-axis-label {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.85);
-  }
-
-  .lanes-axis-label--start {
-    text-align: left;
-  }
-
-  .lanes-axis-label--end {
-    text-align: right;
-  }
-
-  .lanes-axis-arrow {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: rgba(34, 211, 238, 0.55);
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-  }
-
-  .lane {
-    display: grid;
-    grid-template-columns: 80px 40px 200px 1fr;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 8px;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-  }
-
-  .lane:last-of-type {
-    border-bottom: none;
-  }
-
-  .lane-msg {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .msg-tag {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 68px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: rgba(34, 211, 238, 0.14);
-    border: 1px solid rgba(34, 211, 238, 0.55);
-    color: var(--cyan-400);
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 1px;
-  }
-
-  .lane-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .lane-arrow i {
-    font-size: 28px;
-    color: rgba(34, 211, 238, 0.65);
-  }
-
-  .lane-consumer {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    border-radius: 12px;
-    background: rgba(17, 24, 39, 0.55);
-    border: 1px solid rgba(148, 163, 184, 0.25);
-  }
-
-  .lane-consumer i {
-    font-size: 24px;
-    color: var(--cyan-400);
-  }
-
-  .lane-consumer span {
-    font-size: 20px;
-    font-weight: 700;
-    color: #e2e8f0;
-    letter-spacing: -0.2px;
-  }
-
-  .lane-track {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 44px;
-    background: rgba(10, 14, 23, 0.4);
-    border-radius: 10px;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    padding: 0 6px;
-  }
-
-  .lane-bar {
-    height: 24px;
-    border-radius: 8px;
-    background: linear-gradient(90deg, rgba(34, 211, 238, 0.55), rgba(34, 211, 238, 0.85));
-    box-shadow: 0 0 16px rgba(34, 211, 238, 0.25);
-  }
-
-  .lane-bar--short { width: 28%; }
-  .lane-bar--medium { width: 58%; }
-  .lane-bar--long { width: 88%; }
-
-  .lane-finish {
-    position: absolute;
-    top: -10px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #fff;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .lane-finish--1 {
-    left: 28%;
-    background: #4ade80;
-    color: #052e16;
-    transform: translateX(-50%);
-  }
-
-  .lane-finish--2 {
-    left: 58%;
-    background: #fbbf24;
-    color: #422006;
-    transform: translateX(-50%);
-  }
-
-  .lane-finish--3 {
-    left: 88%;
-    background: #f87171;
-    color: #450a0a;
-    transform: translateX(-50%);
-  }
-
-  .lanes-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 14px;
-    padding: 12px 18px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(127, 29, 29, 0.18), rgba(17, 24, 39, 0.6));
-    border: 1px solid rgba(248, 113, 113, 0.40);
-  }
-
-  .footer-label {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(248, 113, 113, 0.95);
-  }
-
-  .footer-seq {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .footer-seq code {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 20px;
-    font-weight: 800;
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: rgba(248, 113, 113, 0.16);
-    border: 1px solid rgba(248, 113, 113, 0.55);
-    color: #fecaca;
-  }
-
-  .footer-seq i {
-    font-size: 22px;
-    color: rgba(248, 113, 113, 0.85);
-  }
-
-  .causes {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    max-width: 1500px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 14px;
-    opacity: 0;
-    animation: fadeUp 0.9s ease-out 1.15s forwards;
-  }
-
-  .causes li {
+  .node {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    gap: 10px;
+    padding: 18px 14px;
+    min-height: 226px;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 16px;
+  }
+
+  .node-ic {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .node-ic i {
+    font-size: 36px;
+    color: var(--cyan-400);
+  }
+
+  .node h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
+    color: #f0f4f8;
+  }
+
+  .node-meta {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: rgba(148, 163, 184, 0.95);
+    letter-spacing: 0.5px;
+  }
+
+  .node--publisher {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.16), rgba(17, 24, 39, 0.55));
+    border-color: rgba(34, 197, 94, 0.42);
+  }
+
+  .node--publisher .node-ic {
+    background: rgba(34, 197, 94, 0.14);
+    border-color: rgba(74, 222, 128, 0.5);
+  }
+
+  .node--publisher .node-ic i { color: #4ade80; }
+
+  .node--queue {
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.20), rgba(17, 24, 39, 0.6));
+    border-color: rgba(34, 211, 238, 0.45);
+    box-shadow: 0 0 28px rgba(34, 211, 238, 0.14);
+  }
+
+  .consumers {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
     gap: 12px;
-    padding: 20px 14px;
+    align-self: stretch;
+  }
+
+  .node--consumer {
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    text-align: left;
+    flex-wrap: wrap;
+  }
+
+  .node--consumer .node-ic {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+  }
+
+  .node--consumer .node-ic i { font-size: 28px; }
+
+  .node--consumer h3 {
+    font-size: 20px;
+    margin-right: auto;
+  }
+
+  .node--consumer-a {
+    border-color: rgba(248, 113, 113, 0.42);
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .node--consumer-a .node-ic {
+    background: rgba(248, 113, 113, 0.14);
+    border-color: rgba(248, 113, 113, 0.5);
+  }
+
+  .node--consumer-a .node-ic i { color: #f87171; }
+
+  .node--consumer-b {
+    border-color: rgba(251, 191, 36, 0.42);
+    background: linear-gradient(135deg, rgba(120, 53, 15, 0.22), rgba(17, 24, 39, 0.6));
+  }
+
+  .node--consumer-b .node-ic {
+    background: rgba(251, 191, 36, 0.14);
+    border-color: rgba(251, 191, 36, 0.5);
+  }
+
+  .node--consumer-b .node-ic i { color: #fbbf24; }
+
+  .msg-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    background: rgba(2, 6, 23, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+  }
+
+  .msg-row--in {
+    margin-left: auto;
+  }
+
+  .msg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: #f8fafc;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .msg--one {
+    border-color: rgba(74, 222, 128, 0.55);
+    color: #bbf7d0;
+    background: rgba(20, 83, 45, 0.4);
+  }
+
+  .msg--two {
+    border-color: rgba(34, 211, 238, 0.5);
+    color: #a5f3fc;
+    background: rgba(8, 145, 178, 0.32);
+  }
+
+  .msg--three {
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fde68a;
+    background: rgba(120, 53, 15, 0.4);
+  }
+
+  .msg-arrow i {
+    font-size: 18px;
+    color: rgba(148, 163, 184, 0.85);
+  }
+
+  .msg-caption {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(226, 232, 240, 0.92);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .msg-caption strong {
+    color: #f8fafc;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 1px;
+  }
+
+  .msg-caption--bad {
+    color: #fecaca;
+  }
+
+  .msg-caption--bad strong {
+    color: #fecaca;
+  }
+
+  .conn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+  }
+
+  .conn i {
+    font-size: 34px;
+    color: rgba(34, 211, 238, 0.7);
+  }
+
+  .conn--split {
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .conn--split i:first-child { color: rgba(248, 113, 113, 0.7); }
+  .conn--split i:last-child { color: rgba(251, 191, 36, 0.7); }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1560px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.05s forwards;
+  }
+
+  .points li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
     background: rgba(17, 24, 39, 0.6);
     backdrop-filter: blur(6px);
     border: 1px solid rgba(148, 163, 184, 0.20);
     border-radius: 14px;
-    text-align: center;
-    min-height: 170px;
+    text-align: left;
   }
 
-  .causes li i {
-    width: 56px;
-    height: 56px;
+  .points li i {
+    width: 46px;
+    height: 46px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
+    border-radius: 12px;
     background: rgba(34, 211, 238, 0.12);
     border: 1px solid rgba(34, 211, 238, 0.42);
     color: var(--cyan-400);
-    font-size: 28px;
+    font-size: 24px;
   }
 
-  .causes li span {
-    font-size: 18px;
-    font-weight: 600;
+  .points li span {
+    font-size: 24px;
+    font-weight: 500;
     line-height: 1.3;
     color: #e2e8f0;
     letter-spacing: -0.2px;
+  }
+
+  .points li strong {
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .points-impact {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .points-impact i {
+    background: rgba(251, 191, 36, 0.16);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fbbf24;
+  }
+
+  .points-impact span {
+    color: #fff7ed;
+  }
+
+  .points-impact strong {
+    color: #fbbf24;
   }
 
   @media (max-width: 1300px) {
@@ -442,50 +470,27 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
       font-size: 54px;
     }
 
-    .lane {
-      grid-template-columns: 70px 30px 170px 1fr;
-      gap: 10px;
-    }
-
-    .msg-tag {
-      font-size: 18px;
-      min-width: 56px;
-    }
-
-    .lane-consumer span {
-      font-size: 17px;
-    }
-
-    .causes {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .causes li {
-      min-height: 130px;
-    }
-
-    .causes li span {
-      font-size: 18px;
-    }
-  }
-
-  @media (max-width: 900px) {
-    .lane {
+    .flow {
       grid-template-columns: 1fr;
-      gap: 10px;
+      gap: 14px;
     }
 
-    .lane-arrow {
+    .conn {
+      width: 100%;
       transform: rotate(90deg);
     }
 
-    .lanes-head {
-      display: none;
+    .conn--split {
+      flex-direction: row;
+      transform: none;
     }
 
-    .lanes-footer {
-      flex-direction: column;
-      gap: 10px;
+    .points {
+      grid-template-columns: 1fr;
+    }
+
+    .points li span {
+      font-size: 18px;
     }
   }
 
@@ -496,31 +501,36 @@ import SlideLayout from '../../../layouts/SlideLayout.astro';
     }
 
     .title {
-      font-size: 38px;
+      font-size: 40px;
     }
 
-    .eyebrow {
-      font-size: 16px;
-      letter-spacing: 4px;
+    .node h3 {
+      font-size: 20px;
     }
 
-    .causes {
-      grid-template-columns: 1fr;
+    .node--consumer {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
-    .causes li {
-      flex-direction: row;
-      align-items: center;
-      text-align: left;
-      gap: 16px;
-      min-height: 0;
+    .msg-row--in {
+      margin-left: 0;
+    }
+
+    .points li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
       padding: 14px 16px;
     }
 
-    .causes li i {
-      width: 44px;
-      height: 44px;
+    .points li i {
+      width: 40px;
+      height: 40px;
       font-size: 22px;
+    }
+
+    .points li span {
+      font-size: 17px;
     }
   }
 </style>
