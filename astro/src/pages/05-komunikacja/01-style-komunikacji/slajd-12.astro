@@ -1,0 +1,580 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 12 - Idempotentna logika biznesowa"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="logicGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.06)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="logicGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#logicGrid)"/>
+    <circle cx="960" cy="540" r="520" fill="url(#logicGlow)"/>
+  </svg>
+
+  <div class="content">
+    <p class="eyebrow">Wzorzec #3</p>
+
+    <h1 class="title">
+      Idempotentna <span class="highlight">logika biznesowa</span>
+    </h1>
+
+    <section class="compare" aria-label="Porównanie podejść">
+      <article class="row row--bad">
+        <header class="row-head">
+          <span class="row-tag row-tag--bad">Nieidempotentne</span>
+          <i class="ti ti-x"></i>
+        </header>
+        <div class="equation">
+          <code class="token">execute</code>
+          <span class="op">+</span>
+          <code class="token">execute</code>
+          <span class="op op--eq">=</span>
+          <span class="result result--bad">double effect</span>
+        </div>
+      </article>
+
+      <article class="row row--good">
+        <header class="row-head">
+          <span class="row-tag row-tag--good">Idempotentne</span>
+          <i class="ti ti-check"></i>
+        </header>
+        <div class="equation">
+          <code class="token">execute</code>
+          <span class="op">+</span>
+          <code class="token">execute</code>
+          <span class="op op--eq">=</span>
+          <span class="result result--good">same final state</span>
+        </div>
+      </article>
+    </section>
+
+    <div class="grid">
+      <ul class="rules" aria-label="Zasady">
+        <li>
+          <i class="ti ti-rotate-clockwise"></i>
+          <span>Handler może zostać wykonany <strong>kilka razy</strong></span>
+        </li>
+        <li>
+          <i class="ti ti-equal"></i>
+          <span>Końcowy stan systemu pozostaje <strong>taki sam</strong></span>
+        </li>
+      </ul>
+
+      <article class="approaches">
+        <header class="approaches-head">
+          <i class="ti ti-tools"></i>
+          <h2>Przykładowe podejścia</h2>
+        </header>
+        <ul class="approaches-list">
+          <li>
+            <code>upsert</code>
+            <span>zamiast <code>insert</code></span>
+          </li>
+          <li>
+            <span>ustawienie <strong>statusu</strong> zamiast dodawania kolejnego efektu</span>
+          </li>
+          <li>
+            <span>logika <strong>odporna na powtórzenia</strong></span>
+          </li>
+        </ul>
+      </article>
+    </div>
+
+    <aside class="goal" aria-label="Cel">
+      <i class="ti ti-target"></i>
+      <div class="goal-body">
+        <p class="goal-eyebrow">Cel</p>
+        <p class="goal-main">
+          Brak <span class="accent">dodatkowych skutków ubocznych</span> przy duplikacie
+        </p>
+      </div>
+    </aside>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 36px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 14px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: rgba(34, 211, 238, 0.78);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .title {
+    font-size: 74px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 36px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.35s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .compare {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 22px 28px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.30);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out forwards;
+  }
+
+  .compare > .row:nth-child(1) { animation-delay: 0.55s; }
+  .compare > .row:nth-child(2) { animation-delay: 0.8s; }
+
+  .row--bad {
+    border-color: rgba(248, 113, 113, 0.45);
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .row--good {
+    border-color: rgba(34, 197, 94, 0.45);
+    background: linear-gradient(135deg, rgba(20, 83, 45, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .row-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .row-tag {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .row-tag--bad {
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #fecaca;
+  }
+
+  .row-tag--good {
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #d1fae5;
+  }
+
+  .row-head i {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 26px;
+    font-weight: 800;
+  }
+
+  .row--bad .row-head i {
+    background: rgba(248, 113, 113, 0.18);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #f87171;
+  }
+
+  .row--good .row-head i {
+    background: rgba(34, 197, 94, 0.18);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #4ade80;
+  }
+
+  .equation {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .equation .token {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 26px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(10, 14, 23, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.30);
+    color: #e2e8f0;
+  }
+
+  .equation .op {
+    font-size: 28px;
+    font-weight: 800;
+    color: rgba(148, 163, 184, 0.85);
+  }
+
+  .equation .op--eq {
+    font-size: 34px;
+    color: rgba(226, 232, 240, 0.95);
+  }
+
+  .equation .result {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    padding: 8px 16px;
+    border-radius: 10px;
+  }
+
+  .result--bad {
+    color: #fecaca;
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+  }
+
+  .result--good {
+    color: #d1fae5;
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+  }
+
+  .grid {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 22px;
+    margin-bottom: 28px;
+  }
+
+  .rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.05s forwards;
+  }
+
+  .rules li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .rules li i {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 24px;
+  }
+
+  .rules li span {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .rules li strong {
+    color: var(--cyan-400);
+    font-weight: 800;
+  }
+
+  .approaches {
+    padding: 22px 26px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.16), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    border-radius: 16px;
+    box-shadow: 0 18px 48px rgba(8, 145, 178, 0.18);
+    text-align: left;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.2s forwards;
+  }
+
+  .approaches-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(34, 211, 238, 0.28);
+  }
+
+  .approaches-head i {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.16);
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    color: var(--cyan-400);
+    font-size: 24px;
+  }
+
+  .approaches-head h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #e2f6ff;
+  }
+
+  .approaches-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .approaches-list li {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    font-size: 20px;
+    line-height: 1.3;
+    color: #e2e8f0;
+  }
+
+  .approaches-list code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 8px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+  }
+
+  .approaches-list strong {
+    color: var(--cyan-400);
+    font-weight: 800;
+  }
+
+  .goal {
+    width: auto;
+    max-width: 1400px;
+    display: inline-flex;
+    gap: 22px;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding: 22px 30px;
+    background: linear-gradient(135deg, rgba(20, 83, 45, 0.22), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(34, 197, 94, 0.50);
+    border-radius: 16px;
+    box-shadow: 0 18px 48px rgba(20, 83, 45, 0.22);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.4s forwards;
+  }
+
+  .goal > i {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #4ade80;
+    flex-shrink: 0;
+  }
+
+  .goal-body {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .goal-eyebrow {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(74, 222, 128, 0.85);
+  }
+
+  .goal-main {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #d1fae5;
+  }
+
+  .goal-main .accent {
+    color: #4ade80;
+    font-weight: 800;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 56px;
+    }
+
+    .row {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .equation {
+      font-size: 22px;
+    }
+
+    .equation .token,
+    .equation .result {
+      font-size: 22px;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .rules li span {
+      font-size: 20px;
+    }
+
+    .goal-main {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 38px;
+    }
+
+    .eyebrow {
+      font-size: 16px;
+      letter-spacing: 4px;
+    }
+
+    .equation {
+      gap: 8px;
+    }
+
+    .equation .token {
+      font-size: 18px;
+      padding: 6px 10px;
+    }
+
+    .equation .result {
+      font-size: 18px;
+    }
+
+    .rules li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .rules li i {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+
+    .rules li span {
+      font-size: 18px;
+    }
+
+    .approaches-list li {
+      font-size: 18px;
+    }
+  }
+</style>

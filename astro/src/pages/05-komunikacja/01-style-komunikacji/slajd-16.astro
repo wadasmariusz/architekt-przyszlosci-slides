@@ -1,0 +1,474 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 16 - Konsekwencje out-of-order"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.82), rgba(10,14,23,0.92))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="ooGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="ooGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="65%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#ooGrid)"/>
+    <circle cx="960" cy="540" r="560" fill="url(#ooGlow)"/>
+  </svg>
+
+  <div class="content">
+    <p class="eyebrow">Podsumowanie</p>
+
+    <h1 class="title">
+      Konsekwencje <span class="highlight">out-of-order</span>
+    </h1>
+
+    <ul class="consequences" aria-label="Konsekwencje out-of-order">
+      <li>
+        <i class="ti ti-clock-pause"></i>
+        <span>Zdarzenia mogą dotrzeć <strong>później</strong> niż zdarzenia od nich zależne</span>
+      </li>
+      <li>
+        <i class="ti ti-eye-off"></i>
+        <span>Różne instancje consumerów mogą widzieć <strong>różne fragmenty procesu</strong></span>
+      </li>
+      <li>
+        <i class="ti ti-arrow-bear-right"></i>
+        <span>Retry może <strong>przesunąć starsze zdarzenie</strong> na koniec</span>
+      </li>
+      <li>
+        <i class="ti ti-affiliate"></i>
+        <span>Model domenowy musi uwzględniać <strong>brak globalnej kolejności</strong></span>
+      </li>
+    </ul>
+
+    <section class="pillars" aria-label="Dwa filary lekcji">
+      <header class="pillars-head">
+        <span class="pillars-eyebrow">Dwa filary asynchroniczności</span>
+      </header>
+
+      <div class="pillars-grid">
+        <article class="pillar pillar--dup">
+          <div class="pillar-ic"><i class="ti ti-copy"></i></div>
+          <div class="pillar-body">
+            <span class="pillar-cause">At-least-once</span>
+            <span class="pillar-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></span>
+            <span class="pillar-effect">duplikaty</span>
+          </div>
+        </article>
+
+        <article class="pillar pillar--ooo">
+          <div class="pillar-ic"><i class="ti ti-arrows-shuffle"></i></div>
+          <div class="pillar-body">
+            <span class="pillar-cause">Brak globalnej kolejności</span>
+            <span class="pillar-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></span>
+            <span class="pillar-effect">out-of-order</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <aside class="closing" aria-label="Adnotacja końcowa">
+      <i class="ti ti-blockquote"></i>
+      <div class="closing-body">
+        <p class="closing-eyebrow">Adnotacja końcowa</p>
+        <p class="closing-main">
+          Asynchroniczność wymaga projektowania pod <span class="accent">duplikaty</span> i <span class="accent">nieuporządkowane dostarczenie</span>
+        </p>
+      </div>
+    </aside>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 36px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 14px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: rgba(34, 211, 238, 0.78);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 36px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.35s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .consequences {
+    list-style: none;
+    margin: 0 0 36px;
+    padding: 0;
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 22px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.55s forwards;
+  }
+
+  .consequences li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .consequences li i {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 24px;
+  }
+
+  .consequences li span {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .consequences li strong {
+    color: var(--cyan-400);
+    font-weight: 800;
+  }
+
+  .pillars {
+    width: 100%;
+    max-width: 1500px;
+    margin-bottom: 28px;
+    padding: 24px 28px 28px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.16), rgba(17, 24, 39, 0.65));
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(8, 145, 178, 0.22);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.9s forwards;
+  }
+
+  .pillars-head {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed rgba(34, 211, 238, 0.35);
+  }
+
+  .pillars-eyebrow {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(34, 211, 238, 0.85);
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+
+  .pillar {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+    gap: 22px;
+    padding: 22px 26px;
+    border-radius: 16px;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    text-align: left;
+  }
+
+  .pillar--dup {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: linear-gradient(135deg, rgba(180, 83, 9, 0.20), rgba(17, 24, 39, 0.6));
+  }
+
+  .pillar--ooo {
+    border-color: rgba(248, 113, 113, 0.45);
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.22), rgba(17, 24, 39, 0.6));
+  }
+
+  .pillar-ic {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+  }
+
+  .pillar-ic i {
+    font-size: 36px;
+  }
+
+  .pillar--dup .pillar-ic {
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.55);
+  }
+
+  .pillar--dup .pillar-ic i {
+    color: #fbbf24;
+  }
+
+  .pillar--ooo .pillar-ic {
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+  }
+
+  .pillar--ooo .pillar-ic i {
+    color: #f87171;
+  }
+
+  .pillar-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pillar-cause {
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(226, 232, 240, 0.95);
+    letter-spacing: -0.2px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .pillar-arrow {
+    color: rgba(148, 163, 184, 0.65);
+    line-height: 1;
+  }
+
+  .pillar-arrow i {
+    font-size: 24px;
+    transform: rotate(90deg);
+    display: inline-block;
+  }
+
+  .pillar-effect {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.05;
+  }
+
+  .pillar--dup .pillar-effect {
+    color: #fff7ed;
+  }
+
+  .pillar--ooo .pillar-effect {
+    color: #fecaca;
+  }
+
+  .closing {
+    width: auto;
+    max-width: 1500px;
+    display: inline-flex;
+    gap: 22px;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding: 24px 32px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.65));
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    border-radius: 16px;
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.06), 0 20px 52px rgba(8, 145, 178, 0.24);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.2s forwards;
+  }
+
+  .closing > i {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.16);
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--cyan-400);
+    flex-shrink: 0;
+  }
+
+  .closing-body {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .closing-eyebrow {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(34, 211, 238, 0.85);
+  }
+
+  .closing-main {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #e2f6ff;
+    letter-spacing: -0.2px;
+  }
+
+  .closing-main .accent {
+    color: var(--cyan-400);
+    font-weight: 800;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 56px;
+    }
+
+    .consequences {
+      grid-template-columns: 1fr;
+    }
+
+    .consequences li span {
+      font-size: 20px;
+    }
+
+    .pillars-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pillar-effect {
+      font-size: 26px;
+    }
+
+    .closing-main {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 40px;
+    }
+
+    .eyebrow {
+      font-size: 16px;
+      letter-spacing: 4px;
+    }
+
+    .consequences li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .consequences li i {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+
+    .consequences li span {
+      font-size: 18px;
+    }
+
+    .pillar {
+      grid-template-columns: 60px 1fr;
+      gap: 14px;
+      padding: 18px 20px;
+    }
+
+    .pillar-ic {
+      width: 56px;
+      height: 56px;
+    }
+
+    .pillar-ic i {
+      font-size: 28px;
+    }
+
+    .pillar-cause {
+      font-size: 18px;
+    }
+
+    .pillar-effect {
+      font-size: 22px;
+    }
+
+    .closing > i {
+      width: 50px;
+      height: 50px;
+      font-size: 26px;
+    }
+
+    .closing-main {
+      font-size: 18px;
+    }
+  }
+</style>

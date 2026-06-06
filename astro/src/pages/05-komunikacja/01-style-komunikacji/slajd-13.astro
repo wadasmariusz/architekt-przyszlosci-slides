@@ -1,0 +1,482 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 13 - Drugie wyzwanie: kolejność"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.84), rgba(10,14,23,0.94))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="orderGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="orderGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.20"/>
+        <stop offset="65%" stop-color="#22d3ee" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#orderGrid)"/>
+    <circle cx="960" cy="540" r="560" fill="url(#orderGlow)"/>
+  </svg>
+
+  <div class="content">
+    <p class="eyebrow">
+      <span class="eyebrow-num">Część 2</span>
+      <span class="eyebrow-sep" aria-hidden="true">·</span>
+      <span>Nowy segment</span>
+    </p>
+
+    <h1 class="title">
+      <span class="title-main">Drugie wyzwanie:</span>
+      <span class="title-sub"><span class="highlight">kolejność</span></span>
+    </h1>
+
+    <section class="manifesto" aria-label="Główna teza">
+      <div class="queue-vis" aria-hidden="true">
+        <div class="queue-box">
+          <i class="ti ti-list-numbers"></i>
+        </div>
+        <div class="queue-tickets">
+          <span class="ticket">M3</span>
+          <span class="ticket">M1</span>
+          <span class="ticket">M2</span>
+        </div>
+      </div>
+
+      <div class="equation">
+        <span class="eq-side eq-side--left">
+          <span class="eq-label">Delivery</span>
+          <span class="eq-value">order</span>
+        </span>
+        <span class="eq-symbol">≠</span>
+        <span class="eq-side eq-side--right">
+          <span class="eq-label">Processing</span>
+          <span class="eq-value">order</span>
+        </span>
+      </div>
+    </section>
+
+    <ul class="points" aria-label="Tezy slajdu">
+      <li>
+        <i class="ti ti-arrows-shuffle"></i>
+        <span>Broker nie musi gwarantować <strong>globalnej kolejności</strong> przetwarzania</span>
+      </li>
+      <li>
+        <i class="ti ti-arrow-bounce"></i>
+        <span>Kolejność publikacji nie zawsze oznacza kolejność obsługi</span>
+      </li>
+      <li>
+        <i class="ti ti-alert-triangle"></i>
+        <span>Problem ujawnia się szczególnie przy <strong>wielu consumerach, retry i opóźnieniach</strong></span>
+      </li>
+      <li class="points-rule">
+        <i class="ti ti-compass"></i>
+        <span><strong>Architekt</strong> musi określić, gdzie kolejność jest wymagana biznesowo</span>
+      </li>
+    </ul>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: center;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 40px 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: rgba(34, 211, 238, 0.78);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .eyebrow-num {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    color: var(--cyan-400);
+    font-weight: 800;
+    letter-spacing: 3px;
+  }
+
+  .eyebrow-sep {
+    color: rgba(148, 163, 184, 0.55);
+  }
+
+  .title {
+    font-size: 92px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 52px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.35s forwards;
+  }
+
+  .title-main,
+  .title-sub {
+    display: block;
+  }
+
+  .title-sub {
+    margin-top: 4px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .manifesto {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 36px;
+    margin-bottom: 56px;
+    padding: 36px 40px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(34, 211, 238, 0.40);
+    border-radius: 22px;
+    box-shadow: 0 28px 70px rgba(8, 145, 178, 0.20);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.6s forwards;
+  }
+
+  .queue-vis {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .queue-box {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 32px rgba(34, 211, 238, 0.25);
+  }
+
+  .queue-box i {
+    font-size: 56px;
+    color: var(--cyan-400);
+  }
+
+  .queue-tickets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ticket {
+    padding: 8px 16px;
+    border-radius: 10px;
+    background: rgba(10, 14, 23, 0.75);
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    color: #e2e8f0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .ticket:nth-child(1) {
+    transform: translateX(-6px);
+    opacity: 0.85;
+  }
+
+  .ticket:nth-child(2) {
+    transform: translateX(8px);
+    border-color: rgba(34, 211, 238, 0.55);
+    color: var(--cyan-400);
+  }
+
+  .ticket:nth-child(3) {
+    transform: translateX(-4px);
+    opacity: 0.85;
+  }
+
+  .equation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .eq-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 18px 30px;
+    border-radius: 16px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+
+  .eq-side--left {
+    border-color: rgba(34, 197, 94, 0.40);
+    background: linear-gradient(135deg, rgba(20, 83, 45, 0.22), rgba(17, 24, 39, 0.55));
+  }
+
+  .eq-side--right {
+    border-color: rgba(248, 113, 113, 0.45);
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.20), rgba(17, 24, 39, 0.55));
+  }
+
+  .eq-label {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.85);
+  }
+
+  .eq-side--left .eq-label {
+    color: rgba(74, 222, 128, 0.85);
+  }
+
+  .eq-side--right .eq-label {
+    color: rgba(248, 113, 113, 0.85);
+  }
+
+  .eq-value {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #f0f4f8;
+    line-height: 1;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .eq-side--left .eq-value {
+    color: #d1fae5;
+  }
+
+  .eq-side--right .eq-value {
+    color: #fecaca;
+  }
+
+  .eq-symbol {
+    font-size: 80px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--cyan-400);
+    text-shadow:
+      0 0 28px rgba(34, 211, 238, 0.55),
+      0 0 56px rgba(34, 211, 238, 0.25);
+    animation: pulseSymbol 2.2s ease-in-out infinite;
+  }
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1400px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 22px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 0.95s forwards;
+  }
+
+  .points li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .points li i {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 24px;
+  }
+
+  .points li span {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .points li strong {
+    color: var(--cyan-400);
+    font-weight: 800;
+  }
+
+  .points-rule {
+    grid-column: 1 / -1;
+    border-color: rgba(34, 211, 238, 0.55);
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(17, 24, 39, 0.62));
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.05);
+  }
+
+  .points-rule i {
+    background: rgba(34, 211, 238, 0.18);
+    border-color: rgba(34, 211, 238, 0.55);
+  }
+
+  .points-rule span {
+    color: #e2f6ff;
+    font-size: 24px;
+  }
+
+  @keyframes pulseSymbol {
+    0%, 100% {
+      text-shadow:
+        0 0 28px rgba(34, 211, 238, 0.55),
+        0 0 56px rgba(34, 211, 238, 0.25);
+    }
+    50% {
+      text-shadow:
+        0 0 42px rgba(34, 211, 238, 0.80),
+        0 0 78px rgba(34, 211, 238, 0.35);
+    }
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 60px;
+    }
+
+    .manifesto {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 24px 22px;
+    }
+
+    .equation {
+      gap: 18px;
+    }
+
+    .eq-value {
+      font-size: 32px;
+    }
+
+    .eq-symbol {
+      font-size: 56px;
+    }
+
+    .points {
+      grid-template-columns: 1fr;
+    }
+
+    .points li span {
+      font-size: 20px;
+    }
+
+    .points-rule span {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 40px;
+    }
+
+    .eyebrow {
+      font-size: 14px;
+      letter-spacing: 3px;
+    }
+
+    .queue-box {
+      width: 80px;
+      height: 80px;
+    }
+
+    .queue-box i {
+      font-size: 42px;
+    }
+
+    .eq-value {
+      font-size: 26px;
+    }
+
+    .eq-symbol {
+      font-size: 44px;
+    }
+
+    .points li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .points li i {
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+
+    .points li span {
+      font-size: 18px;
+    }
+  }
+</style>

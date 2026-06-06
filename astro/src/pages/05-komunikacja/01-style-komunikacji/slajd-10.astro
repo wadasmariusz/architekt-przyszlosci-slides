@@ -1,0 +1,549 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 10 - Deduplication store"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="dedupGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="dedupGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.18"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#dedupGrid)"/>
+    <circle cx="960" cy="540" r="520" fill="url(#dedupGlow)"/>
+  </svg>
+
+  <div class="content">
+    <div class="header">
+      <span class="level-chip"><i class="ti ti-database-search"></i>Wzorzec #1</span>
+      <h1 class="title">
+        Deduplication <span class="highlight">store</span>
+      </h1>
+    </div>
+
+    <section class="decision" aria-label="Diagram decyzyjny">
+      <article class="dec-node dec-receive">
+        <div class="dec-ic"><i class="ti ti-mail-forward"></i></div>
+        <h3>Receive message</h3>
+        <span class="dec-meta">Message ID</span>
+      </article>
+
+      <div class="dec-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="dec-node dec-check">
+        <div class="dec-ic"><i class="ti ti-database-search"></i></div>
+        <h3>Check</h3>
+        <span class="dec-meta">processed_messages</span>
+      </article>
+
+      <div class="dec-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+
+      <article class="dec-diamond" aria-label="Decyzja">
+        <div class="diamond-inner">
+          <span class="diamond-q">Seen?</span>
+        </div>
+      </article>
+
+      <div class="dec-branches" aria-label="Gałęzie decyzji">
+        <div class="branch branch--yes">
+          <span class="branch-tag">tak</span>
+          <article class="branch-node branch-node--skip">
+            <div class="dec-ic"><i class="ti ti-arrow-bear-right-2"></i></div>
+            <h3>Skip</h3>
+            <span class="dec-meta">brak efektu ubocznego</span>
+          </article>
+        </div>
+
+        <div class="branch branch--no">
+          <span class="branch-tag">nie</span>
+          <article class="branch-node branch-node--process">
+            <div class="dec-ic"><i class="ti ti-player-play"></i></div>
+            <h3>Process</h3>
+            <span class="dec-meta">+ zapisz Message ID</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <ul class="steps" aria-label="Mechanizm deduplikacji">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-text">Każda wiadomość ma unikalne <strong>Message ID</strong></span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-text">Handler sprawdza, czy Message ID było już przetworzone</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-text">Jeśli tak, to pomija ponowne wykonanie efektu ubocznego</span>
+      </li>
+      <li>
+        <span class="step-num">4</span>
+        <span class="step-text">Jeśli nie było, to przetwarza wiadomość i zapisuje Message ID jako obsłużone</span>
+      </li>
+    </ul>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 36px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .level-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    color: var(--cyan-400);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .level-chip i { font-size: 18px; }
+
+  .title {
+    font-size: 76px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .decision {
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto auto auto 1fr;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+    padding: 28px 22px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
+  }
+
+  .dec-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 12px;
+    min-height: 180px;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 16px;
+  }
+
+  .dec-ic {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dec-ic i {
+    font-size: 32px;
+    color: var(--cyan-400);
+  }
+
+  .dec-node h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
+    color: #f0f4f8;
+  }
+
+  .dec-meta {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(203, 213, 225, 0.78);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.3px;
+  }
+
+  .dec-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+  }
+
+  .dec-arrow i {
+    font-size: 32px;
+    color: rgba(34, 211, 238, 0.65);
+  }
+
+  .dec-diamond {
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(45deg);
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.30), rgba(17, 24, 39, 0.7));
+    border: 1.5px solid rgba(34, 211, 238, 0.55);
+    border-radius: 16px;
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.06), 0 18px 40px rgba(8, 145, 178, 0.25);
+  }
+
+  .diamond-inner {
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .diamond-q {
+    font-size: 26px;
+    font-weight: 800;
+    color: #e2f6ff;
+    letter-spacing: -0.4px;
+  }
+
+  .dec-branches {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .branch {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .branch-tag {
+    width: 56px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .branch--yes .branch-tag {
+    background: rgba(148, 163, 184, 0.18);
+    border: 1px solid rgba(148, 163, 184, 0.50);
+    color: rgba(203, 213, 225, 0.95);
+  }
+
+  .branch--no .branch-tag {
+    background: rgba(34, 197, 94, 0.18);
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #4ade80;
+  }
+
+  .branch-node {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .branch-node .dec-ic {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .branch-node .dec-ic i {
+    font-size: 26px;
+  }
+
+  .branch-node h3 {
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .branch-node .dec-meta {
+    grid-column: 2;
+    font-size: 13px;
+  }
+
+  .branch-node--skip {
+    background: rgba(148, 163, 184, 0.10);
+    border: 1px solid rgba(148, 163, 184, 0.32);
+  }
+
+  .branch-node--skip .dec-ic {
+    background: rgba(148, 163, 184, 0.16);
+    border-color: rgba(148, 163, 184, 0.45);
+  }
+
+  .branch-node--skip .dec-ic i {
+    color: rgba(203, 213, 225, 0.85);
+  }
+
+  .branch-node--skip h3 {
+    color: rgba(226, 232, 240, 0.85);
+  }
+
+  .branch-node--process {
+    background: linear-gradient(135deg, rgba(20, 83, 45, 0.22), rgba(17, 24, 39, 0.6));
+    border: 1px solid rgba(34, 197, 94, 0.50);
+    box-shadow: 0 12px 30px rgba(34, 197, 94, 0.18);
+  }
+
+  .branch-node--process .dec-ic {
+    background: rgba(34, 197, 94, 0.16);
+    border-color: rgba(34, 197, 94, 0.55);
+  }
+
+  .branch-node--process .dec-ic i {
+    color: #4ade80;
+  }
+
+  .branch-node--process h3 {
+    color: #d1fae5;
+  }
+
+  .steps {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 22px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.2s forwards;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: left;
+  }
+
+  .step-num {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 22px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .step-text {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .step-text strong {
+    color: var(--cyan-400);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .note {
+    width: auto;
+    max-width: 1400px;
+    display: inline-flex;
+    gap: 22px;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding: 22px 30px;
+    background: linear-gradient(135deg, rgba(8, 145, 178, 0.20), rgba(17, 24, 39, 0.62));
+    border: 1px solid rgba(34, 211, 238, 0.50);
+    border-radius: 16px;
+    box-shadow: 0 18px 48px rgba(8, 145, 178, 0.20);
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.4s forwards;
+  }
+
+  .note > i {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: var(--cyan-400);
+    flex-shrink: 0;
+  }
+
+  .note-body {
+    text-align: left;
+  }
+
+  .note-main {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #e2f6ff;
+  }
+
+  .note-main .accent {
+    color: var(--cyan-400);
+    font-weight: 800;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 56px;
+    }
+
+    .decision {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .dec-arrow {
+      width: 100%;
+      transform: rotate(90deg);
+    }
+
+    .dec-diamond {
+      width: 110px;
+      height: 110px;
+      justify-self: center;
+    }
+
+    .diamond-q {
+      font-size: 22px;
+    }
+
+    .steps {
+      grid-template-columns: 1fr;
+    }
+
+    .step-text {
+      font-size: 20px;
+    }
+
+    .note-main {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 40px;
+    }
+
+    .eyebrow {
+      font-size: 16px;
+      letter-spacing: 4px;
+    }
+
+    .dec-node h3 {
+      font-size: 20px;
+    }
+
+    .steps li {
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
+
+    .step-text {
+      font-size: 18px;
+    }
+  }
+</style>

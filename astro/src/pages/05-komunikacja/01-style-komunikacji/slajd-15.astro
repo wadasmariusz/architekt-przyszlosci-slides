@@ -1,0 +1,526 @@
+---
+import SlideLayout from '../../../layouts/SlideLayout.astro';
+---
+<SlideLayout
+  title="Slajd 15 - Skąd bierze się zmiana kolejności"
+  bgImage="/images/background-3.jpg"
+  bgOverlay="linear-gradient(rgba(10,14,23,0.80), rgba(10,14,23,0.90))"
+>
+  <svg class="bg-deco" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="srcGrid" width="86" height="86" patternUnits="userSpaceOnUse">
+        <path d="M 86 0 L 0 0 0 86" fill="none" stroke="rgba(34,211,238,0.07)" stroke-width="1"/>
+      </pattern>
+      <radialGradient id="srcGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.16"/>
+        <stop offset="68%" stop-color="#22d3ee" stop-opacity="0.04"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1920" height="1080" fill="url(#srcGrid)"/>
+    <circle cx="960" cy="540" r="520" fill="url(#srcGlow)"/>
+  </svg>
+
+  <div class="content">
+    <p class="eyebrow">Mechanizmy techniczne</p>
+
+    <h1 class="title">
+      Skąd bierze się <span class="highlight">zmiana kolejności</span>
+    </h1>
+
+    <section class="lanes" aria-label="Diagram wiadomości i consumerów">
+      <header class="lanes-head">
+        <span class="lanes-axis-label lanes-axis-label--start">publikacja</span>
+        <span class="lanes-axis-arrow" aria-hidden="true">———————————— czas ————————————</span>
+        <span class="lanes-axis-label lanes-axis-label--end">zakończenie</span>
+      </header>
+
+      <article class="lane">
+        <div class="lane-msg">
+          <span class="msg-tag">M1</span>
+        </div>
+        <div class="lane-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+        <div class="lane-consumer">
+          <i class="ti ti-cpu"></i>
+          <span>Consumer A</span>
+        </div>
+        <div class="lane-track">
+          <div class="lane-bar lane-bar--long"></div>
+          <span class="lane-finish lane-finish--3">finish 3</span>
+        </div>
+      </article>
+
+      <article class="lane">
+        <div class="lane-msg">
+          <span class="msg-tag">M2</span>
+        </div>
+        <div class="lane-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+        <div class="lane-consumer">
+          <i class="ti ti-cpu"></i>
+          <span>Consumer B</span>
+        </div>
+        <div class="lane-track">
+          <div class="lane-bar lane-bar--short"></div>
+          <span class="lane-finish lane-finish--1">finish 1</span>
+        </div>
+      </article>
+
+      <article class="lane">
+        <div class="lane-msg">
+          <span class="msg-tag">M3</span>
+        </div>
+        <div class="lane-arrow" aria-hidden="true"><i class="ti ti-arrow-right"></i></div>
+        <div class="lane-consumer">
+          <i class="ti ti-cpu"></i>
+          <span>Consumer C</span>
+        </div>
+        <div class="lane-track">
+          <div class="lane-bar lane-bar--medium"></div>
+          <span class="lane-finish lane-finish--2">finish 2</span>
+        </div>
+      </article>
+
+      <footer class="lanes-footer">
+        <span class="footer-label">Kolejność efektów:</span>
+        <span class="footer-seq">
+          <code>M2</code>
+          <i class="ti ti-arrow-right"></i>
+          <code>M3</code>
+          <i class="ti ti-arrow-right"></i>
+          <code>M1</code>
+        </span>
+      </footer>
+    </section>
+
+    <ul class="causes" aria-label="Przyczyny zmiany kolejności">
+      <li>
+        <i class="ti ti-stack-2"></i>
+        <span>Równoległe instancje consumerów</span>
+      </li>
+      <li>
+        <i class="ti ti-clock-hour-4"></i>
+        <span>Różne czasy przetwarzania wiadomości</span>
+      </li>
+      <li>
+        <i class="ti ti-refresh"></i>
+        <span>Retry pojedynczej wiadomości</span>
+      </li>
+      <li>
+        <i class="ti ti-network"></i>
+        <span>Opóźnienia sieciowe lub infrastrukturalne</span>
+      </li>
+      <li>
+        <i class="ti ti-plug-off"></i>
+        <span>Czasowa niedostępność zależności</span>
+      </li>
+    </ul>
+  </div>
+</SlideLayout>
+
+<style is:global>
+  .stage {
+    justify-content: flex-start;
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 0.2s forwards;
+  }
+
+  .content {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 1640px;
+    padding: 36px 3rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 14px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: rgba(34, 211, 238, 0.78);
+    opacity: 0;
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin: 0 0 32px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.35s forwards;
+  }
+
+  .title .highlight {
+    background: linear-gradient(135deg, var(--cyan-400), var(--cyan-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .lanes {
+    width: 100%;
+    max-width: 1500px;
+    padding: 24px 28px;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.32);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.85s ease-out 0.55s forwards;
+  }
+
+  .lanes-head {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 0 8px 14px;
+    border-bottom: 1px dashed rgba(148, 163, 184, 0.28);
+    margin-bottom: 12px;
+  }
+
+  .lanes-axis-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.85);
+  }
+
+  .lanes-axis-label--start {
+    text-align: left;
+  }
+
+  .lanes-axis-label--end {
+    text-align: right;
+  }
+
+  .lanes-axis-arrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgba(34, 211, 238, 0.55);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .lane {
+    display: grid;
+    grid-template-columns: 80px 40px 200px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .lane:last-of-type {
+    border-bottom: none;
+  }
+
+  .lane-msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .msg-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 68px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, 0.14);
+    border: 1px solid rgba(34, 211, 238, 0.55);
+    color: var(--cyan-400);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  .lane-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lane-arrow i {
+    font-size: 28px;
+    color: rgba(34, 211, 238, 0.65);
+  }
+
+  .lane-consumer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: rgba(17, 24, 39, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+
+  .lane-consumer i {
+    font-size: 24px;
+    color: var(--cyan-400);
+  }
+
+  .lane-consumer span {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  .lane-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 44px;
+    background: rgba(10, 14, 23, 0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    padding: 0 6px;
+  }
+
+  .lane-bar {
+    height: 24px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.55), rgba(34, 211, 238, 0.85));
+    box-shadow: 0 0 16px rgba(34, 211, 238, 0.25);
+  }
+
+  .lane-bar--short { width: 28%; }
+  .lane-bar--medium { width: 58%; }
+  .lane-bar--long { width: 88%; }
+
+  .lane-finish {
+    position: absolute;
+    top: -10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lane-finish--1 {
+    left: 28%;
+    background: #4ade80;
+    color: #052e16;
+    transform: translateX(-50%);
+  }
+
+  .lane-finish--2 {
+    left: 58%;
+    background: #fbbf24;
+    color: #422006;
+    transform: translateX(-50%);
+  }
+
+  .lane-finish--3 {
+    left: 88%;
+    background: #f87171;
+    color: #450a0a;
+    transform: translateX(-50%);
+  }
+
+  .lanes-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 14px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(127, 29, 29, 0.18), rgba(17, 24, 39, 0.6));
+    border: 1px solid rgba(248, 113, 113, 0.40);
+  }
+
+  .footer-label {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(248, 113, 113, 0.95);
+  }
+
+  .footer-seq {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-seq code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 20px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(248, 113, 113, 0.16);
+    border: 1px solid rgba(248, 113, 113, 0.55);
+    color: #fecaca;
+  }
+
+  .footer-seq i {
+    font-size: 22px;
+    color: rgba(248, 113, 113, 0.85);
+  }
+
+  .causes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease-out 1.15s forwards;
+  }
+
+  .causes li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 20px 14px;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    text-align: center;
+    min-height: 170px;
+  }
+
+  .causes li i {
+    width: 56px;
+    height: 56px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    color: var(--cyan-400);
+    font-size: 28px;
+  }
+
+  .causes li span {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #e2e8f0;
+    letter-spacing: -0.2px;
+  }
+
+  @media (max-width: 1300px) {
+    .title {
+      font-size: 54px;
+    }
+
+    .lane {
+      grid-template-columns: 70px 30px 170px 1fr;
+      gap: 10px;
+    }
+
+    .msg-tag {
+      font-size: 18px;
+      min-width: 56px;
+    }
+
+    .lane-consumer span {
+      font-size: 17px;
+    }
+
+    .causes {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .causes li {
+      min-height: 130px;
+    }
+
+    .causes li span {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .lane {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .lane-arrow {
+      transform: rotate(90deg);
+    }
+
+    .lanes-head {
+      display: none;
+    }
+
+    .lanes-footer {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding-left: 1.3rem;
+      padding-right: 1.3rem;
+    }
+
+    .title {
+      font-size: 38px;
+    }
+
+    .eyebrow {
+      font-size: 16px;
+      letter-spacing: 4px;
+    }
+
+    .causes {
+      grid-template-columns: 1fr;
+    }
+
+    .causes li {
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 16px;
+      min-height: 0;
+      padding: 14px 16px;
+    }
+
+    .causes li i {
+      width: 44px;
+      height: 44px;
+      font-size: 22px;
+    }
+  }
+</style>

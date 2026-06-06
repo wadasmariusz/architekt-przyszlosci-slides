@@ -1,5 +1,6 @@
 ---
 const slideFiles = {
+  ...import.meta.glob('./05-komunikacja/**/slajd-*.astro'),
   ...import.meta.glob('./06-wizualizacja-architektury/**/slajd-*.astro'),
   ...import.meta.glob('./07-Decyzje architektoniczne/**/slajd-*.astro'),
 };
@@ -15,9 +16,34 @@ type SectionConfig = {
 
 const sections: SectionConfig[] = [
   {
+    basePath: '05-komunikacja',
+    slug: '01-style-komunikacji',
+    number: '01',
+    title: 'Wyzwania komunikacji asynchronicznej',
+    subtitle: 'At-least-once, duplikaty, out-of-order — co broker gwarantuje, a co musi obsłużyć architektura.',
+    labels: {
+      '01': 'Wyzwania komunikacji asynchronicznej',
+      '02': 'Model na papierze',
+      '03': 'Przykład: płatność online',
+      '04': 'Krytyczne okno awarii',
+      '05': 'Timeout i ponowne dostarczenie',
+      '06': 'Duplikat operacji biznesowej',
+      '07': 'To nie bug — to kontrakt brokera',
+      '08': 'At-least-once delivery',
+      '09': 'Idempotentność jako wymaganie',
+      '10': 'Deduplication store',
+      '11': 'Idempotency key',
+      '12': 'Idempotentna logika biznesowa',
+      '13': 'Drugie wyzwanie: kolejność',
+      '14': 'Kolejność zdarzeń płatności',
+      '15': 'Skąd bierze się zmiana kolejności',
+      '16': 'Konsekwencje out-of-order',
+    },
+  },
+  {
     basePath: '06-wizualizacja-architektury',
     slug: '01-model-c4-wprowadzenie',
-    number: '01',
+    number: '02',
     title: 'Model C4 — wprowadzenie',
     subtitle: 'Czym jest C4, jego cztery poziomy, mity i częste błędy.',
     labels: {
@@ -41,7 +67,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '06-wizualizacja-architektury',
     slug: '02-context',
-    number: '02',
+    number: '03',
     title: 'Diagram kontekstowy (C4, poziom 1)',
     subtitle: 'System widziany z lotu ptaka — aktorzy, systemy zewnętrzne, granice.',
     labels: {
@@ -65,7 +91,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '06-wizualizacja-architektury',
     slug: '03-containers',
-    number: '03',
+    number: '04',
     title: 'Diagram kontenerów (C4, poziom 2)',
     subtitle: 'Techniczny kształt systemu — aplikacje, bazy, kolejki, integracje.',
     labels: {
@@ -88,7 +114,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '06-wizualizacja-architektury',
     slug: '04-componnets',
-    number: '04',
+    number: '05',
     title: 'Diagram komponentów (C4, poziom 3)',
     subtitle: 'Wnętrze kontenera — odpowiedzialności, zależności, granice.',
     labels: {
@@ -109,7 +135,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '07-Decyzje architektoniczne',
     slug: '01-analiza-ograniczen',
-    number: '05',
+    number: '06',
     title: 'Analiza ograniczeń',
     subtitle: 'Kontekst i ograniczenia, od których startuje każda dobra decyzja architektoniczna.',
     labels: {
@@ -120,7 +146,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '07-Decyzje architektoniczne',
     slug: '02-ADR',
-    number: '06',
+    number: '07',
     title: 'Architecture Decision Records (ADR)',
     subtitle: 'Krótkie dokumenty utrwalające jedną decyzję architektoniczną — kontekst, decyzja, konsekwencje.',
     labels: {
@@ -143,7 +169,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '07-Decyzje architektoniczne',
     slug: '03-OODA',
-    number: '07',
+    number: '08',
     title: 'OODA Loop w decyzjach architektonicznych',
     subtitle: 'Observe → Orient → Decide → Act — decyzja architektoniczna jako iteracyjny cykl uczenia się.',
     labels: {
@@ -170,7 +196,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '07-Decyzje architektoniczne',
     slug: '04-risk-storming',
-    number: '08',
+    number: '09',
     title: 'Risk storming',
     subtitle: 'Zespołowe ujawnianie ryzyk architektonicznych zanim trafią na produkcję.',
     labels: {
@@ -198,7 +224,7 @@ const sections: SectionConfig[] = [
   {
     basePath: '07-Decyzje architektoniczne',
     slug: '05-trade-off-matrix',
-    number: '09',
+    number: '10',
     title: 'Trade-off matrix',
     subtitle: 'Macierz porządkuje dyskusję, a nie zastępuje decyzję.',
     labels: {
@@ -456,9 +482,9 @@ const totalSlides = grouped.reduce((sum, s) => sum + s.slides.length, 0);
 </head>
 <body>
   <div class="container">
-    <span class="module-eyebrow">Moduły 06 · 07</span>
-    <h1>Wizualizacja architektury i decyzje architektoniczne</h1>
-    <p class="lead">Model C4 (kontekst, kontenery, komponenty) oraz Architecture Decision Records — pamięć decyzji projektu.</p>
+    <span class="module-eyebrow">Moduły 05 · 06 · 07</span>
+    <h1>Komunikacja, wizualizacja i decyzje architektoniczne</h1>
+    <p class="lead">Komunikacja asynchroniczna (at-least-once, out-of-order), Model C4 (kontekst, kontenery, komponenty) oraz Architecture Decision Records — pamięć decyzji projektu.</p>
     <p class="stats">
       <strong>{grouped.length}</strong> lekcje · <strong>{totalSlides}</strong> slajdów
     </p>
